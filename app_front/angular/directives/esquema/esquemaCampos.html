@@ -1,0 +1,48 @@
+<hr>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="eNombre">Nombre:</label>
+            <input type="text" class="form-control" id="eNombre" ng-model="esquemaHeader.nombre" ng-disabled="!isAddMode" placeholder="Nombre del nuevo esquema">
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="eDescripcion">Descripción:</label>
+            <input type="text" class="form-control" id="eDescripcion" ng-model="esquemaHeader.descripcion" ng-disabled="!isAddMode" placeholder="Información adicional">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="eDiasGracia">Días Gracia:</label>
+            <input type="text" class="form-control" id="eDiasGracia" ng-model="esquemaHeader.diasGracia" ng-disabled="!isAddMode" placeholder="Días libres de interes">
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="ePlazo">Plazo:</label>
+            <input type="text" class="form-control" id="ePlazo" ng-model="esquemaHeader.plazo" ng-disabled="!isAddMode" placeholder="Días de financiamiento">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="txtInteresMoratorio">Interes Moratorio:</label>
+            <input type="text" class="form-control" id="txtInteresMoratorio" ng-model="esquemaHeader.interesMoratorio" ng-disabled="!isAddMode" placeholder="Porcentaje Interes">
+        </div>
+    </div>
+    <div class="col-sm-6">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <button type="button" class="btn btn-success" ng-click="backToPrincipal()">Regresar</button>
+    </div>
+    <div class="col-sm-6">
+        <button type="button" ng-hide="showEditBtn" class="btn btn-primary pull-right" ng-click="validateSchemaHeader()">Guardar</button>
+        <button type="button" ng-show="showEditBtn" class="btn btn-primary pull-right" ng-click="validateSchemaHeaderEdit()">Guardar Edición</button>
+    </div>
+</div>

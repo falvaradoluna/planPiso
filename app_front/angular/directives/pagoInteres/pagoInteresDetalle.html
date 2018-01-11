@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <table id="tblDetalle" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>loteDetalleID</th>
+                    <th>unidadID</th>
+                    <th>interesCalculado</th>
+                    <th ng-hide="objEdit.visible">interesUsuario</th>
+                    <th ng-show="objEdit.visible">interesUsuario</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="unidad in lstUnitDeatil" repeat-end="setTableStyle('#tblDetalle')">
+                    <td>{{unidad.loteDetalleID}}</td>
+                    <td>{{unidad.unidadID}}</td>
+                    <td>{{unidad.interesCalculado}}</td>
+                    <td ng-hide="objEdit.visible">{{unidad.interesUsuario}}</td>
+                    <td ng-show="objEdit.visible">
+                        <input type="text" ng-model="unidad.interesUsuario" class="form-control">
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button type="button" class="btn btn-success" ng-click="prevStep()">regresar</button>

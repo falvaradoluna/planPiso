@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <table id="tblPagoPendiente" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Lote</th>
+                    <th>Tipo</th>                    
+                    <th>Fecha Creación</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="unidad in lstUnitsPending" repeat-end="setTableStyle('#tblPagoPendiente')">
+                    <td>{{unidad.loteID}}</td>
+                    <td>{{unidad.estatusDesc}}</td>                    
+                    <td>{{unidad.fechaCreacion}}</td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="showDetail(unidad)"><span class="glyphicon glyphicon-eye-open"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
