@@ -51,7 +51,7 @@ swig.setDefaults({varControls:['[[',']]']});
 
 app.post('/', function(req, res) {
 	var user = { idUsuario: req.body.idUsuario };
-    console.log( "idUsuario", user );
+    // console.log( "idUsuario", user );
     res.render('index', { user });
 });
 

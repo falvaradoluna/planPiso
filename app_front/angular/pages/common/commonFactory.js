@@ -1,10 +1,13 @@
 appModule.factory('commonFactory', function($http) {
     return {
-        getSucursal: function(EmpresaID) {
+        getSucursal: function(idEmpresa, idUsuario) {
             return $http({
                 url: 'apiCommon/getSucursal',
                 method: "GET",
-                params: { EmpresaID: EmpresaID },
+                params: { 
+                    idEmpresa: idEmpresa,
+                    idUsuario: idUsuario
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         },

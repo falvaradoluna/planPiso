@@ -1,6 +1,6 @@
 appModule.controller('unuevasController', function($scope, $rootScope, $location, unuevasFactory, commonFactory, staticFactory) {
-
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.idUsuario = localStorage.getItem("idUsuario");
 
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = unuevasFactory.topNavBar();
@@ -27,7 +27,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         $scope.lstFinancial = result.data;
     });
 
-    commonFactory.getSucursal(sessionFactory.empresaID).then(function(result) {
+    commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
     });
 

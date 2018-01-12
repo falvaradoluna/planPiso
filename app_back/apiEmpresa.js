@@ -13,15 +13,15 @@ router.get('/', function(req, res) {
 });
 
 router.get('/getEmpresa', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
+        request.input('idUsuario', sql.Int, req.query.idUsuario);
 
-        request.execute('uspGetEmpresa').then(function(result) {
+        request.execute('EMPRESABYUSER_SP').then(function(result) {
             dbCnx.close();
-            res.json(result.recordsets[0]);
+            res.json(result.recordsets);
         }).catch(function(err) {
             console.log(err);
             dbCnx.close();
@@ -31,7 +31,6 @@ router.get('/getEmpresa', function(req, res) {
         console.log(err);
         dbCnx.close();
     });
-
 });
 
 module.exports = router;

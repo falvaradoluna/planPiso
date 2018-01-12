@@ -19,9 +19,11 @@ router.get('/getSucursal', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        request.input('EmpresaID', sql.Int, req.query.EmpresaID);
+        request.input('idEmpresa', sql.Int, req.query.idEmpresa);
+        request.input('idUsuario', sql.Int, req.query.idUsuario);
 
-        request.execute('uspGetSucursal').then(function(result) {
+        // request.execute('uspGetSucursal').then(function(result) {
+        request.execute('SUCURSALBYUSUARIO_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
