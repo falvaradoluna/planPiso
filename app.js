@@ -59,10 +59,6 @@ app.get('*', function(req, res) {
     res.sendFile(__dirname + '/app_front/index.html'); /* <= Where my ng-view is located */
 });
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6e353e719be2ddd70d4c8904fa3b28b9e8a46b54
 http.createServer(app).listen(4900, function() {
     console.log('Listen on port 4900 imgServer');
 });
