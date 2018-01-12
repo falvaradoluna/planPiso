@@ -1,5 +1,4 @@
 appModule.controller('empresaController', function($scope, $rootScope, $location, commonFactory, staticFactory, empresaFactory) {
-
     sessionStorage.removeItem("sessionFactory");
     $scope.lstEmpresa = [];
 
@@ -40,7 +39,7 @@ appModule.controller('empresaController', function($scope, $rootScope, $location
 
     $scope.setEmpresa = function(objEmpresa) {
         sessionStorage.setItem("sessionFactory", JSON.stringify(objEmpresa));
-        window.location = "/unuevas";
+        // window.location = "/unuevas";
     };
 
 

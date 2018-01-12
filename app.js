@@ -2,6 +2,8 @@ var http = require('http');
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
+// var ejs = require('ejs');
+var swig = require('swig'); 
 
 var apiTiie = require('./app_back/apiTiie');
 var apiCommon = require('./app_back/apiCommon');
@@ -31,14 +33,33 @@ app.use('/apiPagoInteres', apiPagoInteres);
 app.use('/apiDashboard', apiDashboard);
 
 
+// app.engine('.html', require('ejs').__express);
+// app.set('view engine', 'ejs');
+
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+//this.expressServer.set('views', __dirname + '/website/views/templates');
+app.set('views', __dirname + '/app_front');
+swig.setDefaults({varControls:['[[',']]']});
+
+// app.engine('html', ejs.renderFile);
+// app.set('views', __dirname + '/app_front');
+// app.set('view engine', 'html');
+// console.log( ejs );
+// ejs.setDefaults({varControls:['[[',']]']});
+
+
 app.post('/', function(req, res) {
-    res.sendFile(__dirname + '/app_front/index.html');
+	var user = { idUsuario: req.body.idUsuario };
+    console.log( "idUsuario", user );
+    res.render('index', { user });
 });
 
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/app_front/index.html'); /* <= Where my ng-view is located */
 });
 
-http.createServer(app).listen(4300, function() {
-    console.log('Listen on port 4300 imgServer');
+
+http.createServer(app).listen(4900, function() {
+    console.log('Listen on port 4900 imgServer');
 });
