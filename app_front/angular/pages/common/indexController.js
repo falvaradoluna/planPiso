@@ -1,8 +1,15 @@
-appModule.controller("indexController", function($scope) {
+appModule.controller("indexController", function($scope, empresaFactory) {
+    // $scope.nombreUsuario    = localStorage.getItem("nombreUsuario");
+    $scope.nombreUsuario    = "";
+
     setTimeout(function(){ $(".init-loading").hide(); }, 500)
     
     if (!($('#idUsuario').val().indexOf('[') > -1)) {
         localStorage.setItem("idUsuario", $('#idUsuario').val())
+        empresaFactory.getUsuarioNombre( $('#idUsuario').val() ).then(function(result) {
+            localStorage.setItem("nombreUsuario", result.data[0][0].nombre);
+            $scope.nombreUsuario    = result.data[0][0].nombre;
+        });
     } 
     else {
         var idUser = localStorage.getItem("idUsuario");
@@ -10,7 +17,10 @@ appModule.controller("indexController", function($scope) {
             $scope.warningMsg = 'Favor de ingresar mediante el Panel de Aplicaciones';
         }
         else{
-            // alert( "Desde localStorage: " + idUser );
+            empresaFactory.getUsuarioNombre( idUser ).then(function(result) {                
+                localStorage.setItem("nombreUsuario", result.data[0][0].nombre);
+                $scope.nombreUsuario    = result.data[0][0].nombre;
+            });
             $(".init-mgs").hide();
             $("#wrapper").show();
         }

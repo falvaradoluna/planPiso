@@ -33,4 +33,25 @@ router.get('/getEmpresa', function(req, res) {
     });
 });
 
+router.get('/getUsuarioNombre', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+
+        var request = new sql.Request(dbCnx);
+        request.input('idUsuario', sql.Int, req.query.idUsuario);
+
+        request.execute('USUARIONOMBRE_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            console.log(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        console.log(err);
+        dbCnx.close();
+    });
+});
+
 module.exports = router;
