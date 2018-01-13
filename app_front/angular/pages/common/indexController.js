@@ -10,6 +10,7 @@ appModule.controller("indexController", function($scope, empresaFactory) {
             localStorage.setItem("nombreUsuario", result.data[0][0].nombre);
             $scope.nombreUsuario    = result.data[0][0].nombre;
         });
+        $("#wrapper").show();
     } 
     else {
         var idUser = localStorage.getItem("idUsuario");
