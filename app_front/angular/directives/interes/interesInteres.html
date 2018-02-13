@@ -22,14 +22,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstNewUnits | filter:{excludeField:false}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
+                <tr ng-repeat="unidad in lstNewUnits | filter:{excludeField:false}">
                     <td>
                         <input type="checkbox" ng-model="unidad.isChecked" ng-click="checkUnits(unidad)">
                     </td>
                     <td>{{unidad.CCP_IDDOCTO}}</td>
                     <td>{{unidad.vehNumserie}}</td>
-                    <td>{{unidad.descModelo}}</td>
-                    <td>{{unidad.modelo}}</td>
+                    <td>{{unidad.VEH_TIPOAUTO}}</td>
+                    <td>{{unidad.VEH_ANMODELO}}</td>
                     <td>{{unidad.importe}}</td>
                     <td>{{unidad.saldo}}</td>
                     <td>{{unidad.diasInteres}}</td>

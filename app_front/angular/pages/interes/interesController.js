@@ -232,7 +232,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     };
     $scope.setResetTable = function(tblID, display, length) {
         $('.' + tblID).DataTable().destroy();
-        staticFactory.filtrosTabla(tblID, display, length);
+        setTimeout(function() {
+            staticFactory.filtrosTabla(tblID, display, length);
+        }, 500);
     };
     $scope.setDelayTableStyle = function(tblID) {
         setTimeout(function() {
