@@ -1,9 +1,9 @@
 <style>
-.detailCol {
-    padding-right: 20px;
-    padding-bottom: 5px;
-    font-weight: bold;
-}
+    .detailCol {
+        padding-right: 20px;
+        padding-bottom: 5px;
+        font-weight: bold;
+    }
 </style>
 <h2>Detalle Unidad</h2>
 <hr>
@@ -23,27 +23,27 @@
         <table>
             <tr>
                 <td class="detailCol">Marca:</td>
-                <td>{{unitDetail.marca}}</td>
+                <td>{{unitDetail.MARCA}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Modelo:</td>
-                <td>{{unitDetail.descModelo}}</td>
+                <td>{{unitDetail.VEH_TIPOAUTO}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Color:</td>
-                <td>{{unitDetail.colorExterior}}</td>
+                <td>{{unitDetail.VEH_COLOEXTE}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Año:</td>
-                <td>{{unitDetail.modelo}}</td>
+                <td>{{unitDetail.VEH_ANMODELO}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Transmisión:</td>
-                <td>{{unitDetail.transmision}}</td>
+                <td>{{unitDetail.VEH_QCTRANSMISION}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Tipo Unidad </td>
-                <td>{{unitDetail.tipoUnidad}}</td>
+                <td>{{unitDetail.UNC_TIPO}}</td>
             </tr>
         </table>
     </div>
@@ -51,19 +51,19 @@
         <table>
             <tr>
                 <td class="detailCol">Fecha Ingreso:</td>
-                <td>{{unitDetail.vehFecrecibo}}</td>
+                <td>{{unitDetail.VEH_FECHOPE}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Valor Inventario:</td>
-                <td>{{unitDetail.valorInventario}}</td>
+                <td>{{unitDetail.VEH_IMPFACTPLAN}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Factura:</td>
-                <td>{{unitDetail.vehNofactplan}}</td>
+                <td>{{unitDetail.VEH_NOFACTPLAN}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Situación:</td>
-                <td>{{unitDetail.situacion}}</td>
+                <td>{{unitDetail.VEH_SITUACION}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Días Inventario: </td>
@@ -75,19 +75,19 @@
         <table>
             <tr>
                 <td class="detailCol">Nombre Esquema:</td>
-                <td>{{unitDetail.nombre}}</td>
+                <td>{{unitDetailEsquema.nombre}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Fecha Efectiva:</td>
-                <td>{{unitDetail.fechaEfectiva}}</td>
+                <td>{{unitDetailEsquema.fechaEfectiva}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Días Gracia:</td>
-                <td>{{unitDetail.diasGracia}}</td>
+                <td>{{unitDetailEsquema.diasGracia}}</td>
             </tr>
             <tr>
                 <td class="detailCol">Descripción: </td>
-                <td>{{unitDetail.descripcion}}</td>
+                <td>{{unitDetailEsquema.descripcion}}</td>
             </tr>
         </table>
     </div>
@@ -95,64 +95,56 @@
 <hr>
 <div class="row">
     <div class="col-md-4">
-        <h2><span class="glyphicon glyphicon-list-alt"></span> Esquema</h2>
+        <h2><span class="glyphicon glyphicon-list-alt"></span>Ultimo Esquema</h2>
     </div>
     <div class="col-md-8">
-        <h2><span class="glyphicon glyphicon-stats"></span> Detalle Esquema</h2>
+        <h2><span class="glyphicon glyphicon-stats"></span>Movimientos</h2>
     </div>
 </div>
 <div class="row">
     <div class="col-md-4">
         <table>
-            <tr>
+            <!-- <tr>
                 <td class="detailCol">Tipo Esquema: </td>
-                <td>{{unitDetail.tipoEsquema}}</td>
-            </tr>
+                <td>{{unitDetailEsquema.tipoEsquema}}</td>
+            </tr> -->
             <tr>
                 <td class="detailCol">Nombre:</td>
-                <td>{{unitDetail.nombre}}</td>
+                <td>{{unitDetailEsquema.nombre}}</td>
             </tr>
+
             <tr>
-                <td class="detailCol">Financiamiento:</td>
-                <td>{{unitDetail.diasFinanciamiento}} días</td>
-            </tr>
-            <tr>
-                <td class="detailCol">Ampliación:</td>
-                <td>{{unitDetail.diasAmpliacion}} días</td>
+                <td class="detailCol">Días Gracia:</td>
+                <td>{{unitDetailEsquema.diasGracia}} días</td>
             </tr>
             <tr>
                 <td class="detailCol">Plazo:</td>
-                <td>{{unitDetail.plazo}} días</td>
+                <td>{{unitDetailEsquema.plazo}} días</td>
             </tr>
             <tr>
                 <td class="detailCol">Intéres Moratorio: </td>
-                <td>{{unitDetail.interesMoratorio}} %</td>
+                <td>{{unitDetailEsquema.interesMoratorio}} %</td>
             </tr>
-            <tr>
-                <td class="detailCol">Descripción:</td>
-                <td>{{unitDetail.descripcion}}</td>
-            </tr>
+
         </table>
     </div>
     <div class="col-md-8">
         <table id="tblAddByDate" class="table table-striped">
             <tr>
-                <th>Estaus</th>
-                <th>Tasa Interes</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Porcentaje de Penetraciónn</th>
-                <th>Tipo Tiie</th>
-                <th>Tiie</th>                
+                <th>Tipo Movimiento</th>
+                <th>Sucursal Origen</th>
+                <th>Sucursal Destino</th>
+                <th>Interes acumulado</th>
+                <th>Fecha</th>
+
             </tr>
             <tr ng-repeat="itemDetail in lstSchemeDetail">
-                <td ng-class=" itemDetail.estatusCID == 1 ? 'celdaFondoVerde' : itemDetail.estatusCID == 2 ? 'celdaFondoAzul' : 'celdaFondoRojo'  ">{{itemDetail.estatusTexto}} </td>
-                <td>{{itemDetail.tasaInteres | number:2}} % </td>
-                <td>{{itemDetail.fechaInicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                <td>{{itemDetail.fechaFin | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                <td>{{itemDetail.porcentajePenetracion | number:2}} %</td>
-                <td>{{itemDetail.TipotiieTexto}}</td>
-                <td>{{itemDetail.tiie | number:2}} %</td>            
+                <td>{{itemDetail.tipoMovimiento }}</td>
+                <td>{{itemDetail.sucorigen }}</td>
+                <td>{{itemDetail.sucdestino }}</td>
+                <td>{{itemDetail.monto | number:2}}</td>
+                <td>{{itemDetail.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
+
             </tr>
         </table>
     </div>
@@ -162,7 +154,7 @@
     <div class="col-md-6">
         <button class="btn btn-primary" ng-click="setPnlInteres()"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
     </div>
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
         <button class="btn btn-primary pull-right" ng-click="setPnlInteresMovimientos()"> Ver Movimientos</button>
-    </div>
+    </div> -->
 </div>

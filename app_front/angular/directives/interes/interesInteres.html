@@ -1,11 +1,12 @@
 <div class="row">
-    <div class="col-md-12" >
+    <div class="col-md-12">
         <table id="tblUnidadesNuevas" class="table table-striped">
             <thead>
                 <tr>
                     <th>
                         <input type="checkbox" ng-click="checkAllUnits()" ng-model="allUnits.isChecked">
                     </th>
+                    <th>Documento</th>
                     <th>Numero Serie</th>
                     <th>Modelo</th>
                     <th>Año</th>
@@ -15,16 +16,17 @@
                     <th>Dias Restantes</th>
                     <th>Interes Corte Pagado</th>
                     <th>Interes MesActual</th>
-                    <th>Interes Acumulado Financiera</th>
-                    <th>Interes Total</th>
+                    <!-- <th>Interes Acumulado Financiera</th>
+                    <th>Interes Total</th> -->
                     <th>Interes Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="unidad in lstNewUnits | filter:{excludeField:false}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
                     <td>
-                        <input type="checkbox" ng-model="unidad.isChecked">
+                        <input type="checkbox" ng-model="unidad.isChecked" ng-click="checkUnits(unidad)">
                     </td>
+                    <td>{{unidad.CCP_IDDOCTO}}</td>
                     <td>{{unidad.vehNumserie}}</td>
                     <td>{{unidad.descModelo}}</td>
                     <td>{{unidad.modelo}}</td>
@@ -34,8 +36,8 @@
                     <td>{{unidad.diasRestantes}}</td>
                     <td>{{unidad.InteresCortePagado | currency}}</td>
                     <td>{{unidad.InteresMesActual | currency}}</td>
-                    <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td>
-                    <td>{{unidad.InteresTotal | currency}}</td>
+                    <!-- <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td>
+                    <td>{{unidad.InteresTotal | currency}}</td> -->
                     <td>
                         <button type="button" class="btn btn-primary" ng-click="setPnlDetalleUnidad(unidad)">
                             <span class="glyphicon glyphicon-th-list"> </span>

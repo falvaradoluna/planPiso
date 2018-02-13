@@ -137,7 +137,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         $scope.lstNewUnits.forEach(function(item) {
             if (item.isChecked === true) {
                 var data = {
-                    unidadID: item.unidadID,
+                    CCP_IDDOCTO: item.CCP_IDDOCTO,
                     userID: $scope.userID,
                     esquemaID: $scope.selectedSchema.esquemaID,
                     saldoInicial: item.saldoInicial,
