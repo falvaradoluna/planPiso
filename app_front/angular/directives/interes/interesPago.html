@@ -1,0 +1,48 @@
+<div class="col-md-12">
+    <h2>Validar Pago Interes</h2>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table id="tblSchemas" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numero Serie</th>
+                    <th>Modelo</th>
+                    <th>Año</th>
+                    <th>Importe</th>
+                    <th>Saldo</th>
+                    <th>Dias Interes</th>
+                    <th>Dias Restantes</th>
+                    <th>Interes Corte Pagado</th>
+                    <th>Interes MesActual</th>
+                    <th>Interes Total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="unidad in lstSelectPay" repeat-end="initTblSchemas()">
+
+                    <td>{{unidad.vehNumserie}}</td>
+                    <td>{{unidad.descModelo}}</td>
+                    <td>{{unidad.modelo}}</td>
+                    <td>{{unidad.importe}}</td>
+                    <td>{{unidad.saldo}}</td>
+                    <td>{{unidad.diasInteres}}</td>
+                    <td>{{unidad.diasRestantes}}</td>
+                    <td>{{unidad.InteresCortePagado | currency}}</td>
+                    <td>{{unidad.InteresMesActual | currency}}</td>
+                    <td><input type="text" class="form-control" ng-model="unidad.InteresMes" style="width: 100px"></td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div>
+    <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
+    <button class="btn btn-primary pull-right" ng-click="setPnlResumen()" style="margin:10px">Siguiente 
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </button>
+</div>

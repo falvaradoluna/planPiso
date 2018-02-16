@@ -140,7 +140,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
                     CCP_IDDOCTO: item.CCP_IDDOCTO,
                     userID: $scope.userID,
                     esquemaID: $scope.selectedSchema.esquemaID,
-                    saldoInicial: item.saldoInicial,
+                    saldoInicial: item.SALDO,
                     fechaCalculo: staticFactory.toISODate(item.fechaCalculoString)
                 };
 

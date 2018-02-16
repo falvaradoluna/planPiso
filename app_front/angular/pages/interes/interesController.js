@@ -12,6 +12,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.lstSchemeDetail = [];
     $scope.lstNewUnits = [];
     $scope.lstSelectUnits = [];
+    $scope.lstSelectPay = [];
     $scope.unitDetail = {};
     $scope.currentPanel = "pnlInteres";
     $scope.currentSucursalName = "Selecciona Sucursal";
@@ -337,21 +338,14 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
-            swal({
-                    title: "¿Esta seguro?",
-                    text: "Se aplicará el pago de intereses para las unidades seleccionadas.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#21B9BB",
-                    confirmButtonText: "Pagar",
-                    cancelButtonText: "Cancelar",
-                    closeOnConfirm: false
-                },
-                function() {
-                    $scope.payInteres();
-                    swal("Ok", "Pago finalizó con exito", "success");
+            $scope.currentPanel = "pnlPagoInteres";
+            $scope.lstNewUnits.forEach(function(item) {
+                if (item.isChecked === true) {
+                    $scope.lstSelectPay.push(item);
+
                 }
-            );
+            });
+
         }
     };
 

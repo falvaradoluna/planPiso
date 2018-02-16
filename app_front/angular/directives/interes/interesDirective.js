@@ -45,4 +45,9 @@ appModule.directive('interesCambioAgencia', function() {
         restrict: 'E',
         templateUrl: interesPath + 'interesTraspasoFinanciera.html'
     };
+}).directive('interesPago', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesPago.html'
+    };
 });
