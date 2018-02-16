@@ -14,8 +14,6 @@ router.get('/', function(req, res) {
 
 // define the about route
 router.get('/getInterestUnits', function(req, res) {
-
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -30,18 +28,13 @@ router.get('/getInterestUnits', function(req, res) {
             res.json(err);
             dbCnx.close();
         });
-
     }).catch(function(err) {
         res.json(err);
         dbCnx.close();
     });
-
 });
 
-
-
 router.get('/getDetailUnits', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -56,17 +49,13 @@ router.get('/getDetailUnits', function(req, res) {
             res.json(err);
             dbCnx.close();
         });
-
     }).catch(function(err) {
         res.json(err);
         dbCnx.close();
     });
 });
 
-
-
 router.get('/insLotePago', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -86,10 +75,7 @@ router.get('/insLotePago', function(req, res) {
     });
 });
 
-
-
 router.get('/insLotePagoDetalle', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -113,11 +99,9 @@ router.get('/insLotePagoDetalle', function(req, res) {
 });
 
 router.get('/setChangeSchema', function(req, res) {
-
     var dateFormat = require('moment');
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
-
         var request = new sql.Request(dbCnx);
 
         request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
@@ -127,7 +111,6 @@ router.get('/setChangeSchema', function(req, res) {
         request.input('financieraID', sql.Int, req.query.financieraID);
         request.input('esquemaID', sql.Int, req.query.esquemaID);
         request.input('tipoMovimientoId', sql.Int, req.query.tipoMovimientoId);
-
 
         request.execute('Usp_Esquema_UPD').then(function(result) {
             dbCnx.close();
@@ -141,11 +124,38 @@ router.get('/setChangeSchema', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
-
 });
-router.get('/getSchemaMovements', function(req, res) {
 
+router.get('/guardaProvision', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+
+        var request = new sql.Request(dbCnx);
+
+        request.input('idEmpresa',          sql.Int,        req.query.idEmpresa);
+        request.input('CCP_IDDOCTO',        sql.VarChar,    req.query.CCP_IDDOCTO);
+        request.input('consecutivo',        sql.Int,        req.query.consecutivo);
+        request.input('saldoDocumento',     sql.VarChar,    req.query.saldoDocumento);
+        request.input('interesCalculado',   sql.VarChar,    req.query.interesCalculado);
+        request.input('interesAplicar',     sql.VarChar,    req.query.interesAplicar);
+        request.input('aplica',             sql.Int,        req.query.aplica);
+
+        request.execute('GUARDAPROVISION_SP').then(function(result) {
+            res.json(result.recordsets);
+            dbCnx.close();
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/getSchemaMovements', function(req, res) {
     var dateFormat = require('moment');
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
@@ -165,7 +175,5 @@ router.get('/getSchemaMovements', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
-
 });
 module.exports = router;
