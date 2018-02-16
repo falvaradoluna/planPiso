@@ -15,7 +15,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.lstSelectPay = [];
     $scope.unitDetail = {};
     $scope.currentPanel = "pnlInteres";
-    $scope.currentSucursalName = "Selecciona Sucursal";
+    $scope.currentSucursalName = "Sucursal Todas";
     $scope.currentFinancialName = "Selecciona Financiera";
     $scope.currentSucursal = [];
     $scope.allUnits = { isChecked: false };
