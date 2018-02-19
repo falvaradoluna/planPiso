@@ -47,6 +47,14 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getGuardaProvision: function(params) {
+            return $http({
+                url: '/apiInteres/guardaProvision',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

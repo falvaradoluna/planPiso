@@ -216,6 +216,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setPnlResumen = function() {
         $scope.currentPanel = "pnlResumen";
     };
+    $scope.setPnlPagoResumen = function() {
+        $scope.currentPanel = "pnlPagoResumen";
+    };
 
 
 
@@ -348,33 +351,70 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
         }
     };
-
-    $scope.payInteres = function() {
-
-        interesFactory.insLotePago().then(function(result) {
-
-            if (result.data[0].result > 0) {
-
-                $scope.lstNewUnits.forEach(function(item) {
-                    if (item.isChecked === true) {
-
-                        var params = {
-                            loteID: result.data[0].result,
-                            unidadID: item.unidadID,
-                            interesCalculado: item.InteresMesActual
-                        };
-
-                        interesFactory.insLotePagoDetalle(params).then(function(resultDetail) {
-                            console.log(resultDetail.data);
-                        });
-
-                    }
-                });
-            }
-
+    $scope.incremental = 0;
+    $scope.consecNum = 0;
+    $scope.CrearPolizaPago = function() {
+        swal({
+            title: "¿Esta seguro?",
+            text: "Se creara la poliza para el pago de interes para las unidades seleccionadas.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aplicar",
+            closeOnConfirm: false
+        }, function() {
+            $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+            $scope.guardandoPoliza();
         });
+    }
 
-    };
+    $scope.guardandoPoliza = function() {
+        var saplica = 0;
+        var item = $scope.listPoliza[$scope.incremental];
+        if ($scope.listPoliza.length == ($scope.incremental + 1)) {
+            saplica = 1;
+        }
+        var params = {
+            CCP_IDDOCTO: item.CCP_IDDOCTO,
+            consecutivo: $scope.consecNum,
+            saldoDocumento: item.saldo,
+            interesCalculado: item.InteresMesActual,
+            interesAplicar: item.InteresMes,
+            aplica: saplica,
+            idEmpresa: item.empresaID,
+            idSucursal: item.sucursalID
+
+        };
+
+
+        interesFactory.getGuardaProvision(params).then(function(result) {
+            $scope.consecNum = result.data[0][0].consecutivo;
+            var insercion = result.data[0][0];
+            console.log("insercion", insercion);
+
+            if (insercion.success == 1) {
+
+                $scope.incremental++;
+
+                if ($scope.incremental < $scope.listPoliza.length) {
+                    $scope.guardandoPoliza();
+                } else {
+                    $scope.incremental = 0;
+                    $scope.consecNum = 0;
+                    swal("Poliza pago interes", "Guardado correctamente");
+                    setTimeout(function() {
+                        console.log('Termino');
+                        window.location = "/interes";
+                    }, 1000);
+                }
+            } else {
+                swal("Poliza pago interes", "Guardado correctamente");
+            }
+        }, function(error) {
+            console.log("Error", error);
+        });
+    }
+
 
 
 
