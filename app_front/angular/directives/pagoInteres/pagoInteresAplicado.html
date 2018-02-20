@@ -3,19 +3,27 @@
         <table id="tblPagoAplicado" class="table table-striped">
             <thead>
                 <tr>
-                    <th>Lote</th>
-                    <th>No. Serie</th>
-                    <th>Tipo</th>
+                    <th>Concepto</th>
+                    <th>Tipo proceso</th>
+                    <th>Sucursal</th>
+                    <th>Consecutivo poliza</th>
+                    <th>Mes poliza</th>
+                    <th>Año poliza</th>
+                    <th>Estatus</th>
                     <th>Fecha Creación</th>
                     <th>Detalle</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="unidad in lstUnitsApply" repeat-end="setTableStyle('#tblPagoAplicado')">
-                    <td>{{unidad.loteID}}</td>
-                    <td>{{unidad.vehNumserie}}</td>                    
-                    <td>{{unidad.estatusDesc}}</td>
-                    <td>{{unidad.fechaCreacion}}</td>
+                    <td>{{unidad.ple_concepto}}</td>
+                    <td>{{unidad.tipoproceso}}</td>
+                    <td>{{unidad.sucursal}}</td>
+                    <td>{{unidad.ple_conspol}}</td>
+                    <td>{{unidad.ple_mes}}</td>
+                    <td>{{unidad.anio}}</td>
+                    <td>{{unidad.ple_estatus}}</td>
+                    <td>{{unidad.ple_fechapoliza}}</td>
                     <td>
                         <button type="button" class="btn btn-success btn-sm" ng-click="showDetail(unidad)"><span class="glyphicon glyphicon-eye-open"></span></button>
                     </td>

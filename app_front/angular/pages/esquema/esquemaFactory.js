@@ -7,12 +7,7 @@ appModule.factory('esquemaFactory', function($http) {
                 descripcion: null,
                 diasGracia: null,
                 plazo: null,
-                interesMoratorio: null
-            };
-        },
-
-        initSchemaDetail: function() {
-            return {
+                interesMoratorio: null,
                 tasaInteres: null,
                 porcentajePenetracion: null,
                 fechaInicio: null,
@@ -22,16 +17,11 @@ appModule.factory('esquemaFactory', function($http) {
             };
         },
 
-        getSchemeDetail: function(esquemaID, esquemaDetalleID) {
-            return $http({
-                url: 'apiEsquema/getEsquemaDetalle',
-                method: "GET",
-                params: { esquemaID: esquemaID, esquemaDetalleID: esquemaDetalleID },
-                headers: { 'Content-Type': 'application/json' }
-            });
+        initSchemaDetail: function() {
+            return {
+
+            };
         },
-
-
         putScheme: function(params) {
             return $http({
                 url: 'apiEsquema/putEsquema',
@@ -40,7 +30,6 @@ appModule.factory('esquemaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-
         updEsquema: function(params) {
             return $http({
                 url: 'apiEsquema/updEsquema',
@@ -49,26 +38,14 @@ appModule.factory('esquemaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-
-
-        putSchemeDetail: function(params) {
+        deleteScheme: function(params) {
             return $http({
-                url: 'apiEsquema/putEsquemaDetalle',
+                url: 'apiEsquema/delEsquema',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-
-        updSchemeDetail: function(params) {
-            return $http({
-                url: 'apiEsquema/updEsquemaDetalle',
-                method: "GET",
-                params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },
-
         formIsvalid: function(controls) {
             var esValido = false;
 
@@ -93,18 +70,7 @@ appModule.factory('esquemaFactory', function($http) {
 
             return esValido;
         },
-        setDetailsValues: function(control, expresion) {
 
-            var formControls = [
-                { value: control.tasaInteres, name: 'Tasa interes', regExp: expresion.decimal1 },
-                { value: control.porcentajePenetracion, name: 'Porcentaje penetración', regExp: expresion.decimal1 },
-                { value: control.fechaInicio, name: 'Fecha inicio', regExp: expresion.todo },
-                { value: control.fechaFin, name: 'Fecha fin', regExp: expresion.todo },
-                { value: control.tiie, name: 'TIIE', regExp: expresion.decimal1 },
-                { value: control.selectedOption === null ? null : control.selectedOption.valor, name: 'Tipo TIIE ', regExp: expresion.entero1 }
-            ];
-            return formControls;
-        },
         setHeaderValues: function(control, expresion) {
 
             var formControls = [
@@ -112,7 +78,13 @@ appModule.factory('esquemaFactory', function($http) {
                 { value: control.descripcion, name: 'Descripción', regExp: expresion.todo },
                 { value: control.diasGracia, name: 'Dias Gracia', regExp: expresion.entero1 },
                 { value: control.plazo, name: 'Plazo', regExp: expresion.entero1 },
-                { value: control.interesMoratorio, name: 'Interes Moratorio', regExp: expresion.decimal1 }
+                { value: control.interesMoratorio, name: 'Interes Moratorio', regExp: expresion.decimal1 },
+                { value: control.tasaInteres, name: 'Tasa interes', regExp: expresion.decimal1 },
+                { value: control.porcentajePenetracion, name: 'Porcentaje penetración', regExp: expresion.decimal1 },
+                { value: control.fechaInicio, name: 'Fecha inicio', regExp: expresion.todo },
+                { value: control.fechaFin, name: 'Fecha fin', regExp: expresion.todo },
+                { value: control.tiie, name: 'TIIE', regExp: expresion.entero1 }, { value: control.selectedOption === null ? null : control.selectedOption.tipoTiieId, name: 'Tipo TIIE ', regExp: expresion.entero1 }
+
             ];
             return formControls;
         }

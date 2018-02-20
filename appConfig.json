@@ -3,12 +3,14 @@
         "user": "sa",
         "password": "S0p0rt3",
         "server": "192.168.20.92",
-        "database": "planPiso"
+        "database": "PlanPiso"
+
     },
     "connectionStringServer": {
         "user": "sa",
         "password": "S0p0rt3",
         "server": "192.168.20.92",
-        "database": "planPiso"
+        "database": "PlanPiso"
+
     }
 }
