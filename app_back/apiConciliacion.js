@@ -14,37 +14,37 @@ router.get('/', function(req, res) {
 
 // define the about route
 router.get('/insExcelData', function(req, res) {
+    res.json({success: 1});
+
+    // var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    // dbCnx.connect().then(function() {
+
+    //     const table = new sql.Table('TmpExcelData');
+    //     table.create = true;
+    //     table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
+    //     table.columns.add('valor', sql.Numeric(18, 4), { nullable: true });
+    //     table.columns.add('interes', sql.Numeric(18, 4), { nullable: true });
 
 
-    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    dbCnx.connect().then(function() {
+    //    // console.log(table);
+    //    console.log(req.query.lstUnidades);
 
-        const table = new sql.Table('TmpExcelData');
-        table.create = true;
-        table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
-        table.columns.add('valor', sql.Numeric(18, 4), { nullable: true });
-        table.columns.add('interes', sql.Numeric(18, 4), { nullable: true });
+    //     req.query.lstUnidades.forEach(function(item) {
+    //         var itemObject = JSON.parse(item);
+    //         table.rows.add(itemObject.dato1, itemObject.dato2, itemObject.dato3);
+    //     });
 
-
-       // console.log(table);
-       console.log(req.query.lstUnidades);
-
-        req.query.lstUnidades.forEach(function(item) {
-            var itemObject = JSON.parse(item);
-            table.rows.add(itemObject.dato1, itemObject.dato2, itemObject.dato3);
-        });
-
-        const request = new sql.Request(dbCnx);
-        request.bulk(table, (err, result) => {
-            dbCnx.close();
-            return res.json({ result: 'OK' });
-        })
+    //     const request = new sql.Request(dbCnx);
+    //     request.bulk(table, (err, result) => {
+    //         dbCnx.close();
+    //         return res.json({ result: 'OK' });
+    //     })
 
 
-    }).catch(function(err) {
-        res.json(err);
-        dbCnx.close();
-    });
+    // }).catch(function(err) {
+    //     res.json(err);
+    //     dbCnx.close();
+    // });
 
 
 
@@ -53,13 +53,11 @@ router.get('/insExcelData', function(req, res) {
 
 
 router.post('/upload', function(req, res, next) {
-
-
     var filename = String(new Date().getTime());
     var multer = require('multer');
     var storage = multer.diskStorage({
         destination: function(req, file, callback) {
-            callback(null, 'uploaded/');
+            callback(null, 'app_back/uploaded/');
         },
         filename: function(req, file, callback) {
 
@@ -85,18 +83,19 @@ router.post('/upload', function(req, res, next) {
 //LayoutName
 
 router.get('/readLayout', function(req, res, next) {
+    console.log("Lectura del EXCEL");
     var self = this;
     var parseXlsx = require('excel');
 
-    parseXlsx('uploaded/' + req.query.LayoutName, function(err, data) {
+    parseXlsx('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err, data) {
         if (err) {
             console.log(err);
             return res.end("Error uploading file.");
         } else {
-
+            // console.log( "Data", data );
             setTimeout(function() {
                 var fs = require("fs");
-                fs.unlink('uploaded/' + req.query.LayoutName, function(err) {
+                fs.unlink('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err) {
                     if (err) {
                         console.log(err);
                         return res.end(err);
