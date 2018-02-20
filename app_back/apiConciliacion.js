@@ -14,37 +14,37 @@ router.get('/', function(req, res) {
 
 // define the about route
 router.get('/insExcelData', function(req, res) {
-    res.json({success: 1});
+    // res.json({success: 1});
 
-    // var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    // dbCnx.connect().then(function() {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
 
-    //     const table = new sql.Table('TmpExcelData');
-    //     table.create = true;
-    //     table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
-    //     table.columns.add('valor', sql.Numeric(18, 4), { nullable: true });
-    //     table.columns.add('interes', sql.Numeric(18, 4), { nullable: true });
-
-
-    //    // console.log(table);
-    //    console.log(req.query.lstUnidades);
-
-    //     req.query.lstUnidades.forEach(function(item) {
-    //         var itemObject = JSON.parse(item);
-    //         table.rows.add(itemObject.dato1, itemObject.dato2, itemObject.dato3);
-    //     });
-
-    //     const request = new sql.Request(dbCnx);
-    //     request.bulk(table, (err, result) => {
-    //         dbCnx.close();
-    //         return res.json({ result: 'OK' });
-    //     })
+        const table = new sql.Table('TmpExcelData');
+        table.create = true;
+        table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
+        table.columns.add('valor', sql.Numeric(18, 4), { nullable: true });
+        table.columns.add('interes', sql.Numeric(18, 4), { nullable: true });
 
 
-    // }).catch(function(err) {
-    //     res.json(err);
-    //     dbCnx.close();
-    // });
+       // console.log(table);
+       console.log(req.query.lstUnidades);
+
+        req.query.lstUnidades.forEach(function(item) {
+            var itemObject = JSON.parse(item);
+            table.rows.add(itemObject.dato1, itemObject.dato2, itemObject.dato3);
+        });
+
+        const request = new sql.Request(dbCnx);
+        request.bulk(table, (err, result) => {
+            dbCnx.close();
+            return res.json({ result: 'OK' });
+        })
+
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
 
 
 
