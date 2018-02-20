@@ -33,14 +33,16 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         console.log(filename);
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
-            console.log('layout',LayoutFile);
-            var execelFields = $scope.arrayToObject(LayoutFile);
-            console.log('fields',execelFields);
+            var aux = [];
+            for( var i = 1; i < LayoutFile.length; i++ ){
+                aux.push( LayoutFile[i] );
+            }
+            var execelFields = $scope.arrayToObject(aux);
             $scope.nexStep();
 
-            // conciliacionFactory.insExcelData(execelFields).then(function(result) {
-            //     console.log(result.data);
-            // });
+            conciliacionFactory.insExcelData(execelFields).then(function(result) {
+                console.log(result.data);
+            });
         }, function(error) {
             console.log("Error", error);
         });

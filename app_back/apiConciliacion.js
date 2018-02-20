@@ -18,7 +18,7 @@ router.get('/insExcelData', function(req, res) {
 
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
-
+        
         const table = new sql.Table('TmpExcelData');
         table.create = true;
         table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
