@@ -12,6 +12,9 @@
                                         <span class="caret"></span>
                                     </button>
                                 <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="setCurrentSucursal()">Todas Sucursales</a>
+                                    </li>
                                     <li ng-repeat="sucursal in lstSucursal">
                                         <a ng-click="setCurrentSucursal(sucursal)">{{sucursal.nombreSucursal}}</a>
                                     </li>

@@ -18,6 +18,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.currentSucursalName = "Sucursal Todas";
     $scope.currentFinancialName = "Selecciona Financiera";
     $scope.currentSucursal = [];
+    $scope.currentFinancial = [];
     $scope.allUnits = { isChecked: false };
     $scope.currentFinancialID = 0;
     $scope.interesMesActual = 0;
@@ -27,7 +28,14 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.fechaHoy = new Date();
     $scope.typeTraspaso = 0;
     $scope.TituloTraspaso = '';
+    $scope.initAmounts = function() {
 
+        $scope.lstNewUnits = [];
+        $scope.interesPagado = 0;
+        $scope.interesMesActual = 0;
+        $scope.interesAcumulado = 0;
+        $scope.numUnidades = 0;
+    };
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
@@ -50,22 +58,32 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.setCurrentSucursal = function(sucursalObj) {
         $scope.totalUnidades = 0;
-        $scope.currentSucursalName = sucursalObj.nombreSucursal;
-        $scope.currentSucursal = sucursalObj;
+        if (sucursalObj != null) {
+            $scope.currentSucursalName = sucursalObj.nombreSucursal;
+            $scope.currentSucursal = sucursalObj;
+            $scope.ddlFinancialShow = true;
+        } else {
+            $scope.currentSucursalName = "Sucursal Todas";
+            $scope.currentSucursal = [];
+            $scope.ddlFinancialShow = false;
+        }
         $scope.lstNewUnits = [];
+        $scope.currentFinancial = [];
+        $scope.currentFinancialName = "Selecciona Financiera";
 
-        $scope.ddlFinancialShow = true;
+        $('#mdlLoading').modal('show');
+        $scope.ObtenUnidadesInteres();
     };
     $scope.setCurrentFinancial = function(financialObj) {
         //  $scope.currentPanel = "pnlResumen";
         $scope.currentFinancialName = financialObj.nombre;
-
-        // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
-
-        $scope.initAmounts();
-
+        $scope.currentFinancial = financialObj;
         $('#mdlLoading').modal('show');
-        interesFactory.getInterestUnits(sessionFactory.empresaID, $scope.currentSucursal.sucursalID, financialObj.financieraID).then(function(result) {
+        $scope.ObtenUnidadesInteres();
+    };
+    $scope.ObtenUnidadesInteres = function() {
+        $scope.initAmounts();
+        interesFactory.getInterestUnits(sessionFactory.empresaID, $scope.currentSucursal.sucursalID, $scope.currentFinancial.financieraID).then(function(result) {
             $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
             $scope.lstNewUnits = [];
             $scope.lstNewUnits = result.data;
@@ -73,13 +91,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 $scope.lstNewUnits[i].excludeField = false;
                 $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
                 $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
-                $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
+                $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumulado;
                 $scope.numUnidades++;
             }
 
             $('#mdlLoading').modal('hide');
         });
-    };
+    }
     $scope.setCurrentFinance2 = function(financialObj) {
         //  $scope.currentPanel = "pnlResumen";
         $scope.currentFinancialName2 = financialObj.nombre;
@@ -107,19 +125,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         //     $('#mdlLoading').modal('hide');
         // });
     };
-    interesFactory.getInterestUnits(sessionFactory.empresaID).then(function(result) {
-        // $('#tblUnidadesNuevas').DataTable().destroy();
-        $scope.lstNewUnits = [];
-        $scope.lstNewUnits = result.data;
-        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-            $scope.lstNewUnits[i].excludeField = false;
-            $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
-            $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
-            $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
-            $scope.numUnidades++;
-        }
-        $('#mdlLoading').modal('hide');
-    });
+
+    $scope.ObtenUnidadesInteres();
 
     $scope.filterDay = function(days) {
         //  $('#tblUnidadesNuevas').DataTable().destroy();
@@ -222,14 +229,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
 
 
-    $scope.initAmounts = function() {
 
-        $scope.lstNewUnits = [];
-        $scope.interesPagado = 0;
-        $scope.interesMesActual = 0;
-        $scope.interesAcumulado = 0;
-        $scope.numUnidades = 0;
-    };
 
     $scope.setTableStyle = function(tblID) {
         staticFactory.setTableStyleOne(tblID);

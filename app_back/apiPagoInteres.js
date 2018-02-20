@@ -44,7 +44,8 @@ router.get('/getLoteDetail', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        request.input('loteID', sql.Int, req.query.loteID);
+
+        request.input('planpisoID', sql.Int, req.query.loteID);
 
         request.execute('uspGetLoteInteresDetalle').then(function(result) {
             dbCnx.close();

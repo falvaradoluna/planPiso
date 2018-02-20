@@ -14,11 +14,12 @@
                     <th>Saldo</th>
                     <th>Dias Interes</th>
                     <th>Dias Restantes</th>
-                    <th>Interes Corte Pagado</th>
-                    <th>Interes MesActual</th>
+                    <th>Interes Mes</th>
+                    <th>Interes Acumulado</th>
                     <!-- <th>Interes Acumulado Financiera</th>
                     <th>Interes Total</th> -->
                     <th>Interes Total</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,10 +35,10 @@
                     <td>{{unidad.saldo}}</td>
                     <td>{{unidad.diasInteres}}</td>
                     <td>{{unidad.diasRestantes}}</td>
-                    <td>{{unidad.InteresCortePagado | currency}}</td>
                     <td>{{unidad.InteresMesActual | currency}}</td>
-                    <!-- <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td>
-                    <td>{{unidad.InteresTotal | currency}}</td> -->
+                    <td>{{unidad.InteresAcumulado | currency}}</td>
+                    <!-- <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td> -->
+                    <td>{{unidad.InteresTotal | currency}}</td>
                     <td>
                         <button type="button" class="btn btn-primary" ng-click="setPnlDetalleUnidad(unidad)">
                             <span class="glyphicon glyphicon-th-list"> </span>
