@@ -1,12 +1,11 @@
 appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory) {
-
-    $scope.lstConceal = [];
-    $scope.lstFinancial = [];
+    $scope.lstConceal           = [];
+    $scope.lstFinancial         = [];
     $scope.currentFinancialName = "Seleccionar Financiera";
-    $scope.currentFinancial = {};
-    $scope.total = { sistema: 0, archivo: 0 };
-
-    $scope.currentPanel = 'pnlCargaArchivo';
+    $scope.currentFinancial     = {};
+    $scope.total                = { sistema: 0, archivo: 0 };
+    $scope.loadLayout           = false;
+    $scope.currentPanel         = 'pnlCargaArchivo';
 
     commonFactory.getFinancial().then(function(result) {
         $scope.lstFinancial = result.data;
@@ -34,10 +33,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         console.log(filename);
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
-            console.log('layout',LayoutFile);
-            var execelFields = $scope.arrayToObject(LayoutFile);
-console.log('fields',execelFields);
-
+            var aux = [];
+            for( var i = 1; i < LayoutFile.length; i++ ){
+                aux.push( LayoutFile[i] );
+            }
+            var execelFields = $scope.arrayToObject(aux);
+            $scope.nexStep();
 
             conciliacionFactory.insExcelData(execelFields).then(function(result) {
                 console.log(result.data);
