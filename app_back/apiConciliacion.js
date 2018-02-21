@@ -7,6 +7,7 @@ var appConfig = require('../appConfig');
 router.use(function timeLog(req, res, next) {
     next();
 });
+
 // define the home page route
 router.get('/', function(req, res) {
     res.json({ message: 'Test conciliación api' });
@@ -14,43 +15,29 @@ router.get('/', function(req, res) {
 
 // define the about route
 router.get('/insExcelData', function(req, res) {
-    // res.json({success: 1});
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
-        
-        const table = new sql.Table('TmpExcelData');
-        table.create = true;
-        table.columns.add('numeroSerie', sql.VarChar(25), { nullable: true });
-        table.columns.add('valor', sql.Numeric(18, 4), { nullable: true });
-        table.columns.add('interes', sql.Numeric(18, 4), { nullable: true });
+        var request = new sql.Request(dbCnx);
+            var itemObject = JSON.parse( req.query.lstUnidades );
+            request.input('numeroSerie', sql.VarChar,        itemObject.dato1);
+            request.input('valor',       sql.Numeric(18, 4), itemObject.dato2);
+            request.input('interes',     sql.Numeric(18, 4), itemObject.dato3);
+            request.input('consecutivo', sql.Int,            itemObject.consecutivo);
 
-
-       // console.log(table);
-       console.log(req.query.lstUnidades);
-
-        req.query.lstUnidades.forEach(function(item) {
-            var itemObject = JSON.parse(item);
-            table.rows.add(itemObject.dato1, itemObject.dato2, itemObject.dato3);
-        });
-
-        const request = new sql.Request(dbCnx);
-        request.bulk(table, (err, result) => {
-            dbCnx.close();
-            return res.json({ result: 'OK' });
-        })
-
-
+            request.execute('TEMPORALLAYOUT_SP').then(function(result) {
+                res.json(result.recordsets[0]);
+                dbCnx.close();
+            }).catch(function(err) {
+                console.log( "Error A", err );
+                res.json(err);
+                dbCnx.close();
+            });
     }).catch(function(err) {
+        console.log( "Error B", err );
         res.json(err);
         dbCnx.close();
     });
-
-
-
-
 });
-
 
 router.post('/upload', function(req, res, next) {
     var filename = String(new Date().getTime());
@@ -69,35 +56,25 @@ router.post('/upload', function(req, res, next) {
 
     upload(req, res, function(err) {
         if (err) {
-            console.log(err);
             return res.end("Error uploading file.");
         } else {
             return res.end(filename);
         }
-
     });
-
-
 });
 
-//LayoutName
-
 router.get('/readLayout', function(req, res, next) {
-    console.log("Lectura del EXCEL");
     var self = this;
     var parseXlsx = require('excel');
 
     parseXlsx('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err, data) {
         if (err) {
-            console.log(err);
             return res.end("Error uploading file.");
         } else {
-            // console.log( "Data", data );
             setTimeout(function() {
                 var fs = require("fs");
                 fs.unlink('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err) {
                     if (err) {
-                        console.log(err);
                         return res.end(err);
                     } else {
                         return res.json(data);
@@ -108,9 +85,7 @@ router.get('/readLayout', function(req, res, next) {
     });
 });
 
-
 router.get('/getConciliacion', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -129,11 +104,6 @@ router.get('/getConciliacion', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
-
 });
-
-
-
 
 module.exports = router;
