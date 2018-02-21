@@ -29,24 +29,42 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     };
 
+    var execelFields = [];
     $scope.readLayout = function(filename) {
-        console.log(filename);
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
             var aux = [];
             for( var i = 1; i < LayoutFile.length; i++ ){
                 aux.push( LayoutFile[i] );
             }
-            var execelFields = $scope.arrayToObject(aux);
-            $scope.nexStep();
-
-            conciliacionFactory.insExcelData(execelFields).then(function(result) {
-                console.log(result.data);
-            });
+            
+            execelFields = $scope.arrayToObject(aux);
+            $scope.insertData( 0 );
+            // execelFields.forEach( function( item, key){
+            //     conciliacionFactory.insExcelData(item).then(function(result) {
+            //         console.log(result.data);
+            //     });
+            // });            
         }, function(error) {
             console.log("Error", error);
         });
     };
+
+    var increment = 0;
+    $scope.insertData = function( consecutivo ){
+        execelFields[ increment ]['consecutivo'] = consecutivo;
+        console.log( increment, execelFields[ increment ] );
+        conciliacionFactory.insExcelData( execelFields[ increment ] ).then(function(result) {
+            increment++;
+            console.log( "data", result.data );
+            console.log( "consecutiva", result.data[0].consecutiva );
+            $scope.insertData( result.data[0].consecutiva );
+
+            if( increment >= (execelFields.length - 1) ){
+                $scope.nexStep();
+            }
+        });
+    }
 
     $scope.arrayToObject = function(array) {
         var lst = [];
@@ -81,6 +99,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     $scope.nexStep = function() {
         $scope.currentPanel = 'pnlConciliar';
+        $scope.conceal();
     };
 
     $scope.prevStep = function() {
