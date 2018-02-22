@@ -1,11 +1,11 @@
 appModule.factory('interesFactory', function($http) {
 
     return {
-        getInterestUnits: function(empresaID, sucursalID) {
+        getInterestUnits: function(empresaID, sucursalID, financieraID) {
             return $http({
                 url: '/apiInteres/getInterestUnits',
                 method: "GET",
-                params: { empresaID: empresaID, sucursalID: sucursalID },
+                params: { empresaID: empresaID, sucursalID: sucursalID, financieraID: financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -27,6 +27,30 @@ appModule.factory('interesFactory', function($http) {
         insLotePagoDetalle: function(params) {
             return $http({
                 url: '/apiInteres/insLotePagoDetalle',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        setChangeSchema: function(params) {
+            return $http({
+                url: '/apiInteres/setChangeSchema',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getSchemaMovements: function(params) {
+            return $http({
+                url: '/apiInteres/getSchemaMovements',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getGuardaProvision: function(params) {
+            return $http({
+                url: '/apiInteres/guardaProvision',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
