@@ -3,7 +3,7 @@ appModule.controller('tiieInfo', function($scope, $rootScope, $location, commonF
 
 	$rootScope.currentTIIE = function(){
 		commonFactory.currentTIIE().then(function(result) {
-	        var response 			= result.data[0];
+	        var response 				= result.data[0];
 	        $rootScope.currentTIIEData	= response;
 
 	        if( response.success == 1 ){
@@ -12,9 +12,9 @@ appModule.controller('tiieInfo', function($scope, $rootScope, $location, commonF
 	        else{
 	        	$scope.warning = true;
 	        }
-	        $rootScope.tiieFields.percent 	= response.Tiie;
+	        $rootScope.tiieFields.percent = response.Tiie;
 	    });
-	    $rootScope.tiieFields.date 		= $scope.fechaActual();
+	    $rootScope.tiieFields.date 		  = $scope.fechaActual();
 	}
 
 	$scope.fechaActual = function(){

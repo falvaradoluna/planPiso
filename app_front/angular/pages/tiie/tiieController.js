@@ -65,13 +65,15 @@ appModule.controller('tiieController', function($scope, $rootScope, $location, c
     };
 
     $scope.setTableStyle = function(tableID) {
-        staticFactory.setTableStyleOne(tableID);
-        $scope.setStyle();
+        setTimeout( function(){
+            staticFactory.setTableStyleOne(tableID);
+            $scope.setStyle();
+        }, 500)
     };
 
     $scope.setStyle = function() {
         staticFactory.setCalendarStyle();
-        //$scope.tiieFields.date = today;
+        // $scope.tiieFields.date = today;
         console.log("done");
     };
 });
