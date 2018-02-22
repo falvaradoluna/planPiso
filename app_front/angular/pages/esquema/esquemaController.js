@@ -20,7 +20,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
 
     $scope.topBarNav = staticFactory.esquemaBar();
 
-    commonFactory.getFinancial().then(function(result) {
+    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
     commonFactory.getTipoTiie().then(function(result) {

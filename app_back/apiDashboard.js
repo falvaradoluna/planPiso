@@ -13,10 +13,8 @@ router.get('/', function(req, res) {
 });
 
 router.get('/getDashboard', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
-
         var request = new sql.Request(dbCnx);
         request.input('empresaID', sql.Int, req.query.empresaID);
 
@@ -32,12 +30,6 @@ router.get('/getDashboard', function(req, res) {
         console.log(err);
         dbCnx.close();
     });
-
 });
-
-
-
-
-
 
 module.exports = router;

@@ -7,6 +7,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Esquemas', url: '#', isActive: true }
             ];
         },
+        financieraBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Financieras', url: '#', isActive: true }
+            ];
+        },
         tiieBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },

@@ -23,7 +23,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
     $('#mdlLoading').modal('show');
 
-    commonFactory.getFinancial().then(function(result) {
+    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
 
