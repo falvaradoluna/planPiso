@@ -1,6 +1,6 @@
 var appModule = angular.module("planPisoApp", ["ngRoute"]);
 appModule.config(function($routeProvider, $locationProvider) {
-    
+
 
     $routeProvider.when('/', {
         templateUrl: 'angular/pages/empresa/empresa.html',
@@ -14,6 +14,9 @@ appModule.config(function($routeProvider, $locationProvider) {
     }).when('/esquema', {
         templateUrl: 'angular/pages/esquema/esquema.html',
         controller: 'esquemaController'
+    }).when('/financiera', {
+        templateUrl: 'angular/pages/financiera/financiera.html',
+        controller: 'financieraController'
     }).when('/interes', {
         templateUrl: 'angular/pages/interes/interes.html',
         controller: 'interesController'

@@ -42,7 +42,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     });
 
 
-    commonFactory.getFinancial().then(function(result) {
+    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
     $scope.checkUnits = function(value) {
