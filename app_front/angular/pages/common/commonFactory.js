@@ -40,6 +40,13 @@ appModule.factory('commonFactory', function($http) {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        currentTIIE: function() {
+            return $http({
+                url: 'apiCommon/currentTIIE',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };
