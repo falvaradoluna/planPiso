@@ -7,12 +7,11 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.loadLayout           = false;
     $scope.currentPanel         = 'pnlCargaArchivo';
 
+    var myDropzone;
+    // Este es como funciona desde Branch Conciliación
     commonFactory.getFinancial().then(function(result) {
         $scope.lstFinancial = result.data;
     });
-
-
-    var myDropzone;
 
     $scope.Dropzone = function() {
         myDropzone = new Dropzone("#idDropzone", {
