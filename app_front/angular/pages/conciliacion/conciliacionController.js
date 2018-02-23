@@ -1,13 +1,13 @@
 appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory) {
-    $scope.lstConceal           = [];
-    $scope.lstFinancial         = [];
+    $scope.lstConceal = [];
+    $scope.lstFinancial = [];
     $scope.currentFinancialName = "Seleccionar Financiera";
-    $scope.currentFinancial     = {};
-    $scope.total                = { sistema: 0, archivo: 0 };
-    $scope.loadLayout           = false;
-    $scope.currentPanel         = 'pnlCargaArchivo';
+    $scope.currentFinancial = {};
+    $scope.total = { sistema: 0, archivo: 0 };
+    $scope.loadLayout = false;
+    $scope.currentPanel = 'pnlCargaArchivo';
 
-    commonFactory.getFinancial().then(function(result) {
+    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
 
@@ -34,12 +34,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
             var aux = [];
-            for( var i = 1; i < LayoutFile.length; i++ ){
-                aux.push( LayoutFile[i] );
+            for (var i = 1; i < LayoutFile.length; i++) {
+                aux.push(LayoutFile[i]);
             }
-            
+
             execelFields = $scope.arrayToObject(aux);
-            $scope.insertData( 0 );
+            $scope.insertData(0);
             // execelFields.forEach( function( item, key){
             //     conciliacionFactory.insExcelData(item).then(function(result) {
             //         console.log(result.data);
@@ -51,16 +51,16 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     var increment = 0;
-    $scope.insertData = function( consecutivo ){
-        execelFields[ increment ]['consecutivo'] = consecutivo;
-        console.log( increment, execelFields[ increment ] );
-        conciliacionFactory.insExcelData( execelFields[ increment ] ).then(function(result) {
+    $scope.insertData = function(consecutivo) {
+        execelFields[increment]['consecutivo'] = consecutivo;
+        console.log(increment, execelFields[increment]);
+        conciliacionFactory.insExcelData(execelFields[increment]).then(function(result) {
             increment++;
-            console.log( "data", result.data );
-            console.log( "consecutiva", result.data[0].consecutiva );
-            $scope.insertData( result.data[0].consecutiva );
+            console.log("data", result.data);
+            console.log("consecutiva", result.data[0].consecutiva);
+            $scope.insertData(result.data[0].consecutiva);
 
-            if( increment >= (execelFields.length - 1) ){
+            if (increment >= (execelFields.length - 1)) {
                 $scope.nexStep();
             }
         });

@@ -11,10 +11,13 @@ appModule.factory('commonFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getFinancial: function() {
+        getFinancial: function(empresaID) {
             return $http({
                 url: 'apiCommon/getFinancieras',
                 method: "GET",
+                params: {
+                    empresaID: empresaID
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
