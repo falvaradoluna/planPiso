@@ -7,8 +7,6 @@ appModule.controller('tiieController', function($scope, $rootScope, $location, c
     var today               = staticFactory.todayDate();
     $scope.currentPanel     = 'pnlTiie';
     $scope.lstTiie          = [];
-
-    $rootScope.tiieFields       = { date: null, percent: 0 };
     $rootScope.currentTIIEData  = {};
 
     setTimeout( function(){

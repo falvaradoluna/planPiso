@@ -1,5 +1,6 @@
 appModule.controller('tiieInfo', function($scope, $rootScope, $location, commonFactory, staticFactory, tiieFactory) {
 	$scope.warning 				= false;
+	$rootScope.tiieFields       = { date: null, percent: 0 };
 
 	$rootScope.currentTIIE = function(){
 		commonFactory.currentTIIE().then(function(result) {
@@ -14,7 +15,7 @@ appModule.controller('tiieInfo', function($scope, $rootScope, $location, commonF
 	        }
 	        $rootScope.tiieFields.percent = response.Tiie;
 	    });
-	    $rootScope.tiieFields.date 		  = $scope.fechaActual();
+	    $rootScope.tiieFields.date		 = $scope.fechaActual();
 	}
 
 	$scope.fechaActual = function(){
