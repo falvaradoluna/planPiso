@@ -127,9 +127,12 @@ appModule.factory('staticFactory', function($http) {
 
         },
         setTableStyleOne: function(tblID) {
+            console.log('Hola setTableStyleOne');
+            $(tblID).DataTable().destroy()
             $(tblID).DataTable({
                 dom: '<"html5buttons"B>lTfgitp',
                 //iDisplayLength: 5,
+                order: [[ 0, "desc" ]],
                 buttons: [{
                     extend: 'copy'
                 }, {

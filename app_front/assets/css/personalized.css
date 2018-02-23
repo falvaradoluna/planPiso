@@ -212,3 +212,12 @@
 .simpleStep .visited {
     background-color: #6FD1BD;
 }
+
+.alert-correct{
+    font-size: 30px !important;
+    margin-top: 15px;
+}
+
+.text-center{
+    text-align: center;
+}
