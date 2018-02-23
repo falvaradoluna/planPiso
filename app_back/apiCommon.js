@@ -67,6 +67,7 @@ router.get('/currentTIIE', function(req, res) {
         var request = new sql.Request(dbCnx);
 
         request.execute('CURRENTTIIE_SP').then(function(result) {
+            console.log( "TIIE", result );
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
