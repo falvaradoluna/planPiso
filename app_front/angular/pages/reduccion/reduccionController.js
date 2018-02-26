@@ -1,12 +1,48 @@
-appModule.controller('reduccionController', function($scope, $rootScope, $location, commonFactory, staticFactory, reduccionFactory) {
+appModule.controller('reduccionController', function($scope, $rootScope, $location, commonFactory, staticFactory, reduccionFactory, filterFilter) {
     var sessionFactory      = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario        = localStorage.getItem("idUsuario");
     $scope.currentEmpresa   = sessionFactory.nombre;
 
     $scope.topBarNav        = staticFactory.tiieBar();
     var today               = staticFactory.todayDate();
-    // $scope.currentPanel     = 'pnlTiie';
-    // $scope.lstTiie          = [];
+    $scope.filterStarus     = 1;
+
+    $scope.lstEsquemas      = [];
+    $scope.cantStatus       = { porvencer: 0, vencido: 0, vigente: 0 };
+
+    $scope.OnInit = function(){
+        $scope.getEsquema();
+    }
+
+    $scope.getEsquema = function(){
+        reduccionFactory.getEsquema( 1 ).then(function(result) {
+            $scope.lstEsquemas = result.data;
+
+            var aux0 = 0,
+                aux1 = 0,
+                aux2 = 0;
+
+            filterFilter($scope.lstEsquemas, { estatus: 0 }).forEach(function( item ){
+                aux0 = aux0 + parseInt( item['TotalDocumentos'] );
+            })
+
+            filterFilter($scope.lstEsquemas, { estatus: 1 }).forEach(function( item ){
+                aux1 = aux1 + parseInt( item['TotalDocumentos'] );
+            })
+
+            filterFilter($scope.lstEsquemas, { estatus: 2 }).forEach(function( item ){
+                aux2 = aux2 + parseInt( item['TotalDocumentos'] );
+            })
+
+            $scope.cantStatus['vencido']    = aux0;
+            $scope.cantStatus['porvencer']  = aux1;
+            $scope.cantStatus['vigente']    = aux2;
+        });
+    }
+
+    $scope.setStatusFilter = function( status ){
+        $scope.filterStarus = status;
+    }
     // $rootScope.currentTIIEData  = {};
 
     // setTimeout( function(){
@@ -62,16 +98,16 @@ appModule.controller('reduccionController', function($scope, $rootScope, $locati
     //     });
     // };
 
-    // $scope.setTableStyle = function(tableID) {
-    //     setTimeout( function(){
-    //         staticFactory.setTableStyleOne(tableID);
-    //         $scope.setStyle();
-    //     }, 500)
-    // };
+    $scope.setTableStyle = function(tableID) {
+        setTimeout( function(){
+            staticFactory.setTableStyleOne(tableID);
+            $scope.setStyle();
+        }, 500)
+    };
 
-    // $scope.setStyle = function() {
-    //     staticFactory.setCalendarStyle();
-    //     // $scope.tiieFields.date = today;
-    //     console.log("done");
-    // };
+    $scope.setStyle = function() {
+        staticFactory.setCalendarStyle();
+        // $scope.tiieFields.date = today;
+        console.log("done");
+    };
 });

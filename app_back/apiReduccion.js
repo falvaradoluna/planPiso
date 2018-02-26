@@ -13,13 +13,15 @@ router.get('/', function(req, res) {
     res.json({ message: 'Test TIIE' });
 });
 
-router.get('/getTiie', function(req, res) {
+router.get('/getEsquemaExpiration', function(req, res) {
+    var resultados = [];
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
+        request.input('idEmpresa', sql.Int, req.query.idEmpresa);
 
-        request.execute('uspGetTiie').then(function(result) {
+        request.execute('ESQUEMAEXPIRATION_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
@@ -27,75 +29,6 @@ router.get('/getTiie', function(req, res) {
             dbCnx.close();
         });
 
-    }).catch(function(err) {
-        console.log(err);
-        dbCnx.close();
-    });
-
-});
-
-router.get('/getTiieDateExist', function(req, res) {
-
-    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    dbCnx.connect().then(function() {
-
-        console.log(req.query.fecha);
-
-        var request = new sql.Request(dbCnx);
-        request.input('fecha', sql.Date, req.query.fecha);
-
-        request.execute('uspGetTiieDateExist').then(function(result) {
-            dbCnx.close();
-            res.json(result.recordsets[0]);
-        }).catch(function(err) {
-            console.log(err);
-            dbCnx.close();
-        });
-
-    }).catch(function(err) {
-        console.log(err);
-        dbCnx.close();
-    });
-
-});
-
-router.get('/insertTiie', function(req, res) {
-    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    dbCnx.connect().then(function() {
-        var request = new sql.Request(dbCnx);
-        request.input('fecha', sql.Date, req.query.fecha);
-        request.input('porcentaje', sql.Float, req.query.porcentaje);
-        request.input('userID', sql.Int, req.query.userID);
-
-        request.execute('uspInsTiie').then(function(result) {
-            dbCnx.close();
-            res.json(result.recordsets[0]);
-        }).catch(function(err) {
-            console.log(err);
-            dbCnx.close();
-        });
-    }).catch(function(err) {
-        console.log(err);
-        dbCnx.close();
-    });
-});
-
-router.get('/actualizaTiie', function(req, res) {
-    console.log( "query", req.query );
-    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    dbCnx.connect().then(function() {
-        var request = new sql.Request(dbCnx);
-
-        request.input('idTIIE',     sql.Int,   req.query.idTIIE);
-        request.input('porcentaje', sql.Float,  req.query.porcentaje);
-
-        request.execute('ACTUALIZATIIE_SP').then(function(result) {
-            dbCnx.close();
-            res.json(result.recordsets[0]);
-        }).catch(function(err) {
-            console.log(err);
-            dbCnx.close();
-        });
     }).catch(function(err) {
         console.log(err);
         dbCnx.close();

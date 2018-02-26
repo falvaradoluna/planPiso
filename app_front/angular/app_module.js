@@ -47,7 +47,7 @@ appModule.config(function($routeProvider, $locationProvider) {
         controller: 'tiieController'
     })
 
-    .when('/reduccion', {
+    .when('/reprogramacion', {
         templateUrl: 'angular/pages/reduccion/templetes/reduccion.html',
         controller: 'reduccionController'
     })
