@@ -2,14 +2,15 @@
     <thead>
         <tr>
             <th>Num Documento</th>
-            <th>Descripcion</th>
-            <th>Tipo documento</th>
+            <!-- <th>Descripcion</th>
+            <th>Tipo documento</th> -->
             <th>VIN</th>
             <th>Marca</th>
             <th>Descripción Modelo</th>
             <th>Modelo</th>
             <th>Precio venta</th>
             <th>Fecha Cálculo</th>
+            <th>Interes Acumulado</th>
             <th>Saldo Inicial</th>
             <th>Mensage</th>
         </tr>
@@ -17,14 +18,15 @@
     <tbody>
         <tr ng-repeat="unidadSeleccion in lstNewUnits | filter:{isChecked:true}" repeat-end="setTableStyle('#tblSelectedUnits')">
             <td>{{unidadSeleccion.CCP_IDDOCTO}}</td>
-            <td>{{unidadSeleccion.DES_CARTERA}}</td>
-            <td>{{unidadSeleccion.DES_TIPODOCTO}}</td>
+            <!-- <td>{{unidadSeleccion.DES_CARTERA}}</td>
+            <td>{{unidadSeleccion.DES_TIPODOCTO}}</td> -->
             <td>{{unidadSeleccion.vehNumserie}}</td>
             <td>{{unidadSeleccion.marca}}</td>
             <td>{{unidadSeleccion.descModelo}}</td>
             <td>{{unidadSeleccion.modelo}}</td>
             <td>{{unidadSeleccion.IMPORTE}}</td>
             <td>{{unidadSeleccion.fechaCalculoString}}</td>
+            <td>{{unidadSeleccion.interes}}</td>
             <td>{{unidadSeleccion.SALDO}}</td>
 
             <td ng-style="unidadSeleccion.isValid ?  

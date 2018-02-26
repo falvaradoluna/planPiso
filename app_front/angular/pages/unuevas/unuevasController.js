@@ -141,6 +141,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
                     userID: $scope.userID,
                     esquemaID: $scope.selectedSchema.esquemaID,
                     saldoInicial: item.SALDO,
+                    interes: parseFloat(item.interes),
                     fechaCalculo: staticFactory.toISODate(item.fechaCalculoString)
                 };
 

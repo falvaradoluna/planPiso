@@ -75,8 +75,8 @@ router.post('/setUnitSchema', function(req, res) {
         request.input('userID', sql.Int, req.body.userID);
         request.input('esquemaID', sql.Int, req.body.esquemaID);
         request.input('fechaCalculo', sql.Date, req.body.fechaCalculo);
-        request.input('saldoInicial', sql.Int, req.body.saldoInicial);
-
+        request.input('saldoInicial', sql.Decimal, req.body.saldoInicial);
+        request.input('InteresInicial', sql.Decimal, req.body.interes);
 
         request.execute('uspSetUnidadSchema').then(function(result) {
             dbCnx.close();
