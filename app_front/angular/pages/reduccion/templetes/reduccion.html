@@ -1,0 +1,44 @@
+<top-Bar></top-Bar>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Reducción</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> TIIE no esta actualizada!
+                        </h4>
+                        <p>Es necesario mantener actualizada la TIIE para que las operaciones se realialicen de forma adecuada.</p>
+                        <hr>
+                        <p class="mb-0">
+                            <b>NOTA:</b> El porcentaje que se muestra en el campo, es el sugerido por el Banco de México.
+                        </p>
+                    </div>
+
+                    <h2><span class="text-navy">Esquemas</span></h2>
+                    <hr>
+                    <table id="tblTiie" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>fecha</th>
+                                <th>porcentaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="itemTiie in lstTiie" repeat-end="setTableStyle('#tblTiie')">
+                                <td>{{itemTiie.tiieID}}</td>
+                                <td>{{itemTiie.fecha}}</td>
+                                <td>{{itemTiie.porcentaje}} %</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
