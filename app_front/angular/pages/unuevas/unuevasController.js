@@ -14,6 +14,8 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.lstFinancial = [];
     $scope.lstSchemas = [];
     $scope.selectedSchema = [];
+    $scope.listPoliza = [];
+    $scope.incremental = 0;
     $scope.currentSucursalName = "Sucursal Todas";
     $scope.currentFinancialName = "Seleccionar Financiera";
 
@@ -132,28 +134,52 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
     $scope.setSchema = function() {
 
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        $scope.incremental = 0;
+        $scope.guardandoPoliza();
 
-
-        $scope.lstNewUnits.forEach(function(item) {
-            if (item.isChecked === true) {
-                var data = {
-                    CCP_IDDOCTO: item.CCP_IDDOCTO,
-                    userID: $scope.userID,
-                    esquemaID: $scope.selectedSchema.esquemaID,
-                    saldoInicial: item.SALDO,
-                    interes: parseFloat(item.interes),
-                    fechaCalculo: staticFactory.toISODate(item.fechaCalculoString)
-                };
-
-                unuevasFactory.setUnitSchema(data);
-            }
-        });
-
-        //aplicar la funcion paso a paso
-        $scope.success();
 
     };
+    $scope.guardandoPoliza = function() {
+        var saplica = 0;
+        var item = $scope.listPoliza[$scope.incremental];
 
+        var data = {
+            CCP_IDDOCTO: item.CCP_IDDOCTO,
+            userID: $scope.userID,
+            esquemaID: $scope.selectedSchema.esquemaID,
+            saldoInicial: item.SALDO,
+            interes: parseFloat(item.interes),
+            fechaCalculo: staticFactory.toISODate(item.fechaCalculoString)
+        };
+
+        unuevasFactory.setUnitSchema(data).then(function(result) {
+
+            var insercion = result;
+            console.log("insercion", insercion);
+
+            if (insercion.status == 200) {
+
+                $scope.incremental++;
+
+                if ($scope.incremental < $scope.listPoliza.length) {
+                    $scope.guardandoPoliza();
+                } else {
+                    $scope.incremental = 0;
+                    $scope.consecNum = 0;
+                    swal("Unidades asignadas", "Guardado correctamente");
+                    setTimeout(function() {
+                        console.log('Termino');
+                        window.location = "/interes";
+                    }, 1000);
+                }
+            } else {
+                swal("Poliza pago interes", "Guardado correctamente");
+            }
+        }, function(error) {
+            console.log("Error", error);
+        });
+    }
     $scope.success = function() {
         swal("Ok", "Asignación finalizó con exito", "success");
         setTimeout(function() {
