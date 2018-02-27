@@ -19,6 +19,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'TIIE', url: '#', isActive: true }
             ];
         },
+        tiieBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Reducción', url: '#', isActive: true }
+            ];
+        },
         interesBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },

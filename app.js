@@ -16,6 +16,7 @@ var apiPagoInteres = require('./app_back/apiPagoInteres');
 var apiConciliacion = require('./app_back/apiConciliacion');
 var apiDashboard = require('./app_back/apiDashboard');
 var timer = require('./app_back/timer');
+var apiReduccion = require('./app_back/apiReduccion');
 
 var app = express();
 var staticPath = path.join(__dirname, '/app_front');
@@ -34,6 +35,8 @@ app.use('/apiNewUnits', apiNewUnits);
 app.use('/apiConciliacion', apiConciliacion);
 app.use('/apiPagoInteres', apiPagoInteres);
 app.use('/apiDashboard', apiDashboard);
+app.use('/apiReduccion', apiReduccion);
+
 
 
 // app.engine('.html', require('ejs').__express);
