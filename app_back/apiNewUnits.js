@@ -70,11 +70,11 @@ router.post('/setUnitSchema', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-
+        var fecha = req.body.fechaCalculo.replace('-', '').replace('-', '');
         request.input('CCP_IDDOCTO', sql.VarChar, req.body.CCP_IDDOCTO);
         request.input('userID', sql.Int, req.body.userID);
         request.input('esquemaID', sql.Int, req.body.esquemaID);
-        request.input('fechaCalculo', sql.Date, req.body.fechaCalculo);
+        request.input('fecha_Calculo', sql.VarChar, fecha);
         request.input('saldoInicial', sql.Decimal, req.body.saldoInicial);
         request.input('InteresInicial', sql.Decimal, req.body.interes);
 
@@ -83,6 +83,7 @@ router.post('/setUnitSchema', function(req, res) {
             res.json(result.recordsets[0]);
         }).catch(function(err) {
             console.log(err);
+
             dbCnx.close();
         });
 
