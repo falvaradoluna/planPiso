@@ -2,15 +2,16 @@
     <thead>
         <tr>
             <th>Num Documento</th>
-            <th>Descripcion</th>
-            <th>Tipo documento</th>
+            <!-- <th>Descripcion</th>
+            <th>Tipo documento</th> -->
 
             <th>VIN</th>
             <th>Marca</th>
             <th>Descripción Modelo</th>
             <th>Modelo</th>
             <th>Precio venta</th>
-            <th>Fecha Cálculo</th>
+            <th>Fecha Interes Acumulado</th>
+            <th>Interes Acumulado</th>
             <th>Saldo Inicial</th>
             <th>
                 <input type="checkbox" ng-click="checkAllUnits()" ng-model="allUnits.isChecked" style="margin-left: 20px;">
@@ -20,8 +21,8 @@
     <tbody>
         <tr ng-repeat="unidad in lstNewUnits" repeat-end="initTblUnidadesNuevas()">
             <td>{{unidad.CCP_IDDOCTO}}</td>
-            <td>{{unidad.DES_CARTERA}}</td>
-            <td>{{unidad.DES_TIPODOCTO}}</td>
+            <!-- <td>{{unidad.DES_CARTERA}}</td>
+            <td>{{unidad.DES_TIPODOCTO}}</td> -->
             <td>{{unidad.vehNumserie}}</td>
             <td>{{unidad.marca}}</td>
             <td>{{unidad.descModelo}}</td>
@@ -35,6 +36,7 @@
                     </div>
                 </div>
             </td>
+            <td><input type="text" class="form-control" ng-model="unidad.interes" style="width: 100px"></td>
             <td><input type="text" class="form-control" ng-model="unidad.SALDO" style="width: 100px"></td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
