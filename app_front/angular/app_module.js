@@ -30,14 +30,16 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/interes', {
         templateUrl: 'angular/pages/interes/interes.html',
         controller: 'interesController'
-    })
-
-    .when('/pagoInteres', {
+    }).when('/pagoInteres', {
         templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
         controller: 'pagoInteresController'
+  
     })
-
-    .when('/dashboard', {
+      .when('/provision', {
+        templateUrl: 'angular/pages/provision/provision.html',
+        controller: 'provisionController'
+    })
+      .when('/dashboard', {
         templateUrl: 'angular/pages/dashboard/dashboard.html',
         controller: 'dashboardController'
     })

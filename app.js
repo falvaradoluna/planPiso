@@ -13,6 +13,7 @@ var apiFinanciera = require('./app_back/apiFinanciera');
 var apiInteres = require('./app_back/apiInteres');
 var apiNewUnits = require('./app_back/apiNewUnits');
 var apiPagoInteres = require('./app_back/apiPagoInteres');
+var apiProvision = require('./app_back/apiProvision');
 var apiConciliacion = require('./app_back/apiConciliacion');
 var apiDashboard = require('./app_back/apiDashboard');
 var timer = require('./app_back/timer');
@@ -34,6 +35,7 @@ app.use('/apiInteres', apiInteres);
 app.use('/apiNewUnits', apiNewUnits);
 app.use('/apiConciliacion', apiConciliacion);
 app.use('/apiPagoInteres', apiPagoInteres);
+app.use('/apiProvision', apiProvision);
 app.use('/apiDashboard', apiDashboard);
 app.use('/apiReduccion', apiReduccion);
 

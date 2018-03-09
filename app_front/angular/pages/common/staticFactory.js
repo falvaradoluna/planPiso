@@ -37,6 +37,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Pago', url: '#', isActive: true }
             ];
         },
+        provisionBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Provisión', url: '#', isActive: true }
+            ];
+        },
         conciliacionBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
