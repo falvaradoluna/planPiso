@@ -23,6 +23,9 @@ appModule.config(function($routeProvider, $locationProvider) {
     }).when('/pagoInteres', {
         templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
         controller: 'pagoInteresController'
+    }).when('/provision', {
+        templateUrl: 'angular/pages/provision/provision.html',
+        controller: 'provisionController'
     }).when('/dashboard', {
         templateUrl: 'angular/pages/dashboard/dashboard.html',
         controller: 'dashboardController'
