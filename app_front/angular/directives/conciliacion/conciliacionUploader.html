@@ -1,14 +1,48 @@
-<h2><span class="text-navy">Carga de Archivo</span></h2>
+<h2>
+    <span class="text-navy">Conciliación</span>
+    <button class="btn btn-warning pull-right" ng-click="openModalConciliacion()"><i class="fa fa-copy"></i> Nueva Conciliación </button>
+</h2>
 <hr>
-<div class="row row_dropzone onlyPrint">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-10" ng-init="Dropzone();">
-        <form action="/file-upload" class="dropzone" id="idDropzone">
-            <div class="fallback">
-                <input name="file" type="file" accept="text/csv, .csv" />
-            </div>
-        </form>
+<div class="row row_dropzone onlyPrint" ng-init="porAutorizar();">
+    <div class="col-sm-12">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Financiera</th>
+                    <th>Periodo Contable</th>
+                    <th>Fecha de Solicitud</th>
+                    <th>Estatus</th>
+                    <th>-</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, item) in lstPendiente">
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ lstMonth[ item.periodoContable - 1 ] }}</td>
+                    <td>{{ item.fechaSolicitud.split('T')[0] }}</td>
+                    <td>
+                        <span class="" ng-class="{ 'text-danger': item.estatus == 0, 'text-default' : item.estatus == 1, 'text-success' : item.estatus == 2}" style="overflow: hidden;">
+                            <table width="100%">
+                                <tr>
+                                    <td width="30">
+                                        <i ng-show="item.estatus == 0" style="font-size: 25px;" class="fa fa-ban" aria-hidden="true"></i>
+                                        <i ng-show="item.estatus == 1" style="font-size: 25px;" class="fa fa-clock-o" aria-hidden="true"></i>
+                                        <i ng-show="item.estatus == 2" style="font-size: 25px;" class="fa fa-check-circle-o" aria-hidden="true"></i>
+                                    </td>
+                                    <td> {{ item.descripcion }} </td>
+                                </tr>
+                            </table>                            
+                        </span>                        
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item.periodoContable, item.consecutivo );">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> Aplicar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <hr>
-<button type="button" class="btn btn-info pull-right" ng-click="nexStep()">Continuar</button>
+<!-- <button type="button" class="btn btn-info pull-right" ng-click="nexStep()">Continuar</button> -->

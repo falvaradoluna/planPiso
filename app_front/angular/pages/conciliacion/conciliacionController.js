@@ -1,31 +1,110 @@
-appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory) {
+appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory, filterFilter ) {
+    $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
+    
+    $scope.currentFinancialName = "Seleccionar Financiera";
+    $scope.lbl_btn_descheck     = "Desmarcar Unidades";
+    $scope.currentPanel         = 'pnlCargaArchivo';
+
+    /* =========================== 
+        [ estSolAutorizacion ]
+    Valida la aplicación de la conci
+    liacion mediante autorización de
+    usuarios mediante notificaciones
+
+    0 => No aplica; 
+    1 => Puede Solicitar;
+    2 => Solicitó y esta en espera;
+    3 => Aprobada;
+    4 => Rechazada;
+    ============================== */
+    $scope.estSolAutorizacion   = 0;
+
+    $scope.currentMonth         = 0;
+    $scope.currentYear          = 0;
+    
+    $scope.flagAjusteCaseTree   = true;
+    $scope.ajusteManual         = false;
+    
+    $scope.lstMonth             = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    $scope.cierreMes            = [];
     $scope.lstConceal           = [];
     $scope.lstFinancial         = [];
-    $scope.currentFinancialName = "Seleccionar Financiera";
+    $scope.lstPendiente         = [];
+    $scope.autDetalle           = [];
+    
     $scope.currentFinancial     = {};
     $scope.total                = { sistema: 0, archivo: 0 };
-    $scope.loadLayout           = false;
-    $scope.currentPanel         = 'pnlCargaArchivo';
-  
+    $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
+    $scope.situacion            = { ok:0, financiera:0, gpoAndrade: 0 };
+    $scope.diferencias          = { iguales:0, diferentes: 0 };
+
+    $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
+
+    var increment   = 0;
+    var contador    = 0;
+
+    var date        = new Date();
+    var toDay       = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    var firstDay    = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay     = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    var tenDay      = new Date(date.getFullYear(), date.getMonth(), 10);
+    var lastTenDay  = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    lastTenDay.setDate(lastTenDay.getDate() - 10);
+    var tenDayNextMonth  = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    tenDayNextMonth.setDate(tenDayNextMonth.getDate() + 10);
+
+    if( toDay.getTime() >= firstDay.getTime() && toDay.getTime() <= tenDay.getTime() ){
+        if( toDay.getMonth() == 0 ){
+            $scope.currentMonth = 11;
+            $scope.currentYear  = date.getFullYear() - 1;
+        }
+        else{
+            $scope.currentMonth = (toDay.getMonth() - 1);
+            $scope.currentYear  = date.getFullYear();
+        }
+    }
+    else{
+        $scope.currentMonth = toDay.getMonth();
+        $scope.currentYear  = date.getFullYear();
+    }
+
+    $scope.frmConciliacion.lblMes = $scope.lstMonth[ $scope.currentMonth ];    
+    
     // Este es como funciona desde Branch Conciliación
-    commonFactory.getFinancial().then(function(result) {
+    commonFactory.getFinancial( 1 ).then(function(result) {
         $scope.lstFinancial = result.data;
     });
     
     var myDropzone;
     $scope.Dropzone = function() {
+        $("#templeteDropzone").html( '' )
+
+        var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" accept="text/csv, .csv" />
+                        </div>
+                    </form>`;
+
+        $("#templeteDropzone").html( html );
         myDropzone = new Dropzone("#idDropzone", {
             url: "/apiConciliacion/upload",
             uploadMultiple: 0,
+            maxFiles: 1,
+            autoProcessQueue: true,
             acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         });
 
         myDropzone.on("success", function(req, res) {
             var filename = res + '.xlsx';
+            $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
-            //$(".row_dropzone").hide();
-        });
 
+            var _this = this;
+            $scope.limpiarDropzone = function(){
+                _this.removeAllFiles();
+                myDropzone.enable()
+            }
+        });
     };
 
     var execelFields = [];
@@ -38,31 +117,46 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             }
 
             execelFields = $scope.arrayToObject(aux);
-            $scope.insertData(0);
-            // execelFields.forEach( function( item, key){
-            //     conciliacionFactory.insExcelData(item).then(function(result) {
-            //         console.log(result.data);
-            //     });
-            // });            
+            $scope.insertData();
         }, function(error) {
             console.log("Error", error);
         });
     };
 
-    var increment = 0;
-    $scope.insertData = function(consecutivo) {
-        execelFields[increment]['consecutivo'] = consecutivo;
-        console.log(increment, execelFields[increment]);
-        conciliacionFactory.insExcelData(execelFields[increment]).then(function(result) {
-            increment++;
-            console.log("data", result.data);
-            console.log("consecutiva", result.data[0].consecutiva);
-            $scope.insertData(result.data[0].consecutiva);
+    $scope.insertData = function() {
+        try{
+            execelFields[increment]['consecutivo'] = contador;
+            conciliacionFactory.insExcelData(execelFields[increment]).then(function(result) {
+                if( !result.data ){
+                    swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                    $('#mdlLoading').modal('hide');
+                }
+                else{
+                    if( result.data[0].success == 1 ){
+                        contador    = parseInt(result.data[0].consecutivo);
 
-            if (increment >= (execelFields.length - 1)) {
-                $scope.nexStep();
-            }
-        });
+                        if (increment >= (execelFields.length - 1)) {
+                            // $scope.nexStep();
+                            $scope.frmConciliacion.loadLayout = true;
+                            $('#mdlLoading').modal('hide');
+                        }
+                        else{
+                            increment++;
+                            $scope.insertData();
+                        }
+                    }                    
+                }
+            })
+            .catch(function(e){
+               console.log("got an error in initial processing",e);
+               throw e;
+            }).then(function(res){
+            });            
+        }
+        catch( e ){
+            console.log( "Error", e );
+            swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+        }
     }
 
     $scope.arrayToObject = function(array) {
@@ -75,20 +169,119 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-        console.log($scope.currentFinancial.financieraID);
-        conciliacionFactory.getConciliacion($scope.currentFinancial.financieraID).then(function(result) {
+        conciliacionFactory.getConciliacion( $scope.currentMonth, contador ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
         });
+
+        $scope.getCierreMes();
     };
+
+    $scope.muestraConciliacionPendiente = function( periodo, consecutivo ){
+        conciliacionFactory.getConciliacion( periodo, consecutivo  ).then(function(result) {
+            conciliacionFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
+                if( detalle.data.length != 0 ){
+                    $scope.lstConceal = result.data;
+                    $scope.sumTotal();
+                    $scope.currentPanel = 'pnlConciliar';
+
+                    $scope.autDetalle = detalle.data[0];
+
+                    $scope.frmConciliacion.lblMes       = $scope.lstMonth[ ($scope.autDetalle.periodoContable - 1) ];
+                    $scope.frmConciliacion.idFinanciera = $scope.autDetalle.idFinanciera;
+                    $scope.lblFinanciera                = $scope.autDetalle.nombre;
+                    switch( $scope.autDetalle.estatus ){
+                        case 0: $scope.estSolAutorizacion = 4; break;
+                        case 1: $scope.estSolAutorizacion = 2; break;
+                        case 2: $scope.estSolAutorizacion = 3; break;
+                    }                    
+                    console.log( "estSolAutorizacion", $scope.estSolAutorizacion );
+
+                }
+            })
+        });
+    }
+
+    $scope.getCierreMes = function() {
+        conciliacionFactory.getCierreMes( $scope.currentMonth ).then(function(result) {
+            $scope.cierreMes = result.data;
+        });
+    };
+    
     $scope.sumTotal = function() {
+        // consecutivo = 0;
         $scope.total.archivo = 0;
         $scope.total.sistema = 0;
 
         $scope.lstConceal.forEach(function(item) {
-            $scope.total.archivo += item.InteresMesActual;
-            $scope.total.sistema += item.interes;
+            $scope.total.sistema += item.InteresMesActual;
+            $scope.total.archivo += item.interes;
+
+            switch( parseInt(item.equiparante) ){
+                case 1:
+                    $scope.situacion.ok = $scope.situacion.ok + 1;
+                    break;
+                case 2:
+                    $scope.situacion.financiera = $scope.situacion.financiera + 1;
+                    break;
+                case 3:
+                    $scope.situacion.gpoAndrade = $scope.situacion.gpoAndrade + 1;
+                    break;
+            }
+
+            if( parseInt(item.esMayor) == 1 ){
+                $scope.diferencias.iguales = $scope.diferencias.iguales + 1;
+            }
+            else{
+                $scope.diferencias.diferentes = $scope.diferencias.diferentes + 1;
+            }
         });
+
+        $scope.controlCheck();
+        $scope.readyConciliation();
+
+        // Valida estatus de autorización
+        if($scope.situacion.gpoAndrade != 0 && $scope.situacion.financiera == 0){
+            $scope.estSolAutorizacion  = 1;
+        }
+    };
+
+    $scope.controlCheck = function() {
+        $scope.lstConceal.forEach(function(item, key) {
+            $scope.lstConceal[key]['checked'] = true;
+            $scope.lstConceal[key]['ajuste']  = item.InteresMesActual;
+        });
+        $scope.lbl_btn_descheck = "Desmarcar Unidades";
+        $scope.flagAjusteCaseTree   = true;
+    };
+
+    $scope.controlCheckDeseleccionar = function() {
+        if( $scope.lbl_btn_descheck == "Desmarcar Unidades" ){
+            $scope.lstConceal.forEach(function(item, key) {
+                if( item.equiparante == 3 ){
+                    $scope.lstConceal[key]['checked'] = false;
+                }
+            });            
+
+            $scope.total.sistema = 0;
+            $scope.lstConceal.forEach(function(item) {
+                if( item.equiparante == 1 ){
+                    $scope.total.sistema += item.InteresMesActual;
+                }
+            });
+
+            $scope.lbl_btn_descheck     = "Marcar Unidades";
+            $scope.flagAjusteCaseTree   = false;
+        }
+        else{
+            $scope.controlCheck();
+            $scope.total.sistema = 0;
+            $scope.lstConceal.forEach(function(item) {
+                $scope.total.sistema += item.InteresMesActual;
+            });
+            $scope.ajusteManual         = false;
+        }
+        $scope.readyConciliation();
     };
 
     $scope.setCurrentFinancial = function(financialObj) {
@@ -97,8 +290,22 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.nexStep = function() {
-        $scope.currentPanel = 'pnlConciliar';
-        $scope.conceal();
+        if($scope.frmConciliacion.lblMes == ''){
+            swal("Conciliación","No se ha especificado el periodo contable.");
+        }
+        else if( $scope.frmConciliacion.idFinanciera == 0){
+            swal("Conciliación","No se ha especificado la financiera.");   
+        }
+        else if( !$scope.frmConciliacion.loadLayout ){
+            swal("Conciliación","No se ha cargado el Layout.");
+        }
+        else{
+            $scope.currentPanel = 'pnlConciliar';
+            $scope.conceal();
+            $("#modalNuevaConciliacion").modal('hide');
+            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
+            $scope.lblFinanciera = aux[0].nombre;
+        }
     };
 
     $scope.prevStep = function() {
@@ -109,8 +316,152 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         staticFactory.setTableStyleOne(tblID);
     };
 
+    $scope.fnAjusteManual = function(){
+            $scope.ajusteManual = true;
+    }
 
+    $scope.setIntFinanToAjuste = function( indice ){
+        $scope.lstConceal[ indice ].ajuste  = $scope.lstConceal[ indice ].interes;
+        $scope.lstConceal[ indice ].esMayor = 3;
+        
+        $scope.total.sistema = 0;
+        $scope.lstConceal.forEach(function(item) {
+            if( item.equiparante == 1 ){
+                $scope.total.sistema += item.ajuste;
+            }
+        });
 
+        $scope.readyConciliation();
+    }
 
+    $scope.recalculo = function( indice ){
+        if( isNaN( $scope.lstConceal[ indice ].ajuste ) ){
+            $scope.lstConceal[ indice ].ajuste = 0;
+        }
 
+        $scope.total.sistema = 0;
+        $scope.lstConceal.forEach(function(item) {
+            $scope.total.sistema += parseFloat(item.ajuste);
+        });
+        $scope.lstConceal[ indice ].esMayor = 3;
+        $scope.readyConciliation();
+    }
+
+    $scope.ajusteAutomatico = function(){
+        $scope.ajusteManual = true;
+        $scope.lstConceal.forEach(function(item, key) {
+            if( item.equiparante == 1 && item.esMayor != 1 ){
+                $scope.lstConceal[ key ].ajuste  = $scope.lstConceal[ key ].interes;
+                $scope.lstConceal[ key ].esMayor = 3;
+            }
+        });
+        
+        $scope.total.sistema = 0;
+        $scope.lstConceal.forEach(function(item) {
+            if( item.equiparante == 1 ){
+                $scope.total.sistema += item.ajuste;
+            }
+        });
+
+        $scope.readyConciliation();
+    }
+
+    $scope.readyConciliation = function(){
+        var modulo = parseFloat($scope.total.sistema) - parseFloat($scope.total.archivo);
+        if( modulo >= -1 && modulo <= 1 ){
+            $scope.conciliacion = true;
+        }
+        else{
+            $scope.conciliacion = false;
+        }        
+    }
+
+    $scope.creaConciliacion = function() {
+        var parametros = {
+            idEmpresa:      $scope.session.empresaID,
+            idFinanciera:   $scope.frmConciliacion.idFinanciera,
+            periodo:        parseInt($scope.currentMonth) + 1,
+            periodoAnio:    $scope.currentYear,
+            idUsuario:      $scope.idUsuario
+        }
+        var parametrosDetalle = {}
+        var item = {};
+        conciliacionFactory.creaConciliacion( parametros ).then(function(result) {
+            if( result.data[0].success == 1 ){
+                for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
+                    item = $scope.lstConceal[ i ];
+                    parametrosDetalle = {
+                        idConciliacion:         result.data[0].LastId,
+                        CCP_IDDOCTO:            item.CCP_IDDOCTO,
+                        VIN:                    item.numeroSerie,
+                        interesGrupoAndrade:    item.InteresMesActual,
+                        interesFinanciera:      item.interes,
+                        interesAjuste:          item.ajuste,
+                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                    }
+
+                    conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
+
+                    if( i >= ( $scope.lstConceal.length - 1 ) ){
+                        swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
+                        $scope.prevStep();
+                        setTimeout( function(){
+                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear );
+                        },2000);
+                    }
+                }
+            }
+        });
+
+    }
+
+    $scope.solicitaAutorizacion = function() {
+        var parametros = {
+            consecutivo: contador,
+            idUsuario: $scope.idUsuario,
+            idFinanciera: $scope.frmConciliacion.idFinanciera,
+            periodoContable: parseInt($scope.currentMonth) + 1,
+            anioContable: $scope.currentYear,
+        }
+
+        swal({
+            title: "Conciliación", 
+            text: "¿Esta seguro de completar esta acción?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            confirmButtonText: "Solicitar Autorización",
+            confirmButtonColor: "#ec6c62",
+            cancelButtonText: "Cerrar"
+        }, function() {
+            conciliacionFactory.solicitaAutorizacion( parametros ).then(function(result) {
+                console.log("result.data", result.data);
+                if( result.data[0].success == 1 ){
+                    for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
+                        swal("Listo", "La se ha realizado la notificacón, favor de esperar su respuesta", "success");
+                        $scope.estSolAutorizacion = 2;
+                        $scope.$apply();
+                    }
+                }
+            });
+        });
+    }
+
+    $scope.openModalConciliacion = function(){
+        $("#modalNuevaConciliacion").modal('show');
+        $scope.Dropzone();
+    }
+
+    $scope.resetFromulario = function(){
+        $scope.frmConciliacion.idFinanciera = 0;
+        $scope.Dropzone();
+    }
+
+    $scope.porAutorizar = function(){
+        conciliacionFactory.porAutorizar().then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstPendiente = result.data;
+            }
+        });
+    }
 });
