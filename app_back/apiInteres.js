@@ -135,6 +135,7 @@ router.get('/guardaProvision', function(req, res) {
 
         request.input('idEmpresa',          sql.Int,        req.query.idEmpresa);
         request.input('idSucursal',         sql.Int,        req.query.idSucursal);
+        request.input('idFinanciera',       sql.Int,        req.query.idFinanciera);
         request.input('CCP_IDDOCTO',        sql.VarChar,    req.query.CCP_IDDOCTO);
         request.input('consecutivo',        sql.Int,        req.query.consecutivo);
         request.input('saldoDocumento',     sql.VarChar,    req.query.saldoDocumento);
