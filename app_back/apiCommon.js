@@ -37,6 +37,7 @@ router.get('/getSucursal', function(req, res) {
     });
 
 });
+
 router.get('/getTipoTiie', function(req, res) {
 
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
@@ -59,13 +60,34 @@ router.get('/getTipoTiie', function(req, res) {
 
 });
 
+router.get('/currentTIIE', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+
+        var request = new sql.Request(dbCnx);
+
+        request.execute('CURRENTTIIE_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+
+});
+
 router.get('/getFinancieras', function(req, res) {
 
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        request.input('empresaID', sql.Int, req.query.empresaID);
+
         request.execute('uspGetFinanciera').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
@@ -135,28 +157,28 @@ router.get('/getCatalog', function(req, res) {
 
 });
 
-router.get('/getTipoTiie', function(req, res) {
+// router.get('/getTipoTiie', function(req, res) {
 
-    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    dbCnx.connect().then(function() {
+//     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+//     dbCnx.connect().then(function() {
 
-        var request = new sql.Request(dbCnx);
+//         var request = new sql.Request(dbCnx);
 
-        request.execute('Usp_TipoTiie_GET').then(function(result) {
-            dbCnx.close();
-            res.json(result.recordsets[0]);
-        }).catch(function(err) {
-            res.json(err);
-            dbCnx.close();
-        });
+//         request.execute('Usp_TipoTiie_GET').then(function(result) {
+//             dbCnx.close();
+//             res.json(result.recordsets[0]);
+//         }).catch(function(err) {
+//             res.json(err);
+//             dbCnx.close();
+//         });
 
-    }).catch(function(err) {
-        res.json(err);
-        dbCnx.close();
-    });
+//     }).catch(function(err) {
+//         res.json(err);
+//         dbCnx.close();
+//     });
 
 
-});
+// });
 
 
 module.exports = router;

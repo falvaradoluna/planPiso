@@ -15,6 +15,14 @@ appModule.factory('tiieFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        actualizaTiie: function(params) {
+            return $http({
+                url: 'apiTiie/actualizaTiie',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         getTiieDateExist: function(fecha) {
             return $http({
                 url: 'apiTiie/getTiieDateExist',

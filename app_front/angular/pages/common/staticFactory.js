@@ -19,6 +19,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'TIIE', url: '#', isActive: true }
             ];
         },
+        tiieBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Reducción', url: '#', isActive: true }
+            ];
+        },
         interesBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
@@ -133,9 +139,12 @@ appModule.factory('staticFactory', function($http) {
 
         },
         setTableStyleOne: function(tblID) {
+            console.log('Hola setTableStyleOne');
+            $(tblID).DataTable().destroy()
             $(tblID).DataTable({
                 dom: '<"html5buttons"B>lTfgitp',
                 //iDisplayLength: 5,
+                order: [[ 0, "desc" ]],
                 buttons: [{
                     extend: 'copy'
                 }, {

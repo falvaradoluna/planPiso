@@ -1,19 +1,18 @@
 appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory) {
-    $scope.lstConceal = [];
-    $scope.lstFinancial = [];
+    $scope.lstConceal           = [];
+    $scope.lstFinancial         = [];
     $scope.currentFinancialName = "Seleccionar Financiera";
-    $scope.currentFinancial = {};
-    $scope.total = { sistema: 0, archivo: 0 };
-    $scope.loadLayout = false;
-    $scope.currentPanel = 'pnlCargaArchivo';
-
-    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
+    $scope.currentFinancial     = {};
+    $scope.total                = { sistema: 0, archivo: 0 };
+    $scope.loadLayout           = false;
+    $scope.currentPanel         = 'pnlCargaArchivo';
+  
+    // Este es como funciona desde Branch Conciliación
+    commonFactory.getFinancial().then(function(result) {
         $scope.lstFinancial = result.data;
     });
-
-
+    
     var myDropzone;
-
     $scope.Dropzone = function() {
         myDropzone = new Dropzone("#idDropzone", {
             url: "/apiConciliacion/upload",
