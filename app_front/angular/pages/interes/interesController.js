@@ -382,7 +382,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             interesAplicar: item.InteresMes,
             aplica: saplica,
             idEmpresa: item.empresaID,
-            idSucursal: item.sucursalID
+            idSucursal: item.sucursalID,
+            idFinanciera: item.financieraID
 
         };
 
