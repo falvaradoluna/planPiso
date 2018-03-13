@@ -96,6 +96,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
         myDropzone.on("success", function(req, res) {
             var filename = res + '.xlsx';
+            $scope.loadingPanel = true;
             $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
 
@@ -130,6 +131,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 if( !result.data ){
                     swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
                     $('#mdlLoading').modal('hide');
+                    $scope.loadingPanel = false;
                 }
                 else{
                     if( result.data[0].success == 1 ){
@@ -138,6 +140,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         if (increment >= (execelFields.length - 1)) {
                             // $scope.nexStep();
                             $scope.frmConciliacion.loadLayout = true;
+                            $scope.loadingPanel = false;
                             $('#mdlLoading').modal('hide');
                         }
                         else{

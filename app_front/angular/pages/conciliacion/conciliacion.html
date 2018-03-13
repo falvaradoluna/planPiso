@@ -50,10 +50,17 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary pull-left" ng-click="resetFromulario()">Limpiar Formulario</button>
-                
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" ng-click="nexStep()">Continuar</button>
+                <div ng-show="!loadingPanel">
+                    <button type="button" class="btn btn-secondary pull-left" ng-click="resetFromulario()">Limpiar Formulario</button>
+                    
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" ng-click="nexStep()">Continuar</button>
+                </div>
+                <div ng-show="loadingPanel">
+                    <center>
+                        <img src="assets/img/loading-light.gif" width="30"> Cargando ...
+                    </center>
+                </div>
             </div>
         </div>
     </div>
