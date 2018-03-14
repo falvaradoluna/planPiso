@@ -23,13 +23,13 @@
             <td>{{unidad.CCP_IDDOCTO}}</td>
             <!-- <td>{{unidad.DES_CARTERA}}</td>
             <td>{{unidad.DES_TIPODOCTO}}</td> -->
-            <td>{{unidad.vehNumserie}}</td>
+            <td>{{unidad.veh_numserie}}</td>
             <td>{{unidad.marca}}</td>
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
             <td>{{unidad.IMPORTE}}</td>
             <td style="width:200px">
-                <div class="input-group date" data-provide="datepicker">
+                <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy">
                     <input type="text" class="form-control" ng-model="unidad.fechaCalculoString">
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>

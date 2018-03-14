@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th>Documento</th>
+                    <th>Cuenta</th>
                     <th>Concepto</th>
                     <th>VIN</th>
                     <th>Cargo</th>
@@ -13,6 +14,7 @@
             <tbody>
                 <tr ng-repeat="unidad in lstUnitDeatil">
                     <td>{{unidad.pld_iddocumento}}</td>
+                    <td>{{unidad.pld_numcuenta}}</td>
                     <td>{{unidad.pld_concepto}}</td>
                     <td>{{unidad.pld_vin}}</td>
                     <td>{{unidad.pld_cargo}}</td>
