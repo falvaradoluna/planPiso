@@ -40,9 +40,13 @@
                         </button>
                     </td>
                 </tr>
+                <tr ng-show="lstPendiente.length == 0">
+                    <td colspan="5">
+                        <i class="fa fa-tag" aria-hidden="true"></i> No hay cociliaciones pendientes
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 <hr>
-<!-- <button type="button" class="btn btn-info pull-right" ng-click="nexStep()">Continuar</button> -->
