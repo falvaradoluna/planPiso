@@ -20,3 +20,41 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalNuevaConciliacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> <span class="text-navy">Carga de Archivo</span> </h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Periodo Contable</label>
+                        <select class="form-control" ng-model="frmConciliacion.lblMes">
+                            <option ng-repeat="(key, mes) in lstMonth" >{{mes}}</option>
+                        </select>
+                        <br>
+
+                        <label>Financiera</label>
+                        <select class="form-control" ng-model="frmConciliacion.idFinanciera">
+                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}">{{financial.nombre}}</option>
+                        </select>
+                        <br>
+
+                        <label>Carga Layout</label>
+                        <div id="templeteDropzone"> <h1>1212</h1> </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-left" ng-click="resetFromulario()">Limpiar Formulario</button>
+                
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" ng-click="nexStep()">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>

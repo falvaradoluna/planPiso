@@ -2485,6 +2485,9 @@ label.error {
 .inspinia-notify.alert-info {
   border-left: 6px solid #1ab394;
 }
+.inspinia-notify.alert-default {
+  border-left: 6px solid #f4f4f4;
+}
 /* Image cropper style */
 .img-container,
 .img-preview {

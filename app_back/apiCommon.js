@@ -87,6 +87,7 @@ router.get('/getFinancieras', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
+        request.input('empresaID', sql.Int, req.query.empresaID);
 
         request.execute('uspGetFinanciera').then(function(result) {
             dbCnx.close();
