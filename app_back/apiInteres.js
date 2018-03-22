@@ -133,15 +133,15 @@ router.get('/guardaProvision', function(req, res) {
 
         var request = new sql.Request(dbCnx);
 
-        request.input('idEmpresa',          sql.Int,        req.query.idEmpresa);
-        request.input('idSucursal',         sql.Int,        req.query.idSucursal);
-        request.input('idFinanciera',       sql.Int,        req.query.idFinanciera);
-        request.input('CCP_IDDOCTO',        sql.VarChar,    req.query.CCP_IDDOCTO);
-        request.input('consecutivo',        sql.Int,        req.query.consecutivo);
-        request.input('saldoDocumento',     sql.VarChar,    req.query.saldoDocumento);
-        request.input('interesCalculado',   sql.VarChar,    req.query.interesCalculado);
-        request.input('interesAplicar',     sql.VarChar,    req.query.interesAplicar);
-        request.input('aplica',             sql.Int,        req.query.aplica);
+        request.input('idEmpresa', sql.Int, req.query.idEmpresa);
+        request.input('idSucursal', sql.Int, req.query.idSucursal);
+        request.input('idFinanciera', sql.Int, req.query.idFinanciera);
+        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
+        request.input('consecutivo', sql.Int, req.query.consecutivo);
+        request.input('saldoDocumento', sql.VarChar, req.query.saldoDocumento);
+        request.input('interesCalculado', sql.VarChar, req.query.interesCalculado);
+        request.input('interesAplicar', sql.VarChar, req.query.interesAplicar);
+        request.input('aplica', sql.Int, req.query.aplica);
 
         request.execute('GUARDAPROVISION_SP').then(function(result) {
             res.json(result.recordsets);
@@ -156,7 +156,27 @@ router.get('/guardaProvision', function(req, res) {
         dbCnx.close();
     });
 });
+router.get('/procesaProvision', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
 
+        var request = new sql.Request(dbCnx);
+
+        request.input('conse', sql.Int, req.query.consecutivo);
+        request.execute('PROCESAPROVISIO_SP').then(function(result) {
+            res.json(result.recordsets);
+            dbCnx.close();
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
 router.get('/getSchemaMovements', function(req, res) {
     var dateFormat = require('moment');
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
@@ -166,6 +186,29 @@ router.get('/getSchemaMovements', function(req, res) {
 
         request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
         request.execute('Usp_EsquemaMovimientos_GET').then(function(result) {
+            res.json(result.recordsets);
+            dbCnx.close();
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+router.get('/getProvisionToday', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+
+        var request = new sql.Request(dbCnx);
+
+        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
+        request.input('empresaID', sql.VarChar, req.query.empresaID);
+        request.input('sucursalID', sql.VarChar, req.query.sucursalID);
+        request.execute('Usp_ProvisionToday_GET').then(function(result) {
             res.json(result.recordsets);
             dbCnx.close();
         }).catch(function(err) {
