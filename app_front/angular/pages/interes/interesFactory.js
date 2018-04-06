@@ -71,6 +71,14 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        insPago: function(params) {
+            return $http({
+                url: '/apiInteres/insPago',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

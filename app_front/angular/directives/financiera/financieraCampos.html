@@ -1,11 +1,6 @@
 <hr>
 <div class="row">
-    <div class="col-sm-3">
-        <div class="form-group">
-            <label for="tipoCobroInteres">Tipo Cobro Interes:</label>
-            <select id="tipoCobroInteres" ng-options="lst.tipoCobroInteres for lst in lsttipoCobroInteres" ng-model="financieraHeader.selectedtipoCobroInteres" class="form-control"></select>
-        </div>
-    </div>
+
     <div class="col-sm-3">
         <div class="form-group">
             <label for="tipoPagoInteres">Tipo Pago Interes:</label>
@@ -22,6 +17,12 @@
         <div class="form-group">
             <label for="tipoSOFOM">Tipo SOFOM:</label>
             <select id="tipoSOFOM" ng-options="lst.tipoSOFOM for lst in lsttipoSOFOM" ng-model="financieraHeader.selectedtipoSOFOM" class="form-control"></select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label for="tipoCobroInteres">Tipo Cobro Interes:</label>
+            <select id="tipoCobroInteres" ng-options="lst.tipoCobroInteres for lst in lsttipoCobroInteres" ng-model="financieraHeader.selectedtipoCobroInteres" class="form-control"></select>
         </div>
     </div>
 </div>
