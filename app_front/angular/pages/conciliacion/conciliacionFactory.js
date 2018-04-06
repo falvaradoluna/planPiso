@@ -40,6 +40,14 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        validaExistencia: function( parametros ) {
+            return $http({
+                url: 'apiConciliacion/validaExistencia',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         creaConciliacionDetalle: function( parametros ) {
             return $http({
                 url: 'apiConciliacion/creaConciliacionDetalle',

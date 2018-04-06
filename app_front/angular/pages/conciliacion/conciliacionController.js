@@ -90,23 +90,43 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             url: "/apiConciliacion/upload",
             uploadMultiple: 0,
             maxFiles: 1,
-            autoProcessQueue: true,
+            autoProcessQueue: false,
             acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         });
 
         myDropzone.on("success", function(req, res) {
+            var _this = this;
+
             var filename = res + '.xlsx';
             $scope.loadingPanel = true;
             $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
 
-            var _this = this;
             $scope.limpiarDropzone = function(){
                 _this.removeAllFiles();
                 myDropzone.enable()
+                $scope.frmConciliacion.loadLayout = true;
             }
         });
+
+        myDropzone.on("addedfile", function() {
+            $scope.frmConciliacion.loadLayout = true;
+        });
     };
+
+    $scope.validaExistencia = function(){
+        return new Promise((resolve, reject)=> {
+            let parametros = {
+                idEmpresa: 1,
+                idFinanciera: 1,
+                periodo: 3,
+                anio: 2018
+            }
+            conciliacionFactory.validaExistencia(parametros).then(function(result) {
+                resolve(result.data[0]);
+            })
+        })
+    }
 
     var execelFields = [];
     $scope.readLayout = function(filename) {
@@ -142,6 +162,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             $scope.frmConciliacion.loadLayout = true;
                             $scope.loadingPanel = false;
                             $('#mdlLoading').modal('hide');
+
+                            $scope.currentPanel = 'pnlConciliar';
+                            $scope.conceal();
+                            $("#modalNuevaConciliacion").modal('hide');
+                            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
+                            $scope.lblFinanciera = aux[0].nombre;
                         }
                         else{
                             increment++;
@@ -303,11 +329,20 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             swal("Conciliación","No se ha cargado el Layout.");
         }
         else{
-            $scope.currentPanel = 'pnlConciliar';
-            $scope.conceal();
-            $("#modalNuevaConciliacion").modal('hide');
-            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
-            $scope.lblFinanciera = aux[0].nombre;
+            $scope.validaExistencia().then( ( result ) => {
+                if( result === undefined ){
+                    swal("Conciliación","Se perdio la conexión al servidor, favor de verificar su conexión.");
+                }
+                else if( result.success == 0 ){
+                    swal("Conciliación","Ya se encuentra una cociliación para el periodo y financiera especificada.");
+                }
+                else if( result.success == 1 ){
+                    myDropzone.processQueue();
+                    $scope.frmConciliacion.loadLayout = true;
+                }
+            })
+
+
         }
     };
 
@@ -418,9 +453,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     }
 
-    $scope.solicitaAutorizacion = function() {
+    $scope.solicitaAutorizacion = function( estatus ) {
         var parametros = {
             consecutivo: contador,
+            estatus: estatus,
             idUsuario: $scope.idUsuario,
             idFinanciera: $scope.frmConciliacion.idFinanciera,
             periodoContable: parseInt($scope.currentMonth) + 1,
@@ -438,10 +474,14 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             cancelButtonText: "Cerrar"
         }, function() {
             conciliacionFactory.solicitaAutorizacion( parametros ).then(function(result) {
-                console.log("result.data", result.data);
                 if( result.data[0].success == 1 ){
                     for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
-                        swal("Listo", "La se ha realizado la notificacón, favor de esperar su respuesta", "success");
+                        if( parametros.estatus == 1 ){
+                            swal("Listo", "La se ha realizado la notificacón, favor de esperar su respuesta", "success");
+                        }
+                        else{
+                            swal("Listo", "Se ha guardado de forma correcta tus registros.", "success");
+                        }
                         $scope.estSolAutorizacion = 2;
                         $scope.$apply();
                     }

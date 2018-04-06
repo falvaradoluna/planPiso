@@ -73,28 +73,16 @@ router.get('/readLayout', function(req, res, next) {
     try{
         var self = this;
         var parseXlsx = require('excel');
-        console.log('[readLayout 2]');
-        console.log( "Ruta",'C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName );
-        parseXlsx('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err, data) {
-            console.log( "err", err );
-            console.log( "data", data );            
-            console.log('[readLayout 3]');
+        parseXlsx( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err, data) {
             if (err) {
-                console.log('[readLayout 4]');
                 return res.end("Error uploading file.");
             } else {
-                console.log('[readLayout 5]');
-                console.log("data", data );
                 setTimeout(function() {
-                    console.log('[readLayout 6]');
                     var fs = require("fs");
-                    fs.unlink('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err) {
-                        console.log('[readLayout 7]');
+                    fs.unlink( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err) {
                         if (err) {
-                            console.log('[readLayout 8]');
                             return res.end(err);
                         } else {
-                            console.log('[readLayout 9]');
                             return res.json(data);
                         }
                     });
@@ -106,6 +94,30 @@ router.get('/readLayout', function(req, res, next) {
         console.log( "Error", e );
         res.json(false);
     }
+});
+
+router.get('/validaExistencia', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input( 'idEmpresa', sql.Int, req.query.idEmpresa );
+        request.input( 'idFinanciera', sql.Int, req.query.idFinanciera );
+        request.input( 'periodo', sql.Int, req.query.periodo );
+        request.input( 'anio', sql.Int, req.query.anio );
+
+        request.execute('CONC_VALIDAEXISTENCIA_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
 });
 
 router.get('/getConciliacion', function(req, res) {
@@ -227,6 +239,7 @@ router.get('/solicitaAutorizacion', function(req, res) {
         var request = new sql.Request(dbCnx);
         
         request.input( 'consecutivo',       sql.Int, req.query.consecutivo);
+        request.input( 'estatus',           sql.Int, req.query.estatus);
         request.input( 'idUsuario',         sql.Int, req.query.idUsuario);
         request.input( 'idFinanciera',      sql.Int, req.query.idFinanciera);
         request.input( 'periodoContable',   sql.Int, req.query.periodoContable);

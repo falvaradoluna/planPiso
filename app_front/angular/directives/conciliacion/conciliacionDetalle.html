@@ -58,7 +58,7 @@
             </div>
 
             <div ng-show="estSolAutorizacion == 1">
-                <button class="btn btn-warning btn-sm pull-right" ng-click="solicitaAutorizacion();">
+                <button class="btn btn-warning btn-sm pull-right" ng-click="solicitaAutorizacion(1);">
                     <i class="fa fa-key" aria-hidden="true"></i> Solicitar Autorización
                 </button>
             </div>
@@ -232,6 +232,8 @@
 
             <hr>
             <button type="button" class="btn btn-default" ng-click="prevStep()">Cancelar Conciliación</button>
+            <button type="button" class="btn btn-default" ng-click="solicitaAutorizacion(3);">Guardar conciliación</button>
+            
             <button type="button" class="btn btn-primary pull-right" ng-click="creaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>
         </div>
 
