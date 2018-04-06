@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <h2>Validar Pago Interes</h2>
+    <h2>Validar Pago</h2>
     <hr>
 </div>
 
@@ -12,16 +12,14 @@
                     <th>Numero Serie</th>
                     <th>Modelo</th>
                     <th>Año</th>
-                    <th>Importe</th>
+
                     <th>Saldo</th>
-                    <th>Dias Interes</th>
-                    <th>Dias Restantes</th>
-                    <th>Interes Corte Pagado</th>
                     <th>Interes MesActual</th>
                     <!-- <th>Interes Acumulado Financiera</th>
                         <th>Interes Total</th> -->
-                    <th>Interes Total</th>
-
+                    <th>Interes a Pagar</th>
+                    <th>Total Pagar</th>
+                    <th>Fecha promesa</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,14 +29,13 @@
                     <td>{{unidad.vehNumserie}}</td>
                     <td>{{unidad.VEH_TIPOAUTO}}</td>
                     <td>{{unidad.VEH_ANMODELO}}</td>
-                    <td>{{unidad.importe}}</td>
-                    <td>{{unidad.saldo}}</td>
-                    <td>{{unidad.diasInteres}}</td>
-                    <td>{{unidad.diasRestantes}}</td>
-                    <td>{{unidad.InteresCortePagado | currency}}</td>
-                    <td>{{unidad.InteresMesActual | currency}}</td>
-                    <td><input type="text" class="form-control" ng-model="unidad.InteresMes" style="width: 100px"></td>
 
+                    <td>{{unidad.saldo}}</td>
+                    <td>{{unidad.InteresMesActual | currency}}</td>
+
+                    <td><input type="text" class="form-control" ng-model="unidad.InteresMes" style="width: 100px"></td>
+                    <td>{{Sumar(unidad) | currency}}</td>
+                    <td>{{unidad.FechaPromesa| date:'dd/MM/yyyy'}}</td>
                 </tr>
             </tbody>
         </table>
@@ -46,7 +43,7 @@
 </div>
 <div>
     <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
-    <button class="btn btn-primary pull-right" ng-click="setPnlPagoResumen()" style="margin:10px">Siguiente 
+    <button class="btn btn-primary pull-right" ng-click="setPnlPagoUnidadResumen()" style="margin:10px">Siguiente 
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
 </div>

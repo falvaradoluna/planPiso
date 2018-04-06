@@ -55,6 +55,30 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getProcesaProvision: function(params) {
+            return $http({
+                url: '/apiInteres/procesaProvision',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getProvisionToday: function(params) {
+            return $http({
+                url: '/apiInteres/getProvisionToday',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        insPago: function(params) {
+            return $http({
+                url: '/apiInteres/insPago',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

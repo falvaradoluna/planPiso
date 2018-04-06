@@ -1,4 +1,4 @@
-appModule.controller('interesController', function($scope, $rootScope, $location, commonFactory, staticFactory, interesFactory, esquemaFactory) {
+appModule.controller('interesController', function($scope, $rootScope, $location, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
@@ -28,6 +28,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.fechaHoy = new Date();
     $scope.typeTraspaso = 0;
     $scope.TituloTraspaso = '';
+    $scope.consecPago = 0;
     $scope.initAmounts = function() {
 
         $scope.lstNewUnits = [];
@@ -35,6 +36,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.interesMesActual = 0;
         $scope.interesAcumulado = 0;
         $scope.numUnidades = 0;
+
     };
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
@@ -46,14 +48,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.lstFinancial = result.data;
     });
     $scope.checkUnits = function(value) {
-        var log = [];
 
-        if (value.isChecked) {
-            $scope.lstSelectUnits.push(value);
-        } else { $scope.lstSelectUnits = _.reject($scope.lstSelectUnits, function(el) { return el.unidadID === value.unidadID; });; }
-
-
-        $scope.showButtons = $scope.lstSelectUnits.length > 0;
+        $scope.showButtons = _.where($scope.lstNewUnits, { isChecked: true }).length > 0;
     }
 
     $scope.setCurrentSucursal = function(sucursalObj) {
@@ -171,6 +167,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.setPnlInteres = function() {
         $scope.currentPanel = "pnlInteres";
+        location.reload();
     };
 
     $scope.setPnlInteresMovimientos = function() {
@@ -224,9 +221,37 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.currentPanel = "pnlResumen";
     };
     $scope.setPnlPagoResumen = function() {
-        $scope.currentPanel = "pnlPagoResumen";
-    };
+        var isok = 0;
+        $scope.lstSelectPay.forEach(function(item) {
+            if (item.InteresMes == 0 || item.InteresMes == undefined) {
+                isok++;
 
+            }
+        });
+        if (isok == 0) {
+            $scope.currentPanel = "pnlPagoResumen";
+        } else {
+
+            swal("Aviso", "Debe llenar el interes total para crear la provisión", "warning");
+
+        }
+    };
+    $scope.setPnlPagoUnidadResumen = function() {
+        var isok = 0;
+        $scope.lstSelectPay.forEach(function(item) {
+            if (item.InteresMes == 0 || item.InteresMes == undefined) {
+                isok++;
+
+            }
+        });
+        if (isok == 0) {
+            $scope.currentPanel = "pnlPagoUnidadResumen";
+        } else {
+
+            swal("Aviso", "Debe llenar el interes total para crear la provisión", "warning");
+
+        }
+    };
 
 
 
@@ -257,6 +282,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         for (var i = 0; i < $scope.lstNewUnits.length; i++) {
             $scope.lstNewUnits[i].isChecked = $scope.allUnits.isChecked;
         }
+        $scope.showButtons = _.where($scope.lstNewUnits, { isChecked: true }).length > 0;
     };
 
 
@@ -338,21 +364,34 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.callPayInteres = function() {
 
-        if ($scope.haveSelection() === false) {
-            swal("Aviso", "No se ha seleccionado ningun registro", "warning");
-        } else {
-            $scope.currentPanel = "pnlPagoInteres";
-            $scope.lstNewUnits.forEach(function(item) {
-                if (item.isChecked === true) {
-                    $scope.lstSelectPay.push(item);
 
-                }
-            });
+        $scope.currentPanel = "pnlPagoInteres";
+        $scope.lstNewUnits.forEach(function(item) {
+            if (item.isChecked === true) {
+                item.InteresMes = item.InteresMesActual;
+                $scope.lstSelectPay.push(item);
 
-        }
+            }
+        });
+
     };
     $scope.incremental = 0;
     $scope.consecNum = 0;
+    $scope.Sumar = function(unidad) {
+        if (unidad.InteresMes == undefined) {
+            unidad.InteresMes = '0';
+            unidad.InteresMes = unidad.InteresMesActual;
+        }
+        if (unidad.TotalMes == undefined)
+            unidad.TotalMes = '0';
+        if (unidad.FechaPromesa == undefined) {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            unidad.FechaPromesa = tomorrow;
+        }
+        unidad.TotalMes = parseFloat(unidad.InteresMes) + unidad.saldo;
+        return unidad.TotalMes;
+    }
     $scope.CrearPolizaPago = function() {
         swal({
             title: "¿Esta seguro?",
@@ -363,11 +402,107 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             confirmButtonText: "Aplicar",
             closeOnConfirm: false
         }, function() {
-            $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
-            $scope.guardandoPoliza();
+            if ($scope.haveSelection() === false) {
+                swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+            } else {
+                $scope.existeProvision = 0;
+                $scope.consecProvision = 0;
+                $scope.lstNewUnits.forEach(function(item) {
+                    if (item.isChecked === true) {
+                        var data = {
+                            CCP_IDDOCTO: item.CCP_IDDOCTO,
+                            empresaID: item.empresaID,
+                            sucursalID: item.sucursalID
+                        };
+                        interesFactory.getProvisionToday(data).then(function(result) {
+                            $scope.consecProvision++;
+                            if (result.data[0].length > 0)
+                                $scope.existeProvision++;
+
+                        }, function(error) {
+                            $scope.error(error.data.Message);
+
+                        });
+
+                    }
+                });
+
+
+
+            }
         });
     }
+    $scope.CrearPago = function() {
+        swal({
+            title: "¿Esta seguro?",
+            text: "Se creara  el pago de la unidad e interes para las unidades seleccionadas.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aplicar",
+            closeOnConfirm: false
+        }, function() {
+            if ($scope.haveSelection() === false) {
+                swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+            } else {
 
+                $scope.lstNewUnits.forEach(function(item) {
+                    if (item.isChecked === true) {
+                        var data = {
+                            CCP_IDDOCTO: item.CCP_IDDOCTO,
+                            empresaID: item.empresaID,
+                            sucursalID: item.sucursalID,
+                            InteresMes: parseFloat(item.InteresMes),
+                            FechaPromesa: $filter('date')(item.FechaPromesa, "yyyy-MM-dd"),
+                            TotalMes: parseFloat(item.TotalMes),
+                            saldo: parseFloat(item.saldo),
+                            tipoCobroInteresID: item.tipoCobroInteresID,
+                            tipoPagoInteresID: item.tipoPagoInteresID,
+                            tipoPagoMensualID: item.tipoPagoMensualID,
+                            tipoSOFOMID: item.tipoSOFOMID,
+                            usuarioID: $scope.idUsuario,
+                        };
+
+                        interesFactory.insPago(data).then(function(result) {
+                            $scope.consecPago++;
+
+
+                        }, function(error) {
+                            $scope.error(error.data.Message);
+
+                        });
+
+                    }
+                });
+
+
+
+            }
+        });
+    }
+    $scope.$watch('consecProvision', function() {
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        if ($scope.consecProvision == $scope.listPoliza.length) {
+            if ($scope.existeProvision == 0) {
+                $scope.guardandoPoliza();
+            } else {
+                swal("Aviso", "Ya existe una provisión del dia de hoy.", "warning");
+
+            }
+        }
+
+    });
+    $scope.$watch('consecPago', function() {
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        if ($scope.consecPago > 0 && $scope.consecPago == $scope.listPoliza.length) {
+            swal("Pago de unidad e interes", "Guardado correctamente");
+            setTimeout(function() {
+                console.log('Termino');
+                window.location = "/interes";
+            }, 1000);
+        }
+
+    });
     $scope.guardandoPoliza = function() {
         var saplica = 0;
         var item = $scope.listPoliza[$scope.incremental];
@@ -400,13 +535,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 if ($scope.incremental < $scope.listPoliza.length) {
                     $scope.guardandoPoliza();
                 } else {
-                    $scope.incremental = 0;
-                    $scope.consecNum = 0;
-                    swal("Poliza pago interes", "Guardado correctamente");
-                    setTimeout(function() {
-                        console.log('Termino');
-                        window.location = "/interes";
-                    }, 1000);
+                    $scope.procesaPoliza($scope.consecNum);
                 }
             } else {
                 swal("Poliza pago interes", "Guardado correctamente");
@@ -415,7 +544,37 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             console.log("Error", error);
         });
     }
+    $scope.procesaPoliza = function(consecNum) {
+        var saplica = 0;
+        var item = $scope.listPoliza[$scope.incremental];
+        if ($scope.listPoliza.length == ($scope.incremental + 1)) {
+            saplica = 1;
+        }
+        var params = {
 
+            consecutivo: consecNum
+
+        };
+
+
+        interesFactory.getProcesaProvision(params).then(function(result) {
+
+            if (result.statusText == 'OK') {
+                $scope.incremental = 0;
+                $scope.consecNum = 0;
+                swal("Poliza pago interes", "Guardado correctamente");
+                setTimeout(function() {
+                    console.log('Termino');
+                    window.location = "/provision";
+                }, 1000);
+
+            } else {
+                swal("Poliza pago interes", "Hubo un problema", "warning");
+            }
+        }, function(error) {
+            console.log("Error", error);
+        });
+    }
 
 
 
@@ -429,7 +588,20 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
     };
 
+    $scope.callPay = function() {
 
+        if ($scope.haveSelection() === false) {
+            swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+        } else {
+            $scope.currentPanel = "pnlPago";
+            $scope.lstNewUnits.forEach(function(item) {
+                if (item.isChecked === true) {
+                    $scope.lstSelectPay.push(item);
+
+                }
+            });
+        }
+    };
 
 
 

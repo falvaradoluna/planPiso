@@ -146,7 +146,7 @@
                 <th>Fecha</th>
 
             </tr>
-            <tr ng-repeat="itemDetail in lstSchemeDetail">
+            <tr ng-repeat="itemDetail in lstNewUnits | filter:{isChecked:true}">
                 <td>{{itemDetail.tipoMovimiento }}</td>
                 <td>{{itemDetail.sucorigen }}</td>
                 <td>{{itemDetail.sucdestino }}</td>

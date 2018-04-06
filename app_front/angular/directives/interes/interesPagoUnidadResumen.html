@@ -1,0 +1,53 @@
+<h2>Resumen</h2>
+<hr>
+<div class="ibox-content">
+    <div class="col-md-4">
+        <h3>Estos registros generaran el pago de la unidad:</h3>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+
+    </div>
+    <hr>
+</div>
+<table id="tblUnidadesNuevas" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Documento</th>
+            <th>Numero Serie</th>
+            <th>Modelo</th>
+            <th>Año</th>
+            <th>Saldo</th>
+            <th>Interes MesActual</th>
+            <th>Interes a Pagar</th>
+            <th>Total Pagar</th>
+            <th>Fecha promesa</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
+
+            <td>{{unidad.CCP_IDDOCTO}}</td>
+            <td>{{unidad.vehNumserie}}</td>
+            <td>{{unidad.VEH_TIPOAUTO}}</td>
+            <td>{{unidad.VEH_ANMODELO}}</td>
+            <td>{{unidad.saldo}}</td>
+            <td>{{unidad.InteresMesActual | currency}}</td>
+            <td>{{unidad.InteresMes | currency}}</td>
+            <td>{{unidad.TotalMes | currency}}</td>
+            <td>{{unidad.FechaPromesa| date:'dd/MM/yyyy'}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-sm-4">
+        <button class="btn btn-danger" ng-click="setPnlInteres()">Cancelar</button>
+    </div>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <button class="btn btn-primary pull-right" ng-click="CrearPago()">Finalizar</button>
+    </div>
+</div>
