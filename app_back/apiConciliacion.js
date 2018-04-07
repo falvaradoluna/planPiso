@@ -79,14 +79,14 @@ router.get('/readLayout', function(req, res, next) {
             } else {
                 setTimeout(function() {
                     var fs = require("fs");
-                    console.log( __dirname + '\\uploaded\\' + req.query.LayoutName );
-                    // fs.unlink( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err) {
+                    // console.log( __dirname + '\\uploaded\\' + req.query.LayoutName );
+                    fs.unlink( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err) {
                         if (err) {
                             return res.end(err);
                         } else {
                             return res.json(data);
                         }
-                    // });
+                    });
                 }, 5000);
             }
         })
