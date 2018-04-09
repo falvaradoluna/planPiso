@@ -1,9 +1,12 @@
-appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory, filterFilter ) {
+appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, provisionFactory, commonFactory, staticFactory, filterFilter ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck     = "Desmarcar Unidades";
     $scope.currentPanel         = 'pnlCargaArchivo';
+
+    $scope.titleDocumentos        = '';
+    $scope.titleDocumentosDetalle = '';
 
     /* =========================== 
         [ estSolAutorizacion ]
@@ -30,7 +33,9 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.lstConceal           = [];
     $scope.lstFinancial         = [];
     $scope.lstPendiente         = [];
+    $scope.lstConciliacion      = [];
     $scope.autDetalle           = [];
+    $scope.lstConciliaDetalle   = [];
     
     $scope.currentFinancial     = {};
     $scope.total                = { sistema: 0, archivo: 0 };
@@ -115,12 +120,13 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.validaExistencia = function(){
+        console.log( "currentMonth", $scope.currentMonth );
         return new Promise((resolve, reject)=> {
             let parametros = {
-                idEmpresa: 1,
-                idFinanciera: 1,
-                periodo: 3,
-                anio: 2018
+                idEmpresa: $scope.session.empresaID,
+                idFinanciera: $scope.frmConciliacion.idFinanciera,
+                periodo: $scope.currentMonth + 1,
+                anio: $scope.currentYear
             }
             conciliacionFactory.validaExistencia(parametros).then(function(result) {
                 resolve(result.data[0]);
@@ -198,7 +204,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-        conciliacionFactory.getConciliacion( $scope.currentMonth, contador ).then(function(result) {
+        conciliacionFactory.getConciliacion( $scope.currentMonth, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
         });
@@ -207,7 +213,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.muestraConciliacionPendiente = function( periodo, consecutivo ){
-        conciliacionFactory.getConciliacion( periodo, consecutivo  ).then(function(result) {
+        conciliacionFactory.getConciliacion( periodo, consecutivo, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             conciliacionFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
                 if( detalle.data.length != 0 ){
                     $scope.lstConceal = result.data;
@@ -228,6 +234,17 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
                 }
             })
+        });
+    }
+
+    $scope.muestraDetalleDocumentos = function( item ){
+        $scope.titleDocumentos = item.Descipcion;
+        conciliacionFactory.conciliaDetalle( item.idConciliacion ).then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstConciliaDetalle = result.data;
+                $scope.currentPanel = 'pnlDocumentos';
+                // console.log("$scope.lstConciliaDetalle", $scope.lstConciliaDetalle);
+            }
         });
     }
 
@@ -319,6 +336,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.nexStep = function() {
+        console.log("$scope.frmConciliacion", $scope.frmConciliacion);
         if($scope.frmConciliacion.lblMes == ''){
             swal("Conciliación","No se ha especificado el periodo contable.");
         }
@@ -347,6 +365,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.prevStep = function() {
+        location.reload();
         $scope.currentPanel = 'pnlCargaArchivo';
     };
 
@@ -442,11 +461,11 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
                     if( i >= ( $scope.lstConceal.length - 1 ) ){
                         swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
-                        $scope.prevStep();
                         setTimeout( function(){
-                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear ).then( function( result ){
+                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
                                 // location.reload();
-                                location.href = "provision";
+                                $scope.prevStep();
+                                // location.href = "provision";
 
                             });
                         },2000);
@@ -510,5 +529,31 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 $scope.lstPendiente = result.data;
             }
         });
+    }
+
+    $scope.obtieneCociliacion = function(){
+        conciliacionFactory.obtieneCociliacion().then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstConciliacion = result.data;
+            }
+        });
+    }
+
+    $scope.regresaConciliacionPanel = function(){        
+        $scope.currentPanel = 'pnlCargaArchivo';
+    }
+
+    $scope.showDetail = function(lote){
+        $scope.titleDocumentosDetalle = lote.ple_concepto;
+        provisionFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstUnitDeatil = result.data;
+                $scope.currentPanel = 'pnlDocumentosDetalle';
+            }
+        });
+    }
+
+    $scope.regresaConciliacionDocumento = function(){
+        $scope.currentPanel = 'pnlDocumentos';
     }
 });
