@@ -69,7 +69,6 @@ router.post('/upload', function(req, res, next) {
 });
 
 router.get('/readLayout', function(req, res, next) {
-    console.log('[readLayout 1]');
     try{
         var self = this;
         var parseXlsx = require('excel');

@@ -444,7 +444,11 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
                         $scope.prevStep();
                         setTimeout( function(){
-                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear );
+                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear ).then( function( result ){
+                                // location.reload();
+                                location.href = "provision";
+
+                            });
                         },2000);
                     }
                 }
