@@ -589,21 +589,52 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     };
 
     $scope.callPay = function() {
-
+        $scope.consec2Pago = 0;
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
-            $scope.currentPanel = "pnlPago";
             $scope.lstNewUnits.forEach(function(item) {
                 if (item.isChecked === true) {
-                    $scope.lstSelectPay.push(item);
+                    var data = {
+                        CCP_IDDOCTO: item.CCP_IDDOCTO
+                    };
+
+                    interesFactory.validaPago(data).then(function(result) {
+                        $scope.consec2Pago++;
+                        item.sePago = result.data[0].sePago;
+                        if (result.data[0].interesMes > 0)
+                            item.InteresMes = result.data[0].interesMes;
+
+                    }, function(error) {
+                        $scope.error(error.data.Message);
+
+                    });
 
                 }
             });
         }
-    };
 
+    }
 
+    $scope.$watch('consec2Pago', function() {
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
+        if ($scope.consec2Pago > 0 && $scope.consec2Pago == $scope.listPoliza.length) {
+
+            if ($scope.listValida.length > 0) {
+                swal("Aviso", "Ya se han pagado algunos documentos elegidos", "warning");
+            } else {
+                $scope.currentPanel = "pnlPago";
+                $scope.lstNewUnits.forEach(function(item) {
+                    if (item.isChecked === true) {
+                        $scope.lstSelectPay.push(item);
+
+                    }
+                });
+            }
+        }
+
+    });
 
 
 
