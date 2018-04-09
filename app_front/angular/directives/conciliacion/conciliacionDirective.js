@@ -10,4 +10,14 @@ appModule.directive('conciliacionDetalle', function() {
         restrict: 'E',
         templateUrl: conciliacionPath + 'conciliacionUploader.html'
     };
+}).directive('conciliacionDocumentos', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'conciliacionDocumentos.html'
+    };
+}).directive('conciliacionDocumentosDetalle', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'conciliacionDocumentosDetalle.html'
+    };
 });

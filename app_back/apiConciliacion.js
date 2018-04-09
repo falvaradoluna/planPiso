@@ -126,6 +126,7 @@ router.get('/getConciliacion', function(req, res) {
         var request = new sql.Request(dbCnx);
         request.input( 'consecutivo', sql.Int, req.query.consecutivo );
         request.input( 'periodo', sql.Int, ( parseInt(req.query.periodo) + 1) );
+        request.input( 'financiera', sql.Int, req.query.financiera );
 
         request.execute('uspGetConciliacion').then(function(result) {
             dbCnx.close();
@@ -285,8 +286,49 @@ router.get('/generaConciliacion', function(req, res) {
         
         request.input( 'periodo',   sql.Int, req.query.periodo);
         request.input( 'anio',      sql.Int, req.query.anio);
+        request.input( 'financiera',      sql.Int, req.query.financiera);
 
         request.execute('CONC_ORQUESTACONCILIACION_SP').then(function(result) {
+            dbCnx.close();
+            console.log( result.recordsets[0] );
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/obtieneConciliacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        request.execute('CONC_OBTIENETODAS_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/conciliaDetalle', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_DETALLE_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
