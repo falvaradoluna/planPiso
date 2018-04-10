@@ -110,6 +110,22 @@ appModule.factory('conciliacionFactory', function($http) {
                 params:{ idConciliacion: idConciliacion },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
+        },
+        validaCancelacion: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/validaCancelacion',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        CancelaConciliacion: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/CancelaConciliacion',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }        
     };
 });

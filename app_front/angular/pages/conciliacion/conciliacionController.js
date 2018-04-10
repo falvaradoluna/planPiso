@@ -38,6 +38,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.lstConciliaDetalle   = [];
     
     $scope.currentFinancial     = {};
+    $scope.currentConciliacion  = {};
     $scope.total                = { sistema: 0, archivo: 0 };
     $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
     $scope.situacion            = { ok:0, financiera:0, gpoAndrade: 0 };
@@ -238,13 +239,44 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.muestraDetalleDocumentos = function( item ){
+        $scope.currentConciliacion = item;
         $scope.titleDocumentos = item.Descipcion;
+        $scope.idConciliacion = item.idConciliacion;
         conciliacionFactory.conciliaDetalle( item.idConciliacion ).then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstConciliaDetalle = result.data;
                 $scope.currentPanel = 'pnlDocumentos';
-                // console.log("$scope.lstConciliaDetalle", $scope.lstConciliaDetalle);
             }
+        });
+    }
+
+    $scope.validaCancelacion = function(){
+        conciliacionFactory.validaCancelacion($scope.idConciliacion).then(function(resultValida) {
+            var validacion = resultValida.data[0][0];
+            if( validacion.PROCESADOS == 0 ){
+                $scope.CancelaConciliacion();
+            }
+            else if( validacion.PAGADOS == 0 ){
+                $scope.CancelaConciliacion();
+            }
+            else if( validacion.PAGADOS == 1 ){
+                swal("Conciliación Plan Piso","No se puede cancelar la conciliación ya existen documentos pagados, cancele los pagos para poder cancelar la conciliación.");
+            }
+        });
+    }
+
+    $scope.CancelaConciliacion = function(){
+        swal({
+            title: "Conciliación Plan Piso",
+            text: "¿Desea cancelar la conciliación?",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            conciliacionFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
+                swal("Conciliación Plan Piso","Se ha efectuado correctamnete la cancelación de la conciliación");
+                $scope.regresaConciliacionPanel();
+            });
         });
     }
 

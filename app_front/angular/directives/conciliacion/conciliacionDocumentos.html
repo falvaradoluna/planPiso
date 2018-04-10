@@ -1,8 +1,25 @@
 <h2>
     <span class="text-navy">{{titleDocumentos}}</span>
+    <br>
+    <span ng-show="currentConciliacion.estatus == 0" class="label label-danger">
+        <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
+    </span>
+
+    <span ng-show="currentConciliacion.estatus == 2" class="label label-success">
+        <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardada
+    </span>
+
+    <span ng-show="currentConciliacion.estatus == 1" class="label label-primary">
+        <i class="fa fa-check" aria-hidden="true"></i> Realizada
+    </span>
+
     <button class="btn btn-success pull-right" ng-click="regresaConciliacionPanel();">
 		<i class="fa fa-angle-left" aria-hidden="true"></i> Regresar
 	 </button>
+
+     <button ng-show="currentConciliacion.estatus == 1" class="btn btn-warning pull-right" ng-click="validaCancelacion();" style="margin-right: 10px;">
+        <i class="fa fa-ban" aria-hidden="true"></i> Cancelar Conciliación
+     </button>
 </h2>
 <hr>
 
