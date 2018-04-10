@@ -275,7 +275,9 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         }, function () {
             conciliacionFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
                 swal("Conciliación Plan Piso","Se ha efectuado correctamnete la cancelación de la conciliación");
-                $scope.regresaConciliacionPanel();
+                location.reload();
+                // $scope.regresaConciliacionPanel();
+                // $scope.obtieneCociliacion();
             });
         });
     }
