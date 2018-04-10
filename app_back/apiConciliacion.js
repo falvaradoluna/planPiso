@@ -342,4 +342,46 @@ router.get('/conciliaDetalle', function(req, res) {
     });
 });
 
+router.get('/validaCancelacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_VALIDACANCELACION_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/CancelaConciliacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_CANCELACONCILIACION_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
 module.exports = router;

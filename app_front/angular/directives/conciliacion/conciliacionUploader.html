@@ -24,7 +24,19 @@
                     <td> {{ item.mes }} </td>
                     <td> {{ item.anio }}</td>
                     <td> {{ item.fechaCreacion.split('T')[0] }}</td>
-                    <td> {{ item.estatus }}</td>
+                    <td> 
+                        <span ng-show="item.estatus == 0" class="label label-danger">
+                            <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
+                        </span>
+
+                        <span ng-show="item.estatus == 2" class="label label-success">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardada
+                        </span>
+
+                        <span ng-show="item.estatus == 1" class="label label-primary">
+                            <i class="fa fa-check" aria-hidden="true"></i> Realizada
+                        </span>
+                    </td>
                     <td>
                         <!-- <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item.periodoContable, item.consecutivo );">
                             <i class="fa fa-file-text" aria-hidden="true"></i> Aplicar
