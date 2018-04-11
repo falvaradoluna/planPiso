@@ -343,14 +343,14 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
 
     $scope.success = function() {
-        swal("Ok", "Traspaso finalizó con exito", "success");
+        swal("Ok", "Finalizó con exito", "success");
         setTimeout(function() {
             console.log('Termino');
             window.location = "/interes";
         }, 1000);
     };
     $scope.error = function(msg) {
-        swal("Error", "Traspaso finalizó con errores :" + msg, "error");
+        swal("Error", "Finalizó con errores :" + msg, "error");
         setTimeout(function() {
             console.log('Termino');
         }, 1000);
@@ -636,7 +636,76 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     });
 
+    $scope.callCompensation = function() {
+        $scope.consecCompensacion = 0;
+        $scope.saldoFinanciera = 200000.00;
+        $scope.precioUnidad = 250000.00;
+        $scope.anticipoUnidad = 100000.00;
+        $scope.saldoCliente = 150000.00;
+        $scope.diferenciaSaldo = 50000.00;
+        if ($scope.haveSelection() === false) {
+            swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+        } else {
+            $scope.lstNewUnits.forEach(function(item) {
+                if (item.isChecked === true) {
+                    var data = {
+                        CCP_IDDOCTO: item.CCP_IDDOCTO
+                    };
 
+                    interesFactory.validaPago(data).then(function(result) {
+                        $scope.consecCompensacion++;
+                        item.sePago = result.data[0].sePago;
+                        if (result.data[0].interesMes > 0)
+                            item.InteresMes = result.data[0].interesMes;
 
+                    }, function(error) {
+                        $scope.error(error.data.Message);
+
+                    });
+
+                }
+            });
+        }
+
+    }
+
+    $scope.$watch('consecCompensacion', function() {
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
+        if ($scope.consecCompensacion > 0 && $scope.consecCompensacion == $scope.listPoliza.length) {
+
+            if ($scope.listValida.length > 0) {
+                swal("Aviso", "Ya se han pagado algunos documentos elegidos", "warning");
+            } else {
+                $scope.currentPanel = "pnlCompensacion";
+                $scope.lstNewUnits.forEach(function(item) {
+                    if (item.isChecked === true) {
+                        $scope.lstSelectPay.push(item);
+
+                    }
+                });
+            }
+        }
+
+    });
+    $scope.setPnlCompensacion = function() {
+        $scope.currentPanel = "pnlCompensacion";
+    };
+    $scope.setPnlCompensacionResumen = function() {
+        var isok = 0;
+        $scope.lstSelectPay.forEach(function(item) {
+            if (item.InteresMes == 0 || item.InteresMes == undefined) {
+                isok++;
+
+            }
+        });
+        if (isok == 0) {
+            $scope.currentPanel = "pnlCompensacionResumen";
+        } else {
+
+            swal("Aviso", "Debe llenar el interes total para crear la provisión", "warning");
+
+        }
+    };
 
 });

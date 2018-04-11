@@ -19,7 +19,7 @@ router.get('/getLote', function(req, res) {
 
         var request = new sql.Request(dbCnx);
         request.input('estatusCID', sql.Int, req.query.estatusCID);
-
+        request.input('idtipoproceso', sql.VarChar, req.query.idtipoproceso);
         request.execute('uspGetLoteInteres').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
