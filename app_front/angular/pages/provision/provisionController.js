@@ -14,11 +14,11 @@ appModule.controller('provisionController', function($scope, $rootScope, $locati
 
 
 
-    provisionFactory.getLote(0).then(function(result) {
+    provisionFactory.getLote(0, '1,3').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
-    provisionFactory.getLote(1).then(function(result) {
+    provisionFactory.getLote(1, '1,3').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
@@ -42,9 +42,7 @@ appModule.controller('provisionController', function($scope, $rootScope, $locati
 
 
     $scope.prevStep = function() {
-        provisionFactory.getLote(0).then(function(result) {
-            $scope.lstUnitsPending = result.data;
-        });
+
         $scope.currentPanel = 'pnlPendientes';
         $scope.showDropDown = true;
     };

@@ -1,10 +1,10 @@
 appModule.factory('provisionFactory', function($http) {
     return {
-        getLote: function(estatusCID) {
+        getLote: function(estatusCID, pro_idtipoproceso) {
             return $http({
                 url: 'apiProvision/getLote',
                 method: "GET",
-                params: { estatusCID: estatusCID },
+                params: { estatusCID: estatusCID, idtipoproceso: pro_idtipoproceso },
                 headers: { 'Content-Type': 'application/json' }
             });
         },

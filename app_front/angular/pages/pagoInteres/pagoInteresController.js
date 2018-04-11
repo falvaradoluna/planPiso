@@ -13,12 +13,12 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
     $scope.showDropDown = true;
 
 
-    pagoFactory.getLote(0).then(function(result) {
+    pagoFactory.getLote(0, '9').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
 
-    pagoFactory.getLote(1).then(function(result) {
+    pagoFactory.getLote(1, '9').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
@@ -31,20 +31,12 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
 
     $scope.setCurrentpay = function(payType) {
 
-        $scope.currentPayName = payType.texto;
 
-        switch (parseInt(payType.CID)) {
-            case 0:
-                $scope.currentPanel = 'pnlPendientes';
-                break;
-            case 1:
-                $scope.currentPanel = 'pnlAplicados';
-                break;
-            default:
-                break;
-        }
+        $scope.currentPanel = 'pnlPendientes';
 
-    };
+    }
+
+
 
 
 

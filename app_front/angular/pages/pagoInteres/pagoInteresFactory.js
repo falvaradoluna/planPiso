@@ -1,10 +1,10 @@
 appModule.factory('pagoFactory', function($http) {
     return {
-        getLote: function(estatusCID) {
+        getLote: function(estatusCID, pro_idtipoproceso) {
             return $http({
                 url: 'apiPagoInteres/getLote',
                 method: "GET",
-                params: { estatusCID: estatusCID },
+                params: { estatusCID: estatusCID, idtipoproceso: pro_idtipoproceso },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
