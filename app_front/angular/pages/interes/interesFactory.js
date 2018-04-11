@@ -32,14 +32,6 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        setChangeSchema: function(params) {
-            return $http({
-                url: '/apiInteres/setChangeSchema',
-                method: "GET",
-                params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },
         getSchemaMovements: function(params) {
             return $http({
                 url: '/apiInteres/getSchemaMovements',

@@ -220,6 +220,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setPnlResumen = function() {
         $scope.currentPanel = "pnlResumen";
     };
+
     $scope.setPnlPagoResumen = function() {
         var isok = 0;
         $scope.lstSelectPay.forEach(function(item) {
@@ -305,42 +306,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }
         );
     };
-    $scope.Traspaso = function() {
-        swal({
-                title: "¿Esta seguro?",
-                text: "Se aplicará el traspaso para las unidades seleccionadas.",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#21B9BB",
-                confirmButtonText: "Aplicar",
-                closeOnConfirm: false
-            },
-            function() {
-                $scope.lstNewUnits.forEach(function(item) {
-                    if (item.isChecked === true) {
-                        var data = {
-                            CCP_IDDOCTO: item.CCP_IDDOCTO,
-                            usuarioID: $scope.idUsuario,
-                            empresaID: item.empresaID,
-                            sucursalID: item.sucursalID,
-                            financieraID: $scope.currentFinancial2.financieraID,
-                            esquemaID: $scope.currentSchema2.esquemaID,
-                            tipoMovimientoId: $scope.typeTraspaso //cambio financiera
-                        };
-
-                        interesFactory.setChangeSchema(data).then(function() {
-
-                        }, function(error) {
-                            $scope.error(error.data.Message);
-
-                        });
-                    }
-                });
-                $scope.success();
-            }
-        );
-    };
-
 
     $scope.success = function() {
         swal("Ok", "Finalizó con exito", "success");
@@ -349,6 +314,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             window.location = "/interes";
         }, 1000);
     };
+
     $scope.error = function(msg) {
         swal("Error", "Finalizó con errores :" + msg, "error");
         setTimeout(function() {
@@ -666,7 +632,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 }
             });
         }
-
     }
 
     $scope.$watch('consecCompensacion', function() {
@@ -707,5 +672,4 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
         }
     };
-
 });

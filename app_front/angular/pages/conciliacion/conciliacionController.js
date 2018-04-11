@@ -260,7 +260,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 $scope.CancelaConciliacion();
             }
             else if( validacion.PAGADOS == 1 ){
-                swal("Conciliación Plan Piso","No se puede cancelar la conciliación ya existen documentos pagados, cancele los pagos para poder cancelar la conciliación.");
+                swal("Conciliación Plan Piso","No se puede cancelar la conciliación ya existen documentos pagados, cancele los pagos para poder continuar con esta acción.");
             }
         });
     }
@@ -370,7 +370,6 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.nexStep = function() {
-        console.log("$scope.frmConciliacion", $scope.frmConciliacion);
         if($scope.frmConciliacion.lblMes == ''){
             swal("Conciliación","No se ha especificado el periodo contable.");
         }
@@ -393,8 +392,6 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     $scope.frmConciliacion.loadLayout = true;
                 }
             })
-
-
         }
     };
 
