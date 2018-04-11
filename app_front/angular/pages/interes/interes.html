@@ -54,14 +54,20 @@
                             <div ng-switch-when="pnlAgencia" class="animated fadeInRight">
                                 <interes-Cambio-Agencia></interes-Cambio-Agencia>
                             </div>
-                            <div ng-switch-when="pnlFinanciera" class="animated fadeInRight">
-                                <interes-Traspaso-Financiera></interes-Traspaso-Financiera>
-                            </div>
+
+                            <!-- Traspaso -->
+                            <div ng-controller="traspasoController">
+                                <div ng-switch-when="pnlFinanciera" class="animated fadeInRight">
+                                    <interes-Traspaso-Financiera></interes-Traspaso-Financiera>
+                                </div>
+
+                                <div ng-switch-when="pnlResumen" class="animated fadeInRight">
+                                    <interes-Resumen></interes-Resumen>
+                                </div>
+                            </div> <!-- / Traspaso -->
+                            
                             <div ng-switch-when="pnlDetalleUnidad" class="animated fadeInRight">
                                 <interes-Detalle-Unidad></interes-Detalle-Unidad>
-                            </div>
-                            <div ng-switch-when="pnlResumen" class="animated fadeInRight">
-                                <interes-Resumen></interes-Resumen>
                             </div>
                             <div ng-switch-when="pnlPagoResumen" class="animated fadeInRight">
                                 <interes-Pago-Resumen></interes-Pago-Resumen>

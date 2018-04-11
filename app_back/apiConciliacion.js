@@ -290,7 +290,6 @@ router.get('/generaConciliacion', function(req, res) {
 
         request.execute('CONC_ORQUESTACONCILIACION_SP').then(function(result) {
             dbCnx.close();
-            console.log( result.recordsets[0] );
             res.json(result.recordsets[0]);
         }).catch(function(err) {
             res.json(err);

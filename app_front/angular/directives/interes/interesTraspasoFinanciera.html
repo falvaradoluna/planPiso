@@ -65,7 +65,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstSelectUnits" repeat-end="initTblSchemas()">
+                <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" repeat-end="initTblSchemas()">
 
                     <td>{{unidad.vehNumserie}}</td>
                     <td>{{unidad.descModelo}}</td>
@@ -85,7 +85,7 @@
 </div>
 <div>
     <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
-    <button class="btn btn-primary pull-right" ng-click="setPnlResumen()" style="margin:10px">Siguiente 
+    <button class="btn btn-primary pull-right" ng-click="setPanelResumen()" style="margin:10px">Siguiente 
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
 </div>
