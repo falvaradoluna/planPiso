@@ -4,24 +4,23 @@
             <thead>
                 <tr>
                     <th>Documento</th>
-                    <th>Num Cuenta</th>
+                    <th>Cuenta</th>
+                    <th>Concepto</th>
                     <th>VIN</th>
-                    <th>interesCalculado</th>
-                    <th ng-hide="objEdit.visible">interesUsuario</th>
-                    <th ng-show="objEdit.visible">interesUsuario</th>
+                    <th>Cargo</th>
+                    <th>Abono</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstUnitDeatil" repeat-end="setTableStyle('#tblDetalle')">
+                <tr ng-repeat="unidad in lstUnitDeatil">
                     <td>{{unidad.pld_iddocumento}}</td>
                     <td>{{unidad.pld_numcuenta}}</td>
+                    <td>{{unidad.pld_concepto}}</td>
                     <td>{{unidad.pld_vin}}</td>
-                    <td>{{unidad.interesCalculado}}</td>
+                    <td>{{unidad.pld_cargo}}</td>
+                    <td>{{unidad.pld_abono}}</td>
 
-                    <td ng-hide="objEdit.visible">{{unidad.pld_cargo}}</td>
-                    <td ng-show="objEdit.visible">
-                        <input type="text" ng-model="unidad.pld_cargo" class="form-control">
-                    </td>
+
 
                 </tr>
             </tbody>

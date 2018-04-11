@@ -71,7 +71,16 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        validaPago: function(params) {
+            return $http({
+                url: '/apiInteres/validaPago',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
+
 
     };
 });

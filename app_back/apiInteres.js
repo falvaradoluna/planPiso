@@ -227,4 +227,25 @@ router.get('/insPago', function(req, res) {
         dbCnx.close();
     });
 });
+router.get('/validaPago', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
+
+        request.execute('Usp_ValidaPago_GET').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
 module.exports = router;

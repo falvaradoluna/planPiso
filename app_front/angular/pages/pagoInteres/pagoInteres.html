@@ -9,13 +9,10 @@
                 <div class="ibox-content">
                     <div ng-switch on="currentPanel">
                         <div ng-switch-when="pnlPendientes" class="animated fadeInRight">
-                            <h2><span class="text-navy">Pendientes </span></h2>
+                            <h2><span class="text-navy">Pagos </span></h2>
                             <pago-Interes-Pendiente></pago-Interes-Pendiente>
                         </div>
-                        <div ng-switch-when="pnlAplicados" class="animated fadeInRight">
-                            <h2><span class="text-navy">Aplicados</span></h2>
-                            <pago-Interes-Aplicado></pago-Interes-Aplicado>
-                        </div>
+
                         <div ng-switch-when="pnlDetalle" class="animated fadeInRight">
                             <h2><span class="text-navy">Detalle {{currentPayName}}</span></h2>
                             <pago-Interes-Detalle></pago-Interes-Detalle>
