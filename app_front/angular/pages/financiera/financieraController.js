@@ -28,6 +28,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.lsttipoPagoInteres = result.data[1];
         $scope.lsttipoPagoMensual = result.data[2];
         $scope.lsttipoSOFOM = result.data[3];
+        $scope.lsttipoCompensacion = result.data[4];
     });
     $scope.validateSchemaHeader = function() {
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
@@ -102,12 +103,14 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.financieraHeader.tipoCobroInteresID = objSchema.tipoCobroInteresID;
         $scope.financieraHeader.tipoPagoInteresID = objSchema.tipoPagoInteresID;
         $scope.financieraHeader.tipoPagoMensualID = objSchema.tipoPagoMensualID;
-        $scope.financieraHeader.tipoSOFOMID = objSchema.tipoSOFOMID;
+        $scope.financieraHeader.tipoCompensacionID = objSchema.tipoCompensacionID;
 
         $scope.financieraHeader.selectedtipoCobroInteres = _.where($scope.lsttipoCobroInteres, { tipoCobroInteresID: objSchema.tipoCobroInteresID })[0];
         $scope.financieraHeader.selectedtipoPagoInteres = _.where($scope.lsttipoPagoInteres, { tipoPagoInteresID: objSchema.tipoPagoInteresID })[0];
         $scope.financieraHeader.selectedtipoPagoMensual = _.where($scope.lsttipoPagoMensual, { tipoPagoMensualID: objSchema.tipoPagoMensualID })[0];
         $scope.financieraHeader.selectedtipoSOFOM = _.where($scope.lsttipoSOFOM, { tipoSOFOMID: objSchema.tipoSOFOMID })[0];
+        $scope.financieraHeader.selectedtipoCompensacion = _.where($scope.lsttipoCompensacion, { tipoCompensacionID: objSchema.tipoCompensacionID })[0];
+
 
     };
     $scope.validateSchemaHeaderEdit = function() {
@@ -115,6 +118,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.financieraHeader.tipoPagoMensualID = $scope.financieraHeader.selectedtipoPagoInteres.tipoPagoInteresID;
         $scope.financieraHeader.tipoPagoInteresID = $scope.financieraHeader.selectedtipoPagoInteres.tipoPagoInteresID;
         $scope.financieraHeader.tipoSOFOMID = $scope.financieraHeader.selectedtipoSOFOM.tipoSOFOMID;
+        $scope.financieraHeader.tipoCompensacionID = $scope.financieraHeader.selectedtipoCompensacion.tipoCompensacionID;
 
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
         var isValid = financieraFactory.formIsvalid(financieraFormControls);
@@ -129,6 +133,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
             tipoPagoMensualID: $scope.financieraHeader.tipoPagoMensualID,
             tipoPagoInteresID: $scope.financieraHeader.tipoPagoInteresID,
             tipoSOFOMID: $scope.financieraHeader.tipoSOFOMID,
+            tipoCompensacionID: $scope.financieraHeader.tipoCompensacionID,
             usuarioID: localStorage.getItem('idUsuario')
         };
 
