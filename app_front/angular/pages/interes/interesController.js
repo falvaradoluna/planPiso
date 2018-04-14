@@ -29,6 +29,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.typeTraspaso = 0;
     $scope.TituloTraspaso = '';
     $scope.consecPago = 0;
+    $scope.consecCompensacion = 0;
     $scope.initAmounts = function() {
 
         $scope.lstNewUnits = [];
@@ -604,72 +605,111 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.callCompensation = function() {
         $scope.consecCompensacion = 0;
-        $scope.saldoFinanciera = 200000.00;
-        $scope.precioUnidad = 250000.00;
-        $scope.anticipoUnidad = 100000.00;
-        $scope.saldoCliente = 150000.00;
-        $scope.diferenciaSaldo = 50000.00;
+
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
-            $scope.lstNewUnits.forEach(function(item) {
-                if (item.isChecked === true) {
-                    var data = {
-                        CCP_IDDOCTO: item.CCP_IDDOCTO
-                    };
-
-                    interesFactory.validaPago(data).then(function(result) {
-                        $scope.consecCompensacion++;
-                        item.sePago = result.data[0].sePago;
-                        if (result.data[0].interesMes > 0)
-                            item.InteresMes = result.data[0].interesMes;
-
-                    }, function(error) {
-                        $scope.error(error.data.Message);
-
-                    });
-
-                }
-            });
-        }
-    }
-
-    $scope.$watch('consecCompensacion', function() {
-        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
-        $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
-        if ($scope.consecCompensacion > 0 && $scope.consecCompensacion == $scope.listPoliza.length) {
-
-            if ($scope.listValida.length > 0) {
-                swal("Aviso", "Ya se han pagado algunos documentos elegidos", "warning");
+            $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
+            if ($scope.listValida.length > 1) {
+                swal("Aviso", "Solo se puede seleccionar uno a la vez.", "warning");
             } else {
-                $scope.currentPanel = "pnlCompensacion";
                 $scope.lstNewUnits.forEach(function(item) {
                     if (item.isChecked === true) {
-                        $scope.lstSelectPay.push(item);
+                        var data = {
+                            CCP_IDDOCTO: item.CCP_IDDOCTO
+                        };
+
+                        interesFactory.GetCompensacion(data).then(function(result) {
+                            $scope.currentPanel = "pnlCompensacion";
+                            $scope.saldoFinanciera = result.data[0].saldoFinanciera;
+                            $scope.precioUnidad = result.data[0].precioUnidad;
+                            $scope.anticipoUnidad = result.data[0].anticipoUnidad;
+                            $scope.saldoCliente = $scope.precioUnidad - $scope.anticipoUnidad;
+                            $scope.diferenciaSaldo = $scope.precioUnidad - $scope.saldoFinanciera;
+                            if ($scope.saldoFinanciera - $scope.saldoCliente > 0) {
+                                $scope.saldoCompensar = $scope.saldoCliente;
+                            } else {
+                                $scope.saldoCompensar = $scope.saldoFinanciera;
+                            }
+                        }, function(error) {
+                            $scope.error(error.data.Message);
+
+                        });
 
                     }
                 });
             }
-        }
 
-    });
+        }
+    }
+
+
     $scope.setPnlCompensacion = function() {
         $scope.currentPanel = "pnlCompensacion";
     };
-    $scope.setPnlCompensacionResumen = function() {
+    $scope.setPnlCompensacionResumen = function(saldoCompensar) {
         var isok = 0;
-        $scope.lstSelectPay.forEach(function(item) {
-            if (item.InteresMes == 0 || item.InteresMes == undefined) {
-                isok++;
+        if (saldoCompensar - $scope.saldoFinanciera <= 0) {
+            $scope.currentPanel = "pnlCompensacionResumen";
+            $scope.saldoCompensar = saldoCompensar;
+        } else {
+            swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+        }
+    };
+    $scope.CreaCompensacion = function() {
+        swal({
+            title: "¿Esta seguro?",
+            text: "Se creara la compensación de la unidad  para la unidad seleccionada.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aplicar",
+            closeOnConfirm: false
+        }, function() {
+            if ($scope.haveSelection() === false) {
+                swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+            } else {
+
+                $scope.lstNewUnits.forEach(function(item) {
+                    if (item.isChecked === true) {
+                        var data = {
+                            CCP_IDDOCTO: item.CCP_IDDOCTO,
+                            empresaID: item.empresaID,
+                            sucursalID: item.sucursalID,
+
+                            saldo: parseFloat($scope.saldoCompensar),
+
+                            usuarioID: $scope.idUsuario,
+                        };
+
+                        interesFactory.insCompensacion(data).then(function(result) {
+                            $scope.consecCompensacion++;
+
+
+                        }, function(error) {
+                            $scope.error(error.data.Message);
+
+                        });
+
+                    }
+                });
+
+
 
             }
         });
-        if (isok == 0) {
-            $scope.currentPanel = "pnlCompensacionResumen";
-        } else {
+    }
 
-            swal("Aviso", "Debe llenar el interes total para crear la provisión", "warning");
-
+    $scope.$watch('consecCompensacion', function() {
+        $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
+        if ($scope.consecCompensacion > 0 && $scope.consecCompensacion == $scope.listPoliza.length) {
+            swal("Compensación", "Guardado correctamente");
+            setTimeout(function() {
+                console.log('Termino');
+                window.location = "/compensacion";
+            }, 1000);
         }
+
     };
+
 });

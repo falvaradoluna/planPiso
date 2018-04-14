@@ -43,6 +43,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Provisión', url: '#', isActive: true }
             ];
         },
+        compensacionBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Compensación', url: '#', isActive: true }
+            ];
+        },
         conciliacionBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
@@ -144,7 +150,9 @@ appModule.factory('staticFactory', function($http) {
             $(tblID).DataTable({
                 dom: '<"html5buttons"B>lTfgitp',
                 //iDisplayLength: 5,
-                order: [[ 0, "desc" ]],
+                order: [
+                    [0, "desc"]
+                ],
                 buttons: [{
                     extend: 'copy'
                 }, {

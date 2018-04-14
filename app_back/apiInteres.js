@@ -248,4 +248,51 @@ router.get('/validaPago', function(req, res) {
         dbCnx.close();
     });
 });
+router.get('/GetCompensacion', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
+
+        request.execute('Usp_Compensacion_GET').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+router.get('/insCompensacion', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
+        request.input('idempresa', sql.Int, req.query.empresaID);
+        request.input('idsucursal', sql.Int, req.query.sucursalID);
+        request.input('saldo', sql.Decimal, req.query.saldo);
+        request.input('usuarioID', sql.Int, req.query.usuarioID);
+
+        request.execute('Usp_CreaCompensacion_INS').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
 module.exports = router;
