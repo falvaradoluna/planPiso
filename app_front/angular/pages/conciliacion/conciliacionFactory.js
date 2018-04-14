@@ -16,11 +16,15 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getConciliacion: function( periodo, consecutivo ) {
+        getConciliacion: function( periodo, consecutivo, financiera ) {
             return $http({
                 url: 'apiConciliacion/getConciliacion',
                 method: "GET",
-                params: { periodo: periodo, consecutivo: consecutivo },
+                params: { 
+                    periodo: periodo, 
+                    consecutivo: consecutivo,
+                    financiera: financiera
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -35,6 +39,14 @@ appModule.factory('conciliacionFactory', function($http) {
         creaConciliacion: function( parametros ) {
             return $http({
                 url: 'apiConciliacion/creaConciliacion',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        validaExistencia: function( parametros ) {
+            return $http({
+                url: 'apiConciliacion/validaExistencia',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
@@ -71,16 +83,49 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        generaConciliacion: function( periodo, anio ) {
+        generaConciliacion: function( periodo, anio, financiera ) {
             return $http({
                 url: 'apiConciliacion/generaConciliacion',
                 method: "GET",
                 params:{ 
                     periodo: periodo,
-                    anio: anio
+                    anio: anio,
+                    financiera: financiera
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
+        },
+        obtieneCociliacion: function() {
+            return $http({
+                url: 'apiConciliacion/obtieneConciliacion',
+                method: "GET",
+                params:{},
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        conciliaDetalle: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/conciliaDetalle',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        validaCancelacion: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/validaCancelacion',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        CancelaConciliacion: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/CancelaConciliacion',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }        
     };
 });

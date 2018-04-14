@@ -1,9 +1,12 @@
-appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, commonFactory, staticFactory, filterFilter ) {
+appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, provisionFactory, commonFactory, staticFactory, filterFilter ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck     = "Desmarcar Unidades";
     $scope.currentPanel         = 'pnlCargaArchivo';
+
+    $scope.titleDocumentos        = '';
+    $scope.titleDocumentosDetalle = '';
 
     /* =========================== 
         [ estSolAutorizacion ]
@@ -30,9 +33,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.lstConceal           = [];
     $scope.lstFinancial         = [];
     $scope.lstPendiente         = [];
+    $scope.lstConciliacion      = [];
     $scope.autDetalle           = [];
+    $scope.lstConciliaDetalle   = [];
     
     $scope.currentFinancial     = {};
+    $scope.currentConciliacion  = {};
     $scope.total                = { sistema: 0, archivo: 0 };
     $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
     $scope.situacion            = { ok:0, financiera:0, gpoAndrade: 0 };
@@ -90,23 +96,44 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             url: "/apiConciliacion/upload",
             uploadMultiple: 0,
             maxFiles: 1,
-            autoProcessQueue: true,
+            autoProcessQueue: false,
             acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         });
 
         myDropzone.on("success", function(req, res) {
+            var _this = this;
+
             var filename = res + '.xlsx';
             $scope.loadingPanel = true;
             $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
 
-            var _this = this;
             $scope.limpiarDropzone = function(){
                 _this.removeAllFiles();
                 myDropzone.enable()
+                $scope.frmConciliacion.loadLayout = true;
             }
         });
+
+        myDropzone.on("addedfile", function() {
+            $scope.frmConciliacion.loadLayout = true;
+        });
     };
+
+    $scope.validaExistencia = function(){
+        console.log( "currentMonth", $scope.currentMonth );
+        return new Promise((resolve, reject)=> {
+            let parametros = {
+                idEmpresa: $scope.session.empresaID,
+                idFinanciera: $scope.frmConciliacion.idFinanciera,
+                periodo: $scope.currentMonth + 1,
+                anio: $scope.currentYear
+            }
+            conciliacionFactory.validaExistencia(parametros).then(function(result) {
+                resolve(result.data[0]);
+            })
+        })
+    }
 
     var execelFields = [];
     $scope.readLayout = function(filename) {
@@ -142,6 +169,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             $scope.frmConciliacion.loadLayout = true;
                             $scope.loadingPanel = false;
                             $('#mdlLoading').modal('hide');
+
+                            $scope.currentPanel = 'pnlConciliar';
+                            $scope.conceal();
+                            $("#modalNuevaConciliacion").modal('hide');
+                            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
+                            $scope.lblFinanciera = aux[0].nombre;
                         }
                         else{
                             increment++;
@@ -172,7 +205,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-        conciliacionFactory.getConciliacion( $scope.currentMonth, contador ).then(function(result) {
+        conciliacionFactory.getConciliacion( $scope.currentMonth, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
         });
@@ -181,7 +214,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.muestraConciliacionPendiente = function( periodo, consecutivo ){
-        conciliacionFactory.getConciliacion( periodo, consecutivo  ).then(function(result) {
+        conciliacionFactory.getConciliacion( periodo, consecutivo, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             conciliacionFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
                 if( detalle.data.length != 0 ){
                     $scope.lstConceal = result.data;
@@ -202,6 +235,50 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
                 }
             })
+        });
+    }
+
+    $scope.muestraDetalleDocumentos = function( item ){
+        $scope.currentConciliacion = item;
+        $scope.titleDocumentos = item.Descipcion;
+        $scope.idConciliacion = item.idConciliacion;
+        conciliacionFactory.conciliaDetalle( item.idConciliacion ).then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstConciliaDetalle = result.data;
+                $scope.currentPanel = 'pnlDocumentos';
+            }
+        });
+    }
+
+    $scope.validaCancelacion = function(){
+        conciliacionFactory.validaCancelacion($scope.idConciliacion).then(function(resultValida) {
+            var validacion = resultValida.data[0][0];
+            if( validacion.PROCESADOS == 0 ){
+                $scope.CancelaConciliacion();
+            }
+            else if( validacion.PAGADOS == 0 ){
+                $scope.CancelaConciliacion();
+            }
+            else if( validacion.PAGADOS == 1 ){
+                swal("Conciliación Plan Piso","No se puede cancelar la conciliación ya existen documentos pagados, cancele los pagos para poder continuar con esta acción.");
+            }
+        });
+    }
+
+    $scope.CancelaConciliacion = function(){
+        swal({
+            title: "Conciliación Plan Piso",
+            text: "¿Desea cancelar la conciliación?",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            conciliacionFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
+                swal("Conciliación Plan Piso","Se ha efectuado correctamnete la cancelación de la conciliación");
+                location.reload();
+                // $scope.regresaConciliacionPanel();
+                // $scope.obtieneCociliacion();
+            });
         });
     }
 
@@ -303,15 +380,23 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             swal("Conciliación","No se ha cargado el Layout.");
         }
         else{
-            $scope.currentPanel = 'pnlConciliar';
-            $scope.conceal();
-            $("#modalNuevaConciliacion").modal('hide');
-            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
-            $scope.lblFinanciera = aux[0].nombre;
+            $scope.validaExistencia().then( ( result ) => {
+                if( result === undefined ){
+                    swal("Conciliación","Se perdio la conexión al servidor, favor de verificar su conexión.");
+                }
+                else if( result.success == 0 ){
+                    swal("Conciliación","Ya se encuentra una cociliación para el periodo y financiera especificada.");
+                }
+                else if( result.success == 1 ){
+                    myDropzone.processQueue();
+                    $scope.frmConciliacion.loadLayout = true;
+                }
+            })
         }
     };
 
     $scope.prevStep = function() {
+        location.reload();
         $scope.currentPanel = 'pnlCargaArchivo';
     };
 
@@ -407,9 +492,13 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
                     if( i >= ( $scope.lstConceal.length - 1 ) ){
                         swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
-                        $scope.prevStep();
                         setTimeout( function(){
-                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear );
+                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
+                                // location.reload();
+                                $scope.prevStep();
+                                // location.href = "provision";
+
+                            });
                         },2000);
                     }
                 }
@@ -418,9 +507,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     }
 
-    $scope.solicitaAutorizacion = function() {
+    $scope.solicitaAutorizacion = function( estatus ) {
         var parametros = {
             consecutivo: contador,
+            estatus: estatus,
             idUsuario: $scope.idUsuario,
             idFinanciera: $scope.frmConciliacion.idFinanciera,
             periodoContable: parseInt($scope.currentMonth) + 1,
@@ -438,10 +528,14 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             cancelButtonText: "Cerrar"
         }, function() {
             conciliacionFactory.solicitaAutorizacion( parametros ).then(function(result) {
-                console.log("result.data", result.data);
                 if( result.data[0].success == 1 ){
                     for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
-                        swal("Listo", "La se ha realizado la notificacón, favor de esperar su respuesta", "success");
+                        if( parametros.estatus == 1 ){
+                            swal("Listo", "La se ha realizado la notificacón, favor de esperar su respuesta", "success");
+                        }
+                        else{
+                            swal("Listo", "Se ha guardado de forma correcta tus registros.", "success");
+                        }
                         $scope.estSolAutorizacion = 2;
                         $scope.$apply();
                     }
@@ -466,5 +560,31 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 $scope.lstPendiente = result.data;
             }
         });
+    }
+
+    $scope.obtieneCociliacion = function(){
+        conciliacionFactory.obtieneCociliacion().then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstConciliacion = result.data;
+            }
+        });
+    }
+
+    $scope.regresaConciliacionPanel = function(){        
+        $scope.currentPanel = 'pnlCargaArchivo';
+    }
+
+    $scope.showDetail = function(lote){
+        $scope.titleDocumentosDetalle = lote.ple_concepto;
+        provisionFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstUnitDeatil = result.data;
+                $scope.currentPanel = 'pnlDocumentosDetalle';
+            }
+        });
+    }
+
+    $scope.regresaConciliacionDocumento = function(){
+        $scope.currentPanel = 'pnlDocumentos';
     }
 });

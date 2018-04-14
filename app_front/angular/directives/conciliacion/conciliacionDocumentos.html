@@ -1,0 +1,59 @@
+<h2>
+    <span class="text-navy">{{titleDocumentos}}</span>
+    <br>
+    <span ng-show="currentConciliacion.estatus == 0" class="label label-danger">
+        <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
+    </span>
+
+    <span ng-show="currentConciliacion.estatus == 2" class="label label-success">
+        <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardada
+    </span>
+
+    <span ng-show="currentConciliacion.estatus == 1" class="label label-primary">
+        <i class="fa fa-check" aria-hidden="true"></i> Realizada
+    </span>
+
+    <button class="btn btn-success pull-right" ng-click="regresaConciliacionPanel();">
+		<i class="fa fa-angle-left" aria-hidden="true"></i> Regresar
+	 </button>
+
+     <button ng-show="currentConciliacion.estatus == 1" class="btn btn-warning pull-right" ng-click="validaCancelacion();" style="margin-right: 10px;">
+        <i class="fa fa-ban" aria-hidden="true"></i> Cancelar Conciliación
+     </button>
+</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-12">
+        <table id="tblPagoPendiente" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Tipo proceso</th>
+                    <th>Sucursal</th>
+                    <th>Consecutivo poliza</th>
+                    <th>Mes poliza</th>
+                    <th>Año poliza</th>
+                    <th>Estatus</th>
+                    <th>Fecha Creación</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="unidad in lstConciliaDetalle">
+                    <td>{{unidad.ple_concepto}}</td>
+                    <td>{{unidad.pro_nombre}}</td>
+                    <td>{{unidad.suc_observaciones}}</td>
+                    <td>{{unidad.ple_conspol}}</td>
+                    <td>{{unidad.ple_mes}}</td>
+                    <td>{{unidad.anio}}</td>
+                    <td>{{unidad.ple_estatus}}</td>
+                    <td>{{unidad.ple_fechapoliza.split('T')[0]}}</td>
+                    <td>
+                        <button type="button" class="btn btn-success btn-sm" ng-click="showDetail(unidad)"><span class="glyphicon glyphicon-eye-open"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -69,32 +69,20 @@ router.post('/upload', function(req, res, next) {
 });
 
 router.get('/readLayout', function(req, res, next) {
-    console.log('[readLayout 1]');
     try{
         var self = this;
         var parseXlsx = require('excel');
-        console.log('[readLayout 2]');
-        console.log( "Ruta",'C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName );
-        parseXlsx('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err, data) {
-            console.log( "err", err );
-            console.log( "data", data );            
-            console.log('[readLayout 3]');
+        parseXlsx( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err, data) {
             if (err) {
-                console.log('[readLayout 4]');
                 return res.end("Error uploading file.");
             } else {
-                console.log('[readLayout 5]');
-                console.log("data", data );
                 setTimeout(function() {
-                    console.log('[readLayout 6]');
                     var fs = require("fs");
-                    fs.unlink('C:\\Users\\WINDOWS\\Documents\\GrijalvaApp\\planPiso\\app_back\\uploaded\\' + req.query.LayoutName, function(err) {
-                        console.log('[readLayout 7]');
+                    // console.log( __dirname + '\\uploaded\\' + req.query.LayoutName );
+                    fs.unlink( __dirname + '\\uploaded\\' + req.query.LayoutName, function(err) {
                         if (err) {
-                            console.log('[readLayout 8]');
                             return res.end(err);
                         } else {
-                            console.log('[readLayout 9]');
                             return res.json(data);
                         }
                     });
@@ -108,12 +96,37 @@ router.get('/readLayout', function(req, res, next) {
     }
 });
 
+router.get('/validaExistencia', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input( 'idEmpresa', sql.Int, req.query.idEmpresa );
+        request.input( 'idFinanciera', sql.Int, req.query.idFinanciera );
+        request.input( 'periodo', sql.Int, req.query.periodo );
+        request.input( 'anio', sql.Int, req.query.anio );
+
+        request.execute('CONC_VALIDAEXISTENCIA_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
 router.get('/getConciliacion', function(req, res) {
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
         var request = new sql.Request(dbCnx);
         request.input( 'consecutivo', sql.Int, req.query.consecutivo );
         request.input( 'periodo', sql.Int, ( parseInt(req.query.periodo) + 1) );
+        request.input( 'financiera', sql.Int, req.query.financiera );
 
         request.execute('uspGetConciliacion').then(function(result) {
             dbCnx.close();
@@ -227,6 +240,7 @@ router.get('/solicitaAutorizacion', function(req, res) {
         var request = new sql.Request(dbCnx);
         
         request.input( 'consecutivo',       sql.Int, req.query.consecutivo);
+        request.input( 'estatus',           sql.Int, req.query.estatus);
         request.input( 'idUsuario',         sql.Int, req.query.idUsuario);
         request.input( 'idFinanciera',      sql.Int, req.query.idFinanciera);
         request.input( 'periodoContable',   sql.Int, req.query.periodoContable);
@@ -272,10 +286,92 @@ router.get('/generaConciliacion', function(req, res) {
         
         request.input( 'periodo',   sql.Int, req.query.periodo);
         request.input( 'anio',      sql.Int, req.query.anio);
+        request.input( 'financiera',      sql.Int, req.query.financiera);
 
         request.execute('CONC_ORQUESTACONCILIACION_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/obtieneConciliacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        request.execute('CONC_OBTIENETODAS_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/conciliaDetalle', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_DETALLE_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/validaCancelacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_VALIDACANCELACION_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/CancelaConciliacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        
+        request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
+
+        request.execute('CONC_CANCELACONCILIACION_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
         }).catch(function(err) {
             res.json(err);
             dbCnx.close();
