@@ -14,7 +14,6 @@ router.get('/', function(req, res) {
 
 // define the about route
 router.get('/getSucursal', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -30,12 +29,10 @@ router.get('/getSucursal', function(req, res) {
             res.json(err);
             dbCnx.close();
         });
-
     }).catch(function(err) {
         res.json(err);
         dbCnx.close();
     });
-
 });
 
 router.get('/getTipoTiie', function(req, res) {
@@ -82,7 +79,6 @@ router.get('/currentTIIE', function(req, res) {
 });
 
 router.get('/getFinancieras', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -101,13 +97,9 @@ router.get('/getFinancieras', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
 });
 
-
-
 router.get('/getSchemas', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
 
@@ -128,16 +120,11 @@ router.get('/getSchemas', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
-
 });
 
-
 router.get('/getCatalog', function(req, res) {
-
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
-
         var request = new sql.Request(dbCnx);
         request.input('catalogoID', sql.Int, req.query.catalogoID);
 
@@ -154,8 +141,6 @@ router.get('/getCatalog', function(req, res) {
         res.json(err);
         dbCnx.close();
     });
-
-
 });
 
 // router.get('/getTipoTiie', function(req, res) {

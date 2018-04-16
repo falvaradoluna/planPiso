@@ -98,6 +98,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         //  $scope.currentPanel = "pnlResumen";
         $scope.currentFinancialName2 = financialObj.nombre;
         $scope.currentFinancial2 = financialObj;
+        $scope.currentSchemaName2 = '';
+        $scope.currentSchema2 = [];
+
         // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
 
         commonFactory.getSchemas(financialObj.financieraID).then(function(result) {
@@ -216,6 +219,10 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
 
     };
+
+    $scope.regresarTraspaso = function(){
+        $scope.currentPanel = "pnlFinanciera";
+    }
 
     $scope.setPnlResumen = function() {
         $scope.currentPanel = "pnlResumen";

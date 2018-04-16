@@ -1,46 +1,59 @@
 <div class="col-md-12">
     <h2>{{TituloTraspaso}}</h2>
-    <hr>
 </div>
-<div class="ibox float-e-margins">
-    <div class="ibox-content">
-        <div class="col-md-4">
-            <h3>Estos registros se transferiran a:</h3>
-        </div>
-        <div class="col-md-4">
-            Financiera:
-            <div class="dropdown" style="display:inline-block">
-                <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                {{currentFinancialName2}}
-                <span class="caret"></span>
-            </button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="financial in lstFinancial">
-                        <a ng-click="setCurrentFinance2(financial)">{{financial.nombre}}</a>
-                    </li>
-                </ul>
+<div class="ibox float-e-margins" ng-init="inicioTraspaso()">
+    <div class="row">
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="col-md-12">
+                        <h3>Financiera de Origen:</h3>
+                    </div>
+                    <div class="col-md-6">
+                        Financiera:<br>
+                        <h2><b>{{ lstFinancieraOrigen[0].nombre }}</b></h2>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-12">
+                        <h3>Financiera Destino:</h3>
+                    </div>
+                    <div class="col-md-6">
+                        Financiera:<br>
+                        <div class="dropdown" style="display:inline-block">
+                            <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{currentFinancialName2}}
+                            <span class="caret"></span>
+                        </button>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="financial in lstTraspasoFinanciera">
+                                    <a ng-click="setCurrentFinance2(financial)">{{financial.nombre}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        Esquema:<br>
+                        <div class="dropdown" style="display:inline-block">
+                            <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                                    {{currentSchemaName2}}
+                                    <span class="caret"></span>
+                                </button>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="schema in lstSchemas">
+                                    <a ng-click="setCurrentSchema2(schema)">{{schema.nombre}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            Esquema:
-            <div class="dropdown" style="display:inline-block">
-                <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                        {{currentSchemaName2}}
-                        <span class="caret"></span>
-                    </button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="schema in lstSchemas">
-                        <a ng-click="setCurrentSchema2(schema)">{{schema.nombre}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-
-        <div class="row">
+            <hr>
+            <div class="row">
 
 
-            <div class="col-md-4">
+                <div class="col-md-4">
+                </div>
             </div>
         </div>
     </div>
@@ -84,7 +97,7 @@
     </div>
 </div>
 <div>
-    <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
+    <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Cancelar</button>
     <button class="btn btn-primary pull-right" ng-click="setPanelResumen()" style="margin:10px">Siguiente 
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
