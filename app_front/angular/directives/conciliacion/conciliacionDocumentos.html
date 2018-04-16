@@ -5,21 +5,22 @@
         <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
     </span>
 
-    <span ng-show="currentConciliacion.estatus == 2" class="label label-success">
+    <span ng-show="currentConciliacion.estatus == 2" class="label label-info">
         <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardada
     </span>
 
     <span ng-show="currentConciliacion.estatus == 1" class="label label-primary">
-        <i class="fa fa-check" aria-hidden="true"></i> Realizada
-    </span>
+        <i class="fa fa-check-circle" aria-hidden="true"></i> Aplicada
+    </span>    
 
-    <button class="btn btn-success pull-right" ng-click="regresaConciliacionPanel();">
-		<i class="fa fa-angle-left" aria-hidden="true"></i> Regresar
-	 </button>
 
-     <button ng-show="currentConciliacion.estatus == 1" class="btn btn-warning pull-right" ng-click="validaCancelacion();" style="margin-right: 10px;">
+    <!-- <button ng-show="currentConciliacion.estatus == 1" class="btn btn-primary pull-right" ng-click="validaCancelacion();" style="margin-right: 0px;">
+        <i class="fa fa-check" aria-hidden="true"></i> Aplicar Conciliación
+     </button> -->
+
+    <button ng-show="currentConciliacion.estatus == 1" class="btn btn-default pull-right" ng-click="validaCancelacion();" style="margin-right: 0px;">
         <i class="fa fa-ban" aria-hidden="true"></i> Cancelar Conciliación
-     </button>
+    </button>
 </h2>
 <hr>
 
@@ -55,5 +56,9 @@
                 </tr>
             </tbody>
         </table>
+        <button class="btn btn-success pull-right" ng-click="regresaConciliacionPanel();">
+            <i class="fa fa-angle-left" aria-hidden="true"></i> Regresar
+        </button>
     </div>
+
 </div>
