@@ -472,7 +472,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             swal("Pago de unidad e interes", "Guardado correctamente");
             setTimeout(function() {
                 console.log('Termino');
-                window.location = "/interes";
+                window.location = "/pagoInteres";
             }, 1000);
         }
 
@@ -717,6 +717,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }, 1000);
         }
 
-    };
+    });
 
 });
