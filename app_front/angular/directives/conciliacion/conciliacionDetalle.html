@@ -51,22 +51,22 @@
                 <small>Fecha de autorización: {{autDetalle.fechaAutoriza}}</small>
             </div>
             <hr>
-            <div ng-show="true">
-            <!-- <div ng-show="estSolAutorizacion == 0 || estSolAutorizacion == 3"> -->
+            <!-- <div ng-show="true"> -->
+            <div ng-show="estSolAutorizacion == 0 || estSolAutorizacion == 3">
                 <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
                 <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
                 <button class="btn btn-warning btn-sm pull-right" ng-click="controlCheckDeseleccionar();">{{lbl_btn_descheck}}</button>
             </div>
 
-            <div ng-show="false">
-            <!-- <div ng-show="estSolAutorizacion == 1"> -->
+            <!-- <div ng-show="false"> -->
+            <div ng-show="estSolAutorizacion == 1">
                 <button class="btn btn-warning btn-sm pull-right" ng-click="solicitaAutorizacion(1);">
                     <i class="fa fa-key" aria-hidden="true"></i> Solicitar Autorización
                 </button>
             </div>
 
-            <div ng-show="false">
-            <!-- <div ng-show="estSolAutorizacion == 2" class="row"> -->
+            <!-- <div ng-show="false"> -->
+            <div ng-show="estSolAutorizacion == 2" class="row">
                 <div class="col-sm-6 pull-right">
                     <table border="0" class="pull-right">
                         <tr>

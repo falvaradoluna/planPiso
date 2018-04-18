@@ -206,7 +206,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-        conciliacionFactory.getConciliacion( $scope.currentMonth, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
+        conciliacionFactory.getConciliacion( ($scope.currentMonth + 1), contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
         });
@@ -214,8 +214,8 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.getCierreMes();
     };
 
-    $scope.muestraConciliacionPendiente = function( periodo, consecutivo ){
-        conciliacionFactory.getConciliacion( periodo, consecutivo, $scope.frmConciliacion.idFinanciera ).then(function(result) {
+    $scope.muestraConciliacionPendiente = function( periodo, consecutivo, financiera ){
+        conciliacionFactory.getConciliacion( periodo, consecutivo, financiera ).then(function(result) {
             conciliacionFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
                 if( detalle.data.length != 0 ){
                     $scope.lstConceal = result.data;
@@ -284,7 +284,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.getCierreMes = function() {
-        conciliacionFactory.getCierreMes( $scope.currentMonth ).then(function(result) {
+        conciliacionFactory.getCierreMes( ($scope.currentMonth + 1) ).then(function(result) {
             $scope.cierreMes = result.data;
         });
     };
@@ -559,6 +559,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         conciliacionFactory.porAutorizar().then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstPendiente = result.data;
+                console.log( "$scope.lstPendiente", $scope.lstPendiente );
             }
         });
     }

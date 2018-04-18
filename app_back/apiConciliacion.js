@@ -125,7 +125,7 @@ router.get('/getConciliacion', function(req, res) {
     dbCnx.connect().then(function() {
         var request = new sql.Request(dbCnx);
         request.input( 'consecutivo', sql.Int, req.query.consecutivo );
-        request.input( 'periodo', sql.Int, ( parseInt(req.query.periodo) + 1) );
+        request.input( 'periodo', sql.Int, req.query.periodo );
         request.input( 'financiera', sql.Int, req.query.financiera );
 
         request.execute('uspGetConciliacion').then(function(result) {
@@ -166,7 +166,7 @@ router.get('/getCierreMes', function(req, res) {
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
         var request = new sql.Request(dbCnx);
-        request.input( 'periodo', sql.Int, ( parseInt(req.query.periodo) + 1) );
+        request.input( 'periodo', sql.Int, req.query.periodo );
 
         request.execute('GETCIERREDEMES_SP').then(function(result) {
             dbCnx.close();
