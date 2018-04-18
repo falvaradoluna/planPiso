@@ -74,6 +74,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.currentYear  = date.getFullYear();
     }
 
+    // $scope.currentMonth = 2; // HardCode
     $scope.frmConciliacion.lblMes = $scope.lstMonth[ $scope.currentMonth ];    
     
     // Este es como funciona desde Branch Conciliación
