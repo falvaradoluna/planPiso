@@ -1,4 +1,4 @@
-appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory, provisionFactory, commonFactory, staticFactory, filterFilter ) {
+appModule.controller('autorizaController', function($scope, $rootScope, $location, autorizaFactory, provisionFactory, commonFactory, staticFactory, filterFilter ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     
     $scope.currentFinancialName = "Seleccionar Financiera";
@@ -130,7 +130,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 periodo: $scope.currentMonth + 1,
                 anio: $scope.currentYear
             }
-            conciliacionFactory.validaExistencia(parametros).then(function(result) {
+            autorizaFactory.validaExistencia(parametros).then(function(result) {
                 resolve(result.data[0]);
             })
         })
@@ -138,7 +138,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     var execelFields = [];
     $scope.readLayout = function(filename) {
-        conciliacionFactory.readLayout(filename).then(function(result) {
+        autorizaFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
             var aux = [];
             for (var i = 1; i < LayoutFile.length; i++) {
@@ -155,7 +155,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.insertData = function() {
         try{
             execelFields[increment]['consecutivo'] = contador;
-            conciliacionFactory.insExcelData(execelFields[increment]).then(function(result) {
+            autorizaFactory.insExcelData(execelFields[increment]).then(function(result) {
                 if( !result.data ){
                     swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
                     $('#mdlLoading').modal('hide');
@@ -206,7 +206,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-        conciliacionFactory.getConciliacion( ($scope.currentMonth + 1), contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
+        autorizaFactory.getConciliacion( ($scope.currentMonth + 1), contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
         });
@@ -215,8 +215,8 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.muestraConciliacionPendiente = function( periodo, consecutivo, financiera ){
-        conciliacionFactory.getConciliacion( periodo, consecutivo, financiera ).then(function(result) {
-            conciliacionFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
+        autorizaFactory.getConciliacion( periodo, consecutivo, financiera ).then(function(result) {
+            autorizaFactory.autorizacionDetalle( consecutivo  ).then(function(detalle) {
                 if( detalle.data.length != 0 ){
                     $scope.lstConceal = result.data;
                     $scope.sumTotal();
@@ -243,7 +243,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.currentConciliacion = item;
         $scope.titleDocumentos = item.Descipcion;
         $scope.idConciliacion = item.idConciliacion;
-        conciliacionFactory.conciliaDetalle( item.idConciliacion ).then(function(result) {
+        autorizaFactory.conciliaDetalle( item.idConciliacion ).then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstConciliaDetalle = result.data;
                 $scope.currentPanel = 'pnlDocumentos';
@@ -252,7 +252,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.validaCancelacion = function(){
-        conciliacionFactory.validaCancelacion($scope.idConciliacion).then(function(resultValida) {
+        autorizaFactory.validaCancelacion($scope.idConciliacion).then(function(resultValida) {
             var validacion = resultValida.data[0][0];
             if( validacion.PROCESADOS == 0 ){
                 $scope.CancelaConciliacion();
@@ -274,7 +274,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             closeOnConfirm: false,
             showLoaderOnConfirm: true
         }, function () {
-            conciliacionFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
+            autorizaFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
                 swal("Conciliación Plan Piso","Se ha efectuado correctamnete la cancelación de la conciliación");
                 location.reload();
                 // $scope.regresaConciliacionPanel();
@@ -284,7 +284,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.getCierreMes = function() {
-        conciliacionFactory.getCierreMes( ($scope.currentMonth + 1) ).then(function(result) {
+        autorizaFactory.getCierreMes( ($scope.currentMonth + 1) ).then(function(result) {
             $scope.cierreMes = result.data;
         });
     };
@@ -475,7 +475,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         }
         var parametrosDetalle = {}
         var item = {};
-        conciliacionFactory.creaConciliacion( parametros ).then(function(result) {
+        autorizaFactory.creaConciliacion( parametros ).then(function(result) {
             if( result.data[0].success == 1 ){
                 for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
                     item = $scope.lstConceal[ i ];
@@ -489,12 +489,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
                     }
 
-                    conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
+                    autorizaFactory.creaConciliacionDetalle( parametrosDetalle );
 
                     if( i >= ( $scope.lstConceal.length - 1 ) ){
                         swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
                         setTimeout( function(){
-                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
+                            autorizaFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
                                 // location.reload();
                                 $scope.prevStep();
                                 // location.href = "provision";
@@ -528,7 +528,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             confirmButtonColor: "#ec6c62",
             cancelButtonText: "Cerrar"
         }, function() {
-            conciliacionFactory.solicitaAutorizacion( parametros ).then(function(result) {
+            autorizaFactory.solicitaAutorizacion( parametros ).then(function(result) {
                 if( result.data[0].success == 1 ){
                     for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
                         if( parametros.estatus == 1 ){
@@ -556,7 +556,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.porAutorizar = function(){
-        conciliacionFactory.porAutorizar().then(function(result) {
+        autorizaFactory.porAutorizar().then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstPendiente = result.data;
                 console.log( "$scope.lstPendiente", $scope.lstPendiente );
@@ -565,7 +565,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.obtieneCociliacion = function(){
-        conciliacionFactory.obtieneCociliacion().then(function(result) {
+        autorizaFactory.obtieneCociliacion().then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstConciliacion = result.data;
             }
