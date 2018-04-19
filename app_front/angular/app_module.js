@@ -57,6 +57,11 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/conciliacion', {
         templateUrl: 'angular/pages/conciliacion/conciliacion.html',
         controller: 'conciliacionController'
+    })
+
+    .when('/autoriza', {
+        templateUrl: 'angular/pages/autoriza/autoriza.html',
+        controller: 'autorizaController'
     });
 
     $routeProvider.otherwise({ requireBasedirectTo: '/' });

@@ -162,6 +162,48 @@ router.get('/getAutorizacionDetalle', function(req, res) {
     });
 });
 
+router.get('/autorizadorDetalle', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        request.input( 'token', sql.VarChar, req.query.token );
+
+        request.execute('CONC_AUT_AUTORIZADOR_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0][0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/autorizaConciliacion', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        request.input( 'token', sql.VarChar, req.query.token );
+        request.input( 'autoriza', sql.VarChar, req.query.autoriza );
+        request.input( 'idUsuario', sql.VarChar, req.query.idUsuario );
+
+        request.execute('CONC_AUTORIZA_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0][0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
 router.get('/getCierreMes', function(req, res) {
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
