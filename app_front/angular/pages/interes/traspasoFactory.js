@@ -23,6 +23,16 @@ appModule.factory('traspasoFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        procesaTraspaso: function( lastId ) {
+            return $http({
+                url: '/apiTraspaso/procesaTraspaso',
+                method: "GET",
+                params: {
+                    idTraspasoFinanciera: lastId
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 });

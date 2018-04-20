@@ -97,7 +97,7 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             var paraTraspasoDetalle = {
                 idTraspasoFinanciera: $scope.LastId,
                 idEsquemaOrigen: item.esquemaID,
-                idEsquemaDestino: $scope.currentFinancial2.financieraID,
+                idEsquemaDestino: $scope.currentSchema2.esquemaID,
                 CCP_IDDOCTO: item.CCP_IDDOCTO
             }
 
@@ -107,14 +107,21 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
                         contTraspadoDetalle++;
                         $scope.guardaDetalle();
                     }
-                    else{
-                        console.log("Se ejecuta el traspaso " + $scope.LastId);                    
-                    }
                 }
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-        }        
+        }
+        else{
+            // console.log("Se ejecuta el traspaso " + $scope.LastId);
+            traspasoFactory.procesaTraspaso($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
     }
 });
 
