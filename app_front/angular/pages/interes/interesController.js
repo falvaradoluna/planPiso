@@ -118,6 +118,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
     };
     $scope.setCurrentSchema2 = function(financialId) {
+        console.log("financialId", financialId);
         $scope.currentSchemaName2 = financialId.nombre;
         $scope.currentSchema2 = financialId;
         // commonFactory.getSchemas(financialId).then(function(result) {
