@@ -324,6 +324,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         // Valida estatus de autorización
         if($scope.situacion.gpoAndrade != 0 && $scope.situacion.financiera == 0){
             $scope.estSolAutorizacion  = 1;
+            $scope.conciliacion = false;
         }
     };
 
@@ -424,16 +425,23 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.recalculo = function( indice ){
+        console.log("indice", indice);
+        console.log("$scope.lstConceal", $scope.lstConceal[ indice ].ajuste);
+
         if( isNaN( $scope.lstConceal[ indice ].ajuste ) ){
             $scope.lstConceal[ indice ].ajuste = 0;
         }
 
         $scope.total.sistema = 0;
         $scope.lstConceal.forEach(function(item) {
-            $scope.total.sistema += parseFloat(item.ajuste);
+            if( item.equiparante == 1 ){
+                $scope.total.sistema += parseFloat(item.ajuste);
+            }
         });
         $scope.lstConceal[ indice ].esMayor = 3;
         $scope.readyConciliation();
+
+        console.log( "total.sistema", $scope.total.sistema );
     }
 
     $scope.ajusteAutomatico = function(){
