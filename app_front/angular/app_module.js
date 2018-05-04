@@ -62,6 +62,11 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/autoriza', {
         templateUrl: 'angular/pages/autoriza/autoriza.html',
         controller: 'autorizaController'
+    })
+
+    .when('/traspasos', {
+        templateUrl: 'angular/pages/traspasos/traspasos.html',
+        controller: 'traspasosController'
     });
 
     $routeProvider.otherwise({ requireBasedirectTo: '/' });

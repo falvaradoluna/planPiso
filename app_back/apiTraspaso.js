@@ -233,11 +233,52 @@ router.get('/cancelaTraspasoConFlujo', function(req, res) {
         var request = new sql.Request(dbCnx);
 
         request.input('idTraspaso', sql.Int, req.query.idTraspaso);
-        console.log( req.query );
 
         request.execute('TRAS_CANCELATRASPASOCONFLUJO_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/obtieneTodos', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.execute('TRAS_GETALLPENDIENTES_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/getDetalle', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('idTraspasoFinanciera', sql.Int, req.query.idTraspasoFinanciera);
+
+        request.execute('TRAS_SEL_GETDETALLE_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
         }).catch(function(err) {
             res.json(err);
             dbCnx.close();

@@ -133,23 +133,21 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             });
         }
         else{
-            swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
-            // traspasoFactory.procesaTraspaso($scope.LastId).then(function( response ) {
-            //     if( response.length != 0 ){
-            //         swal(
-            //         {
-            //             title: "Traspaso Plan Piso",
-            //             text: "Se ha efectuado correctamente su traspaso.",
-            //             type: "warning"
-            //         }, function(){
-            //             location.reload();
-            //         });
-            //     }
-            // }, function(error) {
-            //     $scope.error(error.data.Message);
-            // });
-
-            
+            // swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
+            traspasoFactory.procesaTraspaso($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal(
+                    {
+                        title: "Traspaso Plan Piso",
+                        text: "Se ha efectuado correctamente su traspaso.",
+                        type: "warning"
+                    }, function(){
+                        location.reload();
+                    });
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
         }
     }
 
