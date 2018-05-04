@@ -9,6 +9,7 @@
         <th>Tipo Pago Mensual</th>
         <th>Tipo SOFOM</th>
         <th>Tipo Cobro Interes</th>
+        <th>Tipo Compensacion</th>
         <th>Edicion</th>
     </tr>
     <tr ng-repeat="itemDetail in lstFinancial">
@@ -17,6 +18,7 @@
         <td>{{itemDetail.tipoPagoMensual}}</td>
         <td>{{itemDetail.tipoSOFOM}}</td>
         <td>{{itemDetail.tipoCobroInteres}}</td>
+        <td>{{itemDetail.tipoCompensacion}}</td>
         <td>
             <button type="button" class="btn btn-default" ng-click="editDetail(itemDetail)">
                 <span class="glyphicon glyphicon-edit"></span>

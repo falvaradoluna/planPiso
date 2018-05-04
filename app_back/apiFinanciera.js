@@ -75,6 +75,7 @@ router.get('/updFinanciera', function(req, res) {
         request.input('tipoPagoMensualID', sql.Int, req.query.tipoPagoMensualID);
         request.input('tipoPagoInteresID', sql.NVarChar, req.query.tipoPagoInteresID);
         request.input('tipoSOFOMID', sql.NVarChar, req.query.tipoSOFOMID);
+        request.input('tipoCompensacionID', sql.NVarChar, req.query.tipoCompensacionID);
         request.input('usuarioID', sql.Int, req.query.usuarioID);
 
 

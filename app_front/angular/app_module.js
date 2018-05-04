@@ -28,21 +28,25 @@ appModule.config(function($routeProvider, $locationProvider) {
     })
 
     .when('/interes', {
-        templateUrl: 'angular/pages/interes/interes.html',
-        controller: 'interesController'
-    }).when('/pagoInteres', {
-        templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
-        controller: 'pagoInteresController'
-  
-    })
-      .when('/provision', {
-        templateUrl: 'angular/pages/provision/provision.html',
-        controller: 'provisionController'
-    })
-      .when('/dashboard', {
-        templateUrl: 'angular/pages/dashboard/dashboard.html',
-        controller: 'dashboardController'
-    })
+            templateUrl: 'angular/pages/interes/interes.html',
+            controller: 'interesController'
+        }).when('/pagoInteres', {
+            templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
+            controller: 'pagoInteresController'
+
+        })
+        .when('/provision', {
+            templateUrl: 'angular/pages/provision/provision.html',
+            controller: 'provisionController'
+        })
+        .when('/compensacion', {
+            templateUrl: 'angular/pages/compensacion/compensacion.html',
+            controller: 'compensacionController'
+        })
+        .when('/dashboard', {
+            templateUrl: 'angular/pages/dashboard/dashboard.html',
+            controller: 'dashboardController'
+        })
 
     .when('/tiie', {
         templateUrl: 'angular/pages/tiie/tiie.html',
