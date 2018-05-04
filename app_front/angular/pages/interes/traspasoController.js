@@ -133,9 +133,9 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             });
         }
         else{
+            // swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
             traspasoFactory.procesaTraspaso($scope.LastId).then(function( response ) {
                 if( response.length != 0 ){
-                    // swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
                     swal(
                     {
                         title: "Traspaso Plan Piso",
@@ -148,8 +148,6 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-
-            
         }
     }
 
@@ -279,13 +277,16 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
         var f_fijo = $scope.fechaPromesa.fijo.split("/");
         var fechados  = new Date( f_fijo[0], (f_fijo[1] - 1), f_fijo[2] );
 
-        if( fechauno < fechados ){
+        if( fechauno < fechados ){ // Es menor la fecha uno
+            console.log("Cosa", 1);
             $scope.lstNewUnits[ key ]["estatusPromesaPago"] = 0;
         }
-        else if( fechauno > fechados ){
+        else if( fechauno > fechados ){ // Es mayos la fecha uno comparado a la 2
+            console.log("Cosa", 2);
             $scope.lstNewUnits[ key ]["estatusPromesaPago"] = 2;
         }
-        else{
+        else{ // Es iguales las fechas
+            console.log("Cosa", 3);
             $scope.lstNewUnits[ key ]["estatusPromesaPago"] = 1;
         }
 

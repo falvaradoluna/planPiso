@@ -52,6 +52,6 @@ appModule.factory('traspasoFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
-        },
+        }
     };
 });

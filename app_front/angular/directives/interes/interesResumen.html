@@ -54,8 +54,8 @@
         <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
             <td>{{unidad.CCP_IDDOCTO}}</td>
             <td>{{unidad.vehNumserie}}</td>
-            <td>{{unidad.descModelo}}</td>
-            <td>{{unidad.modelo}}</td>
+            <td>{{unidad.VEH_TIPOAUTO}}</td>
+            <td>{{unidad.VEH_ANMODELO}}</td>
             <td>{{unidad.importe}}</td>
             <td>{{unidad.saldo}}</td>
             <td>{{unidad.diasInteres}}</td>
@@ -115,8 +115,8 @@
                         <tr ng-repeat="(key, unidad) in lstNewUnits | filter:{isChecked:true}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
                             <td>{{unidad.CCP_IDDOCTO}}</td>
                             <td>{{unidad.vehNumserie}}</td>
-                            <td>{{unidad.descModelo}}</td>
-                            <td>{{unidad.modelo}}</td>
+                            <td>{{unidad.VEH_TIPOAUTO}}</td>
+                            <td>{{unidad.VEH_ANMODELO}}</td>
                             <td>{{unidad.importe}}</td>
                             <td>{{unidad.saldo}}</td>
                             <td ng-show="!flagInputFechaPromesa">{{unidad.fechaPromesaPago}}</td>
