@@ -1,42 +1,40 @@
 appModule.controller('interesController', function($scope, $rootScope, $location, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
-
-    var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
-    $scope.idUsuario = localStorage.getItem("idUsuario");
-    $scope.currentEmpresa = sessionFactory.nombre;
-    $scope.topBarNav = staticFactory.interesBar();
-    $scope.ddlFinancialShow = false;
-    $scope.showButtons = false;
-    $scope.lstSucursal = [];
-    $scope.lstFinancial = [];
-    $scope.lstSchemas = [];
-    $scope.lstSchemeDetail = [];
-    $scope.lstNewUnits = [];
-    $scope.lstSelectUnits = [];
-    $scope.lstSelectPay = [];
-    $scope.unitDetail = {};
-    $scope.currentPanel = "pnlInteres";
-    $scope.currentSucursalName = "Sucursal Todas";
+    var sessionFactory          = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.idUsuario            = localStorage.getItem("idUsuario");
+    $scope.currentEmpresa       = sessionFactory.nombre;
+    $scope.topBarNav            = staticFactory.interesBar();
+    $scope.ddlFinancialShow     = false;
+    $scope.showButtons          = false;
+    $scope.lstSucursal          = [];
+    $scope.lstFinancial         = [];
+    $scope.lstSchemas           = [];
+    $scope.lstSchemeDetail      = [];
+    $scope.lstNewUnits          = [];
+    $scope.lstSelectUnits       = [];
+    $scope.lstSelectPay         = [];
+    $scope.unitDetail           = {};
+    $scope.currentPanel         = "pnlInteres";
+    $scope.currentSucursalName  = "Sucursal Todas";
     $scope.currentFinancialName = "Selecciona Financiera";
-    $scope.currentSucursal = [];
-    $scope.currentFinancial = [];
-    $scope.allUnits = { isChecked: false };
-    $scope.currentFinancialID = 0;
-    $scope.interesMesActual = 0;
-    $scope.interesAcumulado = 0;
-    $scope.interesPagado = 0;
-    $scope.numUnidades = 0;
-    $scope.fechaHoy = new Date();
-    $scope.typeTraspaso = 0;
-    $scope.TituloTraspaso = '';
-    $scope.consecPago = 0;
-    $scope.initAmounts = function() {
+    $scope.currentSucursal      = [];
+    $scope.currentFinancial     = [];
+    $scope.allUnits             = { isChecked: false };
+    $scope.currentFinancialID   = 0;
+    $scope.interesMesActual     = 0;
+    $scope.interesAcumulado     = 0;
+    $scope.interesPagado        = 0;
+    $scope.numUnidades          = 0;
+    $scope.fechaHoy             = new Date();
+    $scope.typeTraspaso         = 0;
+    $scope.TituloTraspaso       = '';
+    $scope.consecPago           = 0;
 
+    $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
         $scope.interesPagado = 0;
         $scope.interesMesActual = 0;
         $scope.interesAcumulado = 0;
         $scope.numUnidades = 0;
-
     };
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
@@ -448,12 +446,10 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
                     }
                 });
-
-
-
             }
         });
     }
+
     $scope.$watch('consecProvision', function() {
         $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
         if ($scope.consecProvision == $scope.listPoliza.length) {
@@ -466,6 +462,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
 
     });
+
     $scope.$watch('consecPago', function() {
         $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
         if ($scope.consecPago > 0 && $scope.consecPago == $scope.listPoliza.length) {
@@ -477,6 +474,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
 
     });
+
     $scope.guardandoPoliza = function() {
         var saplica = 0;
         var item = $scope.listPoliza[$scope.incremental];
@@ -518,6 +516,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             console.log("Error", error);
         });
     }
+
     $scope.procesaPoliza = function(consecNum) {
         var saplica = 0;
         var item = $scope.listPoliza[$scope.incremental];
@@ -549,9 +548,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             console.log("Error", error);
         });
     }
-
-
-
 
     $scope.callPayCapital = function() {
 
@@ -587,7 +583,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 }
             });
         }
-
     }
 
     $scope.$watch('consec2Pago', function() {
@@ -607,7 +602,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 });
             }
         }
-
     });
 
     $scope.callCompensation = function() {
@@ -659,11 +653,12 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 });
             }
         }
-
     });
+
     $scope.setPnlCompensacion = function() {
         $scope.currentPanel = "pnlCompensacion";
     };
+    
     $scope.setPnlCompensacionResumen = function() {
         var isok = 0;
         $scope.lstSelectPay.forEach(function(item) {

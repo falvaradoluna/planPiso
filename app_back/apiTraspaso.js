@@ -132,31 +132,7 @@ router.get('/traspasoFlujo', function(req, res) {
     });
 });
 
-router.get('/traspasoFlujoFinanciera', function(req, res) {
-    console.log( req.query );
-    // var dateFormat = require('moment');
-    // var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
-    // dbCnx.connect().then(function() {
-    //     var request = new sql.Request(dbCnx);
-    //     request.input('financieraDestino', sql.Int, req.query.financieraDestino);
-    //     request.input('financieraOrigen', sql.Int, req.query.financieraOrigen);
-
-    //     request.execute('TRAS_NUEVOCONFLUJO_SP').then(function(result) {
-    //         dbCnx.close();
-    //         res.json(result.recordsets[0][0]);
-    //     }).catch(function(err) {
-    //         res.json(err);
-    //         dbCnx.close();
-    //     });
-
-    // }).catch(function(err) {
-    //     res.json(err);
-    //     dbCnx.close();
-    // });
-});
-
 router.get('/traspasoFinancieraFlujo', function(req, res) {
-    console.log("TraspasoFinancieraFlujo", req.query);
     var dateFormat = require('moment');
     var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
     dbCnx.connect().then(function() {
@@ -166,11 +142,100 @@ router.get('/traspasoFinancieraFlujo', function(req, res) {
         request.input('idEmpresa', sql.Int, req.query.idEmpresa);
         request.input('idFinancieraDestino', sql.Int, req.query.idFinancieraDestino);
         request.input('idFinancieraOrigen', sql.Int, req.query.idFinancieraOrigen);
-        // request.input('fechaPromesaPago', sql.VarChar, req.query.fechaPromesaPago);
         request.input('flujo', sql.Int, req.query.flujo);
 
-        console.log(request.input);
         request.execute('TRAS_NUEVOCONFLUJO_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/TraspasoDetalleAutoriza', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('token', sql.VarChar, req.query.token);
+
+        request.execute('TRAS_DETALLEAUTORIZA_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/ActualizaFechaPP', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('fecha', sql.VarChar, req.query.fecha);
+        request.input('idTraspaso', sql.Int, req.query.idTraspaso);
+
+        request.execute('TRAS_UPDATEFECHAPP_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/CambioFECHPROMPAGBPRO', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('idTraspaso', sql.Int, req.query.idTraspaso);
+        console.log( req.query );
+
+        request.execute('TRAS_CAMBIOFECHPROMPAGBPRO_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets[0]);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/cancelaTraspasoConFlujo', function(req, res) {
+    var dateFormat = require('moment');
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+
+        request.input('idTraspaso', sql.Int, req.query.idTraspaso);
+        console.log( req.query );
+
+        request.execute('TRAS_CANCELATRASPASOCONFLUJO_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {

@@ -4,7 +4,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
 
     $http({
         method: 'GET',
-        url: 'apiConciliacion/autorizadorDetalle',
+        url: '../apiConciliacion/autorizadorDetalle',
         params: { 
                 token: Token
             }
@@ -13,7 +13,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
 
         $http({
             method: 'GET',
-            url: 'apiConciliacion/getConciliacion',
+            url: '../apiConciliacion/getConciliacion',
             params: { 
                     periodo: $scope.dataAut.periodoContable, 
                     consecutivo: $scope.dataAut.consecutivo,
@@ -36,7 +36,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
         }, function () {
             $http({
                 method: 'GET',
-                url: 'apiConciliacion/autorizaConciliacion',
+                url: '../apiConciliacion/autorizaConciliacion',
                 params: { 
                         token: Token, 
                         autoriza: 0,
