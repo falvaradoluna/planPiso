@@ -83,22 +83,22 @@
                             <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
                         </span>
 
-                        <span ng-show="item.estatus == 2" class="label label-info">
+                        <span ng-show="item.estatus == 1" class="label label-info">
                             <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardada
                         </span>
 
-                        <span ng-show="item.estatus == 1" class="label label-primary">
+                        <span ng-show="item.estatus == 2" class="label label-primary">
                             <i class="fa fa-check-circle" aria-hidden="true"></i> Aplicada
                         </span>
                     </td>
                     <td>
-                        <!-- <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item.periodoContable, item.consecutivo );">
+                        <button class="btn btn-default btn-sm" ng-click="recuperaConciliacionGuardadad( item.idConciliacion );">
                             <i class="fa fa-file-text" aria-hidden="true"></i> Aplicar
-                        </button> -->
-
-                        <button class="btn btn-default btn-sm" ng-click="muestraDetalleDocumentos(item);">
-                            <i class="fa fa-file-text" aria-hidden="true"></i> Detalle
                         </button>
+
+                        <!-- <button class="btn btn-default btn-sm" ng-click="muestraDetalleDocumentos(item);">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> Detalle
+                        </button> -->
                     </td>
                 </tr>
                 <tr ng-show="lstConciliacion.length == 0">

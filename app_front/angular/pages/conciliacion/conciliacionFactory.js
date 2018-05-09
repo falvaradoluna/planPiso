@@ -28,6 +28,16 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        recuperaConciliacionGuardadad: function( idConciliacion ) {
+            return $http({
+                url: 'apiConciliacion/recuperaConciliacionGuardadad',
+                method: "GET",
+                params: { 
+                    idConciliacion: idConciliacion
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         getCierreMes: function( periodo ) {
             return $http({
                 url: 'apiConciliacion/getCierreMes',

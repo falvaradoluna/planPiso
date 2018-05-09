@@ -2,7 +2,7 @@ var appModule = angular.module("planPisoApp",[]);
 appModule.controller('traspasoController', function($scope, $http, filterFilter ) {
     var Token = window.location.hash.substr(1);
     var array = Token.split("|");
-    Token = array[0]
+    Token = array[0];
 
     $http({
         method: 'GET',

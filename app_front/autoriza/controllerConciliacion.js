@@ -1,6 +1,8 @@
 var appModule = angular.module("planPisoApp",[]);
 appModule.controller('conciliacionController', function($scope, $http, filterFilter ) {
     var Token = window.location.hash.substr(1);
+    var array = Token.split("|");
+    Token = array[0];
 
     $http({
         method: 'GET',
@@ -66,7 +68,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
         }, function () {
             $http({
                 method: 'GET',
-                url: 'apiConciliacion/autorizaConciliacion',
+                url: '../apiConciliacion/autorizaConciliacion',
                 params: { 
                         token: Token, 
                         autoriza: 1,

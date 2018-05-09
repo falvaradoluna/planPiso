@@ -136,7 +136,7 @@
                                 </td>
                                 <td>{{dato.CCP_IDDOCTO}} </td>
                                 <td class="text-right">{{dato.saldo | currency}}</td>
-                                <td class="text-right">{{dato.InteresMesActual | currency}}</td>
+                                <td class="text-right">{{dato.InteresMesActual | currency}} {{ dato.InteresMesActual === null ? '$ 0.00' : '' }} </td>
                             </tr>
                         </tbody>
                     </table>

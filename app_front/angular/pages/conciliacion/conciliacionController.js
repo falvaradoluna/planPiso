@@ -74,7 +74,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.currentYear  = date.getFullYear();
     }
 
-    // $scope.currentMonth = 2; // HardCode
+    $scope.currentMonth = 4; // HardCode
     $scope.frmConciliacion.lblMes = $scope.lstMonth[ $scope.currentMonth ];    
     
     // Este es como funciona desde Branch Conciliación
@@ -473,13 +473,14 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         }        
     }
 
-    $scope.creaConciliacion = function() {
+    $scope.creaConciliacion = function( save ) {
         var parametros = {
             idEmpresa:      $scope.session.empresaID,
             idFinanciera:   $scope.frmConciliacion.idFinanciera,
             periodo:        parseInt($scope.currentMonth) + 1,
             periodoAnio:    $scope.currentYear,
-            idUsuario:      $scope.idUsuario
+            idUsuario:      $scope.idUsuario,
+            estatus:        save ? 1 : 2
         }
         var parametrosDetalle = {}
         var item = {};
@@ -494,7 +495,9 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         interesGrupoAndrade:    item.InteresMesActual,
                         interesFinanciera:      item.interes,
                         interesAjuste:          item.ajuste,
-                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3, // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                        saldoGrupoAndrade:      item.saldo,
+                        saldoFinanciera:        item.valor
                     }
 
                     conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
@@ -502,12 +505,14 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     if( i >= ( $scope.lstConceal.length - 1 ) ){
                         swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
                         setTimeout( function(){
-                            conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
-                                // location.reload();
-                                $scope.prevStep();
-                                // location.href = "provision";
+                            if( !save ){
+                                conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
+                                    // location.reload();
+                                    $scope.prevStep();
+                                    // location.href = "provision";
+                                });
+                            }
 
-                            });
                         },2000);
                     }
                 }
@@ -597,4 +602,29 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.regresaConciliacionDocumento = function(){
         $scope.currentPanel = 'pnlDocumentos';
     }
+
+    $scope.recuperaConciliacionGuardadad = function( idConciliacion ) {
+        conciliacionFactory.recuperaConciliacionGuardadad( idConciliacion ).then(function(result) {
+            $scope.lstConceal = result.data[1];
+            $scope.sumTotal();
+
+            $scope.currentPanel = 'pnlConciliar';
+            var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
+            $scope.lblFinanciera = result.data[0][0].nombre;
+
+            $scope.autDetalle = result.data[2][0];
+            $scope.frmConciliacion.lblMes       = $scope.lstMonth[ ($scope.autDetalle.periodoContable - 1) ];
+            $scope.frmConciliacion.idFinanciera = $scope.autDetalle.idFinanciera;
+            $scope.lblFinanciera                = $scope.autDetalle.nombre;
+            switch( $scope.autDetalle.estatus ){
+                case 0: $scope.estSolAutorizacion = 4; break;
+                case 1: $scope.estSolAutorizacion = 2; break;
+                case 2: $scope.estSolAutorizacion = 3; break;
+            }
+
+            console.log( "estSolAutorizacion", $scope.estSolAutorizacion );
+        });
+
+        // $scope.getCierreMes();
+    };
 });

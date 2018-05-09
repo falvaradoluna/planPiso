@@ -139,7 +139,7 @@
             </td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.valor | currency}}</td>
-            <td>{{dato.InteresMesActual | currency}}</td>
+            <td>{{dato.InteresMesActual | currency}} {{ dato.InteresMesActual }}</td>
             <td>{{dato.interes | currency}}</td>
             <td ng-show="ajusteManual" width="120" style="border-left: solid 1px #ddd; 
                                                          border-right: solid 1px #ddd;
@@ -237,14 +237,15 @@
 
             <hr>
             <button type="button" class="btn btn-default" ng-click="prevStep()">Regresar</button>
-            <button type="button" class="btn btn-default" ng-click="prevStep()">Cancelar Conciliación</button>
-            <!-- <button type="button" class="btn btn-default" ng-click="solicitaAutorizacion(3);">Guardar conciliación</button> -->
+            <!-- <button type="button" class="btn btn-default" ng-click="prevStep()">Cancelar Conciliación</button> -->
+            <button type="button" class="btn btn-default" ng-click="creaConciliacion( false );">Guardar conciliación</button>
             
-            <button type="button" class="btn btn-primary pull-right" ng-click="creaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="creaConciliacion( false )" ng-disabled="!conciliacion">Generar Conciliación</button>
         </div>
 
         <div style="overflow: hidden;" ng-show="situacion.financiera != 0">
-             <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
+             <button type="button" class="btn btn-default pull-left" ng-click="prevStep()">Regresar</button>
+             <button type="button" class="btn btn-default pull-right" ng-click="creaConciliacion( false );">Guardar conciliación</button>
          </div>
     </div>
 </div>

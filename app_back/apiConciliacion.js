@@ -234,6 +234,7 @@ router.get('/creaConciliacion', function(req, res) {
         request.input( 'periodo',       sql.Int, req.query.periodo);
         request.input( 'periodoAnio',   sql.Int, req.query.periodoAnio);
         request.input( 'idUsuario',     sql.Int, req.query.idUsuario);
+        request.input( 'estatus',     sql.Int, req.query.estatus);
 
         request.execute('CREACONCILIACION_SP').then(function(result) {
             dbCnx.close();
@@ -261,6 +262,8 @@ router.get('/creaConciliacionDetalle', function(req, res) {
         request.input( 'interesFinanciera',     sql.Numeric(18, 4), req.query.interesFinanciera);
         request.input( 'interesAjuste',         sql.Numeric(18, 4), req.query.interesAjuste);
         request.input( 'situacion',             sql.Int, req.query.situacion);
+        request.input( 'saldoGrupoAndrade',     sql.Numeric(18, 4), req.query.saldoGrupoAndrade);
+        request.input( 'saldoFinanciera',       sql.Numeric(18, 4), req.query.saldoFinanciera);
 
         request.execute('CREACONCILIACIONDETALLE_SP').then(function(result) {
             dbCnx.close();
@@ -412,6 +415,26 @@ router.get('/CancelaConciliacion', function(req, res) {
         request.input( 'idConciliacion',   sql.Int, req.query.idConciliacion);
 
         request.execute('CONC_CANCELACONCILIACION_SP').then(function(result) {
+            dbCnx.close();
+            res.json(result.recordsets);
+        }).catch(function(err) {
+            res.json(err);
+            dbCnx.close();
+        });
+
+    }).catch(function(err) {
+        res.json(err);
+        dbCnx.close();
+    });
+});
+
+router.get('/recuperaConciliacionGuardadad', function(req, res) {
+    var dbCnx = new sql.ConnectionPool(appConfig.connectionString);
+    dbCnx.connect().then(function() {
+        var request = new sql.Request(dbCnx);
+        request.input( 'idConciliacion', sql.Int, req.query.idConciliacion );
+
+        request.execute('CONS_RECUPERAGUARDADA_SP').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets);
         }).catch(function(err) {
