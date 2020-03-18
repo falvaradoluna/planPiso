@@ -1,0 +1,59 @@
+<h2>Resumen</h2>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="col-md-5">
+            <table class="table table-striped">
+
+                <tr>
+                    <th class="left" style="width:200px">Rubro</th>
+                    <th style="text-align: right">Monto</th>
+                </tr>
+
+                <tr>
+                    <td class="left" style="width:200px">Saldo Plan piso {{financiera}}: </td>
+                    <td style="text-align: right">{{saldoFinanciera | number :2}}</td>
+                </tr>
+                <tr>
+                    <td class="left">Precio de la unidad: </td>
+                    <td style="text-align: right">{{precioUnidad | number :2}}</td>
+                </tr>
+                <tr>
+                    <td class="left">Anticipo del cliente: </td>
+                    <td style="text-align: right">{{anticipoUnidad | number :2}}</td>
+                </tr>
+                <tr>
+                    <td class="left">Saldo del cliente: </td>
+                    <td style="text-align: right">{{saldoCliente | number :2}}</td>
+                </tr>
+                <tr>
+                    <td class="left">Diferencia entre Saldos: </td>
+                    <td style="text-align: right">{{diferenciaSaldo | number :2}}</dt>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-7">
+            <table class="table table-striped">
+
+                <tr>
+                    <td class="left" style="width:200px">Saldo a Compensar: </td>
+                    <td class="left">{{saldoCompensar | number :2}}</td>
+                </tr>
+
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <button class="btn btn-danger" ng-click="setPnlCompensacion()">Cancelar</button>
+    </div>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <button class="btn btn-primary pull-right" ng-click="CreaCompensacion()">Finalizar</button>
+    </div>
+</div>

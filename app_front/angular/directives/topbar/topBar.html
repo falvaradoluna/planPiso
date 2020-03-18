@@ -1,0 +1,22 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>{{currentEmpresa}}</h2>
+        <ol class="breadcrumb">
+            <li ng-repeat="ruta in topBarNav" ng-switch="ruta.isActive">
+                <a href="{{ruta.url}}" ng-switch-when='false'>{{ruta.name}}</a>
+                <a href="{{ruta.url}}" ng-switch-when='true'><strong>{{ruta.name}}</strong></a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2" ng-controller="tiieInfo"> 
+        <div class="pull-right">
+            <a href="tiie">
+                <i ng-show="!warning" class="fa fa-check-circle alert-correct text-success"></i>
+                <div ng-show="warning" class="text-center">
+                    <i class="fa fa-exclamation-triangle alert-correct text-warning"></i><br>
+                    &nbsp;<b>TIIE</b>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
