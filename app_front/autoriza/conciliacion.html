@@ -1,0 +1,147 @@
+<!doctype html>
+<html ng-app="planPisoApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="../assets/libs/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+        <script src="../assets/libs/sweetalert/dist/sweetalert.min.js"></script>
+
+        <link href="assets/css/font-awesome.css" rel="stylesheet">
+        <script type="text/javascript" src="controllerConciliacion.js"></script>
+    </head>
+    <body>
+        <div class="containerw">
+            <div class="panel panel-default" ng-controller="conciliacionController" style="margin: 20px">
+                <!-- <div class="panel-heading">Panel heading without title</div> -->
+                <div class="panel-body">
+                    <div class="row">
+                            <h2 class="col-sm-12">Conciliación Plan Piso</h2>
+                        <div class="col-sm-7">
+                            <div class="alert alert-warning"
+                                 ng-show="dataAut.estatus == 1"
+                                 style="overflow: hidden;" 
+                                 role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px"></i> 
+                                    ¡Unidades no reportadas por la Financiera!
+                                </h4>
+                                <p>Existen unidades reportadas por Grupo Andrade que la Financiera no esta reportando,se necesita su autorización para quitar las unidades de la conciliación.</p>
+                                <hr>
+                                <!-- <div ng-show="true"> -->
+                                <button class="btn btn-danger btn-sm" style="margin-right: 10px;" ng-click="cancelar();">
+                                    <i class="fa fa-ban"></i> Cancelar Solicitud
+                                </button>
+
+                                <button class="btn btn-success btn-sm pull-right" ng-click="aceptar();">
+                                    <i class="fa fa-check"></i>Omitir unidades en la conciliación
+                                </button>
+
+                                <!-- <div ng-show="false"> -->
+                                <div ng-show="estSolAutorizacion == 2" class="row">
+                                    <div class="col-sm-6 pull-right">
+                                        <table border="0" class="pull-right">
+                                            <tr>
+                                                <td width="30"> <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 25px"></i> </td>
+                                                <td class="text-right"> <b> En espera de autorización </b> </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info"
+                                 ng-show="dataAut.estatus == 2"
+                                 style="overflow: hidden;" 
+                                 role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px"></i> 
+                                    ¡Unidades no reportadas por la Financiera!
+                                </h4>
+                                <p>Existen unidades reportadas por Grupo Andrade que la Financiera no esta reportando,se necesita su autorización para quitar las unidades de la conciliación.</p>
+                                <hr>
+                                
+
+                                <!-- <div ng-show="false"> -->
+                                <div class="row">
+                                    <div class="col-sm-12 pull-right">
+                                        <table border="0" class="pull-right">
+                                            <tr>
+                                                <td width="30"> <i class="fa fa-check" aria-hidden="true" style="font-size: 25px"></i> </td>
+                                                <td class="text-right"> <b> Solicitud autorizada </b> </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-danger"
+                                 ng-show="dataAut.estatus == 0"
+                                 style="overflow: hidden;" 
+                                 role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px"></i> 
+                                    ¡Unidades no reportadas por la Financiera!
+                                </h4>
+                                <p>Existen unidades reportadas por Grupo Andrade que la Financiera no esta reportando,se necesita su autorización para quitar las unidades de la conciliación.</p>
+                                <hr>
+                                
+
+                                <!-- <div ng-show="false"> -->
+                                <div class="row">
+                                    <div class="col-sm-12 pull-right">
+                                        <table border="0" class="pull-right">
+                                            <tr>
+                                                <td width="30"> <i class="fa fa-check" aria-hidden="true" style="font-size: 25px"></i> </td>
+                                                <td class="text-right"> <b> Solicitud rechazada </b> </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <h3><small>Periodo Contable:</small> <br>{{dataAut.mesContable}} {{dataAut.anio}}</h3>
+                                </div>
+                                <div class="col-sm-12 text-right">
+                                    <h3><small>Financiera:</small> <br>{{dataAut.nombre}}</h3>
+                                </div>
+                                <!-- <div class="col-sm-12">&nbsp;</div>
+                                <div class="col-sm-6 text-right">
+                                    <b>Total Sistema</b>
+                                    <h2><b>{{ 4276.98 | currency}}</b></h2>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <b>Total Financiera</b>
+                                    <h2><b>{{ 4000.00 | currency}}</b></h2>
+                                </div>   -->          
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <table id="tblConciliacion" class="table table-hover borderless">
+                        <thead>
+                            <tr>
+                                <th>Numero Serie</th>
+                                <th>Documento</th>
+                                <th class="text-right">Saldo</th>
+                                <th class="text-right">Interes Grupo Andrade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key, dato) in lstConceal | filter:{ equiparante: 3}">
+                                <td>
+                                    <b>{{dato.numeroSerie}}</b>
+                                </td>
+                                <td>{{dato.CCP_IDDOCTO}} </td>
+                                <td class="text-right">{{dato.saldo | currency}}</td>
+                                <td class="text-right">{{dato.InteresMesActual | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
