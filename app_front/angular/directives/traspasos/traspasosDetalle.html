@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <h2><small>Tipo Traspaso:</small> <br><b style="text-transform: uppercase;">{{ Detalle[0][0].tipotraspaso }}</b></h2>
+            </div>
+            <div class="col-md-2">
+                <h2><small>Financiera Destino:</small> <br>{{ Detalle[0][0].FinancieraOrigen }}</h2>
+            </div>
+            <div class="col-md-2">
+                <h2><small>Financiera Origen:</small> <br>{{ Detalle[0][0].FinancieraDestino }}</h2>
+            </div>
+            <div class="col-md-2">
+                <h2><small>Fecha Solicitud:</small> <br>{{ Detalle[0][0].fechaSolicitud.split('T')[0] }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<table id="tblConciliacion" class="table table-hover borderless">
+    <thead>
+        <tr>
+            <th>DOCUMENTO</th>
+            <th>Esquema Origen</th>
+            <th>Esquema Destino</th>
+            <th>Fecha Solicitud</th>
+            <th>Fecha Promesa Pago</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(key, dato) in Registros">
+            <td> <b>{{dato.CCP_IDDOCTO}}</b> </td>
+            <td>{{ dato.EsquemaOrigen }}</td>
+            <td>{{ dato.EsquemaDestino }}</td>
+            <td>{{ dato.fechaSolicitud.split('T')[0] }}</td>
+            <td>{{ dato.fechaPromesaPago }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-sm-6">
+        &nbsp;
+    </div>
+    <div class="col-sm-6">
+        <div style="overflow: hidden;">
+             <button type="button" class="btn btn-default pull-right" ng-click="regresar()">Regresar</button>
+         </div>
+    </div>
+</div>
