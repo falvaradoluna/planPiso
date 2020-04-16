@@ -1,5 +1,5 @@
 appModule.controller('empresaController', function($scope, $rootScope, $location, commonFactory, staticFactory, empresaFactory) {
-    sessionStorage.removeItem("sessionFactory");
+    // sessionStorage.removeItem("sessionFactory");
     $scope.idUsuario        = localStorage.getItem("idUsuario");
     $scope.nombreUsuario    = localStorage.getItem("nombreUsuario");
     $scope.lstEmpresa       = [];

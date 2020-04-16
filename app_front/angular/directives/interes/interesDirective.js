@@ -45,4 +45,34 @@ appModule.directive('interesCambioAgencia', function() {
         restrict: 'E',
         templateUrl: interesPath + 'interesTraspasoFinanciera.html'
     };
+}).directive('interesPago', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesPago.html'
+    };
+}).directive('interesPagoUnidad', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesPagoUnidad.html'
+    };
+}).directive('interesPagoResumen', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesPagoResumen.html'
+    };
+}).directive('interesPagoUnidadResumen', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesPagoUnidadResumen.html'
+    };
+}).directive('interesCompensacion', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesCompensacion.html'
+    };
+}).directive('interesCompensacionResumen', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesCompensacionResumen.html'
+    };
 });

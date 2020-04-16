@@ -4,17 +4,20 @@ appModule.factory('commonFactory', function($http) {
             return $http({
                 url: 'apiCommon/getSucursal',
                 method: "GET",
-                params: { 
+                params: {
                     idEmpresa: idEmpresa,
                     idUsuario: idUsuario
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getFinancial: function() {
+        getFinancial: function(empresaID) {
             return $http({
                 url: 'apiCommon/getFinancieras',
                 method: "GET",
+                params: {
+                    empresaID: empresaID
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -33,7 +36,22 @@ appModule.factory('commonFactory', function($http) {
                 params: { catalogoID: catalogoID },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getTipoTiie: function() {
+            return $http({
+                url: 'apiCommon/getTipoTiie',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        currentTIIE: function() {
+            return $http({
+                url: 'apiCommon/currentTIIE',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
+
     };
 
 });

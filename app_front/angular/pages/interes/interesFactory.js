@@ -1,11 +1,11 @@
 appModule.factory('interesFactory', function($http) {
 
     return {
-        getInterestUnits: function(empresaID, sucursalID) {
+        getInterestUnits: function(empresaID, sucursalID, financieraID) {
             return $http({
                 url: '/apiInteres/getInterestUnits',
                 method: "GET",
-                params: { empresaID: empresaID, sucursalID: sucursalID },
+                params: { empresaID: empresaID, sucursalID: sucursalID, financieraID: financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -31,7 +31,72 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getSchemaMovements: function(params) {
+            return $http({
+                url: '/apiInteres/getSchemaMovements',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getGuardaProvision: function(params) {
+            return $http({
+                url: '/apiInteres/guardaProvision',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getProcesaProvision: function(params) {
+            return $http({
+                url: '/apiInteres/procesaProvision',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getProvisionToday: function(params) {
+            return $http({
+                url: '/apiInteres/getProvisionToday',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        insPago: function(params) {
+            return $http({
+                url: '/apiInteres/insPago',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        insCompensacion: function(params) {
+            return $http({
+                url: '/apiInteres/insCompensacion',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        validaPago: function(params) {
+            return $http({
+                url: '/apiInteres/validaPago',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        GetCompensacion: function(params) {
+            return $http({
+                url: '/apiInteres/GetCompensacion',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
+
 
     };
 });

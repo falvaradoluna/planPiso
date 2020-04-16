@@ -18,8 +18,9 @@ router.get('/getLote', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        request.input('estatusCID', sql.Int, req.query.estatusCID);
 
+        request.input('estatusCID', sql.Int, req.query.estatusCID);
+        request.input('idtipoproceso', sql.VarChar, req.query.idtipoproceso);
         request.execute('uspGetLoteInteres').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
@@ -44,7 +45,8 @@ router.get('/getLoteDetail', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        request.input('loteID', sql.Int, req.query.loteID);
+
+        request.input('planpisoID', sql.Int, req.query.loteID);
 
         request.execute('uspGetLoteInteresDetalle').then(function(result) {
             dbCnx.close();

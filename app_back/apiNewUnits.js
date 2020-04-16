@@ -19,7 +19,7 @@ router.get('/getNewUnits', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-        
+
         request.input('empresaID', sql.Int, req.query.empresaID);
 
         request.execute('uspGetUnidadesNuevas').then(function(result) {
@@ -70,19 +70,20 @@ router.post('/setUnitSchema', function(req, res) {
     dbCnx.connect().then(function() {
 
         var request = new sql.Request(dbCnx);
-
-        request.input('unidadID', sql.Int, req.body.unidadID);
+        var fecha = req.body.fechaCalculo.replace('-', '').replace('-', '');
+        request.input('CCP_IDDOCTO', sql.VarChar, req.body.CCP_IDDOCTO);
         request.input('userID', sql.Int, req.body.userID);
         request.input('esquemaID', sql.Int, req.body.esquemaID);
-        request.input('fechaCalculo', sql.Date, req.body.fechaCalculo);
-        request.input('saldoInicial', sql.Int, req.body.saldoInicial);
-        
+        request.input('fecha_Calculo', sql.VarChar, fecha);
+        request.input('saldoInicial', sql.Decimal, req.body.saldoInicial);
+        request.input('InteresInicial', sql.Decimal, req.body.interes);
 
         request.execute('uspSetUnidadSchema').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
             console.log(err);
+
             dbCnx.close();
         });
 

@@ -5,8 +5,13 @@
             <th>Descripcion</th>
             <th>Días Gracia</th>
             <th>Plazo</th>
-            <th>Tipo</th>
             <th>Fecha Creación</th>
+            <th>Tasa Interes</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>% penetración</th>
+            <th>Tipo tiie</th>
+            <th>Tiie</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -16,12 +21,14 @@
             <td>{{schema.descripcion}}</td>
             <td>{{schema.diasGracia}}</td>
             <td>{{schema.plazo}}</td>
-            <td>{{schema.esFijo}}</td>
-            <td>{{schema.fechaCreacion | date:'dd-MM-yyyy'}}</td>
+            <td>{{schema.fechaCreacion}}</td>
+            <td>{{schema.tasaInteres}}</td>
+            <td>{{schema.fechaInicio}}</td>
+            <td>{{schema.fechaFin}}</td>
+            <td>{{schema.porcentajePenetracion}}</td>
+            <td>{{schema.tipoTiie}}</td>
+            <td>{{schema.tiie}}</td>
             <td>
-                <button type="button" class="btn btn-default" ng-click="showSchemaDetail(schema)">
-                    <span class="glyphicon glyphicon-eye-open"> </span>
-                </button>
                 <button type="button" class="btn btn-default" ng-click="editSchema(schema)">
                     <span class="glyphicon glyphicon-edit"> </span>
                 </button>
