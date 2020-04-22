@@ -1,8 +1,9 @@
+var traspasoUrl = global_settings.urlCORS + 'api/apiTraspaso/';
 appModule.factory('traspasoFactory', function($http) {
     return {
         traspasoFinanciera: function(params) {
             return $http({
-                url: '/apiTraspaso/TraspasoFinanciera',
+                url: traspasoUrl + 'TraspasoFinanciera/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -10,7 +11,7 @@ appModule.factory('traspasoFactory', function($http) {
         },
         traspasoFinancieraDetalle: function(params) {
             return $http({
-                url: '/apiTraspaso/TraspasoFinancieraDetalle',
+                url: traspasoUrl + 'TraspasoFinancieraDetalle/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -18,7 +19,7 @@ appModule.factory('traspasoFactory', function($http) {
         },
         setChangeSchema: function(params) {
             return $http({
-                url: '/apiTraspaso/setChangeSchema',
+                url: traspasoUrl + 'setChangeSchema/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -26,7 +27,7 @@ appModule.factory('traspasoFactory', function($http) {
         },
         procesaTraspaso: function( lastId ) {
             return $http({
-                url: '/apiTraspaso/procesaTraspaso',
+                url: traspasoUrl + 'procesaTraspaso/',
                 method: "GET",
                 params: {
                     idTraspasoFinanciera: lastId
@@ -36,7 +37,7 @@ appModule.factory('traspasoFactory', function($http) {
         },
         traspasoFlujo: function( financieraDestino, financieraOrigen ) {
             return $http({
-                url: '/apiTraspaso/traspasoFlujo',
+                url: traspasoUrl + 'traspasoFlujo/',
                 method: "GET",
                 params: {
                     financieraDestino: financieraDestino,
@@ -47,7 +48,7 @@ appModule.factory('traspasoFactory', function($http) {
         },
         TraspasoFinancieraFlujo: function(params) {
             return $http({
-                url: '/apiTraspaso/TraspasoFinancieraFlujo',
+                url: traspasoUrl + 'TraspasoFinancieraFlujo/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }

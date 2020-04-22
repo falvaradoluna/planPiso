@@ -11,5 +11,6 @@
      apiPagoInteres: require('./controllers/apiPagoInteres'),
      apiProvision: require('./controllers/apiProvision'),
      apiReduccion: require('./controllers/apiReduccion'),
-     apiTiie: require('./controllers/apiTiie')
+     apiTiie: require('./controllers/apiTiie'),
+     apiTraspaso: require('./controllers/apiTraspaso')
  }
