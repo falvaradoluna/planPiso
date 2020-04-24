@@ -1,0 +1,53 @@
+<top-Bar></top-Bar>
+<div class="wrapper wrapper-content">
+    <div class="row" ng-repeat="itemFinanciera in lstFinancieras track by $index">
+        <div class="col-md-3">
+            <div class="ibox float-e-margins" ng-hide="itemFinanciera.column1.hide">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">Unidades {{itemFinanciera.column1.unidades}}</span>
+                    <h5>{{itemFinanciera.column1.nombreFinanciera}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{itemFinanciera.column1.InteresTotal | currency}}</h1>
+                    <small>Interes Total</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ibox float-e-margins" ng-hide="itemFinanciera.column2.hide">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">Unidades {{itemFinanciera.column2.unidades}}</span>
+                    <h5>{{itemFinanciera.column2.nombreFinanciera}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{itemFinanciera.column2.InteresTotal | currency}}</h1>
+                    <small>Interes Total</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ibox float-e-margins" ng-hide="itemFinanciera.column3.hide">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">Unidades {{itemFinanciera.column3.unidades}}</span>
+                    <h5>{{itemFinanciera.column3.nombreFinanciera}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{itemFinanciera.column3.InteresTotal | currency}}</h1>
+                    <small>Interes Total</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ibox float-e-margins" ng-hide="itemFinanciera.column4.hide">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">Unidades {{itemFinanciera.column4.unidades}}</span>
+                    <h5>{{itemFinanciera.column4.nombreFinanciera}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{itemFinanciera.column4.InteresTotal | currency}}</h1>
+                    <small>Interes Total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
