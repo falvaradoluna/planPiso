@@ -1,0 +1,33 @@
+<div style="padding-top:25px">
+    <h2><span class="text-navy">Detalle esquema: {{currentFinancialName}}</span></h2>
+    <hr>
+</div>
+<table id="tblAddByDate" class="table table-striped">
+    <tr>
+        <th>Estaus</th>
+        <th>Tasa Interes</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Porcentaje de Penetración</th>
+        <th>Tipo Tiie</th>
+        <th>Tiie</th>
+        <th>Edicion</th>
+    </tr>
+    <tr ng-repeat="itemDetail in lstSchemeDetail">
+        <td ng-class=" itemDetail.estatusCID == 1 ? 'celdaFondoVerde' : itemDetail.estatusCID == 2 ? 'celdaFondoAzul' : 'celdaFondoRojo'  ">{{itemDetail.estatusTexto}} </td>
+        <td>{{itemDetail.tasaInteres | number:2}} % </td>
+        <td>{{itemDetail.fechaInicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
+        <td>{{itemDetail.fechaFin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+        <td>{{itemDetail.porcentajePenetracion | number:2}} %</td>
+        <td>{{itemDetail.TipotiieTexto}}</td>
+        <td>{{itemDetail.tiie | number:2}} %</td>
+        <td>
+            <button type="button" class="btn btn-default" ng-click="editDetail(itemDetail)">
+                <span class="glyphicon glyphicon-edit"></span>
+            </button>
+            <button type="button" class="btn btn-default" ng-click="">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        </td>
+    </tr>
+</table>
