@@ -48,10 +48,10 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
 
     var self = this;
     var fecha = req.body.fechaCalculo.replace('-', '').replace('-', '');
-    var params = [{ name: 'CCP_IDDOCTO', value: req.body.CCP_IDDOCTO, type: self.model.types.INT },
+    var params = [{ name: 'CCP_IDDOCTO', value: req.body.CCP_IDDOCTO, type: self.model.types.STRING },
     { name: 'userID', value: req.body.userID, type: self.model.types.INT },
-    { name: 'empresaID', value: req.body.empresaID, type: self.model.types.INT },
-    { name: 'fecha_Calculo', value: fecha, type: self.model.types.INT },
+    { name: 'esquemaID', value: req.body.esquemaID, type: self.model.types.INT },
+    { name: 'fecha_Calculo', value: fecha, type: self.model.types.STRING },
     { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
     { name: 'InteresInicial', value: req.body.InteresInicial, type: self.model.types.INT }];
 

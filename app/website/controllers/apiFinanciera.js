@@ -36,7 +36,6 @@ ApiFinanciera.prototype.get_CatalogosTipo = function(req, res, next) {
     var self = this;
 
     var params = [];
-
     self.model.query('Usp_CatalogosTipo_GET', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
