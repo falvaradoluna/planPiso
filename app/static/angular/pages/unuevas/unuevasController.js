@@ -40,16 +40,17 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     });
 
     $scope.setCurrentSucursal = function(sucursalObj) {
+        $('#mdlLoading').modal('show');
         $scope.totalUnidades = 0;
         $scope.currentSucursalName = sucursalObj.nombreSucursal;
         $scope.getNewUnitsBySucursal(sessionFactory.empresaID, sucursalObj.sucursalID);
     };
 
-    $scope.getNewUnitsBySucursal = function(emresaID, sucursalID) {
+    $scope.getNewUnitsBySucursal = function(emresaID, sucursalID) {        
         $('#tblUnidadesNuevas').DataTable().destroy();
-        $('#mdlLoading').modal('show');
         unuevasFactory.getNewUnitsBySucursal(emresaID, sucursalID).then(function(result) {
             $scope.lstNewUnits = result.data;
+            $scope.initTblUnidadesNuevas();
             $('#mdlLoading').modal('hide');
         });
     };

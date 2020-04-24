@@ -25,14 +25,14 @@ appModule.factory('financieraFactory', function($http) {
         },
         getCatalogosTipo: function(params) {
             return $http({
-                url: financieraUrl + '/CatalogosTipo/',
+                url: financieraUrl + 'CatalogosTipo/',
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });
         },
         putScheme: function(params) {
             return $http({
-                url: financieraUrl + '/putFinanciera/',
+                url: financieraUrl + 'putFinanciera/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -40,7 +40,7 @@ appModule.factory('financieraFactory', function($http) {
         },
         updFinanciera: function(params) {
             return $http({
-                url: financieraUrl + '/updFinanciera/',
+                url: financieraUrl + 'updFinanciera/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -48,7 +48,7 @@ appModule.factory('financieraFactory', function($http) {
         },
         deleteScheme: function(params) {
             return $http({
-                url: financieraUrl + '/delFinanciera/',
+                url: financieraUrl + 'delFinanciera/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
