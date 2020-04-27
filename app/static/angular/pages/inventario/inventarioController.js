@@ -1,8 +1,8 @@
-appModule.controller('compensacionController', function($scope, $rootScope, $location, commonFactory, staticFactory, compensacionFactory) {
+appModule.controller('inventarioController', function($scope, $rootScope, $location, commonFactory, staticFactory, inventarioFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
 
-    $scope.topBarNav = staticFactory.compensacionBar();
+    $scope.topBarNav = staticFactory.inventarioBar();
     $scope.lstPayTypes = [];
     $scope.lstUnitsPending = [];
     $scope.lstUnitsApply = [];
@@ -14,11 +14,11 @@ appModule.controller('compensacionController', function($scope, $rootScope, $loc
 
 
 
-    compensacionFactory.getLote(0, '11').then(function(result) {
+    inventarioFactory.getLote(0, '11').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
-    compensacionFactory.getLote(1, '11').then(function(result) {
+    inventarioFactory.getLote(1, '11').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
@@ -31,7 +31,7 @@ appModule.controller('compensacionController', function($scope, $rootScope, $loc
 
         $scope.currentPayName = id.pro_nombre;
         $scope.currentPanel = 'pnlPendientes';
-        compensacionFactory.getLote(id.pro_idtipoproceso).then(function(result) {
+        inventarioFactory.getLote(id.pro_idtipoproceso).then(function(result) {
             $scope.lstUnitsPending = result.data;
         });
 
@@ -60,7 +60,7 @@ appModule.controller('compensacionController', function($scope, $rootScope, $loc
         }
 
         $scope.currentPanel = 'pnlDetalle';
-        compensacionFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
+        inventarioFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
             $scope.lstUnitDeatil = result.data;
         });
     };

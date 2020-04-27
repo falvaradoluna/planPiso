@@ -1,12 +1,12 @@
-var ApiProvisionView = require('../views/reference'),
-    ApiProvisionModel = require('../models/dataAccess')
+var ApipolizasView = require('../views/reference'),
+    ApipolizasModel = require('../models/dataAccess')
 
 
-var ApiProvision = function(conf) {
+var Apipolizas = function(conf) {
     this.conf = conf || {};
 
-    this.view = new ApiProvisionView();
-    this.model = new ApiProvisionModel({
+    this.view = new ApipolizasView();
+    this.model = new ApipolizasModel({
         parameters: this.conf.parameters
     });
 
@@ -16,7 +16,7 @@ var ApiProvision = function(conf) {
 };
 
 
-ApiProvision.prototype.get_Lote = function(req, res, next) {
+Apipolizas.prototype.get_Lote = function(req, res, next) {
 
     var self = this;
 
@@ -31,7 +31,7 @@ ApiProvision.prototype.get_Lote = function(req, res, next) {
     });
 };
 
-ApiProvision.prototype.get_LoteDetail = function(req, res, next) {
+Apipolizas.prototype.get_LoteDetail = function(req, res, next) {
 
     var self = this;
 
@@ -44,17 +44,5 @@ ApiProvision.prototype.get_LoteDetail = function(req, res, next) {
         });
     });
 };
-ApiProvision.prototype.get_ProvisionType = function(req, res, next) {
 
-    var self = this;
-
-    var params = [];
-
-    self.model.query('USP_TipoProceso_GET', params, function(error, result) {
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};
-module.exports = ApiProvision;
+module.exports = Apipolizas;

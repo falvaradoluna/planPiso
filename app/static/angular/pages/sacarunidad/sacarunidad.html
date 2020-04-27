@@ -4,18 +4,18 @@
         <div class="col-md-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <pago-Interes-Content-Header></pago-Interes-Content-Header>
+                    <sacarunidad-Content-Header></sacarunidad-Content-Header>
                 </div>
                 <div class="ibox-content">
                     <div ng-switch on="currentPanel">
                         <div ng-switch-when="pnlPendientes" class="animated fadeInRight">
-                            <h2><span class="text-navy">Pagos </span></h2>
-                            <pago-Interes-Pendiente></pago-Interes-Pendiente>
+                            <h2><span class="text-navy">Sacar unidad de plan piso </span></h2>
+                            <sacarunidad-Pendiente></sacarunidad-Pendiente>
                         </div>
 
                         <div ng-switch-when="pnlDetalle" class="animated fadeInRight">
                             <h2><span class="text-navy">Detalle {{currentPayName}}</span></h2>
-                            <pago-Interes-Detalle></pago-Interes-Detalle>
+                            <sacarunidad-Detalle></sacarunidad-Detalle>
                         </div>
                     </div>
                 </div>

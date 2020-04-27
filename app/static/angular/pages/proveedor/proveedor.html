@@ -1,0 +1,25 @@
+<top-Bar></top-Bar>
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <proveedor-Content-Header></proveedor-Content-Header>
+                </div>
+                <div class="ibox-content">
+                    <div ng-switch on="currentPanel">
+                        <div ng-switch-when="pnlPendientes" class="animated fadeInRight">
+                            <h2><span class="text-navy">Unidades de proveedores </span></h2>
+                            <proveedor-Pendiente></proveedor-Pendiente>
+                        </div>
+
+                        <div ng-switch-when="pnlDetalle" class="animated fadeInRight">
+                            <h2><span class="text-navy">Detalle {{currentPayName}}</span></h2>
+                            <proveedor-Detalle></proveedor-Detalle>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

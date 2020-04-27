@@ -1,49 +1,47 @@
-appModule.controller('provisionController', function($scope, $rootScope, $location, commonFactory, staticFactory, provisionFactory) {
+appModule.controller('polizasController', function($scope, $rootScope, $location, commonFactory, staticFactory, polizasFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
 
-    $scope.topBarNav = staticFactory.provisionBar();
+    $scope.topBarNav = staticFactory.polizasBar();
     $scope.lstPayTypes = [];
     $scope.lstUnitsPending = [];
     $scope.lstUnitsApply = [];
     $scope.lstUnitDeatil = [];
     $scope.objEdit = { visible: false };
     $scope.currentPanel = 'pnlPendientes';
-    $scope.currentPayName = 'Todos';
+    $scope.currentPayName = 'polizass Pendiente';
     $scope.showDropDown = true;
 
 
-
-    provisionFactory.getLote(0, '1,3').then(function(result) {
+    polizasFactory.getLote(0, '9').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
-    provisionFactory.getLote(1, '1,3').then(function(result) {
+
+    polizasFactory.getLote(1, '9').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
 
-    provisionFactory.getProvisionType().then(function(result) {
+    commonFactory.getCatalog(4).then(function(result) {
         $scope.lstPayTypes = result.data;
     });
 
 
 
-    $scope.setCurrentpay = function(id) {
+    $scope.setCurrentpay = function(payType) {
 
-        $scope.currentPayName = id.pro_nombre;
+
         $scope.currentPanel = 'pnlPendientes';
-        provisionFactory.getLote(id.pro_idtipoproceso).then(function(result) {
-            $scope.lstUnitsPending = result.data;
-        });
 
-    };
+    }
+
+
 
 
 
     $scope.prevStep = function() {
-
-        $scope.currentPanel = 'pnlPendientes';
+        $scope.setCurrentpay($scope.lstPayTypes[0]);
         $scope.showDropDown = true;
     };
 
@@ -62,7 +60,7 @@ appModule.controller('provisionController', function($scope, $rootScope, $locati
         }
 
         $scope.currentPanel = 'pnlDetalle';
-        provisionFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
+        polizasFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
             $scope.lstUnitDeatil = result.data;
         });
     };

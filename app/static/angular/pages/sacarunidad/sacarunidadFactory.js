@@ -1,9 +1,9 @@
-var apiCompensacionUrl = global_settings.urlCORS + 'api/apiCompensacion/';
-appModule.factory('compensacionFactory', function($http) {
+var apisacarunidadUrl = global_settings.urlCORS + 'api/apisacarunidad/';
+appModule.factory('sacarunidadFactory', function($http) {
     return {
         getLote: function(estatusCID, pro_idtipoproceso) {
             return $http({
-                url: apiCompensacionUrl + 'Lote/',
+                url: apisacarunidadUrl + 'Lote/',
                 method: "GET",
                 params: { estatusCID: estatusCID, idtipoproceso: pro_idtipoproceso },
                 headers: { 'Content-Type': 'application/json' }
@@ -11,7 +11,7 @@ appModule.factory('compensacionFactory', function($http) {
         },
         getLoteDetail: function(loteID) {
             return $http({
-                url: apiCompensacionUrl + 'LoteDetail/',
+                url: apisacarunidadUrl + 'LoteDetail/',
                 method: "GET",
                 params: { loteID: loteID },
                 headers: { 'Content-Type': 'application/json' }

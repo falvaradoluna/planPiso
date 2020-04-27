@@ -31,22 +31,28 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Interes', url: '#', isActive: true }
             ];
         },
-        pagoBar: function() {
+        polizasBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
-                { name: 'Pago', url: '#', isActive: true }
+                { name: 'polizas', url: '#', isActive: true }
             ];
         },
-        provisionBar: function() {
+        proveedorBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
-                { name: 'Provisión', url: '#', isActive: true }
+                { name: 'Unidades de proveedores', url: '#', isActive: true }
             ];
         },
-        compensacionBar: function() {
+        inventarioBar: function() {
             return [
                 { name: 'Home', url: 'home', isActive: false },
-                { name: 'Compensación', url: '#', isActive: true }
+                { name: 'Unidades de Inventario', url: '#', isActive: true }
+            ];
+        },
+        sacarunidadBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Sacar Unidades de Plan Piso', url: '#', isActive: true }
             ];
         },
         conciliacionBar: function() {

@@ -1,47 +1,49 @@
-appModule.controller('pagoInteresController', function($scope, $rootScope, $location, commonFactory, staticFactory, pagoFactory) {
+appModule.controller('proveedorController', function($scope, $rootScope, $location, commonFactory, staticFactory, proveedorFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
 
-    $scope.topBarNav = staticFactory.pagoBar();
+    $scope.topBarNav = staticFactory.proveedorBar();
     $scope.lstPayTypes = [];
     $scope.lstUnitsPending = [];
     $scope.lstUnitsApply = [];
     $scope.lstUnitDeatil = [];
     $scope.objEdit = { visible: false };
     $scope.currentPanel = 'pnlPendientes';
-    $scope.currentPayName = 'Pagos Pendiente';
+    $scope.currentPayName = 'Todos';
     $scope.showDropDown = true;
 
 
-    pagoFactory.getLote(0, '9').then(function(result) {
+
+    proveedorFactory.getLote(0, '1,3').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
-
-    pagoFactory.getLote(1, '9').then(function(result) {
+    proveedorFactory.getLote(1, '1,3').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
 
-    commonFactory.getCatalog(4).then(function(result) {
+    proveedorFactory.getproveedorType().then(function(result) {
         $scope.lstPayTypes = result.data;
     });
 
 
 
-    $scope.setCurrentpay = function(payType) {
+    $scope.setCurrentpay = function(id) {
 
-
+        $scope.currentPayName = id.pro_nombre;
         $scope.currentPanel = 'pnlPendientes';
+        proveedorFactory.getLote(id.pro_idtipoproceso).then(function(result) {
+            $scope.lstUnitsPending = result.data;
+        });
 
-    }
-
-
+    };
 
 
 
     $scope.prevStep = function() {
-        $scope.setCurrentpay($scope.lstPayTypes[0]);
+
+        $scope.currentPanel = 'pnlPendientes';
         $scope.showDropDown = true;
     };
 
@@ -60,7 +62,7 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
         }
 
         $scope.currentPanel = 'pnlDetalle';
-        pagoFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
+        proveedorFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
             $scope.lstUnitDeatil = result.data;
         });
     };

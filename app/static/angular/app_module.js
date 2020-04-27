@@ -30,23 +30,28 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/interes', {
             templateUrl: 'angular/pages/interes/interes.html',
             controller: 'interesController'
-        }).when('/pagoInteres', {
-            templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
-            controller: 'pagoInteresController'
+    })
+    .when('/polizas', {
+        templateUrl: 'angular/pages/polizas/polizas.html',
+        controller: 'polizasController'
 
-        })
-        .when('/provision', {
-            templateUrl: 'angular/pages/provision/provision.html',
-            controller: 'provisionController'
-        })
-        .when('/compensacion', {
-            templateUrl: 'angular/pages/compensacion/compensacion.html',
-            controller: 'compensacionController'
-        })
-        .when('/dashboard', {
-            templateUrl: 'angular/pages/dashboard/dashboard.html',
-            controller: 'dashboardController'
-        })
+    })
+    .when('/proveedor', {
+        templateUrl: 'angular/pages/proveedor/proveedor.html',
+        controller: 'proveedorController'
+    })
+    .when('/inventario', {
+        templateUrl: 'angular/pages/inventario/inventario.html',
+        controller: 'inventarioController'
+    })
+    .when('/sacarunidad', {
+        templateUrl: 'angular/pages/sacarunidad/sacarunidad.html',
+        controller: 'sacarunidadController'
+    })
+    .when('/dashboard', {
+        templateUrl: 'angular/pages/dashboard/dashboard.html',
+        controller: 'dashboardController'
+    })
 
     .when('/tiie', {
         templateUrl: 'angular/pages/tiie/tiie.html',

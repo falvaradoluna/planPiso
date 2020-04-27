@@ -1,12 +1,12 @@
-var ApiCompensacionView = require('../views/reference'),
-    ApiCompensacionModel = require('../models/dataAccess')
+var ApiinventarioView = require('../views/reference'),
+    ApiinventarioModel = require('../models/dataAccess')
 
 
-var ApiCompensacion = function(conf) {
+var Apiinventario = function(conf) {
     this.conf = conf || {};
 
-    this.view = new ApiCompensacionView();
-    this.model = new ApiCompensacionModel({
+    this.view = new ApiinventarioView();
+    this.model = new ApiinventarioModel({
         parameters: this.conf.parameters
     });
 
@@ -16,7 +16,7 @@ var ApiCompensacion = function(conf) {
 };
 
 
-ApiCompensacion.prototype.get_Lote = function(req, res, next) {
+Apiinventario.prototype.get_Lote = function(req, res, next) {
 
     var self = this;
 
@@ -31,7 +31,7 @@ ApiCompensacion.prototype.get_Lote = function(req, res, next) {
     });
 };
 
-ApiCompensacion.prototype.get_LoteDetail = function(req, res, next) {
+Apiinventario.prototype.get_LoteDetail = function(req, res, next) {
 
     var self = this;
 
@@ -45,4 +45,4 @@ ApiCompensacion.prototype.get_LoteDetail = function(req, res, next) {
     });
 };
 
-module.exports = ApiCompensacion;
+module.exports = Apiinventario;

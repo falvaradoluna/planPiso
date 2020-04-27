@@ -1,12 +1,12 @@
-var ApiPagoInteresView = require('../views/reference'),
-    ApiPagoInteresModel = require('../models/dataAccess')
+var ApiproveedorView = require('../views/reference'),
+    ApiproveedorModel = require('../models/dataAccess')
 
 
-var ApiPagoInteres = function(conf) {
+var Apiproveedor = function(conf) {
     this.conf = conf || {};
 
-    this.view = new ApiPagoInteresView();
-    this.model = new ApiPagoInteresModel({
+    this.view = new ApiproveedorView();
+    this.model = new ApiproveedorModel({
         parameters: this.conf.parameters
     });
 
@@ -16,7 +16,7 @@ var ApiPagoInteres = function(conf) {
 };
 
 
-ApiPagoInteres.prototype.get_Lote = function(req, res, next) {
+Apiproveedor.prototype.get_Lote = function(req, res, next) {
 
     var self = this;
 
@@ -31,7 +31,7 @@ ApiPagoInteres.prototype.get_Lote = function(req, res, next) {
     });
 };
 
-ApiPagoInteres.prototype.get_LoteDetail = function(req, res, next) {
+Apiproveedor.prototype.get_LoteDetail = function(req, res, next) {
 
     var self = this;
 
@@ -44,5 +44,17 @@ ApiPagoInteres.prototype.get_LoteDetail = function(req, res, next) {
         });
     });
 };
+Apiproveedor.prototype.get_proveedorType = function(req, res, next) {
 
-module.exports = ApiPagoInteres;
+    var self = this;
+
+    var params = [];
+
+    self.model.query('USP_TipoProceso_GET', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+module.exports = Apiproveedor;
