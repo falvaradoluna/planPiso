@@ -9,11 +9,11 @@ appModule.factory('unuevasFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getNewUnitsBySucursal: function(empresaID, sucursalID) {
+        getNewUnitsBySucursal: function(empresaID, sucursalID,financieraID) {
             return $http({
                 url: apiNewUnitsUrl + 'NewUnitsBySucursal/',
                 method: "GET",
-                params: { empresaID: empresaID, sucursalID: sucursalID },
+                params: { empresaID: empresaID, sucursalID: sucursalID,financieraID:financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -34,7 +34,7 @@ appModule.factory('unuevasFactory', function($http) {
         stepsBar: function() {
             return [
                 { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar" },
-                { name: "2. Financiera", className: "", panelName: "pnlFinanciera" },
+                { name: "2. Esquema", className: "", panelName: "pnlFinanciera" },
                 { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
             ];
         },

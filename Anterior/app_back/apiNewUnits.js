@@ -21,6 +21,8 @@ router.get('/getNewUnits', function(req, res) {
         var request = new sql.Request(dbCnx);
 
         request.input('empresaID', sql.Int, req.query.empresaID);
+        request.input('sucursalID', sql.Int, req.query.sucursalID);
+        request.input('financieraID', sql.Int, req.query.financieraID);
 
         request.execute('uspGetUnidadesNuevas').then(function(result) {
             dbCnx.close();

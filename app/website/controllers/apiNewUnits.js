@@ -35,7 +35,8 @@ ApiNewUnits.prototype.get_NewUnitsBySucursal = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT },
-    { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT }];
+    { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT} ,
+    { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT }];
 
     self.model.query('uspGetUnidadesNuevas', params, function(error, result) {
         self.view.expositor(res, {

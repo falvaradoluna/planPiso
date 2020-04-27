@@ -64,7 +64,8 @@ ApiCommon.prototype.get_Financieras = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT }
-    ];
+                ,{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    
 
     self.model.query('uspGetFinanciera', params, function(error, result) {
         self.view.expositor(res, {

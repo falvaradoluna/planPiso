@@ -22,12 +22,12 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.allUnits = { isChecked: false };
     $scope.ddlFinancialShow = false;
     $scope.showStep = 1;
+    $scope.SucursalSel=[];
+    $scope.FinancieraSel=[];
 
     $('#mdlLoading').modal('show');
 
-    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
-        $scope.lstFinancial = result.data;
-    });
+    
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
@@ -40,24 +40,38 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     });
 
     $scope.setCurrentSucursal = function(sucursalObj) {
+        $scope.SucursalSel=sucursalObj;
         $('#mdlLoading').modal('show');
         $scope.totalUnidades = 0;
         $scope.currentSucursalName = sucursalObj.nombreSucursal;
-        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, sucursalObj.sucursalID);
+        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, sucursalObj.sucursalID,$scope.FinancieraSel.financieraID);
+        commonFactory.getFinancial(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
+            $scope.lstFinancial = result.data;
+            $scope.ddlFinancialShow= true;
+        });
+        
     };
 
-    $scope.getNewUnitsBySucursal = function(emresaID, sucursalID) {        
+    $scope.getNewUnitsBySucursal = function(empresaID, sucursalID,financieraID) {        
         $('#tblUnidadesNuevas').DataTable().destroy();
-        unuevasFactory.getNewUnitsBySucursal(emresaID, sucursalID).then(function(result) {
+        unuevasFactory.getNewUnitsBySucursal(empresaID, sucursalID,financieraID).then(function(result) {
             $scope.lstNewUnits = result.data;
             $scope.initTblUnidadesNuevas();
             $('#mdlLoading').modal('hide');
         });
     };
 
-    $scope.setCurrentFinancial = function(financialObj) {
+    $scope.setCurrentFinancialHead = function(financialObj) {
+        $scope.FinancieraSel=financialObj;
+        $('#mdlLoading').modal('show');
         $scope.currentFinancialName = financialObj.nombre;
-        $scope.getSchemas(financialObj.financieraID);
+        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.SucursalSel.sucursalID,$scope.FinancieraSel.financieraID);
+        $scope.getSchemas($scope.FinancieraSel.financieraID);
+    };
+    $scope.setCurrentFinancial = function() {
+        $scope.listUnidades = _.where($scope.lstNewUnits, { isChecked: true });
+        $scope.currentFinancialName = $scope.listUnidades[0].nombreFinanciera;
+        $scope.getSchemas($scope.listUnidades[0].idPersona);
     };
 
     $scope.getSchemas = function(financieraID) {
@@ -85,6 +99,10 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
 
     $scope.nextStep = function() {
+        if($scope.currentStep == 0)
+        {
+            $scope.setCurrentFinancial();
+        }
         if ($scope.currentStep === 1 && $scope.selectedSchema.esquemaID === undefined) {
             swal("Aviso", "No ha seleccionado un esquema", "warning");
             return;
