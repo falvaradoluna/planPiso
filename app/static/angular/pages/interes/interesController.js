@@ -169,7 +169,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.setPnlInteres = function() {
         $scope.currentPanel = "pnlInteres";
-        location.reload();
+      //  location.reload();
     };
 
     $scope.setPnlInteresMovimientos = function() {

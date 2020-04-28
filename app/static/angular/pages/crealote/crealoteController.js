@@ -1,17 +1,17 @@
-appModule.controller('traspasosController', function($scope, $rootScope, $location, traspasosFactory, provisionFactory, commonFactory, staticFactory, filterFilter ) {
+appModule.controller('crealoteController', function($scope, $rootScope, $location, crealoteFactory, commonFactory, staticFactory, filterFilter ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     
     $scope.currentPanel = 'pnlHome';
-
+    $scope.topBarNav            = staticFactory.crealoteBar();
     $scope.obtieneTodos = function(){
-    	traspasosFactory.obtieneTodos().then(function(result) {
+    	crealoteFactory.obtieneTodos().then(function(result) {
             $scope.Datos = result.data;
         });
     }
 
     $scope.Detalle = function( idTraspasoFinanciera ){
-    	traspasosFactory.obtieneDetalle( idTraspasoFinanciera ).then(function(result) {
-    		$scope.currentPanel = 'pnlDetale';
+    	crealoteFactory.obtieneDetalle( idTraspasoFinanciera ).then(function(result) {
+    		$scope.currentPanel = 'pnlDetalle';
             $scope.Detalle = result.data;
             $scope.Registros = $scope.Detalle[1];
             console.log( "$scope.Detalle", $scope.Detalle );

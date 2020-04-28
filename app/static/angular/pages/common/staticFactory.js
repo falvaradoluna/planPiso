@@ -61,6 +61,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Conciliación', url: '#', isActive: true }
             ];
         },
+        crealoteBar: function() {
+            return [
+                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Crear Lote', url: '#', isActive: true }
+            ];
+        },
         message: function() {
             alert("Hello");
         },
