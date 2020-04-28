@@ -10,9 +10,9 @@ appModule.directive('proveedorContentHeader', function() {
         restrict: 'E',
         templateUrl: proveedorPath + 'proveedorDetalle.html'
     };
-}).directive('proveedorPendiente', function() {
+}).directive('proveedorAplicar', function() {
     return {
         restrict: 'E',
-        templateUrl: proveedorPath + 'proveedorPendiente.html'
+        templateUrl: proveedorPath + 'proveedorAplicar.html'
     };
 });

@@ -27,7 +27,7 @@ appModule.factory('unuevasFactory', function($http) {
         },
         topNavBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Unidades Nuevas', url: '#', isActive: true }
             ];
         },

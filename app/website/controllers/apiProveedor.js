@@ -14,7 +14,20 @@ var Apiproveedor = function(conf) {
         this[this.conf.funcionalidad](this.conf.req, this.conf.res, this.conf.next);
     };
 };
+Apiproveedor.prototype.get_providers = function(req, res, next) {
 
+    var self = this;
+
+    var params = [{ name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT },
+    { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.STRING }];
+
+    self.model.query('uspGetDocumentosProveedores', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 Apiproveedor.prototype.get_Lote = function(req, res, next) {
 
