@@ -113,7 +113,7 @@ ApiInteres.prototype.get_SchemaMovements = function(req, res, next) {
 
     var params = [{ name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING }];
 
-    self.model.query('Usp_EsquemaMovimientos_GET', params, function(error, result) {
+    self.model.queryAllRecordSet('Usp_EsquemaMovimientos_GET', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
