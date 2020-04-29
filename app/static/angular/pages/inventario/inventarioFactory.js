@@ -1,23 +1,40 @@
 var apiinventarioUrl = global_settings.urlCORS + 'api/apiinventario/';
 appModule.factory('inventarioFactory', function($http) {
     return {
-        getLote: function(estatusCID, pro_idtipoproceso) {
+        getInventory: function(idEmpresa, idSucursal) {
             return $http({
-                url: apiinventarioUrl + 'Lote/',
+                url: apiinventarioUrl + 'inventory/',
                 method: "GET",
-                params: { estatusCID: estatusCID, idtipoproceso: pro_idtipoproceso },
+                params: { idEmpresa: idEmpresa
+                    , idSucursal: idSucursal },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getLoteDetail: function(loteID) {
-            return $http({
-                url: apiinventarioUrl + 'LoteDetail/',
-                method: "GET",
-                params: { loteID: loteID },
-                headers: { 'Content-Type': 'application/json' }
-            });
+        topNavBar: function() {
+            return [
+                { name: 'Empresas', url: 'empresa', isActive: false },
+                { name: 'Unidades en Inventario', url: '#', isActive: true }
+            ];
+        },
+        stepsBar: function() {
+            return [
+                { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar" },
+                { name: "2. Aplicar", className: "", panelName: "pnlAplicar" }
+            ];
+        },
+        assignMesage: function(callback) {
+            swal({
+                    title: "¿Estas Seguro?",
+                    text: "Se le generara póliza a todos los documentos seleccionados.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#21B9BB",
+                    confirmButtonText: "Continuar",
+                    closeOnConfirm: false
+                },
+                callback
+            );
         }
-
     };
 
 });

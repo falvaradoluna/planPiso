@@ -1,31 +1,32 @@
-<div class="row">
-    <div class="col-md-12">
-        <table id="tblDetalle" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Documento</th>
-                    <th>Cuenta</th>
-                    <th>Concepto</th>
-                    <th>VIN</th>
-                    <th>Cargo</th>
-                    <th>Abono</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="unidad in lstUnitDeatil">
-                    <td>{{unidad.pld_iddocumento}}</td>
-                    <td>{{unidad.pld_numcuenta}}</td>
-                    <td>{{unidad.pld_concepto}}</td>
-                    <td>{{unidad.pld_vin}}</td>
-                    <td>{{unidad.pld_cargo}}</td>
-                    <td>{{unidad.pld_abono}}</td>
-
-
-
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<button type="button" class="btn btn-success" ng-click="prevStep()">regresar</button>
+<table id="tblUnidadesInventario" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Num Documento</th>
+            <th>VIN</th>
+            <th>Marca</th>
+            <th>Proveedor</th>
+            <th>Descripción Modelo</th>
+            <th>Modelo</th>
+            <th>Precio venta</th>
+            <th>Saldo Inicial</th>
+            <th>
+                <input type="checkbox" ng-click="checkAllUnits()" ng-model="allUnits.isChecked" style="margin-left: 20px;">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr ng-repeat="unidad in lstNewUnits">
+            <td>{{unidad.CCP_IDDOCTO}}</td>
+            <td>{{unidad.veh_numserie}}</td>
+            <td>{{unidad.marca}}</td>
+            <td>{{unidad.nombreFinanciera}}</td>
+            <td>{{unidad.descModelo}}</td>
+            <td>{{unidad.modelo}}</td>
+            <td>{{unidad.IMPORTE}}</td>            
+            <td>{{unidad.SALDO}}</td>
+            <td style="text-align: center;">
+                <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -56,7 +56,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
             }
         });
         if ($scope.currentStep === 0 && contador === 0) {
-            swal("Aviso", "No ha seleccionado ningun dopcumento", "warning");
+            swal("Aviso", "No ha seleccionado ningun documento", "warning");
             return;
         } else if (($scope.currentStep + 1) < $scope.steps.length) {
             $scope.steps[$scope.currentStep].className = "visited";

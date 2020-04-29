@@ -15,7 +15,20 @@ var Apiinventario = function(conf) {
     };
 };
 
+Apiinventario.prototype.get_inventory = function(req, res, next) {
 
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT }];
+
+    self.model.query('uspGetDocumentosInventario', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 Apiinventario.prototype.get_Lote = function(req, res, next) {
 
     var self = this;

@@ -10,9 +10,9 @@ appModule.directive('inventarioContentHeader', function() {
         restrict: 'E',
         templateUrl: inventarioPath + 'inventarioDetalle.html'
     };
-}).directive('inventarioPendiente', function() {
+}).directive('inventarioAplicar', function() {
     return {
         restrict: 'E',
-        templateUrl: inventarioPath + 'inventarioPendiente.html'
+        templateUrl: inventarioPath + 'inventarioAplicar.html'
     };
 });
