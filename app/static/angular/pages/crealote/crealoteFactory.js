@@ -1,18 +1,18 @@
-var traspasosUrl = global_settings.urlCORS + 'api/apiTraspaso/';
-appModule.factory('traspasosFactory', function($http) {
+var crealoteUrl = global_settings.urlCORS + 'api/apicrealote/';
+appModule.factory('crealoteFactory', function($http) {
     return {
         obtieneTodos: function() {
             return $http({
-                url: traspasosUrl + 'obtieneTodos/',
+                url: crealoteUrl + 'obtieneTodos/',
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        obtieneDetalle: function( idTraspasoFinanciera ) {
+        obtieneDetalle: function( idcrealoteFinanciera ) {
             return $http({
-                url: traspasosUrl + 'Detalle/',
+                url: crealoteUrl + 'Detalle/',
                 method: "GET",
-                params: { idTraspasoFinanciera: idTraspasoFinanciera },
+                params: { idcrealoteFinanciera: idcrealoteFinanciera },
                 headers: { 'Content-Type': 'application/json' }
             });
         }

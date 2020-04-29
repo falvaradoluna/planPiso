@@ -73,9 +73,9 @@ appModule.config(function($routeProvider, $locationProvider) {
         controller: 'autorizaController'
     })
 
-    .when('/traspasos', {
-        templateUrl: 'angular/pages/traspasos/traspasos.html',
-        controller: 'traspasosController'
+    .when('/crealote', {
+        templateUrl: 'angular/pages/crealote/crealote.html',
+        controller: 'crealoteController'
     });
 
     $routeProvider.otherwise({ requireBasedirectTo: '/' });

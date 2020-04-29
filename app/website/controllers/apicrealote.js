@@ -1,12 +1,12 @@
-var ApiTraspasoView = require('../views/reference'),
-    ApiTraspasoModel = require('../models/dataAccess')
+var ApicrealoteView = require('../views/reference'),
+    ApicrealoteModel = require('../models/dataAccess')
 
 
-var ApiTraspaso = function(conf) {
+var Apicrealote = function(conf) {
     this.conf = conf || {};
 
-    this.view = new ApiTraspasoView();
-    this.model = new ApiTraspasoModel({
+    this.view = new ApicrealoteView();
+    this.model = new ApicrealoteModel({
         parameters: this.conf.parameters
     });
 
@@ -16,7 +16,7 @@ var ApiTraspaso = function(conf) {
 };
 
 
-ApiTraspaso.prototype.get_TraspasoFinanciera = function(req, res, next) {
+Apicrealote.prototype.get_crealoteFinanciera = function(req, res, next) {
 
     var self = this;
 
@@ -33,11 +33,11 @@ ApiTraspaso.prototype.get_TraspasoFinanciera = function(req, res, next) {
     });
 };
 
-ApiTraspaso.prototype.get_TraspasoFinancieraDetalle = function(req, res, next) {
+Apicrealote.prototype.get_crealoteFinancieraDetalle = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idTraspasoFinanciera', value: req.query.idTraspasoFinanciera, type: self.model.types.INT },
+    var params = [{ name: 'idcrealoteFinanciera', value: req.query.idcrealoteFinanciera, type: self.model.types.INT },
     { name: 'idEsquemaOrigen', value: req.query.idEsquemaOrigen, type: self.model.types.INT },
     { name: 'idEsquemaDestino', value: req.query.idEsquemaDestino, type: self.model.types.INT },
     { name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },
@@ -50,7 +50,7 @@ ApiTraspaso.prototype.get_TraspasoFinancieraDetalle = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_setChangeSchema = function(req, res, next) {
+Apicrealote.prototype.get_setChangeSchema = function(req, res, next) {
 
     var self = this;
 
@@ -67,20 +67,20 @@ ApiTraspaso.prototype.get_setChangeSchema = function(req, res, next) {
     });
 };
 
-ApiTraspaso.prototype.get_procesaTraspaso = function(req, res, next) {
+Apicrealote.prototype.get_procesacrealote = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idTraspasoFinanciera', value: req.query.idTraspasoFinanciera, type: self.model.types.INT }];
+    var params = [{ name: 'idcrealoteFinanciera', value: req.query.idcrealoteFinanciera, type: self.model.types.INT }];
 
-    self.model.query('TRAS_PROCESATRASPASO_SP', params, function(error, result) {
+    self.model.query('TRAS_PROCESAcrealote_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
-ApiTraspaso.prototype.get_traspasoFlujo = function(req, res, next) {
+Apicrealote.prototype.get_crealoteFlujo = function(req, res, next) {
 
     var self = this;
 
@@ -94,7 +94,7 @@ ApiTraspaso.prototype.get_traspasoFlujo = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_traspasoFinancieraFlujo = function(req, res, next) {
+Apicrealote.prototype.get_crealoteFinancieraFlujo = function(req, res, next) {
 
     var self = this;
 
@@ -111,7 +111,7 @@ ApiTraspaso.prototype.get_traspasoFinancieraFlujo = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_TraspasoDetalleAutoriza = function(req, res, next) {
+Apicrealote.prototype.get_crealoteDetalleAutoriza = function(req, res, next) {
 
     var self = this;
 
@@ -124,12 +124,12 @@ ApiTraspaso.prototype.get_TraspasoDetalleAutoriza = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_ActualizaFechaPP = function(req, res, next) {
+Apicrealote.prototype.get_ActualizaFechaPP = function(req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'fecha', value: req.query.fecha, type: self.model.types.STRING },
-    { name: 'idTraspaso', value: req.query.idTraspaso, type: self.model.types.INT }];
+    { name: 'idcrealote', value: req.query.idcrealote, type: self.model.types.INT }];
 
     self.model.query('TRAS_UPDATEFECHAPP_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -138,11 +138,11 @@ ApiTraspaso.prototype.get_ActualizaFechaPP = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_CambioFECHPROMPAGBPRO = function(req, res, next) {
+Apicrealote.prototype.get_CambioFECHPROMPAGBPRO = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idTraspaso', value: req.query.idTraspaso, type: self.model.types.INT }];
+    var params = [{ name: 'idcrealote', value: req.query.idcrealote, type: self.model.types.INT }];
 
     self.model.query('TRAS_CAMBIOFECHPROMPAGBPRO_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -151,20 +151,20 @@ ApiTraspaso.prototype.get_CambioFECHPROMPAGBPRO = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_cancelaTraspasoConFlujo = function(req, res, next) {
+Apicrealote.prototype.get_cancelacrealoteConFlujo = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idTraspaso', value: req.query.idTraspaso, type: self.model.types.INT }];
+    var params = [{ name: 'idcrealote', value: req.query.idcrealote, type: self.model.types.INT }];
 
-    self.model.query('TRAS_CANCELATRASPASOCONFLUJO_SP', params, function(error, result) {
+    self.model.query('TRAS_CANCELAcrealoteCONFLUJO_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
-ApiTraspaso.prototype.get_obtieneTodos = function(req, res, next) {
+Apicrealote.prototype.get_obtieneTodos = function(req, res, next) {
 
     var self = this;
 
@@ -177,11 +177,11 @@ ApiTraspaso.prototype.get_obtieneTodos = function(req, res, next) {
         });
     });
 };
-ApiTraspaso.prototype.get_Detalle = function(req, res, next) {
+Apicrealote.prototype.get_Detalle = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idTraspasoFinanciera', value: req.query.idTraspasoFinanciera, type: self.model.types.INT }];
+    var params = [{ name: 'idcrealoteFinanciera', value: req.query.idcrealoteFinanciera, type: self.model.types.INT }];
 
     self.model.query('TRAS_SEL_GETDETALLE_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -190,4 +190,4 @@ ApiTraspaso.prototype.get_Detalle = function(req, res, next) {
         });
     });
 };
-module.exports = ApiTraspaso;
+module.exports = Apicrealote;
