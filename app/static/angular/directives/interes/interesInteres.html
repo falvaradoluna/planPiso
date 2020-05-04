@@ -12,15 +12,19 @@
                     <th>Esquema</th>
                     <th>Modelo</th>
                     <th>Año</th>
+                    <th>Tipo</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Salida</th>
                     <th>Importe</th>
                     <th>Saldo</th>
-
+                    <th>Saldo en CC</th>
                     <th>Dias Restantes</th>
                     <th>Interes Mes</th>
                     <th>Interes Acumulado</th>
                     <!-- <th>Interes Acumulado Financiera</th>
                     <th>Interes Total</th> -->
                     <th>Interes Total</th>
+                    <th>Estatus</th>
                     <th></th>
                 </tr>
             </thead>
@@ -35,14 +39,18 @@
                     <td>{{unidad.nombre}}</td>
                     <td>{{unidad.VEH_TIPOAUTO}}</td>
                     <td>{{unidad.VEH_ANMODELO}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>{{unidad.importe}}</td>
                     <td>{{unidad.saldo}}</td>
-
+                    <td></td>
                     <td>{{unidad.diasRestantes}}</td>
                     <td>{{unidad.InteresMesActual | currency}}</td>
                     <td>{{unidad.InteresAcumulado | currency}}</td>
                     <!-- <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td> -->
                     <td>{{unidad.InteresTotal | currency}}</td>
+                    <td></td>
                     <td>
                         <button type="button" class="btn btn-primary" ng-click="setPnlDetalleUnidad(unidad)">
                             <span class="glyphicon glyphicon-th-list"> </span>

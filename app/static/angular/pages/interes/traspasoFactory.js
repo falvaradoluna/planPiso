@@ -17,6 +17,14 @@ appModule.factory('traspasoFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        traspasoEsquemaDetalle: function(params) {
+            return $http({
+                url: traspasoUrl + 'TraspasoEsquemaDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         setChangeSchema: function(params) {
             return $http({
                 url: traspasoUrl + 'setChangeSchema/',

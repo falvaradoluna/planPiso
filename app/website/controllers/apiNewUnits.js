@@ -54,7 +54,7 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
     { name: 'esquemaID', value: req.body.esquemaID, type: self.model.types.INT },
     { name: 'fecha_Calculo', value: fecha, type: self.model.types.STRING },
     { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
-    { name: 'InteresInicial', value: req.body.InteresInicial, type: self.model.types.INT }];
+    { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT }];
 
     self.model.query('uspSetUnidadSchema', params, function(error, result) {
         self.view.expositor(res, {
