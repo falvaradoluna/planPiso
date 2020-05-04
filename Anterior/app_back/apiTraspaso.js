@@ -21,10 +21,10 @@ router.get('/TraspasoFinanciera', function(req, res) {
 
         request.input('idUsuario', sql.Int, req.query.idUsuario);
         request.input('idEmpresa', sql.Int, req.query.idEmpresa);
-        request.input('idFinancieraDestino', sql.Int, req.query.idFinancieraDestino);
-        request.input('idFinancieraOrigen', sql.Int, req.query.idFinancieraOrigen);
+        request.input('idtipopoliza', sql.Int, req.query.idtipopoliza);
+       
 
-        request.execute('TRAS_NUEVO_SP').then(function(result) {
+        request.execute('Pol_Cabecera_INS').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {
@@ -44,13 +44,15 @@ router.get('/TraspasoFinancieraDetalle', function(req, res) {
     dbCnx.connect().then(function() {
         var request = new sql.Request(dbCnx);
 
-        request.input('idTraspasoFinanciera', sql.Int, req.query.idTraspasoFinanciera);
-        request.input('idEsquemaOrigen', sql.Int, req.query.idEsquemaOrigen);
-        request.input('idEsquemaDestino', sql.Int, req.query.idEsquemaDestino);
-        request.input('CCP_IDDOCTO', sql.VarChar, req.query.CCP_IDDOCTO);
-        request.input('fechaPromesaPago', sql.VarChar, req.query.fechaPromesaPago);
+        request.input('idpoliza', sql.Int, req.query.idpoliza);
+        request.input('idmovimiento', sql.Int, req.query.idEsquemaOrigen);
+        request.input('idfinancieraO', sql.Int, req.query.idEsquemaDestino);
+        request.input('idEsquemaO', sql.Int, req.query.idEsquemaDestino);
+        request.input('idfinancieraD', sql.Int, req.query.idEsquemaDestino);
+        request.input('idEsquemaD', sql.Int, req.query.idEsquemaDestino);
+        request.input('idUsuario', sql.Int, req.query.idUsuario);
 
-        request.execute('TRAS_NUEVODETALLE_SP').then(function(result) {
+        request.execute('Pol_Poliza5Detalle_INS').then(function(result) {
             dbCnx.close();
             res.json(result.recordsets[0]);
         }).catch(function(err) {

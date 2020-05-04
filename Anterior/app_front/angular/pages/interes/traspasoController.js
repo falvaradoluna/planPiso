@@ -93,8 +93,7 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
                     var paraTraspaso = {
                         idUsuario: $scope.idUsuario,
                         idEmpresa: sessionFactory.empresaID,
-                        idFinancieraDestino: $scope.lstFinancieraOrigen[0].financieraID,
-                        idFinancieraOrigen: $scope.currentFinancial2.financieraID
+                       idtipopoliza: 2
                     }
 
                     traspasoFactory.traspasoFinanciera(paraTraspaso).then(function( respuesta ) {
@@ -115,10 +114,13 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
         if( contTraspadoDetalle < $scope.lstUnitsTraspasos.length ){
             var item = $scope.lstUnitsTraspasos[ contTraspadoDetalle ];
             var paraTraspasoDetalle = {
-                idTraspasoFinanciera: $scope.LastId,
-                idEsquemaOrigen: item.esquemaID,
-                idEsquemaDestino: $scope.currentSchema2.esquemaID,
-                CCP_IDDOCTO: item.CCP_IDDOCTO
+                idpoliza: $scope.LastId,
+                idmovimiento: item.idmovimiento,
+                idfinancieraO: $scope.currentFinancial2.financieraID,
+                idEsquemaO: item.esquemaID,
+                idfinancieraD: $scope.lstFinancieraOrigen[0].financieraID,
+                idEsquemaD: $scope.currentSchema2.esquemaID,
+                idUsuario: $scope.idUsuario,
             }
 
             traspasoFactory.traspasoFinancieraDetalle(paraTraspasoDetalle).then(function( response ) {
