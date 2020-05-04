@@ -39,9 +39,21 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             });
         }
     }
-
+    $scope.setTableStyle = function(tblID) {
+        staticFactory.setTableStyleOne(tblID);
+    };
+    $scope.initTblSchemas = function() {
+        $scope.setTableStyle('#tblSchemas');
+    };
     $scope.modoTraspaso = null;
+    $scope.setResetTable = function(tblID, display, length) {
+        $('.' + tblID).DataTable().destroy();
+        setTimeout(function() {
+            staticFactory.filtrosTabla(tblID, display, length);
+        }, 500);
+    };
     $scope.setPanelResumen = function() {
+        $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
         if( $scope.currentFinancial2 === undefined ){
             swal("Traspaso de Financiera", "Favor de seleccionar la financiera destino.");
         }

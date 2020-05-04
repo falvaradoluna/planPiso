@@ -25,11 +25,20 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
 
         if( auxList.length === 1){
             $scope.CurrentFinanciera = auxList[0];
-            $scope.lstTraspasoFinanciera = filterFilter( $scope.lstFinancial , {financieraID: '!' + $scope.CurrentFinanciera} );
-            
+            if( $scope.typeTraspaso== 3){
+           
             $scope.lstTraspasoFinanciera = filterFilter( $scope.lstFinancial , {financieraID: '!' + $scope.CurrentFinanciera} );
             $scope.lstFinancieraOrigen = filterFilter( $scope.lstFinancial , {financieraID: $scope.CurrentFinanciera} );
-        }
+            }
+            else
+            {
+                $scope.lstTraspasoFinanciera=$scope.lstFinancial;
+                $scope.lstFinancieraOrigen = filterFilter( $scope.lstFinancial , {financieraID: $scope.CurrentFinanciera} );
+                $scope.setCurrentFinance2($scope.lstFinancieraOrigen[0] );
+            }
+
+            
+                   }
         else{
             swal({
                 title: "Traspaso entre Financieras",
@@ -39,9 +48,34 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             });
         }
     }
+    $scope.setCurrentFinance2 = function(financialObj) {
+        //  $scope.currentPanel = "pnlResumen";
+        $rootScope.currentFinancialName2 = financialObj.nombre;
+        $rootScope.currentFinancial2 = financialObj;
+        $rootScope.currentSchemaName2 = '';
+        $rootScope.currentSchema2 = [];
 
+        // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
+
+        commonFactory.getSchemas(financialObj.financieraID).then(function(result) {
+            $rootScope.lstSchemas = result.data;
+        });
+    };
+    $scope.setTableStyle = function(tblID) {
+        staticFactory.setTableStyleOne(tblID);
+    };
+    $scope.initTblSchemas = function() {
+        $scope.setTableStyle('#tblSchemas');
+    };
     $scope.modoTraspaso = null;
+    $scope.setResetTable = function(tblID, display, length) {
+        $('.' + tblID).DataTable().destroy();
+        setTimeout(function() {
+            staticFactory.filtrosTabla(tblID, display, length);
+        }, 500);
+    };
     $scope.setPanelResumen = function() {
+        $scope.setResetTable('tblUnidadesNuevas2', 'Unidades Nuevas', 20);
         if( $scope.currentFinancial2 === undefined ){
             swal("Traspaso de Financiera", "Favor de seleccionar la financiera destino.");
         }
@@ -90,20 +124,40 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
                     closeOnConfirm: false
                 },
                 function() {
-                    var paraTraspaso = {
-                        idUsuario: $scope.idUsuario,
-                        idEmpresa: sessionFactory.empresaID,
-                        idFinancieraDestino: $scope.lstFinancieraOrigen[0].financieraID,
-                        idFinancieraOrigen: $scope.currentFinancial2.financieraID
-                    }
-
-                    traspasoFactory.traspasoFinanciera(paraTraspaso).then(function( respuesta ) {
-                        $scope.LastId = respuesta.data[0].LastId;
-                        $scope.lstUnitsTraspasos = filterFilter( $scope.lstNewUnits , {isChecked: true} );
-                        $scope.guardaDetalle();
-                    }, function(error) {
-                        $scope.error(error.data.Message);
-                    });
+                   
+                    if( $scope.typeTraspaso== 3){
+           
+                        var paraTraspaso = {
+                            idUsuario: $scope.idUsuario,
+                            idEmpresa: sessionFactory.empresaID,
+                            idtipopoliza:2  //cambio de financiera
+                        }
+    
+                        traspasoFactory.traspasoFinanciera(paraTraspaso).then(function( respuesta ) {
+                            $scope.LastId = respuesta.data[0].LastId;
+                            $scope.lstUnitsTraspasos = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                            $scope.guardaDetalle();
+                        }, function(error) {
+                            $scope.error(error.data.Message);
+                        });
+                        }
+                        else
+                        {
+                            var paraTraspaso = {
+                                idUsuario: $scope.idUsuario,
+                                idEmpresa: sessionFactory.empresaID,
+                                idtipopoliza:9  //cambio de financiera
+                            }
+        
+                            traspasoFactory.traspasoFinanciera(paraTraspaso).then(function( respuesta ) {
+                                $scope.LastId = respuesta.data[0].LastId;
+                                $scope.lstUnitsTraspasos = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                                $scope.guardaDetalleEsquema();
+                            }, function(error) {
+                                $scope.error(error.data.Message);
+                            });
+                                   }
+                    
                 }
             );
         }        
@@ -115,10 +169,13 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
         if( contTraspadoDetalle < $scope.lstUnitsTraspasos.length ){
             var item = $scope.lstUnitsTraspasos[ contTraspadoDetalle ];
             var paraTraspasoDetalle = {
-                idTraspasoFinanciera: $scope.LastId,
-                idEsquemaOrigen: item.esquemaID,
-                idEsquemaDestino: $scope.currentSchema2.esquemaID,
-                CCP_IDDOCTO: item.CCP_IDDOCTO
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idfinancieraO: $scope.lstFinancieraOrigen[0].financieraID,
+                idEsquemaO: item.esquemaID,
+                idfinancieraD: $scope.currentFinancial2.financieraID,
+                idEsquemaD: $scope.currentSchema2.esquemaID,
+                idUsuario: $scope.idUsuario
             }
 
             traspasoFactory.traspasoFinancieraDetalle(paraTraspasoDetalle).then(function( response ) {
@@ -150,7 +207,48 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
             });
         }
     }
+    $scope.guardaDetalleEsquema = function(){
+        if( contTraspadoDetalle < $scope.lstUnitsTraspasos.length ){
+            var item = $scope.lstUnitsTraspasos[ contTraspadoDetalle ];
+            var paraTraspasoDetalle = {
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idfinancieraO: $scope.lstFinancieraOrigen[0].financieraID,
+                idEsquemaO: item.esquemaID,
+                idfinancieraD: $scope.currentFinancial2.financieraID,
+                idEsquemaD: $scope.currentSchema2.esquemaID,
+                idUsuario: $scope.idUsuario
+            }
 
+            traspasoFactory.traspasoEsquemaDetalle(paraTraspasoDetalle).then(function( response ) {
+                if( response.length != 0 ){
+                    if( contTraspadoDetalle < $scope.lstUnitsTraspasos.length ){
+                        contTraspadoDetalle++;
+                        $scope.guardaDetalleEsquema();
+                    }
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+        else{
+            // swal("Traspaso Plan Piso", "Se ha efectuado correctamente su traspaso.");
+            traspasoFactory.procesaTraspaso($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal(
+                    {
+                        title: "Cambio de esquema Plan Piso",
+                        text: "Se ha efectuado correctamente su operación.",
+                        type: "warning"
+                    }, function(){
+                        location.reload();
+                    });
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+    }
     $scope.numAlert = 3;
     $scope.fnFechaPromesaPago = function(){
         var f_pago = $scope.fechaPromesa.pago.split("/");

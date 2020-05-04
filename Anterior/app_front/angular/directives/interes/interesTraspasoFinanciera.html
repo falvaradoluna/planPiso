@@ -79,7 +79,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" repeat-end="initTblSchemas()">
+                <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" repeat-end="setTableStyle('#tblUnidadesNuevas')">
                     <td>{{unidad.CCP_IDDOCTO}}</td>
                     <td>{{unidad.vehNumserie}}</td>
                     <td>{{unidad.VEH_TIPOAUTO}}</td>

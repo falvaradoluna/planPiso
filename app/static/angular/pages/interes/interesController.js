@@ -7,15 +7,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.showButtons          = false;
     $scope.lstSucursal          = [];
     $scope.lstFinancial         = [];
-    $scope.lstSchemas           = [];
+    $rootScope.lstSchemas           = [];
     $scope.lstSchemeDetail      = [];
     $scope.lstNewUnits          = [];
     $scope.lstSelectUnits       = [];
     $scope.lstSelectPay         = [];
     $scope.unitDetail           = {};
     $scope.currentPanel         = "pnlInteres";
-    $scope.currentSucursalName  = "Sucursal Todas";
-    $scope.currentFinancialName = "Selecciona Financiera";
+    $rootScope.currentSucursalName  = "Sucursal Todas";
+    $rootScope.currentFinancialName = "Selecciona Financiera";
     $scope.currentSucursal      = [];
     $scope.currentFinancial     = [];
     $scope.allUnits             = { isChecked: false };
@@ -94,15 +94,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     }
     $scope.setCurrentFinance2 = function(financialObj) {
         //  $scope.currentPanel = "pnlResumen";
-        $scope.currentFinancialName2 = financialObj.nombre;
-        $scope.currentFinancial2 = financialObj;
-        $scope.currentSchemaName2 = '';
-        $scope.currentSchema2 = [];
+        $rootScope.currentFinancialName2 = financialObj.nombre;
+        $rootScope.currentFinancial2 = financialObj;
+        $rootScope.currentSchemaName2 = '';
+        $rootScope.currentSchema2 = [];
 
         // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
 
         commonFactory.getSchemas(financialObj.financieraID).then(function(result) {
-            $scope.lstSchemas = result.data;
+            $rootScope.lstSchemas = result.data;
         });
     };
     $('#mdlLoading').modal('show');
@@ -110,7 +110,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $('#mdlLoading').modal('show');
         $scope.currentSchemaName = financialId.nombre;
         commonFactory.getSchemas(financialId).then(function(result) {
-            $scope.lstSchemas = result.data;
+            $rootScope.lstSchemas = result.data;
             $('#mdlLoading').modal('hide');
         });
     };
@@ -160,7 +160,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $('#mdlLoading').modal('show');
         commonFactory.getSchemas(financialId).then(function(result) {
             $('#tblSchemas').DataTable().destroy();
-            $scope.lstSchemas = result.data;
+            $rootScope.lstSchemas = result.data;
             $('#mdlLoading').modal('hide');
         });
     };

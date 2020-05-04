@@ -8,6 +8,7 @@
      apiEsquema: require('./controllers/apiEsquema'),
      apiFinanciera: require('./controllers/apiFinanciera'),
      apiInteres: require('./controllers/apiInteres'),
+     apiTraspaso: require('./controllers/apiTraspaso'),
      apipolizas: require('./controllers/apipolizas'),
      apiproveedor: require('./controllers/apiProveedor'),
      apiReduccion: require('./controllers/apiReduccion'),
