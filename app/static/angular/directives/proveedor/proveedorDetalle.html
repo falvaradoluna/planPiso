@@ -22,8 +22,8 @@
             <td>{{unidad.nombreFinanciera}}</td>
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
-            <td>{{unidad.IMPORTE}}</td>            
-            <td>{{unidad.SALDO}}</td>
+            <td class="text-right">{{unidad.IMPORTE | currency}}</td>            
+            <td class="text-right">{{unidad.SALDO | currency}}</td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
             </td>

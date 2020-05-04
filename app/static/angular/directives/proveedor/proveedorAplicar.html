@@ -22,8 +22,8 @@
             <td>{{unidadSeleccion.marca}}</td>
             <td>{{unidadSeleccion.descModelo}}</td>
             <td>{{unidadSeleccion.modelo}}</td>
-            <td>{{unidadSeleccion.IMPORTE}}</td>
-            <td>{{unidadSeleccion.SALDO}}</td>
+            <td class="text-right">{{unidadSeleccion.IMPORTE | currency}}</td>
+            <td class="text-right">{{unidadSeleccion.SALDO | currency}}</td>
 
             <td ng-style="unidadSeleccion.isValid ?  
             {'background-color':'#1A7BB9', 'color':'white'} : 

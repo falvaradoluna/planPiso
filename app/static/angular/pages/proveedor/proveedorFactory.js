@@ -45,7 +45,8 @@ appModule.factory('proveedorFactory', function($http) {
         stepsBar: function() {
             return [
                 { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar" },
-                { name: "2. Aplicar", className: "", panelName: "pnlAplicar" }
+                { name: "2. Financiera", className: "", panelName: "pnlFinanciera" },
+                { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
             ];
         },
         assignMesage: function(callback) {
