@@ -23,19 +23,32 @@ appModule.factory('inventarioFactory', function($http) {
                 { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
             ];
         },
-        assignMesage: function(callback) {
-            swal({
-                    title: "¿Estas Seguro?",
-                    text: "Se le generara póliza a todos los documentos seleccionados.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#21B9BB",
-                    confirmButtonText: "Continuar",
-                    closeOnConfirm: false
+        inventarioPoliza: function(params) {
+            return $http({
+                url: apiinventarioUrl + 'inventarioPoliza/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        inventarioPolizaDetalle: function(params) {
+            return $http({
+                url: apiinventarioUrl + 'inventarioPolizaDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        procesainventario: function( lastId ) {
+            return $http({
+                url: traspasoUrl + 'procesainventario/',
+                method: "GET",
+                params: {
+                    idTraspasoFinanciera: lastId
                 },
-                callback
-            );
-        }
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
     };
 
 });

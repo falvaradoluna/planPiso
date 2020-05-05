@@ -49,19 +49,32 @@ appModule.factory('proveedorFactory', function($http) {
                 { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
             ];
         },
-        assignMesage: function(callback) {
-            swal({
-                    title: "¿Estas Seguro?",
-                    text: "Se le generara póliza a todos los documentos seleccionados.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#21B9BB",
-                    confirmButtonText: "Continuar",
-                    closeOnConfirm: false
+        proveedorPoliza: function(params) {
+            return $http({
+                url: proveedorUrl + 'proveedorPoliza/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        proveedorPolizaDetalle: function(params) {
+            return $http({
+                url: proveedorUrl + 'proveedorPolizaDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        procesaproveedor: function( lastId ) {
+            return $http({
+                url: traspasoUrl + 'procesaproveedor/',
+                method: "GET",
+                params: {
+                    idTraspasoFinanciera: lastId
                 },
-                callback
-            );
-        }
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
 
     };
 

@@ -1,4 +1,4 @@
-appModule.controller('proveedorController', function($scope, $rootScope, $location, commonFactory, staticFactory, proveedorFactory) {
+appModule.controller('proveedorController', function($scope, $rootScope, $location,filterFilter, commonFactory, staticFactory, proveedorFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
@@ -118,10 +118,85 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
         else
             $scope.ddlFinancialShow = true;
     };
-    $scope.showMsg = function() {
-        proveedorFactory.assignMesage($scope.setSchema);
-    };
+    $scope.showMsg = function() 
+    {
+        swal({
+            title: "¿Estas Seguro?",
+            text: "Se le generara póliza a todos los documentos seleccionados.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Continuar",
+            closeOnConfirm: false
+        },
+        function() 
+        {
+            var paraproveedor = {
+                idUsuario: $scope.idUsuario,
+                idEmpresa: sessionFactory.empresaID,
+                idtipopoliza:1 //Unidades de proovedoores
+            }
 
+            proveedorFactory.proveedorPoliza(paraproveedor).then(function( respuesta ) {
+                $scope.LastId = respuesta.data[0].LastId;
+                $scope.lstUnitsproveedors = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                $scope.guardaDetalle();
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+           
+            
+            
+        });
+    };
+    
+    $scope.LastId = 0;
+    var contTraspadoDetalle = 0;
+    $scope.guardaDetalle = function(){
+        if( contTraspadoDetalle < $scope.lstUnitsproveedors.length ){
+            var item = $scope.lstUnitsproveedors[ contTraspadoDetalle ];
+           
+            var paraproveedorDetalle = {
+                idpoliza: $scope.LastId,
+                empresaID: item.idEmpresa,
+                sucursalID: item.idSucursal,
+                CCP_IDDOCTO : item.CCP_IDDOCTO,
+                idfinancieraO: $scope.FinancieraSel.financieraID,
+                idEsquemaO: $scope.selectedSchema.esquemaID,
+                idfinancieraD: 0,
+                idEsquemaD: 0,
+                idUsuario: $scope.idUsuario
+            }
+
+            proveedorFactory.proveedorPolizaDetalle(paraproveedorDetalle).then(function( response ) {
+                if( response.data.length != 0 ){
+                    if( contTraspadoDetalle < $scope.lstUnitsproveedors.length ){
+                        contTraspadoDetalle++;
+                        $scope.guardaDetalle();
+                    }
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+        else{
+            // swal("proveedor Plan Piso", "Se ha efectuado correctamente su proveedor.");
+            proveedorFactory.procesaproveedor($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal(
+                    {
+                        title: "Unidades de proveedor Plan Piso",
+                        text: "Se ha efectuado correctamente su póliza.",
+                        type: "warning"
+                    }, function(){
+                        location.reload();
+                    });
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+    }
     $scope.setCurrentFinancialHead = function(financialObj) {
         $scope.FinancieraSel = financialObj;
         $('#mdlLoading').modal('show');
