@@ -22,12 +22,12 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.allUnits = { isChecked: false };
     $scope.ddlFinancialShow = false;
     $scope.showStep = 1;
-    $scope.SucursalSel=[];
-    $scope.FinancieraSel=[];
+    $scope.SucursalSel = [];
+    $scope.FinancieraSel = [];
 
     $('#mdlLoading').modal('show');
 
-    
+
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
@@ -40,21 +40,21 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     });
 
     $scope.setCurrentSucursal = function(sucursalObj) {
-        $scope.SucursalSel=sucursalObj;
+        $scope.SucursalSel = sucursalObj;
         $('#mdlLoading').modal('show');
         $scope.totalUnidades = 0;
         $scope.currentSucursalName = sucursalObj.nombreSucursal;
-        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, sucursalObj.sucursalID,$scope.FinancieraSel.financieraID);
+        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, sucursalObj.sucursalID, $scope.FinancieraSel.financieraID);
         commonFactory.getFinancial(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
             $scope.lstFinancial = result.data;
-            $scope.ddlFinancialShow= true;
+            $scope.ddlFinancialShow = true;
         });
-        
+
     };
 
-    $scope.getNewUnitsBySucursal = function(empresaID, sucursalID,financieraID) {        
+    $scope.getNewUnitsBySucursal = function(empresaID, sucursalID, financieraID) {
         $('#tblUnidadesNuevas').DataTable().destroy();
-        unuevasFactory.getNewUnitsBySucursal(empresaID, sucursalID,financieraID).then(function(result) {
+        unuevasFactory.getNewUnitsBySucursal(empresaID, sucursalID, financieraID).then(function(result) {
             $scope.lstNewUnits = result.data;
             $scope.initTblUnidadesNuevas();
             $('#mdlLoading').modal('hide');
@@ -62,10 +62,10 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     };
 
     $scope.setCurrentFinancialHead = function(financialObj) {
-        $scope.FinancieraSel=financialObj;
+        $scope.FinancieraSel = financialObj;
         $('#mdlLoading').modal('show');
         $scope.currentFinancialName = financialObj.nombre;
-        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.SucursalSel.sucursalID,$scope.FinancieraSel.financieraID);
+        $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.SucursalSel.sucursalID, $scope.FinancieraSel.financieraID);
         $scope.getSchemas($scope.FinancieraSel.financieraID);
     };
     $scope.setCurrentFinancial = function() {
@@ -99,9 +99,19 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
 
     $scope.nextStep = function() {
-        if($scope.currentStep == 0)
-        {
-            $scope.setCurrentFinancial();
+        if ($scope.currentStep == 0) {
+            var contador = 0;
+            angular.forEach($scope.lstNewUnits, function(value, key) {
+                if (value.isChecked === true) {
+                    contador++;
+                }
+            });
+            if (contador === 0) {
+                swal("Aviso", "No ha seleccionado ningun documento", "warning");
+                return;
+            } else {
+                $scope.setCurrentFinancial();
+            }
         }
         if ($scope.currentStep === 1 && $scope.selectedSchema.esquemaID === undefined) {
             swal("Aviso", "No ha seleccionado un esquema", "warning");
@@ -109,7 +119,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         } else if (($scope.currentStep + 1) < $scope.steps.length) {
             $scope.steps[$scope.currentStep].className = "visited";
             $scope.currentStep++;
-             $scope.showStep = $scope.currentStep + 1;
+            $scope.showStep = $scope.currentStep + 1;
             $scope.currentPanel = $scope.steps[$scope.currentStep].panelName;
             $scope.steps[$scope.currentStep].className = "active";
             $scope.showFilterButtons($scope.currentStep);
@@ -120,7 +130,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         if (($scope.currentStep - 1) >= 0) {
             $scope.steps[$scope.currentStep].className = "visited";
             $scope.showStep = $scope.currentStep;
-            $scope.currentStep--;            
+            $scope.currentStep--;
             $scope.currentPanel = $scope.steps[$scope.currentStep].panelName;
             $scope.steps[$scope.currentStep].className = "active";
             $scope.showFilterButtons($scope.currentStep);

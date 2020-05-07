@@ -1,33 +1,33 @@
 appModule.controller('interesController', function($scope, $rootScope, $location, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
-    var sessionFactory          = JSON.parse(sessionStorage.getItem("sessionFactory"));
-    $scope.idUsuario            = localStorage.getItem("idUsuario");
-    $scope.currentEmpresa       = sessionFactory.nombre;
-    $scope.topBarNav            = staticFactory.interesBar();
-    $scope.ddlFinancialShow     = false;
-    $scope.showButtons          = false;
-    $scope.lstSucursal          = [];
-    $scope.lstFinancial         = [];
-    $rootScope.lstSchemas           = [];
-    $scope.lstSchemeDetail      = [];
-    $scope.lstNewUnits          = [];
-    $scope.lstSelectUnits       = [];
-    $scope.lstSelectPay         = [];
-    $scope.unitDetail           = {};
-    $scope.currentPanel         = "pnlInteres";
-    $rootScope.currentSucursalName  = "Sucursal Todas";
+    var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.idUsuario = localStorage.getItem("idUsuario");
+    $scope.currentEmpresa = sessionFactory.nombre;
+    $scope.topBarNav = staticFactory.interesBar();
+    $scope.ddlFinancialShow = false;
+    $scope.showButtons = false;
+    $scope.lstSucursal = [];
+    $scope.lstFinancial = [];
+    $rootScope.lstSchemas = [];
+    $scope.lstSchemeDetail = [];
+    $scope.lstNewUnits = [];
+    $scope.lstSelectUnits = [];
+    $scope.lstSelectPay = [];
+    $scope.unitDetail = {};
+    $scope.currentPanel = "pnlInteres";
+    $rootScope.currentSucursalName = "Sucursal Todas";
     $rootScope.currentFinancialName = "Selecciona Financiera";
-    $scope.currentSucursal      = [];
-    $scope.currentFinancial     = [];
-    $scope.allUnits             = { isChecked: false };
-    $scope.currentFinancialID   = 0;
-    $scope.interesMesActual     = 0;
-    $scope.interesAcumulado     = 0;
-    $scope.interesPagado        = 0;
-    $scope.numUnidades          = 0;
-    $scope.fechaHoy             = new Date();
-    $scope.typeTraspaso         = 0;
-    $scope.TituloTraspaso       = '';
-    $scope.consecPago           = 0;
+    $scope.currentSucursal = [];
+    $scope.currentFinancial = [];
+    $scope.allUnits = { isChecked: false };
+    $scope.currentFinancialID = 0;
+    $scope.interesMesActual = 0;
+    $scope.interesAcumulado = 0;
+    $scope.interesPagado = 0;
+    $scope.numUnidades = 0;
+    $scope.fechaHoy = new Date();
+    $scope.typeTraspaso = 0;
+    $scope.TituloTraspaso = '';
+    $scope.consecPago = 0;
 
     $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
@@ -169,7 +169,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.setPnlInteres = function() {
         $scope.currentPanel = "pnlInteres";
-      //  location.reload();
+        $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+        //  location.reload();
     };
 
     $scope.setPnlInteresMovimientos = function() {
@@ -219,7 +220,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     };
 
-    $scope.regresarTraspaso = function(){
+    $scope.regresarTraspaso = function() {
         $scope.currentPanel = "pnlFinanciera";
     }
 
@@ -269,8 +270,14 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setResetTable = function(tblID, display, length) {
         $('.' + tblID).DataTable().destroy();
         setTimeout(function() {
-            staticFactory.filtrosTabla(tblID, display, length);
-        }, 500);
+            $('.' + tblID).DataTable({
+                "scrollX": true,
+                fixedColumns: {
+                    leftColumns: 1
+                }
+            });
+            // staticFactory.filtrosTabla(tblID, display, length);
+        }, 100);
     };
     $scope.setDelayTableStyle = function(tblID) {
         setTimeout(function() {

@@ -30,7 +30,7 @@
             <td>{{unidad.nombreFinanciera}}</td>
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
-            <td>{{unidad.IMPORTE}}</td>
+            <td>{{unidad.IMPORTE | currency}}</td>
             <td style="width:200px">
                 <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy">
                     <input type="text" class="form-control" ng-model="unidad.fechaCalculoString">
@@ -39,7 +39,9 @@
                     </div>
                 </div>
             </td>
-            <td><input type="text" class="form-control" ng-model="unidad.interes" style="width: 100px"></td>
+            <td>
+                <input type="text" class="form-control" ng-model="unidad.interes" style="width: 100px">
+            </td>
             <td><input type="text" class="form-control" ng-model="unidad.SALDO" style="width: 100px"></td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">

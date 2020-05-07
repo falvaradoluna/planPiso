@@ -18,9 +18,9 @@ appModule.factory('inventarioFactory', function($http) {
         },
         stepsBar: function() {
             return [
-                { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar" },
-                { name: "2. Financiera", className: "", panelName: "pnlFinanciera" },
-                { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
+                { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar", icono: "fa fa-check-square-o" },
+                { name: "2. Financiera", className: "", panelName: "pnlFinanciera", icono: "fa fa-bank" }, 
+                { name: "3. Aplicar", className: "", panelName: "pnlAplicar", icono: "fa fa-cloud-upload" }
             ];
         },
         inventarioPoliza: function(params) {

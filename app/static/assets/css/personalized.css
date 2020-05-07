@@ -193,7 +193,8 @@
 .simpleStep li {
     float: left;
     margin: 0 5px;
-    width: 150px;
+    width: 90px;
+    /*width: 150px;*/
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -border-radius: 3px;
@@ -205,8 +206,8 @@
 .simpleStep li a {
     display: block;
     color: white;
-    text-align: left;
-    padding: 10px 12px;
+    /*text-align: left;*/
+    /*padding: 10px 12px;*/
     text-decoration: none;
 }
 
@@ -238,3 +239,30 @@
 .icon-user {
     font-size: 30px !important;
 }
+
+/*Iconos del wizard*/
+
+.icon-header {
+    color: white;
+    font-size: 15px !important;
+}
+
+.wizard-style {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.btn {
+    font-size: 12px !important;
+}
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.3); /* IE */
+  -moz-transform: scale(1.3); /* FF */
+  -webkit-transform: scale(1.3); /* Safari and Chrome */
+  -o-transform: scale(1.3); /* Opera */
+  transform: scale(1.3);
+  padding: 10px;
+}
+

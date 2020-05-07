@@ -3,67 +3,67 @@ appModule.factory('staticFactory', function($http) {
 
         esquemaBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Esquemas', url: '#', isActive: true }
             ];
         },
         financieraBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Financieras', url: '#', isActive: true }
             ];
         },
         tiieBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'TIIE', url: '#', isActive: true }
             ];
         },
         tiieBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Reducción', url: '#', isActive: true }
             ];
         },
         interesBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Interes', url: '#', isActive: true }
             ];
         },
         polizasBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'polizas', url: '#', isActive: true }
             ];
         },
         proveedorBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Unidades de proveedores', url: '#', isActive: true }
             ];
         },
         inventarioBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Unidades de Inventario', url: '#', isActive: true }
             ];
         },
         sacarunidadBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Sacar Unidades de Plan Piso', url: '#', isActive: true }
             ];
         },
         conciliacionBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Conciliación', url: '#', isActive: true }
             ];
         },
         crealoteBar: function() {
             return [
-                { name: 'Home', url: 'home', isActive: false },
+                { name: 'Empresas', url: 'empresa', isActive: false },
                 { name: 'Crear Lote', url: '#', isActive: true }
             ];
         },

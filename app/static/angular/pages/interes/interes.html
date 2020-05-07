@@ -1,43 +1,44 @@
-<top-Bar></top-Bar>
+<top-bar></top-bar>
 <div ng-controller="interesController">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-md-12">
                 <div class="ibox float-e-margins">
-
-                    <div class="ibox-content" style="height:60px">
-                        <div class="col-md-12">
-                            <div class="dropdown setInline">
-                                <button class="btn btn-warning" type="button" data-toggle="dropdown">{{currentSucursalName}}
+                    <div class="ibox-title">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="dropdown setInline">
+                                    <button class="btn btn-warning" type="button" data-toggle="dropdown">{{currentSucursalName}}
                                         <span class="caret"></span>
                                     </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a ng-click="setCurrentSucursal()">Todas Sucursales</a>
-                                    </li>
-                                    <li ng-repeat="sucursal in lstSucursal">
-                                        <a ng-click="setCurrentSucursal(sucursal)">{{sucursal.nombreSucursal}}</a>
-                                    </li>
-                                </ul>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a ng-click="setCurrentSucursal()">Todas Sucursales</a>
+                                        </li>
+                                        <li ng-repeat="sucursal in lstSucursal">
+                                            <a ng-click="setCurrentSucursal(sucursal)">{{sucursal.nombreSucursal}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown setInline" ng-show="ddlFinancialShow">
+                                    <button class="btn btn-warning" type="button" data-toggle="dropdown">
+                                        {{currentFinancialName}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="financial in lstFinancial">
+                                            <a ng-click="setCurrentFinancial(financial)">{{financial.nombre}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <br />
                             </div>
-                            <div class="dropdown setInline" ng-show="ddlFinancialShow">
-                                <button class="btn btn-warning" type="button" data-toggle="dropdown">
-                                    {{currentFinancialName}}
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li ng-repeat="financial in lstFinancial">
-                                        <a ng-click="setCurrentFinancial(financial)">{{financial.nombre}}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <br/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <interes-Dashboard></interes-Dashboard>
+        <interes-dashboard></interes-dashboard>
         <div class="row">
             <div class="col-md-12">
                 <div class="ibox float-e-margins">
@@ -47,51 +48,48 @@
                     <div class="ibox-content">
                         <div ng-switch on="currentPanel">
                             <div ng-switch-when="pnlInteres" class="animated fadeInRight">
-                                <interes-Content-Header></interes-Content-Header>
+                                <interes-content-header></interes-content-header>
                                 <hr>
-                                <interes-Interes></interes-Interes>
+                                <interes-interes class></interes-interes>
                             </div>
                             <div ng-switch-when="pnlAgencia" class="animated fadeInRight">
-                                <interes-Cambio-Agencia></interes-Cambio-Agencia>
+                                <interes-cambio-agencia></interes-cambio-agencia>
                             </div>
-
                             <!-- Traspaso -->
                             <div ng-controller="traspasoController">
                                 <div ng-switch-when="pnlFinanciera" class="animated fadeInRight">
-                                    <interes-Traspaso-Financiera></interes-Traspaso-Financiera>
+                                    <interes-traspaso-financiera></interes-traspaso-financiera>
                                 </div>
-
                                 <div ng-switch-when="pnlResumen" class="animated fadeInRight">
-                                    <interes-Resumen></interes-Resumen>
+                                    <interes-resumen></interes-resumen>
                                 </div>
                             </div> <!-- / Traspaso -->
-                            
                             <div ng-switch-when="pnlDetalleUnidad" class="animated fadeInRight">
-                                <interes-Detalle-Unidad></interes-Detalle-Unidad>
+                                <interes-detalle-unidad></interes-detalle-unidad>
                             </div>
                             <div ng-switch-when="pnlPagoResumen" class="animated fadeInRight">
-                                <interes-Pago-Resumen></interes-Pago-Resumen>
+                                <interes-pago-resumen></interes-pago-resumen>
                             </div>
                             <div ng-switch-when="pnlPagoUnidadResumen" class="animated fadeInRight">
-                                <interes-Pago-Unidad-Resumen></interes-Pago-Unidad-Resumen>
+                                <interes-pago-unidad-resumen></interes-pago-unidad-resumen>
                             </div>
                             <div ng-switch-when="pnlInteresMovimientos" class="animated fadeInRight">
-                                <interes-Movimientos></interes-Movimientos>
+                                <interes-movimientos></interes-movimientos>
                             </div>
                             <div ng-switch-when="pnlInteresReduccion" class="animated fadeInRight">
-                                <interes-Pago-Reduccion></interes-Pago-Reduccion>
+                                <interes-pago-reduccion></interes-pago-reduccion>
                             </div>
                             <div ng-switch-when="pnlPagoInteres" class="animated fadeInRight">
-                                <interes-Pago></interes-Pago>
+                                <interes-pago></interes-pago>
                             </div>
                             <div ng-switch-when="pnlPago" class="animated fadeInRight">
-                                <interes-Pago-Unidad></interes-Pago-Unidad>
+                                <interes-pago-unidad></interes-pago-unidad>
                             </div>
                             <div ng-switch-when="pnlCompensacion" class="animated fadeInRight">
-                                <interes-Compensacion></interes-Compensacion>
+                                <interes-compensacion></interes-compensacion>
                             </div>
                             <div ng-switch-when="pnlCompensacionResumen" class="animated fadeInRight">
-                                <interes-Compensacion-Resumen></interes-Compensacion-Resumen>
+                                <interes-compensacion-resumen></interes-compensacion-resumen>
                             </div>
                         </div>
                     </div>

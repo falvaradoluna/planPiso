@@ -33,9 +33,9 @@ appModule.factory('unuevasFactory', function($http) {
         },
         stepsBar: function() {
             return [
-                { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar" },
-                { name: "2. Esquema", className: "", panelName: "pnlFinanciera" },
-                { name: "3. Aplicar", className: "", panelName: "pnlAplicar" }
+                { name: "Seleccionar", className: "active", panelName: "pnlSeleccionar", icono: "fa fa-check-square-o" },
+                { name: "Esquema", className: "", panelName: "pnlFinanciera", icono: "fa fa-bank" }, 
+                { name: "Aplicar", className: "", panelName: "pnlAplicar", icono: "fa fa-cloud-upload" }
             ];
         },
         assignMesage: function(callback) {
