@@ -21,7 +21,7 @@
     </div>
     <div class="col-sm-12">
         <ul class="nav nav-tabs">
-            <li role="presentation" ng-click="ObtenUnidadesInteres() " ng-class="{'active': todos}"><a>Todos</a></li>
+            <li role="presentation" ng-click="activoSeminuevos = false; activoNuevos = false; todos = true; ObtenUnidadesInteres() " ng-class="{'active': todos}"><a>Todos</a></li>
             <li role="presentation" ng-click="activoSeminuevos = false; activoNuevos = true; todos = false; ObtenUnidadesInteresNuevas() " ng-class="{'active': activoNuevos}"><a>Nuevos</a></li>
             <li role="presentation" ng-click="activoNuevos = false; activoSeminuevos = true; todos = false; ObtenUnidadesInteresSeminuevas()" ng-class="{'active': activoSeminuevos}"><a>Seminuevos</a></li>
         </ul>

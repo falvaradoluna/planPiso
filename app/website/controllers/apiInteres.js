@@ -250,6 +250,21 @@ ApiInteres.prototype.get_ReduccionFinancieraDetalle = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_interestUnitsNews = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT },
+    { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
+    { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT }];
+
+    self.model.query('uspGetUnidadesInteresNuevas', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 ApiInteres.prototype.get_interestUnitsPreOwned = function(req, res, next) {
 
     var self = this;
