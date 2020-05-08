@@ -96,8 +96,33 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
-
+        },
+        ReduccionFinanciera: function(params) {
+            return $http({
+                url: interesesUrl + 'reduccionFinanciera/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        ReduccionFinancieraDetalle: function(params) {
+            return $http({
+                url: interesesUrl + 'reduccionFinancieraDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        procesaReduccion: function( lastId ) {
+            return $http({
+                url: interesesUrl + 'procesaReduccion/',
+                method: "GET",
+                params: {
+                    idReduccionFinanciera: lastId
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
 
     };
 });

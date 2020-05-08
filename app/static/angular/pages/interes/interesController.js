@@ -1,4 +1,4 @@
-appModule.controller('interesController', function($scope, $rootScope, $location, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
+appModule.controller('interesController', function($scope, $rootScope, $location,filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -301,10 +301,10 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
 
 
-    $scope.doSomething = function() {
+    $scope.PagoReduccion = function() {
         swal({
                 title: "¿Esta seguro?",
-                text: "Se aplicará el pago de intereses para las unidades seleccionadas.",
+                text: "Se aplicará el pago de reducción para las unidades seleccionadas.",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
@@ -312,14 +312,66 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 closeOnConfirm: false
             },
             function() {
-                swal("Ok", "Pago finalizó con exito", "success");
-                setTimeout(function() {
-                    console.log('Termino');
-                }, 1000);
+
+                var paraReduccion = {
+                    idUsuario: $scope.idUsuario,
+                    idEmpresa: sessionFactory.empresaID,
+                    idtipopoliza:10  //pago reduccion
+                }
+
+                interesFactory.ReduccionFinanciera(paraReduccion).then(function( respuesta ) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    $scope.lstUnitsReduccions = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                    $scope.guardaReduccionDetalle();
+                }, function(error) {
+                    $scope.error(error.data.Message);
+                });
+                  
+                
             }
         );
     };
+    $scope.LastId = 0;
+    var contReduccionDetalle = 0;
+    $scope.guardaReduccionDetalle = function(){
+        if( contReduccionDetalle < $scope.lstUnitsReduccions.length ){
+            var item = $scope.lstUnitsReduccions[ contReduccionDetalle ];
+            var paraReduccionDetalle = {
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idUsuario: $scope.idUsuario,
+                saldo:item.pagoReduccion
+            }
 
+            interesFactory.ReduccionFinancieraDetalle(paraReduccionDetalle).then(function( response ) {
+                if( response.length != 0 ){
+                    if( contReduccionDetalle < $scope.lstUnitsReduccions.length ){
+                        contReduccionDetalle++;
+                        $scope.guardaReduccionDetalle();
+                    }
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+        else{
+            // swal("Reduccion Plan Piso", "Se ha efectuado correctamente su Reduccion.");
+            interesFactory.procesaReduccion($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal(
+                    {
+                        title: "Reducción Plan Piso",
+                        text: "Se ha efectuado correctamente su Reducción.",
+                        type: "warning"
+                    }, function(){
+                        location.reload();
+                    });
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+    }
     $scope.success = function() {
         swal("Ok", "Finalizó con exito", "success");
         setTimeout(function() {

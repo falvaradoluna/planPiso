@@ -20,9 +20,9 @@ ApiTraspaso.prototype.get_TraspasoFinanciera = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idUsuario', value: req.query.empresaID, type: self.model.types.INT },
-    { name: 'idEmpresa', value: req.query.sucursalID, type: self.model.types.INT },
-    { name: 'idtipopoliza', value: req.query.financieraID, type: self.model.types.INT }];
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT }];
 
     self.model.query('Pol_Cabecera_INS', params, function(error, result) {
         self.view.expositor(res, {

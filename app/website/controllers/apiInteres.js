@@ -202,4 +202,36 @@ ApiInteres.prototype.get_insCompensacion = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_ReduccionFinanciera = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT }];
+
+    self.model.query('Pol_Cabecera_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiInteres.prototype.get_ReduccionFinancieraDetalle = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+    { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL }];
+
+    self.model.query('Pol_PolizaReduccionDetalle_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;
