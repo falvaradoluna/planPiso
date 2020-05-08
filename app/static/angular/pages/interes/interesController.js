@@ -28,6 +28,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.typeTraspaso = 0;
     $scope.TituloTraspaso = '';
     $scope.consecPago = 0;
+    $scope.todos = true;
+    $scope.noExisten = false;
 
     $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
@@ -66,21 +68,44 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.currentFinancialName = "Selecciona Financiera";
 
         $('#mdlLoading').modal('show');
-        $scope.ObtenUnidadesInteres();
+        if ($scope.todos == true) {
+            $scope.ObtenUnidadesInteres();
+        } else if ($scope.activoSeminuevos == true) {
+            $scope.ObtenUnidadesInteresSeminuevas();
+        } else if ($scope.activoNuevos == true) {
+            $scope.ObtenUnidadesInteresNuevas();
+        }
+
     };
     $scope.setCurrentFinancial = function(financialObj) {
         //  $scope.currentPanel = "pnlResumen";
         $scope.currentFinancialName = financialObj.nombre;
         $scope.currentFinancial = financialObj;
         $('#mdlLoading').modal('show');
-        $scope.ObtenUnidadesInteres();
+        if ($scope.todos == true) {
+            $scope.ObtenUnidadesInteres();
+        } else if ($scope.activoSeminuevos == true) {
+            $scope.ObtenUnidadesInteresSeminuevas();
+        } else if ($scope.activoNuevos == true) {
+            $scope.ObtenUnidadesInteresNuevas();
+        }
     };
     $scope.ObtenUnidadesInteres = function() {
+        $('#mdlLoading').modal('show');
+        $scope.activoSeminuevos = false;
+        $scope.activoNuevos = false;
+        $scope.todos = true;
         $scope.initAmounts();
         interesFactory.getInterestUnits(sessionFactory.empresaID, $scope.currentSucursal.sucursalID, $scope.currentFinancial.financieraID).then(function(result) {
             $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
             $scope.lstNewUnits = [];
             $scope.lstNewUnits = result.data;
+            if ($scope.lstNewUnits.length == 0) {
+                $scope.noExisten = true;
+            }else{
+                $scope.noExisten = false;
+            }
+
             for (var i = 0; i < $scope.lstNewUnits.length; i++) {
                 $scope.lstNewUnits[i].excludeField = false;
                 $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
@@ -88,8 +113,58 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumulado;
                 $scope.numUnidades++;
             }
+        });
+    }
+    // Obtiene las unidades nuevas desde el tab nuevas
+    $scope.ObtenUnidadesInteresNuevas = function() {
+        $('#mdlLoading').modal('show');
+        $scope.activoSeminuevos = false;
+        $scope.activoNuevos = true;
+        $scope.todos = false;
+        $scope.initAmounts();
+        interesFactory.getInterestUnitsNews(sessionFactory.empresaID, $scope.currentSucursal.sucursalID, $scope.currentFinancial.financieraID).then(function(result) {
+            $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+            $scope.lstNewUnits = [];
+            $scope.lstNewUnits = result.data;
+            if ($scope.lstNewUnits.length == 0) {
+                $scope.noExisten = true;
+            }else{
+                $scope.noExisten = false;
+            }
 
-            $('#mdlLoading').modal('hide');
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                $scope.lstNewUnits[i].excludeField = false;
+                $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
+                $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
+                $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumulado;
+                $scope.numUnidades++;
+            }
+        });
+    }
+    //Obtiene las unidades seminuevas desde el tab seminuevas
+    $scope.ObtenUnidadesInteresSeminuevas = function() {
+        $('#mdlLoading').modal('show');
+        $scope.activoSeminuevos = true;
+        $scope.activoNuevos = false;
+        $scope.todos = false;
+        $scope.initAmounts();
+        interesFactory.getInterestUnitsPreOwned(sessionFactory.empresaID, $scope.currentSucursal.sucursalID, $scope.currentFinancial.financieraID).then(function(result) {
+            $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+            $scope.lstNewUnits = [];
+            $scope.lstNewUnits = result.data;
+            if ($scope.lstNewUnits.length == 0) {
+                $scope.noExisten = true;
+            }else{
+                $scope.noExisten = false;
+            }
+
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                $scope.lstNewUnits[i].excludeField = false;
+                $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
+                $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
+                $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumulado;
+                $scope.numUnidades++;
+            }
         });
     }
     $scope.setCurrentFinance2 = function(financialObj) {
@@ -106,12 +181,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
     };
     $('#mdlLoading').modal('show');
+
     $scope.getSchemas = function(financialId) {
         $('#mdlLoading').modal('show');
         $scope.currentSchemaName = financialId.nombre;
         commonFactory.getSchemas(financialId).then(function(result) {
             $rootScope.lstSchemas = result.data;
-            $('#mdlLoading').modal('hide');
+            // $('#mdlLoading').modal('hide');
         });
     };
     $scope.setCurrentSchema2 = function(financialId) {
@@ -161,7 +237,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         commonFactory.getSchemas(financialId).then(function(result) {
             $('#tblSchemas').DataTable().destroy();
             $rootScope.lstSchemas = result.data;
-            $('#mdlLoading').modal('hide');
+            // $('#mdlLoading').modal('hide');
         });
     };
 
@@ -268,6 +344,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         staticFactory.setTableStyleOne(tblID);
     };
     $scope.setResetTable = function(tblID, display, length) {
+        $('.' + tblID).DataTable().clear();
         $('.' + tblID).DataTable().destroy();
         setTimeout(function() {
             $('.' + tblID).DataTable({
@@ -278,6 +355,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             });
             // staticFactory.filtrosTabla(tblID, display, length);
         }, 100);
+        $('#mdlLoading').modal('hide');
     };
     $scope.setDelayTableStyle = function(tblID) {
         setTimeout(function() {

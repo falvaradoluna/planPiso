@@ -123,6 +123,22 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        getInterestUnitsNews: function(empresaID, sucursalID, financieraID) {
+            return $http({
+                url: interesesUrl + 'interestUnitsNews/',
+                method: "GET",
+                params: { empresaID: empresaID, sucursalID: sucursalID, financieraID: financieraID },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getInterestUnitsPreOwned: function(empresaID, sucursalID, financieraID) {
+            return $http({
+                url: interesesUrl + 'interestUnitsPreOwned/',
+                method: "GET",
+                params: { empresaID: empresaID, sucursalID: sucursalID, financieraID: financieraID },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
     };
 });
