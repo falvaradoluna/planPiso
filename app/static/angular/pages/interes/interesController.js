@@ -501,7 +501,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         unidad.TotalMes = parseFloat(unidad.InteresMes) + unidad.saldo;
         return unidad.TotalMes;
     }
-    $scope.CrearPolizaPago = function() {
+    $scope.CrearProvision = function() {
         swal({
             title: "¿Esta seguro?",
             text: "Se creara la poliza para el pago de interes para las unidades seleccionadas.",
@@ -513,33 +513,65 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }, function() {
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");
-            } else {
-                $scope.existeProvision = 0;
-                $scope.consecProvision = 0;
-                $scope.lstNewUnits.forEach(function(item) {
-                    if (item.isChecked === true) {
-                        var data = {
-                            CCP_IDDOCTO: item.CCP_IDDOCTO,
-                            empresaID: item.empresaID,
-                            sucursalID: item.sucursalID
-                        };
-                        interesFactory.getProvisionToday(data).then(function(result) {
-                            $scope.consecProvision++;
-                            if (result.data[0].length > 0)
-                                $scope.existeProvision++;
+            } else 
+            {
+                var paraProvision = {
+                    idUsuario: $scope.idUsuario,
+                    idEmpresa: sessionFactory.empresaID,
+                    idtipopoliza:7  //cambio de financiera
+                }
 
-                        }, function(error) {
-                            $scope.error(error.data.Message);
-
-                        });
-
-                    }
+                interesFactory.getProvisionToday(paraProvision).then(function( respuesta ) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    $scope.lstUnitsProvisions = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                    $scope.guardaProvisionDetalle();
+                }, function(error) {
+                    $scope.error(error.data.Message);
                 });
-
-
-
+                    
             }
+            
         });
+    }
+    var contProvisionDetalle = 0;
+    $scope.guardaProvisionDetalle = function(){
+        if( contProvisionDetalle < $scope.lstUnitsProvisions.length ){
+            var item = $scope.lstUnitsProvisions[ contProvisionDetalle ];
+            var paraProvisionDetalle = {
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idUsuario: $scope.idUsuario,
+                saldo:item.InteresTotal
+            }
+
+            interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function( response ) {
+                if( response.length != 0 ){
+                    if( contProvisionDetalle < $scope.lstUnitsProvisions.length ){
+                        contProvisionDetalle++;
+                        $scope.guardaProvisionDetalle();
+                    }
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
+        else{
+            // swal("Provision Plan Piso", "Se ha efectuado correctamente su Provision.");
+            interesFactory.procesaReduccion($scope.LastId).then(function( response ) {
+                if( response.length != 0 ){
+                    swal(
+                    {
+                        title: "Provisión Plan Piso",
+                        text: "Se ha efectuado correctamente su Provisión.",
+                        type: "warning"
+                    }, function(){
+                        location.reload();
+                    });
+                }
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        }
     }
     $scope.CrearPago = function() {
         swal({

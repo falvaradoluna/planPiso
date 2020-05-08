@@ -65,6 +65,14 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        ProvisionFinancieraDetalle: function(params) {
+            return $http({
+                url: interesesUrl + 'ProvisionFinancieraDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         insPago: function(params) {
             return $http({
                 url: interesesUrl + 'insPago/',

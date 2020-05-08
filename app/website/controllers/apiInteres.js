@@ -124,11 +124,27 @@ ApiInteres.prototype.get_ProvisionToday = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },
-    { name: 'empresaID', value: req.query.empresaID, type: self.model.types.STRING },
-    { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.STRING }];
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT }];
 
-    self.model.query('Usp_ProvisionToday_GET', params, function(error, result) {
+    self.model.query('Pol_Cabecera_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_ProvisionFinancieraDetalle = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+    { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL }];
+
+    self.model.query('Pol_Poliza7Detalle_INS', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
