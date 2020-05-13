@@ -4,6 +4,7 @@
   "dependencies": {
     "body-parser": "^1.9.2",
     "directory-tree": "^1.1.1",
+    "excel": "^1.0.1",
     "express": "4.9.8",
     "graceful-fs": "^4.1.11",
     "jszip": "^3.1.3",
@@ -16,6 +17,7 @@
     "request": "^2.88.2",
     "serve-favicon": "^2.1.6",
     "socket.io": "^1.2.0",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "xlsx": "^0.16.0"
   }
 }

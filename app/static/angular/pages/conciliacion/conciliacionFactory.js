@@ -2,6 +2,20 @@
 var conciliacionUrl = global_settings.urlCORS + 'api/apiConciliacion/';
 appModule.factory('conciliacionFactory', function($http) {
     return {
+        
+        topNavBar: function() {
+            return [
+                { name: 'Empresas', url: 'empresa', isActive: false },
+                { name: 'Conciliacion', url: '#', isActive: true }
+            ];
+        },
+        stepsBar: function() {
+            return [
+                { name: "1. Seleccionar", className: "active", panelName: "pnlSeleccionar", icono: "fa fa-check-square-o" },
+                { name: "2. Financiera", className: "", panelName: "pnlFinanciera", icono: "fa fa-bank" }, 
+                { name: "3. Aplicar", className: "", panelName: "pnlAplicar", icono: "fa fa-cloud-upload" }
+            ];
+        },
         readLayout: function(LayoutName) {
             return $http({
                 url: conciliacionUrl + 'readLayout/',
@@ -30,6 +44,16 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        getConciliacionGuardada: function( idconciliacion ) {
+            return $http({
+                url: conciliacionUrl + 'ConciliacionGuardada/',
+                method: "GET",
+                params: { 
+                    idconciliacion: idconciliacion, 
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         getCierreMes: function( periodo ) {
             return $http({
                 url: conciliacionUrl + 'CierreMes/',
@@ -41,6 +65,14 @@ appModule.factory('conciliacionFactory', function($http) {
         creaConciliacion: function( parametros ) {
             return $http({
                 url: conciliacionUrl + 'creaConciliacion/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        guardaConciliacion: function( parametros ) {
+            return $http({
+                url: conciliacionUrl + 'guardaConciliacion/',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
@@ -97,11 +129,11 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        obtieneCociliacion: function() {
+        obtieneCociliacion: function(parametros) {
             return $http({
                 url: conciliacionUrl + 'obtieneConciliacion/',
                 method: "GET",
-                params:{},
+                params:parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -128,6 +160,39 @@ appModule.factory('conciliacionFactory', function($http) {
                 params:{ idConciliacion: idConciliacion },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }        
+        } ,
+        getUnidadesCompraVirtual: function(idConciliacion) {
+            return $http({
+                url: conciliacionUrl + 'UnidadesCompraVirtual/',
+                method: "GET",
+                params:{ idConciliacion: idConciliacion },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }, conciliacionPoliza: function(params) {
+            return $http({
+                url: conciliacionUrl + 'conciliacionPoliza/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        conciliacionPolizaDetalle: function(params) {
+            return $http({
+                url: conciliacionUrl + 'conciliacionPolizaDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        procesaconciliacion: function( lastId ) {
+            return $http({
+                url: conciliacionUrl + 'procesaconciliacion/',
+                method: "GET",
+                params: {
+                    idTraspasoFinanciera: lastId
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },       
     };
 });

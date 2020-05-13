@@ -66,20 +66,20 @@
                     <th>Financiera</th>
                     <th>Periodo Contable</th>
                     <th>Año</th>
-                    <th>Fecha de Solicitud</th>
+                    <th>Fecha de Conciliación</th>
                     <th>Estatus</th>
                     <th>-</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="(key, item) in lstConciliacion">
-                    <td> <b>{{item.Descipcion}}</b> </td>
+                    <td> <b>{{item.Descripcion}}</b> </td>
                     <td> {{ item.nombre }} </td>
                     <td> {{ item.mes }} </td>
                     <td> {{ item.anio }}</td>
                     <td> {{ item.fechaCreacion.split('T')[0] }}</td>
                     <td> 
-                        <span ng-show="item.estatus == 0" class="label label-danger">
+                        <span ng-show="item.estatus == 3" class="label label-danger">
                             <i class="fa fa-ban" aria-hidden="true"></i> Cancelada
                         </span>
 
@@ -92,18 +92,18 @@
                         </span>
                     </td>
                     <td>
-                        <!-- <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item.periodoContable, item.consecutivo );">
-                            <i class="fa fa-file-text" aria-hidden="true"></i> Aplicar
-                        </button> -->
-
-                        <button class="btn btn-default btn-sm" ng-click="muestraDetalleDocumentos(item);">
-                            <i class="fa fa-file-text" aria-hidden="true"></i> Detalle
+                        <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item );">
+                            <i class="fa fa-eye" aria-hidden="true"></i> Ver
                         </button>
+
+                        <!-- <button class="btn btn-default btn-sm" ng-click="muestraDetalleDocumentos(item);">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> Detalle
+                        </button> -->
                     </td>
                 </tr>
                 <tr ng-show="lstConciliacion.length == 0">
                     <td colspan="7">
-                        <i class="fa fa-tag" aria-hidden="true"></i> No hay cociliaciones realizadas o pendientes
+                        <i class="fa fa-tag" aria-hidden="true"></i> No hay conciliaciones realizadas o pendientes
                     </td>
                 </tr>
             </tbody>

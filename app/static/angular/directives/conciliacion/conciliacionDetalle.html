@@ -1,5 +1,8 @@
 <div class="row">
     <div class="col-md-6">
+        <div ng-show="estatusConciliacion != 1">
+
+       
         <div class="alert alert-default"
              style="overflow: hidden; background-color: #f4f4f4;"
              role="alert"
@@ -83,12 +86,14 @@
                 <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 20px"></i> 
                 Unidades no reportadas por Grupo Andrade!
             </h4>
-            <p>No es posible realizar la CONCILIACIÓN debido a que Grupo Andrade no reporta unidades que en el Layout se espeficican.</p>
+            <p>No es posible realizar la CONCILIACIÓN debido a que Grupo Andrade no reporta unidades que en el Layout se especifican.</p>
             <hr>
             <p class="mb-0">
                 <b>NOTA:</b> Debera actualizar la cartera para cuadrar la conciliación.
+                <button type="button" class="btn btn-primary pull-right" ng-click="CompraVirtual()" >Compra Virtual</button>
             </p>
         </div>
+    </div>
     </div>
     <div class="col-md-6">
         <div class="row">
@@ -240,7 +245,7 @@
             <button type="button" class="btn btn-default" ng-click="prevStep()">Cancelar Conciliación</button>
             <!-- <button type="button" class="btn btn-default" ng-click="solicitaAutorizacion(3);">Guardar conciliación</button> -->
             
-            <button type="button" class="btn btn-primary pull-right" ng-click="creaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="guardaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>
         </div>
 
         <div style="overflow: hidden;" ng-show="situacion.financiera != 0">
