@@ -220,7 +220,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.muestraConciliacionPendiente = function( idconciliacion ){
         $scope.idconciliacion=idconciliacion.idConciliacion;
         $scope.estatusConciliacion=idconciliacion.estatus;
-        $scope.frmConciliacion.lbltipoconciliacion=idconciliacion.idtipo;
+        $scope.frmConciliacion.lbltipoconciliacion=idconciliacion.idTipo;
                                     
 
         conciliacionFactory.getConciliacionGuardada($scope.idconciliacion).then(function(result) {
