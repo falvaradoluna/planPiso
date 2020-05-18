@@ -50,39 +50,36 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     var increment   = 0;
     var contador    = 0;
 
-    var date        = new Date();
-    var toDay       = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    var firstDay    = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lastDay     = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    var tenDay      = new Date(date.getFullYear(), date.getMonth(), 10);
-    var lastTenDay  = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    lastTenDay.setDate(lastTenDay.getDate() - 10);
-    var tenDayNextMonth  = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    tenDayNextMonth.setDate(tenDayNextMonth.getDate() + 10);
-
-    if( toDay.getTime() >= firstDay.getTime() && toDay.getTime() <= tenDay.getTime() ){
-        if( toDay.getMonth() == 0 ){
-            $scope.currentMonth = 11;
-            $scope.currentYear  = date.getFullYear() - 1;
-        }
-        else{
-            $scope.currentMonth = (toDay.getMonth() - 1);
-            $scope.currentYear  = date.getFullYear();
-        }
-    }
-    else{
-        $scope.currentMonth = toDay.getMonth();
-        $scope.currentYear  = date.getFullYear();
-    }
-
-    // $scope.currentMonth = 2; // HardCode
-    $scope.frmConciliacion.lblMes = $scope.lstMonth[ $scope.currentMonth ];    
+         
     
     // Este es como funciona desde Branch Conciliación
     commonFactory.getFinancial( 1 ).then(function(result) {
         $scope.lstFinancial = result.data;
     });
-    
+    $scope.SelectFinanciera= function(item){
+        var parametros = {
+            idEmpresa:      $scope.session.empresaID,
+            idFinanciera:   $scope.frmConciliacion.idFinanciera
+        }
+        conciliacionFactory.getMesConciliacion(parametros).then(function(result) {
+            $scope.lstMonths = result.data;
+            $scope.currentMonth = $scope.lstMonths[0].nummes-1;
+            $scope.currentYear  = $scope.lstMonths[0].anio;
+            $scope.frmConciliacion.lblMes = $scope.lstMonth[ $scope.currentMonth ];  
+            $scope.tiposConciliacion();
+        }, function(error) {
+            console.log("Error", error);
+        });
+        
+    }
+    $scope.tiposConciliacion = function() {
+
+        conciliacionFactory.getTiposConciliacion().then(function(result) {
+            $scope.lstTipoConciliacion = result.data;
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
     var myDropzone;
     $scope.Dropzone = function() {
         $("#templeteDropzone").html( '' )
@@ -172,8 +169,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             $scope.frmConciliacion.loadLayout = true;
                             $scope.loadingPanel = false;
                             $('#mdlLoading').modal('hide');
-
-                            $scope.currentPanel = 'pnlConciliar';
+                                if($scope.frmConciliacion.lbltipoconciliacion== 1)
+                                    $scope.currentPanel = 'pnlConciliar';
+                                else
+                                    $scope.currentPanel = 'pnlConciliarUnidades';
                             $scope.conceal();
                             $("#modalNuevaConciliacion").modal('hide');
                             var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
@@ -221,11 +220,18 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.muestraConciliacionPendiente = function( idconciliacion ){
         $scope.idconciliacion=idconciliacion.idConciliacion;
         $scope.estatusConciliacion=idconciliacion.estatus;
+        $scope.frmConciliacion.lbltipoconciliacion=idconciliacion.idtipo;
+                                    
 
         conciliacionFactory.getConciliacionGuardada($scope.idconciliacion).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.sumTotal();
-            $scope.currentPanel = 'pnlConciliar';
+
+             if($scope.frmConciliacion.lbltipoconciliacion== 1)
+                                    $scope.currentPanel = 'pnlConciliar';
+                                else
+                                    $scope.currentPanel = 'pnlConciliarUnidades';
+
             conciliacionFactory.autorizacionDetalle( $scope.idconciliacion  ).then(function(detalle) {
                 if( detalle.data.length != 0 ){
                    
@@ -314,15 +320,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         }
                     break;
                 case 2:
-                    // if($scope.estatusConciliacion != 1){
                     $scope.situacion.financiera = $scope.situacion.financiera + 1;
-                    // }
-                    // else
-                    // {
-                    // $scope.conciliacion=true;
-                    // $scope.situacion.gpoAndrade = 0;
-                    // $scope.situacion.financiera = $scope.situacion.financiera + 1;
-                    // }
                     break;
                 case 3:
                     $scope.situacion.gpoAndrade = $scope.situacion.gpoAndrade + 1;
@@ -399,6 +397,9 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         }
         else if( !$scope.frmConciliacion.loadLayout ){
             swal("Conciliación","No se ha cargado el Layout.");
+        }
+        else if( !$scope.frmConciliacion.lbltipoconciliacion ){
+            swal("Conciliación","No se ha seleccionado el tipo de conciliación.");
         }
         else{
             $scope.validaExistencia().then( ( result ) => {
@@ -502,7 +503,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             periodoAnio:    $scope.currentYear,
             idUsuario:      $scope.idUsuario,
             idEstatus:       $scope.idestatus,
-            idtipo:         $scope.tipoConciliacion,
+            idtipo:         $scope.frmConciliacion.lbltipoconciliacion,
             contador:       contador
         }
         var parametrosDetalle = {}
@@ -525,20 +526,6 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
                     conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
 
-                    if( i >= ( $scope.lstConceal.length - 1 ) ){
-                        if($scope.idestatus== 1)
-                        {
-                            swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
-                            setTimeout( function(){
-                                conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
-                                    // location.reload();
-                                    $scope.prevStep();
-                                    // location.href = "provision";
-
-                                });
-                            },2000);
-                        }
-                    }
                 }
             }
         });

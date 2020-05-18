@@ -5,6 +5,11 @@ appModule.directive('conciliacionDetalle', function() {
         restrict: 'E',
         templateUrl: conciliacionPath + 'conciliacionDetalle.html'
     };
+}).directive('conciliacionDetalleUnidades', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'conciliacionDetalleUnidades.html'
+    };
 }).directive('conciliacionUploader', function() {
     return {
         restrict: 'E',

@@ -193,6 +193,21 @@ appModule.factory('conciliacionFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
-        },       
+        },  
+        getMesConciliacion: function(params) {
+            return $http({
+                url: conciliacionUrl + 'MesConciliacion/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },  
+        getTiposConciliacion: function() {
+            return $http({
+                url: conciliacionUrl + 'tiposConciliacion/',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },   
     };
 });

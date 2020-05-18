@@ -399,4 +399,31 @@ ApiConciliacion.prototype.get_conciliacionPolizaDetalle = function(req, res, nex
         });
     });
 };
+ApiConciliacion.prototype.get_MesConciliacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [ { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idfinanciera', value: req.query.idFinanciera, type: self.model.types.INT }
+    ];
+
+    self.model.query('CONC_MESCONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_tiposConciliacion = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+
+    self.model.query('CONC_TIPOSCONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiConciliacion;
