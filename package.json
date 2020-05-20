@@ -2,6 +2,7 @@
   "name": "centralizacion",
   "version": "0.1.0",
   "dependencies": {
+    "angular-ui-grid": "^4.8.3",
     "body-parser": "^1.9.2",
     "directory-tree": "^1.1.1",
     "express": "4.9.8",
@@ -15,7 +16,9 @@
     "phantom": "^2.1.21",
     "request": "^2.88.2",
     "serve-favicon": "^2.1.6",
+    "soap": "^0.31.0",
     "socket.io": "^1.2.0",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "xml2js": "^0.4.23"
   }
 }

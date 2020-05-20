@@ -1,4 +1,5 @@
 var crealoteUrl = global_settings.urlCORS + 'api/apicrealote/';
+var pagoUrl = global_settings.urlCORSPagos + '/api/pagoapi/';
 appModule.factory('crealoteFactory', function($http) {
     return {
         obtieneTodos: function() {
@@ -8,12 +9,74 @@ appModule.factory('crealoteFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        obtieneDetalle: function( idcrealoteFinanciera ) {
+        obtieneDetalle: function(idcrealoteFinanciera) {
             return $http({
                 url: crealoteUrl + 'Detalle/',
                 method: "GET",
                 params: { idcrealoteFinanciera: idcrealoteFinanciera },
                 headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getCuentas: function(idEmpresa) {
+            return $http({
+                url: crealoteUrl + 'cuentas/',
+                method: "GET",
+                params: { idEmpresa: idEmpresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getDocumentos: function(idEmpresa) {
+            return $http({
+                url: crealoteUrl + 'documentos/',
+                method: "GET",
+                params: { idEmpresa: idEmpresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getPdf: function(tipo, annio, mes, No, empresa) {
+            return $http({
+                url: crealoteUrl + 'poliza/',
+                method: "GET",
+                params: {
+                    tipo: tipo,
+                    annio: annio,
+                    mes: mes,
+                    No: No,
+                    empresa: empresa
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getLotes: function(idEmpresa) {
+            return $http({
+                url: crealoteUrl + 'lotes/',
+                method: "GET",
+                params: { idEmpresa: idEmpresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getescenario: function(idEmpresa) {
+            return $http({
+                url: crealoteUrl + 'escenarios/',
+                method: "GET",
+                params: { idEmpresa: idEmpresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        setEncabezadoPago: function(dataEncabezado) {
+            return $http({
+                url: crealoteUrl + 'encabezadoPagos/',
+                method: "POST",
+                data: dataEncabezado,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        setDatos: function(id, idEmpleado, idPadre, ingresos, transfer, caja, cobrar, total, operacion) {
+            return $http({
+                url: pagoUrl,
+                method: 'POST',
+                params: { id: '1|' + idEmpleado + '|' + idPadre + '|' + caja + '|' + cobrar + '|' + operacion },
+                data: JSON.stringify(id) + '|' + ingresos + '|' + transfer + '|' + total
             });
         }
     };

@@ -1,0 +1,38 @@
+<div class="modal fade" id="modalGridLote" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">                
+                <h4 class="modal-title">
+                    <div class="row">
+                       <!--  <div class="col-sm-12">
+                            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                        </div> -->
+                        <div class="col-sm-6">
+                            <strong>{{nombreLote}}</strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <h3>{{sumaDocumentos | currency}}</h3>
+                        </div>
+                    </div>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Se guardara el lote con los siguientes documentos</h3>
+                        <div id="grid2" ui-grid="gridOptions2" ui-grid-grouping ui-grid-cellNav class="gridStyle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar y Enviar a Aprobación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

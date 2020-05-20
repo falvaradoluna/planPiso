@@ -12,7 +12,7 @@ appModule.controller('empresaController', function($scope, $rootScope, $location
     $scope.setEmpresa = function( index ) {
         // alert('Hola mundo');
         var current = $scope.lstEmpresa[ index ];
-        var sessionFactory = { nombre: current.emp_nombre, empresaID: current.emp_idempresa };
+        var sessionFactory = { nombre: current.emp_nombre, empresaID: current.emp_idempresa, empresaRfc: current.rfc };
         console.log( sessionFactory );
         sessionStorage.setItem("sessionFactory", JSON.stringify(sessionFactory));
         window.location = "/unuevas";

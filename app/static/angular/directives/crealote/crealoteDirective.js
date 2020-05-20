@@ -10,4 +10,14 @@ appModule.directive('crealoteDetalle', function() {
         restrict: 'E',
         templateUrl: crealotePath + 'crealoteHome.html'
     };
+}).directive('modalPdf', function() {
+    return {
+        restrict: 'E',
+        templateUrl: crealotePath + 'modalPdf.html'
+    };
+}).directive('modalGridLote', function() {
+    return {
+        restrict: 'E',
+        templateUrl: crealotePath + 'modalGridLote.html'
+    };
 });
