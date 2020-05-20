@@ -14,12 +14,19 @@
                         <div ng-switch-when="pnlConciliar" class="animated fadeInRight">
                             <conciliacion-Detalle></conciliacion-Detalle>
                         </div>
+                        <div ng-switch-when="pnlConciliarUnidades" class="animated fadeInRight">
+                            <conciliacion-Detalle-Unidades></conciliacion-Detalle-Unidades>
+                        </div>
                         <div ng-switch-when="pnlDocumentos" class="animated fadeInRight">
                             <conciliacion-Documentos></conciliacion-Documentos>
                         </div>
                         <div ng-switch-when="pnlDocumentosDetalle" class="animated fadeInRight">
                             <conciliacion-Documentos-Detalle></conciliacion-Documentos-Detalle>
                         </div>
+                        <div ng-switch-when="pnlCompraVirtual" class="animated fadeInRight">
+                            <compra-Virtual></compra-Virtual>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -37,18 +44,23 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
+                       
+
+                        <label>Financiera</label>
+                        <select class="form-control" ng-model="frmConciliacion.idFinanciera" ng-change="SelectFinanciera(financial)">
+                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}">{{financial.nombre}}</option>
+                        </select>
+                        <br>
                         <label>Periodo Contable</label>
                         <select class="form-control" ng-model="frmConciliacion.lblMes" disabled="">
                             <option ng-repeat="(key, mes) in lstMonth" >{{mes}}</option>
                         </select>
                         <br>
-
-                        <label>Financiera</label>
-                        <select class="form-control" ng-model="frmConciliacion.idFinanciera">
-                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}">{{financial.nombre}}</option>
+                        <label>Tipo conciliación</label>
+                        <select class="form-control" ng-model="frmConciliacion.lbltipoconciliacion" >
+                            <option ng-repeat="tipo in lstTipoConciliacion" value="{{tipo.idtipo}}" >{{tipo.tipoConciliacion}}</option>
                         </select>
                         <br>
-
                         <label>Carga Layout</label>
                         <div id="templeteDropzone"></div>
                         

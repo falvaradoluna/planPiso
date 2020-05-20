@@ -5,6 +5,11 @@ appModule.directive('conciliacionDetalle', function() {
         restrict: 'E',
         templateUrl: conciliacionPath + 'conciliacionDetalle.html'
     };
+}).directive('conciliacionDetalleUnidades', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'conciliacionDetalleUnidades.html'
+    };
 }).directive('conciliacionUploader', function() {
     return {
         restrict: 'E',
@@ -20,4 +25,24 @@ appModule.directive('conciliacionDetalle', function() {
         restrict: 'E',
         templateUrl: conciliacionPath + 'conciliacionDocumentosDetalle.html'
     };
-});
+}).directive('compraVirtualAplicar', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'compraVirtualAplicar.html'
+    };
+}).directive('compraVirtualContentHeader', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'compraVirtualContentHeader.html'
+    };
+}).directive('compraVirtualDetalle', function() {
+    return {
+        restrict: 'E',
+        templateUrl: conciliacionPath + 'compraVirtualDetalle.html'
+    };
+}).directive('compraVirtual', function() {
+        return {
+            restrict: 'E',
+            templateUrl: conciliacionPath + 'compraVirtual.html'
+        };
+    });

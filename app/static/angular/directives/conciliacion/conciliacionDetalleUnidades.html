@@ -2,44 +2,6 @@
     <div class="col-md-6">
         <div ng-show="estatusConciliacion != 1">
 
-       
-        <div class="alert alert-default"
-             style="overflow: hidden; background-color: #f4f4f4;"
-             role="alert"
-             ng-show="situacion.gpoAndrade == 0 && situacion.financiera == 0">
-            
-            <div ng-show="!conciliacion">
-                <h4 class="alert-heading">
-                    <table width="100%" border="0">
-                        <tr>
-                            <td width="40"> <i class="fa fa-exclamation-triangle text-warning" aria-hidden="true" style="font-size: 30px"></i> </td>
-                            <td> <span>No es posible realizar la conciliación</span> </td>
-                        </tr>
-                    </table>
-                </h4>
-
-                <p>No es posible realizar la conciliación, asegurate de ajustar los montos de intereses a aplicar.</p>
-            </div>
-
-            <div ng-show="conciliacion">
-                <h4 class="alert-heading">
-                    <table width="100%" border="0">
-                        <tr>
-                            <td width="40"> <i class="fa fa-check-circle text-success" aria-hidden="true" style="font-size: 30px"></i>  </td>
-                            <td> <span>Conciliación lista</span> </td>
-                        </tr>
-                    </table>
-                </h4>
-
-                <p>Los montos de los intereses estan listos para su conciliación.</p>
-            </div>
-
-            <hr>
-
-            <button class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
-            <button class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
-        </div>
-
         <div class="alert alert-warning"
              style="overflow: hidden;" 
              role="alert" 
@@ -105,12 +67,10 @@
             </div>
             <div class="col-md-12">&nbsp;</div>
             <div class="col-md-6 text-right">
-                <b>Total Sistema</b>
-                <h2><b>{{total.sistema | currency}}</b></h2>
+              
             </div>
             <div class="col-md-6 text-right">
-                <b>Total Financiera</b>
-                <h2><b>{{total.archivo | currency}}</b></h2>
+               
             </div>            
         </div>
     </div>
@@ -123,9 +83,6 @@
             <th>Numero Serie</th>
             <th>Saldo G.A.</th>
             <th>Sando Financiera</th>
-            <th>Interes Grupo Andrade</th>
-            <th>Interes Financiera</th>
-            <th ng-show="ajusteManual">Ajuste de Interes</th>
             <th>Diferencia</th>
             <th width="180">Situación</th>
         </tr>
@@ -144,43 +101,17 @@
             </td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.valor | currency}}</td>
-            <td>{{dato.InteresMesActual | currency}}</td>
-            <td>{{dato.interes | currency}}</td>
-            <td ng-show="ajusteManual" width="120" style="border-left: solid 1px #ddd; 
-                                                         border-right: solid 1px #ddd;
-                                                         background-color: #f4f4f4">
-                <input  type="text" 
-                        class="form-control text-right pull-left" 
-                        ng-model="dato.ajuste"
-                        ng-disabled="dato.esMayor == 1 || dato.equiparante != 1"
-                        ng-blur="recalculo( key )"
-                        style="width: 90px">
-
-                <button class="btn btn-linck pull-right btn-sm" ng-click="setIntFinanToAjuste( key )" ng-disabled="dato.esMayor == 1 || dato.equiparante != 1">
-                    <i class="fa fa-refresh"></i>
-                </button>
-            </td>
             <td>
-                {{dato.diferencia | currency}}
+                {{dato.saldo-dato.valor | currency}}
             </td>
             <td ng-class="  {
-                                'celdaFondoVerde': dato.equiparante == 1 && dato.esMayor == 1,
-                                'celdaFondoAzul': dato.equiparante == 1 && ( dato.esMayor == 0 || dato.esMayor == 2 || dato.esMayor == 3),
                                 'celdaFondoRojo': dato.equiparante == 2,
                                 'celdaFondoAmarillo': dato.equiparante == 3,
                             }">
                 <table width="100%" border="0">
                     <tr>
                         <td width="50" class="text-center">
-                            <i ng-show="dato.equiparante == 1 && dato.esMayor == 1" class="fa fa-check-circle text-primary" 
-                            aria-hidden="true" style="font-size: 20px "></i>
-
-                            <i ng-show="dato.equiparante == 1 && ( dato.esMayor == 0 || dato.esMayor == 2)" class="fa fa-info-circle text-primary" 
-                            aria-hidden="true" style="font-size: 20px "></i>
-
-                            <i ng-show="dato.equiparante == 1 && ( dato.esMayor == 3)" class="fa fa-sliders text-primary" 
-                            aria-hidden="true" style="font-size: 20px "></i>
-
+                           
                             <i ng-show="dato.equiparante == 2" class="fa fa-arrow-circle-right text-danger" 
                             aria-hidden="true" style="font-size: 20px "></i>
 
@@ -188,10 +119,6 @@
                             aria-hidden="true" style="font-size: 20px "></i>
                         </td>
                         <td>
-                            <p ng-show=" dato.equiparante == 1 && dato.esMayor == 0">Interés de Financiera mayor a Gpo. Andrade</p>
-                            <p ng-show=" dato.equiparante == 1 && dato.esMayor == 1">Montos iguales</p>
-                            <p ng-show=" dato.equiparante == 1 && dato.esMayor == 2">Interés de Financiera menor a Gpo. Andrade</p>
-                            <p ng-show=" dato.equiparante == 1 && dato.esMayor == 3">Ajuste de Interes</p>
                             <p ng-show=" dato.equiparante == 2">Reportada por la Financiera</p>
                             <p ng-show=" dato.equiparante == 3">Reportada por Grupo Andrade</p>
                         </td>

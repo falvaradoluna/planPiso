@@ -1,5 +1,7 @@
 var ApiConciliacionView = require('../views/reference'),
-    ApiConciliacionModel = require('../models/dataAccess')
+    ApiConciliacionModel = require('../models/dataAccess'),
+    XLSX = require('xlsx'),
+    multer = require('multer');
 
 
 
@@ -38,10 +40,10 @@ ApiConciliacion.prototype.get_insExcelData = function(req, res, next) {
 
 ApiConciliacion.prototype.post_upload = function(req, res, next) {
     var filename = String(new Date().getTime());
-    var multer = require('multer');
+  
     var storage = multer.diskStorage({
         destination: function(req, file, callback) {
-            callback(null, 'app_back/uploaded/');
+            callback(null, './uploads/');
         },
         filename: function(req, file, callback) {
 
@@ -52,17 +54,11 @@ ApiConciliacion.prototype.post_upload = function(req, res, next) {
     var upload = multer({ storage: storage }).any();
 
     upload(req, res, function(err) {
-        var result = undefined;
-        var error = undefined;
         if (err) {
-            error = "Error uploading file.";
+            return res.end("Error uploading file.");
         } else {
-            result = filename;
+            return res.end(filename);
         }
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
     });
 };
 ApiConciliacion.prototype.get_readLayout = function(req, res, next) {
@@ -70,15 +66,17 @@ ApiConciliacion.prototype.get_readLayout = function(req, res, next) {
     var error = undefined;
     try {
         var self = this;
-        var parseXlsx = require('excel');
-        parseXlsx(__dirname + '\\uploaded\\' + req.query.LayoutName, function(err, data) {
-            if (err) {
+        var workbook = XLSX.readFile('./uploads/' + req.query.LayoutName);
+        var sheet_name_list = workbook.SheetNames;
+        var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+      
+            if (xlData == undefined) {
                 return res.end("Error uploading file.");
             } else {
                 setTimeout(function() {
                     var fs = require("fs");
                     // console.log( __dirname + '\\uploaded\\' + req.query.LayoutName );
-                    fs.unlink(__dirname + '\\uploaded\\' + req.query.LayoutName, function(err) {
+                    fs.unlink('./uploads/' + req.query.LayoutName, function(err) {
                         if (err) {
                             self.view.expositor(res, {
                                 error: err,
@@ -87,14 +85,14 @@ ApiConciliacion.prototype.get_readLayout = function(req, res, next) {
                         } else {
                             self.view.expositor(res, {
                                 error: error,
-                                result: data
+                                result: xlData
                             });
 
                         }
                     });
                 }, 5000);
             }
-        })
+      
     } catch (e) {
         console.log("Error", e);
         self.view.expositor(res, {
@@ -106,7 +104,6 @@ ApiConciliacion.prototype.get_readLayout = function(req, res, next) {
 ApiConciliacion.prototype.get_validaExistencia = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
         { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
@@ -123,7 +120,6 @@ ApiConciliacion.prototype.get_validaExistencia = function(req, res, next) {
 ApiConciliacion.prototype.get_Conciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [{ name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.INT },
         { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
         { name: 'financiera', value: req.query.financiera, type: self.model.types.INT }
@@ -136,11 +132,24 @@ ApiConciliacion.prototype.get_Conciliacion = function(req, res, next) {
         });
     });
 };
+ApiConciliacion.prototype.get_ConciliacionGuardada = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idconciliacion', value: req.query.idconciliacion, type: self.model.types.INT }
+    ];
+
+    self.model.query('uspGetConciliacionGuardada', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 ApiConciliacion.prototype.get_AutorizacionDetalle = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
-    var params = [{ name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.INT }];
+
+    var params = [{ name: 'idconciliacion', value: req.query.consecutivo, type: self.model.types.INT }];
 
     self.model.query('CONC_AUTORIZACIONDETALLE_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -152,7 +161,6 @@ ApiConciliacion.prototype.get_AutorizacionDetalle = function(req, res, next) {
 ApiConciliacion.prototype.get_autorizadorDetalle = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [{ name: 'token', value: req.query.token, type: self.model.types.STRING }];
 
     self.model.query('CONC_AUT_AUTORIZADOR_SP', params, function(error, result) {
@@ -165,7 +173,6 @@ ApiConciliacion.prototype.get_autorizadorDetalle = function(req, res, next) {
 ApiConciliacion.prototype.get_autorizaConciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [{ name: 'token', value: req.query.token, type: self.model.types.STRING },
         { name: 'autoriza', value: req.query.autoriza, type: self.model.types.STRING },
         { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.STRING }
@@ -181,7 +188,7 @@ ApiConciliacion.prototype.get_autorizaConciliacion = function(req, res, next) {
 ApiConciliacion.prototype.get_CierreMes = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+  
     var params = [{ name: 'periodo', value: req.query.periodo, type: self.model.types.INT }];
 
     self.model.query('GETCIERREDEMES_SP', params, function(error, result) {
@@ -194,14 +201,31 @@ ApiConciliacion.prototype.get_CierreMes = function(req, res, next) {
 ApiConciliacion.prototype.get_creaConciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+   
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
     { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
     { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
     { name: 'periodoAnio', value: req.query.periodoAnio, type: self.model.types.INT },
-    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idestatus', value: req.query.idEstatus, type: self.model.types.INT },
+    { name: 'idtipo', value: req.query.idtipo, type: self.model.types.INT },
+    { name: 'contador', value: req.query.contador, type: self.model.types.INT }];
 
     self.model.query('CREACONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_guardaConciliacion = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT },
+    { name: 'idestatus', value: req.query.idEstatus, type: self.model.types.INT }];
+
+    self.model.query('GUARDACONCILIACION_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -211,7 +235,7 @@ ApiConciliacion.prototype.get_creaConciliacion = function(req, res, next) {
 ApiConciliacion.prototype.get_creaConciliacionDetalle = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+   
     var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT },
     { name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },
     { name: 'VIN', value: req.query.VIN, type: self.model.types.STRING },
@@ -230,13 +254,14 @@ ApiConciliacion.prototype.get_creaConciliacionDetalle = function(req, res, next)
 ApiConciliacion.prototype.get_solicitaAutorizacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+  
     var params = [{ name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.INT },
-    { name: 'estatus', value: req.query.estatus, type: self.model.types.INT },
+  //  { name: 'estatus', value: req.query.estatus, type: self.model.types.INT },
     { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
     { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
     { name: 'periodoContable', value: req.query.periodoContable, type: self.model.types.INT },
-    { name: 'anioContable', value: req.query.anioContable, type: self.model.types.INT }];
+    { name: 'anioContable', value: req.query.anioContable, type: self.model.types.INT },
+    { name: 'idconciliacion', value: req.query.idconciliacion, type: self.model.types.INT }];
 
     self.model.query('CONC_SOLICITAAUTORIZA_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -248,7 +273,6 @@ ApiConciliacion.prototype.get_solicitaAutorizacion = function(req, res, next) {
 ApiConciliacion.prototype.get_porAutorizar = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [];
 
     self.model.query('CONC_PORAUTORIZAR_SP', params, function(error, result) {
@@ -261,7 +285,7 @@ ApiConciliacion.prototype.get_porAutorizar = function(req, res, next) {
 ApiConciliacion.prototype.get_generaConciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+  
     var params = [{ name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
     { name: 'anio', value: req.query.anio, type: self.model.types.INT },
     { name: 'financiera', value: req.query.financiera, type: self.model.types.INT }];
@@ -276,8 +300,7 @@ ApiConciliacion.prototype.get_generaConciliacion = function(req, res, next) {
 ApiConciliacion.prototype.get_obtieneConciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
-    var params = [];
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },];
 
     self.model.query('CONC_OBTIENETODAS_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -289,7 +312,6 @@ ApiConciliacion.prototype.get_obtieneConciliacion = function(req, res, next) {
 ApiConciliacion.prototype.get_conciliaDetalle = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
     var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT }];
 
     self.model.query('CONC_DETALLE_SP', params, function(error, result) {
@@ -302,7 +324,7 @@ ApiConciliacion.prototype.get_conciliaDetalle = function(req, res, next) {
 ApiConciliacion.prototype.get_validaCancelacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+  
     var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT }];
 
     self.model.query('CONC_VALIDACANCELACION_SP', params, function(error, result) {
@@ -315,10 +337,89 @@ ApiConciliacion.prototype.get_validaCancelacion = function(req, res, next) {
 ApiConciliacion.prototype.get_CancelaConciliacion = function(req, res, next) {
 
     var self = this;
-    var itemObject = JSON.parse(req.query.lstUnidades);
+   
     var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT }];
 
     self.model.query('CONC_CANCELACONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_UnidadesCompraVirtual = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT }];
+
+    self.model.query('CONC_UnidadesCompraVirtual_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_conciliacionPoliza = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT }];
+
+    self.model.query('Pol_Cabecera_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiConciliacion.prototype.get_conciliacionPolizaDetalle = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+    { name: 'idconciliacion', value: req.query.idconciliacion, type: self.model.types.INT },
+    { name: 'idsucursal', value: req.query.idsucursal, type: self.model.types.INT },
+    { name: 'VIN', value: req.query.VIN, type: self.model.types.STRING },
+    { name: 'Marca', value: req.query.Marca, type: self.model.types.STRING },
+    { name: 'Descripcion', value: req.query.Descripcion, type: self.model.types.STRING },
+    { name: 'Modelo', value: req.query.Modelo, type: self.model.types.STRING },
+    { name: 'Costo', value: req.query.Costo, type: self.model.types.DECIMAL },
+    { name: 'idfinancieraO', value: req.query.idfinancieraO, type: self.model.types.INT },
+    { name: 'idEsquemaO', value: req.query.idEsquemaO, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+
+    self.model.query('Pol_Poliza8Detalle_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_MesConciliacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [ { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idfinanciera', value: req.query.idFinanciera, type: self.model.types.INT }
+    ];
+
+    self.model.query('CONC_MESCONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_tiposConciliacion = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+
+    self.model.query('CONC_TIPOSCONCILIACION_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
