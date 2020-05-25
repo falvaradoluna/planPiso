@@ -1,5 +1,4 @@
 var crealoteUrl = global_settings.urlCORS + 'api/apicrealote/';
-var pagoUrl = global_settings.urlCORSPagos + '/api/pagoapi/';
 appModule.factory('crealoteFactory', function($http) {
     return {
         obtieneTodos: function() {
@@ -73,10 +72,14 @@ appModule.factory('crealoteFactory', function($http) {
         },
         setDatos: function(id, idEmpleado, idPadre, ingresos, transfer, caja, cobrar, total, operacion) {
             return $http({
-                url: pagoUrl,
+                url: crealoteUrl + 'detalleLotePago/',
                 method: 'POST',
-                params: { id: '1|' + idEmpleado + '|' + idPadre + '|' + caja + '|' + cobrar + '|' + operacion },
-                data: JSON.stringify(id) + '|' + ingresos + '|' + transfer + '|' + total
+                params: {
+                    idEmpleado: idEmpleado,
+                    idPadre: idPadre
+                },
+                data: { datos: JSON.stringify(id) },
+                headers: { 'Content-Type': 'application/json' }
             });
         }
     };

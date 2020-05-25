@@ -127,7 +127,7 @@ Apicrealote.prototype.get_escenarios = function(req, res, next) {
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
 
-    self.model.query('SEL_ESCENARIO_SP___', params, function(error, result) {
+    self.model.query('SEL_ESCENARIO_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -138,15 +138,15 @@ Apicrealote.prototype.get_escenarios = function(req, res, next) {
 Apicrealote.prototype.post_encabezadoPagos = function(req, res, next) {
 
     var self = this;
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
-        { name: 'nombreLote', value: req.query.nombreLote, type: self.model.types.STRING },
-        { name: 'estatus', value: req.query.estatus, type: self.model.types.INT },
-        { name: 'esApliacionDirecta', value: req.query.esAplicacionDirecta, type: self.model.types.INT },
-        { name: 'cifraControl', value: req.query.cifraControl, type: self.model.types.INT }
+    // console.log(req.body.idEmpresa)
+    var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT },
+        { name: 'nombreLote', value: req.body.nombreLote, type: self.model.types.STRING },
+        { name: 'estatus', value: req.body.estatus, type: self.model.types.INT },
+        { name: 'esApliacionDirecta', value: req.body.esAplicacionDirecta, type: self.model.types.INT },
+        { name: 'cifraControl', value: req.body.cifraControl, type: self.model.types.INT }
     ];
-    console.log(params, 'INS_PAG_PROG_PAGOS_SP')
+    // console.log(params, 'INS_PAG_PROG_PAGOS_SP')
     self.model.query('INS_PAG_PROG_PAGOS_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -154,6 +154,37 @@ Apicrealote.prototype.post_encabezadoPagos = function(req, res, next) {
         });
     });
 };
+
+Apicrealote.prototype.post_detalleLotePago = function(req, res, next) {
+    var self = this;
+    var arrayInsert = [];
+    // console.log(req.query.idPadre)
+    // var idPadre = req.query.idPadre;
+    var params = [{ name: 'idPadre', value: req.query.idPadre, type: self.model.types.INT }
+    ];
+    const obj = JSON.parse(req.body.datos);
+    var table = '[Pagos].[dbo].[PAG_TABLA_PASO_POLIZAS]'
+    var values = obj;
+    self.model.queryInsert(table, values, function(error, result) {
+        if (error) {
+            // console.log(error)
+            self.view.expositor(res, {
+                error: error,
+                result: result
+            });
+        } else {
+            // console.log(params)
+            self.model.query('INS_PROG_PAGOS_SP', params, function(error, result) {
+                self.view.expositor(res, {
+                    error: error,
+                    result: result
+                });
+            });
+        }
+
+    });
+};
+
 
 Apicrealote.prototype.get_crealoteFinanciera = function(req, res, next) {
 

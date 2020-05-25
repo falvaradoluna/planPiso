@@ -4,6 +4,7 @@
   "dependencies": {
     "angular-ui-grid": "^4.8.3",
     "body-parser": "^1.9.2",
+    "dateformat": "^3.0.3",
     "directory-tree": "^1.1.1",
     "excel": "^1.0.1",
     "express": "4.9.8",
@@ -20,7 +21,7 @@
     "soap": "^0.31.0",
     "socket.io": "^1.2.0",
     "swig": "^1.4.2",
-    "xml2js": "^0.4.23",
-    "xlsx": "^0.16.0"
+    "xlsx": "^0.16.0",
+    "xml2js": "^0.4.23"
   }
 }

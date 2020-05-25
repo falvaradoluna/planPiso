@@ -4,32 +4,36 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = staticFactory.crealoteBar();
     $scope.currentCuentaName = "Seleccione cuenta";
-    $scope.bancoPago = [];
-    crealoteFactory.getescenario(sessionFactory.empresaID).then(function success(result) {
-        console.log(result.data, 'SOY EL ESCENARIO');
-        $scope.escenarios = result.data;
-        $scope.pdPlanta = $scope.escenarios.Pdbanco;
-        $scope.pdBanco = $scope.escenarios.Pdplanta;
-        $scope.refPlanta = $scope.escenarios.TipoRefPlanta;
-        $scope.refpdBanco = $scope.escenarios.tipoRefBanco;
-        if ($scope.pdPlanta || $scope.pdBanco) {
-            $scope.selPagoDirecto = true;
-        } else {
-            $scope.selPagoDirecto = false;
-        }
-        console.log($scope.selPagoDirecto, 'PAGO DIRECTO');
-        crealoteFactory.getDocumentos(sessionFactory.empresaID).then(function success(result) {
-            console.log(result.data);
-            $scope.documentos = result.data;
-            validaDocumentos($scope.documentos);
-            $scope.gridOptions.data = $scope.documentos;
-        }, function error(err) {
-            console.log('Ocusrrio un error al obtener los documentos')
-        });
+    $scope.bancoPago = undefined;
+    var cargaInfoGridLotes = function() {
+        $scope.sumaDocumentos = undefined;
+        crealoteFactory.getescenario(sessionFactory.empresaID).then(function success(result) {
+            console.log(result.data, 'SOY EL ESCENARIO');
+            $scope.escenarios = result.data;
+            $scope.pdPlanta = $scope.escenarios.Pdbanco;
+            $scope.pdBanco = $scope.escenarios.Pdplanta;
+            $scope.refPlanta = $scope.escenarios.TipoRefPlanta;
+            $scope.refpdBanco = $scope.escenarios.tipoRefBanco;
+            if ($scope.pdPlanta || $scope.pdBanco) {
+                $scope.selPagoDirecto = true;
+            } else {
+                $scope.selPagoDirecto = false;
+            }
+            console.log($scope.selPagoDirecto, 'PAGO DIRECTO');
+            crealoteFactory.getDocumentos(sessionFactory.empresaID).then(function success(result) {
+                console.log(result.data);
+                $scope.documentos = result.data;
+                validaDocumentos($scope.documentos);
+                $scope.gridOptions.data = $scope.documentos;
+            }, function error(err) {
+                console.log('Ocusrrio un error al obtener los documentos')
+            });
 
-    }, function error(err) {
-        console.log('Ocurrio un erro al obtener los escenarios')
-    });
+        }, function error(err) {
+            console.log('Ocurrio un erro al obtener los escenarios')
+        });
+    };
+    cargaInfoGridLotes();
     crealoteFactory.getCuentas(sessionFactory.empresaID).then(function success(result) {
         console.log(result.data, 'SOY LAS CUENTAS');
         $scope.lstCuentas = result.data;
@@ -705,100 +709,96 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     };
     $scope.VerDocumento = function(lote) {
         crealoteFactory.getPdf(lote.polTipo, lote.annio, lote.polMes, lote.polConsecutivo, sessionFactory.empresaID).then(function(d) {
-            //Creo la URL
             var pdf = URL.createObjectURL(utils.b64toBlob(d.data.arrayBits, "application/pdf"))
             var pdf_link = '';
             var typeAplication = '';
             var titulo = 'Poliza del documento' + lote.documento;
             $scope.rptPoliza = $sce.trustAsResourceUrl(pdf);
-            //Mando a llamar la URL desde el div sustituyendo el pdf
-            /////////  $("<object id='pdfDisplay' data='" + pdf + "' width='100%' height='400px' >").appendTo('#pdfContent');
-            // var iframe = '<div id="hideFullContent"><div onclick="nodisponible()" ng-controller="documentoController"> </div> <object id="ifDocument" data="' + pdf + '" type="' + typeAplication + '" width="100%" height="100%"><p>Alternative text - include a link <a href="' + pdf + '">to the PDF!</a></p></object> </div>';
-            //  $("#pdfPoliza").append(iframe);
-            // $('#modalPdf').modal('show')
             $("<object id='embedReportePoliza' data=" + $scope.rptPoliza + " style='width:800px;height:400px;'></object>").appendTo('#pdfPoliza');
             $('#modalPdf').modal('show');
             $("#modalPdf").on('hidden.bs.modal', function() {
                 $("#embedReportePoliza").remove();
             });
-            // $.createModal({
-            //     title: titulo,
-            //     message: iframe,
-            //     closeButton: false,
-            //     scrollable: false
-            // });
-            /////////$scope.loadingOrder = false; //Animacion
         });
 
     };
     $scope.validaDocumentosSeleccionados = function() {
+        console.log($scope.bancoPago, 'BANCO')
         var rows = $scope.gridApi1.selection.getSelectedRows();
-        //$scope.gridOptions2.data = rows;
-        console.log(rows);
-        var pasaxCIE = true;
-        var proveedorCIE = '';
-        var pasaxbancoDestino = true;
-        var proveedorcuentaDestino = '';
-        var unaCuenta = true;
-        rows.some(function(row, i, j) {
-            if ((row.convenioCIE == null) || (row.convenioCIE == undefined) || (row.convenioCIE == "")) {
-                pasaxCIE = true;
-            } else {
-                pasaxCIE = false;
-            }
-            if (pasaxCIE == false) {
-                if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
-                    proveedorCIE = row.proveedor;
-                    return true;
-                } else {
+        if (rows.length > 0) {
+            if ($scope.bancoPago) {
+                //$scope.gridOptions2.data = rows;
+                console.log(rows);
+                var pasaxCIE = true;
+                var proveedorCIE = '';
+                var pasaxbancoDestino = true;
+                var proveedorcuentaDestino = '';
+                var unaCuenta = true;
+                rows.some(function(row, i, j) {
+                    if ((row.convenioCIE == null) || (row.convenioCIE == undefined) || (row.convenioCIE == "")) {
+                        pasaxCIE = true;
+                    } else {
+                        pasaxCIE = false;
+                    }
+                    if (pasaxCIE == false) {
+                        if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
+                            proveedorCIE = row.proveedor;
+                            return true;
+                        } else {
+                            var ctrCuentaDestinoArr = row.cuentaDestino.split(',');
+                            if (ctrCuentaDestinoArr.length > 1) {
+                                pasaxbancoDestino = false;
+                                proveedorcuentaDestino = row.proveedor;
+                                alertFactory.warning('El proveedor CIE' + proveedorcuentaDestino + ' Tiene mas de una cuenta destino');
+                                unaCuenta = false;
+                                pasaxCIE = false;
+                                return true;
+                            } else {
+                                pasaxCIE = true;
+                                return false;
+                            }
+                        }
+                    }
                     var ctrCuentaDestinoArr = row.cuentaDestino.split(',');
                     if (ctrCuentaDestinoArr.length > 1) {
                         pasaxbancoDestino = false;
                         proveedorcuentaDestino = row.proveedor;
-                        alertFactory.warning('El proveedor CIE' + proveedorcuentaDestino + ' Tiene mas de una cuenta destino');
+                        alertFactory.warning('El proveedor ' + proveedorcuentaDestino + ' Tiene mas de una cuenta destino');
                         unaCuenta = false;
-                        pasaxCIE = false;
                         return true;
-                    } else {
-                        pasaxCIE = true;
-                        return false;
                     }
+                });
+                if (unaCuenta) {
+                    if (pasaxCIE) {
+                        $('#modalGridLote').modal('show');
+                        $scope.gridOptions2.data = rows;
+                        $interval(function() {
+                            $scope.gridApi2.core.handleWindowResize();
+                        }, 500, 10);
+                    } else {
+                        alertFactory.warning('Existe un documento del proveedor ' + proveedorCIE + ' con convenio CIE sin referencia');
+                    };
                 }
-            }
-            var ctrCuentaDestinoArr = row.cuentaDestino.split(',');
-            if (ctrCuentaDestinoArr.length > 1) {
-                pasaxbancoDestino = false;
-                proveedorcuentaDestino = row.proveedor;
-                alertFactory.warning('El proveedor ' + proveedorcuentaDestino + ' Tiene mas de una cuenta destino');
-                unaCuenta = false;
-                return true;
-            }
-        });
-        if (unaCuenta) {
-            if (pasaxCIE) {
-                $('#modalGridLote').modal('show');
-                $scope.gridOptions2.data = rows;
-                $interval(function() {
-                    $scope.gridApi2.core.handleWindowResize();
-                }, 500, 10);
             } else {
-                alertFactory.warning('Existe un documento del proveedor ' + proveedorCIE + ' con convenio CIE sin referencia');
-            };
+                alertFactory.warning('Debe seleccionar una cuenta');
+            }
+        } else {
+            alertFactory.warning('Debe seleccionar por lo menos un documento');
         }
-
     };
     $scope.guardarLote = function() {
-        var dataEncabezado = [{
+        var rows = $scope.gridApi1.selection.getSelectedRows();
+        var dataEncabezado = {
             idEmpresa: sessionFactory.empresaID,
             idUsuario: $scope.idUsuario,
             nombreLote: $scope.nombreLote,
             estatus: 1,
             esAplicacionDirecta: 0,
             cifraControl: ($scope.sumaDocumentos).toFixed(2)
-        }]
+        };
         crealoteFactory.setEncabezadoPago(dataEncabezado)
             .then(function successCallback(response) {
-                $scope.idLotePadre = response.data;
+                $scope.idLotePadre = response.data[0].idLotePadre;
                 var array = [];
                 var count = 1;
                 rows.forEach(function(row, i) {
@@ -812,7 +812,6 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     elemento.pad_fechaPromesaPago = (row.fechaPromesaPago == '' ? '1900-01-01T00:00:00' : row.fechaPromesaPago);
                     elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//
                     //15062018
-
                     if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
                         row.referencia = "AUT";
                     } else {
@@ -820,13 +819,10 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                             //row.referencia = $scope.idLotePadre + '-' + row.idProveedor + '-' + row.referencia.replace(" ", "");
                         }
                     }
-
                     //fin 15062018
-
-
                     elemento.pad_documento = row.documento;
                     elemento.pad_polReferencia = row.referencia; //FAL 09052015 mandar referencia
-                    elemento.tab_revision = 1;
+                    elemento.tab_revision = '1';
                     if (row.agrupar == 1) {
                         elemento.pad_agrupamiento = count;
                     } else {
@@ -848,36 +844,26 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     count = count + 1;
                 });
 
-
-                var jsIngresos = angular.toJson($scope.ingresos); //delete $scope.ingresos['$$hashKey'];
-                var jsTransf = angular.toJson($scope.transferencias);
-                var jsEgresos = angular.toJson($scope.egresos);
-                crealoteFactory.setDatos(array, $scope.idUsuario, $scope.idLotePadre, jsIngresos, jsTransf, $scope.caja, $scope.cobrar, jsEgresos, ($scope.estatusLote == 0) ? 1 : 2)
+                var jsIngresos = angular.toJson([{}]); //delete $scope.ingresos['$$hashKey'];
+                var jsTransf = angular.toJson([{}]);
+                var jsEgresos = angular.toJson([{}]);
+                // array, $rootScope.currentEmployee, $scope.idLotePadre, jsIngresos, jsTransf, $scope.caja, $scope.cobrar, jsEgresos, ($scope.estatusLote == 0) ? 1 : 2
+                crealoteFactory.setDatos(array, $scope.idUsuario, $scope.idLotePadre, jsIngresos, jsTransf, 0, 0, jsEgresos, 1)
                     .then(function successCallback(response) {
-                        alertFactory.success('Se guardaron los datos.');
-                        $scope.estatusLote = 1;
-                        angular.forEach($scope.noLotes.data, function(lote, key) {
-                            if (lote.idLotePago == $scope.idLote) {
-                                lote.idLotePago = $scope.idLotePadre;
-                                lote.estatus = 1;
-                            }
-                        });
-
-
-
+                        console.log(response.data[0].estatus, 'INSERTO???MMMM')
+                        if (response.data[0].estatus == 1) {
+                            alertFactory.success('Se guardaron los datos.');
+                            $('#modalGridLote').modal('hide');
+                            cargaInfoGridLotes();
+                        } else {
+                            alertFactory.error('Ocurrio un Problema al guardar el lote')
+                        }
 
                     }, function errorCallback(response) {
                         alertFactory.error('Error al guardar Datos');
-
-                        $('#btnAprobar').button('reset');
                     });
-
-
-
-
             }, function errorCallback(response) {
                 alertFactory.error('Error al insertar en tabla padre.');
-
             });
 
     };
