@@ -81,6 +81,17 @@ appModule.factory('crealoteFactory', function($http) {
                 data: { datos: JSON.stringify(id) },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getPreDocumentos: function(idEmpresa, idPoliza) {
+            return $http({
+                url: crealoteUrl + 'preDocumentos/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idPoliza: idPoliza
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 });

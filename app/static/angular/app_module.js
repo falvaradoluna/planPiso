@@ -76,7 +76,13 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/crealote', {
         templateUrl: 'angular/pages/crealote/crealote.html',
         controller: 'crealoteController'
+    })
+
+    .when('/guardarLote', {
+        templateUrl: 'angular/pages/crealote/guardarLote.html',
+        controller: 'guardarLoteController'
     });
+
 
     $routeProvider.otherwise({ requireBasedirectTo: '/' });
 

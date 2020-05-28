@@ -160,8 +160,7 @@ Apicrealote.prototype.post_detalleLotePago = function(req, res, next) {
     var arrayInsert = [];
     // console.log(req.query.idPadre)
     // var idPadre = req.query.idPadre;
-    var params = [{ name: 'idPadre', value: req.query.idPadre, type: self.model.types.INT }
-    ];
+    var params = [{ name: 'idPadre', value: req.query.idPadre, type: self.model.types.INT }];
     const obj = JSON.parse(req.body.datos);
     var table = '[Pagos].[dbo].[PAG_TABLA_PASO_POLIZAS]'
     var values = obj;
@@ -184,7 +183,21 @@ Apicrealote.prototype.post_detalleLotePago = function(req, res, next) {
 
     });
 };
+Apicrealote.prototype.get_preDocumentos = function(req, res, next) {
 
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idPoliza', value: req.query.idPoliza, type: self.model.types.INT }
+    ];
+
+    self.model.query('UspGetDocumentosPagosPre', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 Apicrealote.prototype.get_crealoteFinanciera = function(req, res, next) {
 

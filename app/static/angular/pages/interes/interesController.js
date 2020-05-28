@@ -1,4 +1,4 @@
-appModule.controller('interesController', function($scope, $rootScope, $location,filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
+appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -102,7 +102,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.lstNewUnits = result.data;
             if ($scope.lstNewUnits.length == 0) {
                 $scope.noExisten = true;
-            }else{
+            } else {
                 $scope.noExisten = false;
             }
 
@@ -128,7 +128,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.lstNewUnits = result.data;
             if ($scope.lstNewUnits.length == 0) {
                 $scope.noExisten = true;
-            }else{
+            } else {
                 $scope.noExisten = false;
             }
 
@@ -154,7 +154,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.lstNewUnits = result.data;
             if ($scope.lstNewUnits.length == 0) {
                 $scope.noExisten = true;
-            }else{
+            } else {
                 $scope.noExisten = false;
             }
 
@@ -394,36 +394,36 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 var paraReduccion = {
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza:10  //pago reduccion
+                    idtipopoliza: 10 //pago reduccion
                 }
 
-                interesFactory.ReduccionFinanciera(paraReduccion).then(function( respuesta ) {
+                interesFactory.ReduccionFinanciera(paraReduccion).then(function(respuesta) {
                     $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsReduccions = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                    $scope.lstUnitsReduccions = filterFilter($scope.lstNewUnits, { isChecked: true });
                     $scope.guardaReduccionDetalle();
                 }, function(error) {
                     $scope.error(error.data.Message);
                 });
-                  
-                
+
+
             }
         );
     };
     $scope.LastId = 0;
     var contReduccionDetalle = 0;
-    $scope.guardaReduccionDetalle = function(){
-        if( contReduccionDetalle < $scope.lstUnitsReduccions.length ){
-            var item = $scope.lstUnitsReduccions[ contReduccionDetalle ];
+    $scope.guardaReduccionDetalle = function() {
+        if (contReduccionDetalle < $scope.lstUnitsReduccions.length) {
+            var item = $scope.lstUnitsReduccions[contReduccionDetalle];
             var paraReduccionDetalle = {
                 idpoliza: $scope.LastId,
                 idmovimiento: item.movimientoID,
                 idUsuario: $scope.idUsuario,
-                saldo:item.pagoReduccion
+                saldo: item.pagoReduccion
             }
 
-            interesFactory.ReduccionFinancieraDetalle(paraReduccionDetalle).then(function( response ) {
-                if( response.length != 0 ){
-                    if( contReduccionDetalle < $scope.lstUnitsReduccions.length ){
+            interesFactory.ReduccionFinancieraDetalle(paraReduccionDetalle).then(function(response) {
+                if (response.length != 0) {
+                    if (contReduccionDetalle < $scope.lstUnitsReduccions.length) {
                         contReduccionDetalle++;
                         $scope.guardaReduccionDetalle();
                     }
@@ -431,23 +431,35 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-        }
-        else{
-            // swal("Reduccion Plan Piso", "Se ha efectuado correctamente su Reduccion.");
-            interesFactory.procesaReduccion($scope.LastId).then(function( response ) {
-                if( response.length != 0 ){
-                    swal(
-                    {
-                        title: "Reducción Plan Piso",
-                        text: "Se ha efectuado correctamente su Reducción.",
-                        type: "warning"
-                    }, function(){
-                        location.reload();
-                    });
-                }
-            }, function(error) {
-                $scope.error(error.data.Message);
+        } else {
+            angular.forEach($scope.lstUnitsReduccions, function(value, key) {
+                value.idUsuario = $scope.idUsuario;
+                value.idPoliza = $scope.LastId;
+                value.estatus = 1;
             });
+            interesFactory.insertaDocumentosLote($scope.lstUnitsReduccions).then(function success(result) {
+                console.log(result);
+                window.location="/guardarLote?idPre=" + $scope.LastId;
+            }, function error(err) {
+                console.log(err)
+            });
+            // swal("Reduccion Plan Piso", "Se ha efectuado correctamente su Reduccion.");
+            //Se agrega ir a crear lote de pago 
+            // $scope.lstUnitsReduccions
+            // interesFactory.procesaReduccion($scope.LastId).then(function( response ) {
+            //     if( response.length != 0 ){
+            //         swal(
+            //         {
+            //             title: "Reducción Plan Piso",
+            //             text: "Se ha efectuado correctamente su Reducción.",
+            //             type: "warning"
+            //         }, function(){
+            //             location.reload();
+            //         });
+            //     }
+            // }, function(error) {
+            //     $scope.error(error.data.Message);
+            // });
         }
     }
     $scope.success = function() {
@@ -513,40 +525,39 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }, function() {
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");
-            } else 
-            {
+            } else {
                 var paraProvision = {
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza:7  //cambio de financiera
+                    idtipopoliza: 7 //cambio de financiera
                 }
 
-                interesFactory.getProvisionToday(paraProvision).then(function( respuesta ) {
+                interesFactory.getProvisionToday(paraProvision).then(function(respuesta) {
                     $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsProvisions = filterFilter( $scope.lstNewUnits , {isChecked: true} );
+                    $scope.lstUnitsProvisions = filterFilter($scope.lstNewUnits, { isChecked: true });
                     $scope.guardaProvisionDetalle();
                 }, function(error) {
                     $scope.error(error.data.Message);
                 });
-                    
+
             }
-            
+
         });
     }
     var contProvisionDetalle = 0;
-    $scope.guardaProvisionDetalle = function(){
-        if( contProvisionDetalle < $scope.lstUnitsProvisions.length ){
-            var item = $scope.lstUnitsProvisions[ contProvisionDetalle ];
+    $scope.guardaProvisionDetalle = function() {
+        if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
+            var item = $scope.lstUnitsProvisions[contProvisionDetalle];
             var paraProvisionDetalle = {
                 idpoliza: $scope.LastId,
                 idmovimiento: item.movimientoID,
                 idUsuario: $scope.idUsuario,
-                saldo:item.InteresTotal
+                saldo: item.InteresTotal
             }
 
-            interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function( response ) {
-                if( response.length != 0 ){
-                    if( contProvisionDetalle < $scope.lstUnitsProvisions.length ){
+            interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function(response) {
+                if (response.length != 0) {
+                    if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
                         contProvisionDetalle++;
                         $scope.guardaProvisionDetalle();
                     }
@@ -554,17 +565,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-        }
-        else{
+        } else {
             // swal("Provision Plan Piso", "Se ha efectuado correctamente su Provision.");
-            interesFactory.procesaReduccion($scope.LastId).then(function( response ) {
-                if( response.length != 0 ){
-                    swal(
-                    {
+            interesFactory.procesaReduccion($scope.LastId).then(function(response) {
+                if (response.length != 0) {
+                    swal({
                         title: "Provisión Plan Piso",
                         text: "Se ha efectuado correctamente su Provisión.",
                         type: "warning"
-                    }, function(){
+                    }, function() {
                         location.reload();
                     });
                 }

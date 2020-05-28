@@ -146,6 +146,14 @@ appModule.factory('interesFactory', function($http) {
                 params: { empresaID: empresaID, sucursalID: sucursalID, financieraID: financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        insertaDocumentosLote: function(array) {
+            return $http({
+                url: interesesUrl + 'insertaDocumentosLote/',
+                method: "POST",
+                data: array,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };
