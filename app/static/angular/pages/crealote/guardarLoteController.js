@@ -73,7 +73,7 @@ appModule.controller('guardarLoteController', function($scope, $rootScope, $loca
 
 
             $scope.TotalSaldoPagar = $scope.TotalSaldoPagar + $scope.data[i].saldo;
-            $scope.data[i].Pagar = $scope.data[i].saldo;
+            $scope.data[i].Pagar = $scope.data[i].aPagar;
             $scope.data[i].fechaPago = $scope.data[i].fechaPromesaPago;
             $scope.data[i].agrupar = 0;
 
