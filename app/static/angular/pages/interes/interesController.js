@@ -344,17 +344,18 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         staticFactory.setTableStyleOne(tblID);
     };
     $scope.setResetTable = function(tblID, display, length) {
-        $('.' + tblID).DataTable().clear();
-        $('.' + tblID).DataTable().destroy();
-        setTimeout(function() {
-            $('.' + tblID).DataTable({
-                "scrollX": true,
-                fixedColumns: {
-                    leftColumns: 1
-                }
-            });
-            // staticFactory.filtrosTabla(tblID, display, length);
-        }, 100);
+        staticFactory.setTableStyleClass('.' + tblID, display, length)
+        // $('.' + tblID).DataTable().clear();
+        // $('.' + tblID).DataTable().destroy();
+        // setTimeout(function() {
+        //     $('.' + tblID).DataTable({
+        //         "scrollX": true,
+        //         fixedColumns: {
+        //             leftColumns: 1
+        //         }
+        //     });
+        //     // staticFactory.filtrosTabla(tblID, display, length);
+        // }, 100);
         $('#mdlLoading').modal('hide');
     };
     $scope.setDelayTableStyle = function(tblID) {

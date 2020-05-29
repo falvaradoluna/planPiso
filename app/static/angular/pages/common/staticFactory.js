@@ -266,6 +266,44 @@ appModule.factory('staticFactory', function($http) {
                     }]
                 });
             }, 100)
+        },
+        setTableStyleClass: function(tblClass) {
+            $(tblClass).DataTable().clear();
+            $(tblClass).DataTable().destroy()
+            setTimeout(function() {
+                $(tblClass).DataTable({
+                    dom: '<"html5buttons"B>lTfgitp',
+                    //iDisplayLength: 5,
+                    "scrollX": true,
+                    fixedColumns: {
+                        leftColumns: 1
+                    },
+                    searching: true,
+                    order: [
+                        [0, "desc"]
+                    ],
+                    buttons: [{
+                        extend: 'copy'
+                    }, {
+                        extend: 'csv'
+                    }, {
+                        extend: 'excel',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'pdf',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'print',
+                        customize: function(win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    }]
+                });
+            }, 100)
         }
 
     };
