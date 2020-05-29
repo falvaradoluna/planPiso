@@ -103,8 +103,15 @@ ApiTiie.prototype.post_insertarTiie = function (req, res, next) {
         });
     });
 };
+ApiTiie.prototype.get_ejecutaTiie = function (req, res, next) {
+    
+    var self = this;
+
+    actualizaTiiesDesdeBanxico();
+};
 
 NodeCron.schedule('00 06 * * *', () => {
+    console.log('se ejecuto cron');
     actualizaTiiesDesdeBanxico();
 });
 
