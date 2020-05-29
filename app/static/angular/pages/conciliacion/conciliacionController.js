@@ -127,7 +127,8 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 idEmpresa: $scope.session.empresaID,
                 idFinanciera: $scope.frmConciliacion.idFinanciera,
                 periodo: $scope.currentMonth + 1,
-                anio: $scope.currentYear
+                anio: $scope.currentYear,
+                idTipo:$scope.frmConciliacion.lbltipoconciliacion
             }
             conciliacionFactory.validaExistencia(parametros).then(function(result) {
                 resolve(result.data[0]);

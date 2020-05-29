@@ -107,7 +107,8 @@ ApiConciliacion.prototype.get_validaExistencia = function(req, res, next) {
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
         { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
-        { name: 'anio', value: req.query.anio, type: self.model.types.INT }
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT },
+        { name: 'tipo', value: req.query.idTipo, type: self.model.types.INT }
     ];
 
     self.model.query('CONC_VALIDAEXISTENCIA_SP', params, function(error, result) {
