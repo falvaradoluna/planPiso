@@ -1,4 +1,4 @@
-var appModule = angular.module("planPisoApp", ["ngRoute"]);
+var appModule = angular.module("planPisoApp", ["ngRoute",'ui.grid', 'ui.grid.grouping', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.cellNav']);
 appModule.config(function($routeProvider, $locationProvider) {
 
 
@@ -76,7 +76,13 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/crealote', {
         templateUrl: 'angular/pages/crealote/crealote.html',
         controller: 'crealoteController'
+    })
+
+    .when('/guardarLote', {
+        templateUrl: 'angular/pages/crealote/guardarLote.html',
+        controller: 'guardarLoteController'
     });
+
 
     $routeProvider.otherwise({ requireBasedirectTo: '/' });
 

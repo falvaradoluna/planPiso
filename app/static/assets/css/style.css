@@ -2402,7 +2402,7 @@ label.error {
   border-right: none;
 }
 /* Toastr custom style */
-#toast-container > .toast {
+/*#toast-container > .toast {
   background-image: none !important;
 }
 #toast-container > .toast:before {
@@ -2464,7 +2464,7 @@ label.error {
 }
 .toast-bottom-full-width {
   margin-bottom: 20px;
-}
+}*/
 /* Notifie */
 .cg-notify-message.inspinia-notify {
   background: #fff;
@@ -7188,7 +7188,7 @@ body.rtls .theme-config {
 body.rtls .spin-icon {
   border-radius: 0 20px 20px 0;
 }
-body.rtls .toast-close-button {
+/*body.rtls .toast-close-button {
   float: left;
 }
 body.rtls #toast-container > .toast:before {
@@ -7196,7 +7196,7 @@ body.rtls #toast-container > .toast:before {
 }
 body.rtls #toast-container > div {
   padding: 15px 50px 15px 15px;
-}
+}*/
 body.rtls .center-orientation .vertical-timeline-icon i {
   margin-left: 0;
   margin-right: -12px;
