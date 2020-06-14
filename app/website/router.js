@@ -13,5 +13,6 @@
      apiproveedor: require('./controllers/apiProveedor'),
      apiReduccion: require('./controllers/apiReduccion'),
      apiTiie: require('./controllers/apiTiie'),
-     apicrealote: require('./controllers/apicrealote')
+     apicrealote: require('./controllers/apicrealote'),
+     apiFechaPromesa: require('./controllers/apiFechaPromesa')
  }

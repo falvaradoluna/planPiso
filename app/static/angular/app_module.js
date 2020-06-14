@@ -81,6 +81,11 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/guardarLote', {
         templateUrl: 'angular/pages/crealote/guardarLote.html',
         controller: 'guardarLoteController'
+    })
+
+    .when('/fechaPromesa', {
+        templateUrl: 'angular/pages/fechaPromesa/fechaPromesa.html',
+        controller: 'fechaPromesaController'
     });
 
 

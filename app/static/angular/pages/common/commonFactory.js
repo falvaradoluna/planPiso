@@ -3,7 +3,7 @@ appModule.factory('commonFactory', function($http) {
     return {
         getSucursal: function(idEmpresa, idUsuario) {
             return $http({
-                url: commonUrl +'Sucursal/',
+                url: commonUrl + 'Sucursal/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
@@ -12,20 +12,20 @@ appModule.factory('commonFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getFinancial: function(empresaID,idUsuario) {
+        getFinancial: function(empresaID, idUsuario) {
             return $http({
-                url: commonUrl +'Financieras/',
+                url: commonUrl + 'Financieras/',
                 method: "GET",
                 params: {
                     empresaID: empresaID,
-                    idUsuario:idUsuario
+                    idUsuario: idUsuario
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
         getSchemas: function(financieraID, esquemaID) {
             return $http({
-                url: commonUrl +'Schemas/',
+                url: commonUrl + 'Schemas/',
                 method: "GET",
                 params: { financieraID: financieraID, esquemaID: esquemaID },
                 headers: { 'Content-Type': 'application/json' }
@@ -33,7 +33,7 @@ appModule.factory('commonFactory', function($http) {
         },
         getCatalog: function(catalogoID) {
             return $http({
-                url: commonUrl +'Catalog/',
+                url: commonUrl + 'Catalog/',
                 method: "GET",
                 params: { catalogoID: catalogoID },
                 headers: { 'Content-Type': 'application/json' }
@@ -41,15 +41,26 @@ appModule.factory('commonFactory', function($http) {
         },
         getTipoTiie: function() {
             return $http({
-                url: commonUrl +'TipoTiie/',
+                url: commonUrl + 'TipoTiie/',
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });
         },
         currentTIIE: function() {
             return $http({
-                url: commonUrl +'currentTIIE/',
+                url: commonUrl + 'currentTIIE/',
                 method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getFinancieraSucursal: function(idEmpresa, idSucursal) {
+            return $http({
+                url: commonUrl + 'financieraSucursal/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         }

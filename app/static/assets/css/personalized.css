@@ -273,51 +273,70 @@ input[type=checkbox] {
 .ibox-title h5 {
     font-size: 12px;
 }
-.tabInteres{
+
+.tabInteres {
     border-radius: 2px;
 }
+
 /*BEGIN Estilos traidos de pagos*/
 .selectNormal .ui-grid-cell-contents {
-  background-color: #97B2F7;
-  color: black;
+    background-color: #97B2F7;
+    color: black;
 }
 
 .ordenBloqueada .ui-grid-cell-contents {
-  background-color: gray;
-  color: white;
+    background-color: gray;
+    color: white;
 }
 
 .noSeleccionable .ui-grid-cell-contents {
-  background-color: yellow;
-  color: black;
+    background-color: yellow;
+    color: black;
 }
 
 .bloqueadaSelec .ui-grid-cell-contents {
-  background-color: #5F6F97 !important;
-  color: white;
+    background-color: #5F6F97 !important;
+    color: white;
 }
 
 .bancocss .ui-grid-cell-contents {
-  background-color: #5cb85c;
-  color: white;
+    background-color: #5cb85c;
+    color: white;
 }
 
 .plantacss .ui-grid-cell-contents {
-  background-color: #819FF7;
-  color: white;
+    background-color: #819FF7;
+    color: white;
 }
 
 .docIncompletos .ui-grid-cell-contents {
-  background-color: orange;
-  color: white;
+    background-color: orange;
+    color: white;
 }
 
 .bloqDocIncom .ui-grid-cell-contents {
-  background: #FC9F14;
-  background: -webkit-linear-gradient(180deg, gray, #FC9F14);
-  background: -o-linear-gradient(180deg, gray, #FC9F14);
-  background: -moz-linear-gradient(180deg, gray, #FC9F14);
-  background: linear-gradient(180deg, gray, #FC9F14);
+    background: #FC9F14;
+    background: -webkit-linear-gradient(180deg, gray, #FC9F14);
+    background: -o-linear-gradient(180deg, gray, #FC9F14);
+    background: -moz-linear-gradient(180deg, gray, #FC9F14);
+    background: linear-gradient(180deg, gray, #FC9F14);
 }
 
+tr.selected td {
+    background: #c8dff5 !important;
+}
+
+tr.unSelect td {
+    background: #d3f9c4;
+}
+
+.cursor {
+    cursor: pointer;
+}
+.positionRight{
+    float: right !important;
+}
+.inputCenter{
+    vertical-align: bottom;
+}
 /*END Estilos tradidos de pagos*/
