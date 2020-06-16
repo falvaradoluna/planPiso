@@ -26,6 +26,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     commonFactory.getTipoTiie().then(function(result) {
         $scope.lstTiie = result.data;
     });
+    commonFactory.getTipoColateral().then(function(result) {
+        $scope.lstTipoColateral = result.data;
+    });
     $scope.validateSchemaHeader = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
         var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
@@ -35,18 +38,20 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
 
         var params = {
             usuarioID: $scope.usuarioID,
-            financieraID: $scope.currentFinancialID,
+            financieraID: $scope.currentFinancialIDAP,
             diasGracia: $scope.esquemaHeader.diasGracia,
             plazo: $scope.esquemaHeader.plazo,
             nombre: $scope.esquemaHeader.nombre,
-            descripcion: $scope.esquemaHeader.descripcion,
             interesMoratorio: $scope.esquemaHeader.interesMoratorio,
             usuarioID: $scope.usuarioID,
             tasaInteres: $scope.esquemaHeader.tasaInteres,
+            tieneDPP: $scope.esquemaHeader.tieneDPP,
+            tieneReduccion: $scope.esquemaHeader.tieneReduccion,
             fechaInicio: $scope.esquemaHeader.fechaInicio,
             fechaFin: $scope.esquemaHeader.fechaFin,
             porcentajePenetracion: $scope.esquemaHeader.porcentajePenetracion,
             tipoTiieCID: $scope.esquemaHeader.selectedOption.tipoTiieId,
+            tipoColateralId:$scope.esquemaHeader.selectedtipoColateral.idtipoColateral,
             tiie: $scope.esquemaHeader.tiie,
         };
 
@@ -57,17 +62,41 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             $scope.backToPrincipal();
         });
     };
+$scope.ColateralChange= function(){
+    var item = $scope.esquemaHeader.selectedtipoColateral;
+    var params = {
+        idempresa: sessionFactory.empresaID,
+        idtipoColateral: item.idtipoColateral,
+        idfinanciera: $scope.currentFinancialID
+    };
 
+    esquemaFactory.getPlantilla(params).then(function(result) {
+       
+        $scope.esquemaHeader.diasGracia = result.data[0].diasGracia;
+        $scope.esquemaHeader.plazo = result.data[0].plazo;
+        $scope.esquemaHeader.interesMoratorio = result.data[0].interesMoratorio;
+        $scope.esquemaHeader.tasaInteres = result.data[0].tasaInteres;
+        $scope.esquemaHeader.porcentajePenetracion = result.data[0].porcentajePenetracion;
+        $scope.esquemaHeader.tieneReduccion = result.data[0].tieneReduccion;
+        $scope.esquemaHeader.tieneDPP = result.data[0].tieneDPP;
+        $scope.esquemaHeader.fechaInicio = result.data[0].fechaInicio;
+        $scope.esquemaHeader.fechaFin = result.data[0].fechaFin;
+        //$scope.esquemaHeader.tiie = objSchema.tiie;
+        $scope.esquemaHeader.selectedOption = _.where($scope.lstTiie, { tipoTiieId: result.data[0].tipoTiieCID })[0];
+        $scope.esquemaHeader.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: result.data[0].tipoColateralID })[0];
+    });
+}
     $scope.setCurrentFinancial = function(financialObj) {
         $scope.showAddBtn = true;
         $scope.currentPanel = "pnlFinanciera";
         $scope.currentFinancialName = financialObj.nombre;
         $scope.currentFinancialID = financialObj.financieraID;
-        $scope.getSchemas($scope.currentFinancialID);
+        $scope.currentFinancialIDAP = financialObj.financieraIDAP;
+        $scope.getSchemas($scope.financieraIDAP);
     };
-    $scope.getSchemas = function(financialId) {
+    $scope.getSchemas = function() {
         $('#mdlLoading').modal('show');
-        commonFactory.getSchemas(financialId).then(function(result) {
+        commonFactory.getSchemasBP( $scope.currentFinancialIDAP).then(function(result) {
             $('#tblSchemas').DataTable().destroy();
             $scope.lstSchemas = result.data;
             $('#mdlLoading').modal('hide');
@@ -81,6 +110,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     };
     $scope.newSchema = function() {
         $scope.isAddMode = true;
+    };
+    $scope.CambiarReduccion = function() {
+        $scope.esquemaHeader.tieneReduccion = $scope.reducc;
     };
     $scope.addSchema = function() {
         $scope.isAddMode = true;
@@ -120,16 +152,20 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     };
     $scope.setSchemaHeaderData = function(objSchema) {
         $scope.esquemaHeader.nombre = objSchema.nombre;
-        $scope.esquemaHeader.descripcion = objSchema.descripcion;
         $scope.esquemaHeader.diasGracia = objSchema.diasGracia;
         $scope.esquemaHeader.plazo = objSchema.plazo;
         $scope.esquemaHeader.interesMoratorio = objSchema.interesMoratorio;
         $scope.esquemaHeader.tasaInteres = objSchema.tasaInteres;
         $scope.esquemaHeader.porcentajePenetracion = objSchema.porcentajePenetracion;
+        $scope.esquemaHeader.tieneReduccion = objSchema.tieneReduccion;
+        $scope.esquemaHeader.tieneDPP = objSchema.tieneDPP;
         $scope.esquemaHeader.fechaInicio = objSchema.fechaInicio;
         $scope.esquemaHeader.fechaFin = objSchema.fechaFin;
         $scope.esquemaHeader.tiie = objSchema.tiie;
         $scope.esquemaHeader.selectedOption = _.where($scope.lstTiie, { tipoTiieId: objSchema.tipoTiieCID })[0];
+        $scope.esquemaHeader.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: objSchema.tipoColateralId })[0];
+        
+    
     };
     $scope.validateSchemaHeaderEdit = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
@@ -141,17 +177,19 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
         var params = {
             esquemaID: $scope.currentEsquema,
             usuarioID: $scope.usuarioID,
-            financieraID: $scope.currentFinancialID,
+            financieraID: $scope.currentFinancialIDAP,
             diasGracia: $scope.esquemaHeader.diasGracia,
             plazo: $scope.esquemaHeader.plazo,
             nombre: $scope.esquemaHeader.nombre,
-            descripcion: $scope.esquemaHeader.descripcion,
             interesMoratorio: $scope.esquemaHeader.interesMoratorio,
             tasaInteres: $scope.esquemaHeader.tasaInteres,
+            tieneDPP: $scope.esquemaHeader.tieneDPP?1:0,
+            tieneReduccion: $scope.esquemaHeader.tieneReduccion?1:0,
             fechaInicio: $scope.esquemaHeader.fechaInicio,
             fechaFin: $scope.esquemaHeader.fechaFin,
             porcentajePenetracion: $scope.esquemaHeader.porcentajePenetracion,
             tipoTiieCID: $scope.esquemaHeader.selectedOption.tipoTiieId,
+            tipoColateralId: $scope.esquemaHeader.selectedtipoColateral.idtipoColateral,
             tiie: $scope.esquemaHeader.tiie,
         };
 

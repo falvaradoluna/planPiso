@@ -1,12 +1,14 @@
 <table id="tblSchemas" class="table table-striped">
     <thead>
         <tr>
+            <th>Tipo Colateral</th>
             <th>Nombre</th>
-            <th>Descripcion</th>
             <th>Días Gracia</th>
             <th>Plazo</th>
             <th>Fecha Creación</th>
             <th>Tasa Interes</th>
+            <th>Tiene DPP</th>
+            <th>Tiene Reduccion</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>% penetración</th>
@@ -17,12 +19,18 @@
     </thead>
     <tbody>
         <tr ng-repeat="schema in lstSchemas" repeat-end="initTblSchemas()">
+            <td>{{schema.tipoColateral}}</td>
             <td>{{schema.nombre}}</td>
-            <td>{{schema.descripcion}}</td>
             <td>{{schema.diasGracia}}</td>
             <td>{{schema.plazo}}</td>
             <td>{{schema.fechaCreacion}}</td>
             <td>{{schema.tasaInteres}}</td>
+            <td>
+                <input type="checkbox"  ng-checked="schema.tieneDPP" >
+            </td>
+            <td>
+                <input type="checkbox"  ng-checked="schema.tieneReduccion" >
+            </td>
             <td>{{schema.fechaInicio}}</td>
             <td>{{schema.fechaFin}}</td>
             <td>{{schema.porcentajePenetracion}}</td>

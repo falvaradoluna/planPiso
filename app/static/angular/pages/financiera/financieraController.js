@@ -26,9 +26,9 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
     financieraFactory.getCatalogosTipo().then(function(result) {
         $scope.lsttipoCobroInteres = result.data[0];
         $scope.lsttipoPagoInteres = result.data[1];
-        $scope.lsttipoPagoMensual = result.data[2];
+        $scope.lsttipoPagoInteresFinMes = result.data[2];
         $scope.lsttipoSOFOM = result.data[3];
-        $scope.lsttipoCompensacion = result.data[4];
+       
     });
     $scope.validateSchemaHeader = function() {
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
@@ -98,27 +98,27 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
     };
     $scope.setSchemaHeaderData = function(objSchema) {
         $scope.financieraHeader.nombre = objSchema.nombre;
-        $scope.financieraHeader.financieraID = objSchema.financieraID;
+        $scope.financieraHeader.financieraID = objSchema.financieraIDAP;
         $scope.financieraHeader.empresaID = objSchema.empresaID;
         $scope.financieraHeader.tipoCobroInteresID = objSchema.tipoCobroInteresID;
         $scope.financieraHeader.tipoPagoInteresID = objSchema.tipoPagoInteresID;
-        $scope.financieraHeader.tipoPagoMensualID = objSchema.tipoPagoMensualID;
-        $scope.financieraHeader.tipoCompensacionID = objSchema.tipoCompensacionID;
+        $scope.financieraHeader.tipoPagoInteresFinMesID = objSchema.tipoPagoInteresFinMesID;
+      
 
         $scope.financieraHeader.selectedtipoCobroInteres = _.where($scope.lsttipoCobroInteres, { tipoCobroInteresID: objSchema.tipoCobroInteresID })[0];
         $scope.financieraHeader.selectedtipoPagoInteres = _.where($scope.lsttipoPagoInteres, { tipoPagoInteresID: objSchema.tipoPagoInteresID })[0];
-        $scope.financieraHeader.selectedtipoPagoMensual = _.where($scope.lsttipoPagoMensual, { tipoPagoMensualID: objSchema.tipoPagoMensualID })[0];
+        $scope.financieraHeader.selectedtipoPagoInteresFinMes = _.where($scope.lsttipoPagoInteresFinMes, { tipoPagoInteresFinMesID: objSchema.tipoPagoInteresFinMesID })[0];
         $scope.financieraHeader.selectedtipoSOFOM = _.where($scope.lsttipoSOFOM, { tipoSOFOMID: objSchema.tipoSOFOMID })[0];
-        $scope.financieraHeader.selectedtipoCompensacion = _.where($scope.lsttipoCompensacion, { tipoCompensacionID: objSchema.tipoCompensacionID })[0];
+     
 
 
     };
     $scope.validateSchemaHeaderEdit = function() {
         $scope.financieraHeader.tipoCobroInteresID = $scope.financieraHeader.selectedtipoCobroInteres.tipoCobroInteresID;
-        $scope.financieraHeader.tipoPagoMensualID = $scope.financieraHeader.selectedtipoPagoInteres.tipoPagoInteresID;
+        $scope.financieraHeader.tipoPagoInteresFinMesID = $scope.financieraHeader.selectedtipoPagoInteresFinMes.tipoPagoInteresFinMesID;
         $scope.financieraHeader.tipoPagoInteresID = $scope.financieraHeader.selectedtipoPagoInteres.tipoPagoInteresID;
         $scope.financieraHeader.tipoSOFOMID = $scope.financieraHeader.selectedtipoSOFOM.tipoSOFOMID;
-        $scope.financieraHeader.tipoCompensacionID = $scope.financieraHeader.selectedtipoCompensacion.tipoCompensacionID;
+      
 
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
         var isValid = financieraFactory.formIsvalid(financieraFormControls);
@@ -130,10 +130,9 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
             financieraID: $scope.financieraHeader.financieraID,
             empresaID: $scope.financieraHeader.empresaID,
             tipoCobroInteresID: $scope.financieraHeader.tipoCobroInteresID,
-            tipoPagoMensualID: $scope.financieraHeader.tipoPagoMensualID,
+            tipoPagoInteresFinMesID: $scope.financieraHeader.tipoPagoInteresFinMesID,
             tipoPagoInteresID: $scope.financieraHeader.tipoPagoInteresID,
             tipoSOFOMID: $scope.financieraHeader.tipoSOFOMID,
-            tipoCompensacionID: $scope.financieraHeader.tipoCompensacionID,
             usuarioID: localStorage.getItem('idUsuario')
         };
 

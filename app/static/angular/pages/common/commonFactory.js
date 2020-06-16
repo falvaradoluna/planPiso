@@ -31,6 +31,14 @@ appModule.factory('commonFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        getSchemasBP: function(financieraID, esquemaID,idempresa) {
+            return $http({
+                url: commonUrl +'SchemasBP/',
+                method: "GET",
+                params: { financieraID: financieraID, esquemaID: esquemaID,idempresa:idempresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         getCatalog: function(catalogoID) {
             return $http({
                 url: commonUrl +'Catalog/',
@@ -49,6 +57,13 @@ appModule.factory('commonFactory', function($http) {
         currentTIIE: function() {
             return $http({
                 url: commonUrl +'currentTIIE/',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getTipoColateral: function() {
+            return $http({
+                url: commonUrl +'TipoColateral/',
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });

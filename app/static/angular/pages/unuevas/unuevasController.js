@@ -71,7 +71,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.setCurrentFinancial = function() {
         $scope.listUnidades = _.where($scope.lstNewUnits, { isChecked: true });
         $scope.currentFinancialName = $scope.listUnidades[0].nombreFinanciera;
-        $scope.getSchemas($scope.listUnidades[0].idPersona);
+        $scope.getSchemasBP($scope.listUnidades[0].idPersona);
     };
 
     $scope.getSchemas = function(financieraID) {
@@ -80,7 +80,12 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             $scope.lstSchemas = result.data;
         });
     };
-
+    $scope.getSchemasBP = function(financieraID,idempresa) {
+        commonFactory.getSchemasBP(financieraID,idempresa).then(function(result) {
+            $('#tblSchemas').DataTable().destroy();
+            $scope.lstSchemas = result.data;
+        });
+    };
     $scope.checkAllUnits = function() {
 
         for (var i = 0; i < $scope.lstNewUnits.length; i++) {

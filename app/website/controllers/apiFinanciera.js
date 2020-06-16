@@ -36,7 +36,7 @@ ApiFinanciera.prototype.get_CatalogosTipo = function(req, res, next) {
     var self = this;
 
     var params = [];
-    self.model.query('Usp_CatalogosTipo_GET', params, function(error, result) {
+    self.model.queryAllRecordSet('Usp_CatalogosTipo_GET', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -50,10 +50,9 @@ ApiFinanciera.prototype.get_updFinanciera = function(req, res, next) {
 
     var params = [{ name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
     { name: 'tipoCobroInteresID', value: req.query.tipoCobroInteresID, type: self.model.types.INT },
-    { name: 'tipoPagoMensualID', value: req.query.tipoPagoMensualID, type: self.model.types.INT },
+    { name: 'tipoPagoInteresFinMesID', value: req.query.tipoPagoInteresFinMesID, type: self.model.types.INT },
     { name: 'tipoPagoInteresID', value: req.query.tipoPagoInteresID, type: self.model.types.STRING },
     { name: 'tipoSOFOMID', value: req.query.tipoSOFOMID, type: self.model.types.STRING },
-    { name: 'tipoCompensacionID', value: req.query.tipoCompensacionID, type: self.model.types.STRING },
     { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
 
     self.model.query('Usp_Financiera_UPD', params, function(error, result) {
@@ -63,7 +62,7 @@ ApiFinanciera.prototype.get_updFinanciera = function(req, res, next) {
         });
     });
 };
-ApiFinanciera.prototype.get_updFinanciera = function(req, res, next) {
+ApiFinanciera.prototype.get_updEsquema = function(req, res, next) {
 
     var self = this;
 
