@@ -12,6 +12,21 @@ appModule.factory('fechaPromesaFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        pushCartera: function(idCartera,idEmpresa, fechaPromesa, anioCartera) {
+            return $http({
+                url: fechaPromesaUrl + 'pushCartera/',
+                method: "POST",
+                data: {
+                    idEmpresa: idEmpresa,
+                    idCartera: idCartera,
+                    fechaPromesa: fechaPromesa,
+                    anioCartera: anioCartera
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
     };
 });
