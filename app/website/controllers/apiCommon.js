@@ -133,4 +133,20 @@ ApiCommon.prototype.get_Catalog = function(req, res, next) {
     });
 };
 
+ApiCommon.prototype.get_financieraSucursal = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT }
+    ];
+
+    self.model.query('UspGetFinancieraSucursal', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiCommon;

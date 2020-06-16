@@ -67,6 +67,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Crear Lote', url: '#', isActive: true }
             ];
         },
+        fechaPromesaBar: function() {
+            return [
+                { name: 'Empresas', url: 'empresa', isActive: false },
+                { name: 'Fecha Promesa de Pago', url: '#', isActive: true }
+            ];
+        },
         message: function() {
             alert("Hello");
         },
@@ -188,6 +194,57 @@ appModule.factory('staticFactory', function($http) {
                         }
                     }]
                 });
+            }, 1)
+        },
+        setTableStyleFechaPromesa: function(tblID) {
+            console.log('Hola setTableStyleOne');
+            $(tblID).DataTable().destroy()
+            setTimeout(function() {
+                var table = $(tblID).DataTable({
+                    dom: '<"html5buttons"B>lTfgitp',
+                    //iDisplayLength: 5,
+                    searching: true,
+                    order: [
+                        [0, "desc"]
+                    ],
+                    buttons: [{
+                        extend: 'copy'
+                    }, {
+                        extend: 'csv'
+                    }, {
+                        extend: 'excel',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'pdf',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'print',
+                        customize: function(win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    }]
+                });
+                table.columns().every(function() {
+                    var that = this
+                    $("#selecionS").on('click', function() {
+                        $.fn.dataTable.ext.search.push(
+                            function(settings, data, dataIndex) {
+                                return ($(table.row(dataIndex).node()).hasClass('selected')) ? true : false;
+                            }
+                        );
+
+                        table.draw();
+
+                        $.fn.dataTable.ext.search.pop();
+                    });
+                    $("#selecionT").on('click', function() {
+                        table.draw();
+                    });
+                })
             }, 1)
         },
         filtrosTabla: function(dataTable, title, displayLength) {

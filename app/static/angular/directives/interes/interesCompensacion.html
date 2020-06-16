@@ -1,14 +1,39 @@
-<div class="col-md-12">
-    <h2>Validar Compensacion</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h2><strong>Validar Compensacion</strong></h2>
+    </div>
+    <div class="col-md-6">
+        <div class="alert alert-info" role="alert">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">Saldo a Compensar:</label>
+                    <input type="text" class="form-control" ng-model="saldoCompensar">
+                </div>
+            </form>
+            <!-- <div class="row">
+                <div class="col-md-12"> -->
+            <!-- <div class="col-md-6 text-right">
+                        Saldo a Compensar:
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" ng-model="saldoCompensar">
+                    </div> -->
+            <!-- </div>
+            </div> -->
+        </div>
+        <!-- <table class="table table-striped">
+            <tr>
+                <td class="left" style="width:200px">Saldo a Compensar: </td>
+                <td><input type="text" class="form-control" ng-model="saldoCompensar" style="width: auto"></td>
+            </tr>
+        </table> -->
+    </div>
     <hr>
 </div>
-
 <div class="row">
     <div class="col-md-12">
-
         <div class="col-md-5">
             <table class="table table-striped">
-
                 <tr>
                     <th class="left" style="width:200px">Rubro</th>
                     <th class="left" style="width:200px">Documento</th>
@@ -18,12 +43,6 @@
                     <td class="left" style="width:200px">Serie de Unidad: </td>
                     <td col-span=2 style="text-align: right">{{vin }}</td>
                 </tr>
-                
-               
-               
-              
-               
-    
                 <tr>
                     <td class="left" style="width:200px">Factura de unidad: </td>
                     <td style="text-align: right">{{faturaunidad }}</td>
@@ -91,24 +110,19 @@
                 </tr>
             </table>
         </div>
-        <div class="col-md-7">
+        <!-- <div class="col-md-7">
             <table class="table table-striped">
-
                 <tr>
                     <td class="left" style="width:200px">Saldo a Compensar: </td>
                     <td><input type="text" class="form-control" ng-model="saldoCompensar" style="width: 100px"></td>
-
                 </tr>
-
             </table>
-        </div>
-
-
+        </div> -->
     </div>
 </div>
 <div>
     <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
-    <button class="btn btn-primary pull-right" ng-click="setPnlCompensacionResumen(saldoCompensar)" style="margin:10px">Siguiente 
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </button>
+    <button class="btn btn-primary pull-right" ng-click="setPnlCompensacionResumen(saldoCompensar)" style="margin:10px">Siguiente
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    </button>
 </div>
