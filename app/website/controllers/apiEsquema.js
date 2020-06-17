@@ -39,17 +39,34 @@ ApiEsquema.prototype.get_putEsquema = function(req, res, next) {
     { name: 'plazo', value: req.query.plazo, type: self.model.types.INT },
     { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
     { name: 'nombre', value: req.query.nombre, type: self.model.types.STRING },
-    { name: 'descripcion', value: req.query.descripcion, type: self.model.types.STRING },
     { name: 'interesMoratorio', value: req.query.interesMoratorio, type: self.model.types.INT },
     { name: 'tasaInteres', value: req.query.tasaInteres, type: self.model.types.INT },
+    { name: 'tieneDPP', value: req.query.tieneDPP, type: self.model.types.INT },
+    { name: 'tieneReduccion', value: req.query.tieneReduccion, type: self.model.types.INT },
     { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
     { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING },
     { name: 'porcentajePenetracion', value: req.query.porcentajePenetracion, type: self.model.types.INT },
     { name: 'tipoTiieCID', value: req.query.tipoTiieCID, type: self.model.types.INT },
+    { name: 'tipoColateralId', value: req.query.tipoColateralId, type: self.model.types.INT },
     { name: 'tiie', value: req.query.tiie, type: self.model.types.INT },
     { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
 
     self.model.query('uspInsEsquema', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiEsquema.prototype.get_Plantilla = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idempresa', value: req.query.idempresa, type: self.model.types.INT },
+    { name: 'idtipoColateral', value: req.query.idtipoColateral, type: self.model.types.INT },
+    { name: 'idfinanciera', value: req.query.idfinanciera, type: self.model.types.INT }];
+
+    self.model.query('uspPlantilla', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -65,13 +82,15 @@ ApiEsquema.prototype.get_updEsquema = function(req, res, next) {
     { name: 'plazo', value: req.query.plazo, type: self.model.types.INT },
     { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
     { name: 'nombre', value: req.query.nombre, type: self.model.types.STRING },
-    { name: 'descripcion', value: req.query.descripcion, type: self.model.types.STRING },
     { name: 'interesMoratorio', value: req.query.interesMoratorio, type: self.model.types.INT },
-    { name: 'tasaInteres', value: req.query.tasaInteres, type: self.model.types.INT },
+    { name: 'tasaInteres', value: req.query.tasaInteres, type: self.model.types.DECIMAL },
+    { name: 'tieneDPP', value: req.query.tieneDPP, type: self.model.types.INT },
+    { name: 'tieneReduccion', value: req.query.tieneReduccion, type: self.model.types.INT },
     { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
     { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING },
     { name: 'porcentajePenetracion', value: req.query.porcentajePenetracion, type: self.model.types.INT },
     { name: 'tipoTiieCID', value: req.query.tipoTiieCID, type: self.model.types.INT },
+    { name: 'tipoColateralId', value: req.query.tipoColateralId, type: self.model.types.INT },
     { name: 'tiie', value: req.query.tiie, type: self.model.types.INT },
     { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
 
@@ -89,6 +108,33 @@ ApiEsquema.prototype.get_delEsquema = function(req, res, next) {
     var params = [{ name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }];
 
     self.model.query('uspDelEsquema', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiEsquema.prototype.get_guardarListaReduccion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'lista', value: req.query.lista, type: self.model.types.STRING },
+    { name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }];
+
+    self.model.query('uspguardarListaReduccion', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiEsquema.prototype.get_obtenListaReduccion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }];
+
+    self.model.query('uspobtenListaReduccion', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

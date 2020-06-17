@@ -45,6 +45,19 @@ ApiCommon.prototype.get_TipoTiie = function(req, res, next) {
         });
     });
 };
+ApiCommon.prototype.get_TipoColateral = function(req, res, next) {
+
+    var self = this;
+
+    var params = [];
+
+    self.model.query('Usp_TipoColateral_GET', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 ApiCommon.prototype.get_currentTIIE = function(req, res, next) {
 
@@ -83,6 +96,22 @@ ApiCommon.prototype.get_Schemas = function(req, res, next) {
     ];
 
     self.model.query('uspGetEsquema', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiCommon.prototype.get_SchemasBP = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'financieraIDBP', value: req.query.financieraID, type: self.model.types.INT },
+    { name: 'idempresa', value: req.query.idempresa, type: self.model.types.INT },
+    { name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }
+    ];
+
+    self.model.query('uspGetEsquemaBP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

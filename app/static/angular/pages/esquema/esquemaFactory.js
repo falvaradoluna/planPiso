@@ -5,10 +5,9 @@ appModule.factory('esquemaFactory', function($http) {
         initSchemaHeader: function() {
             return {
                 nombre: null,
-                descripcion: null,
                 diasGracia: null,
                 plazo: null,
-                interesMoratorio: null,
+              
                 tasaInteres: null,
                 porcentajePenetracion: null,
                 fechaInicio: null,
@@ -39,9 +38,33 @@ appModule.factory('esquemaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        getPlantilla: function(params) {
+            return $http({
+                url: esquemaUrl +'Plantilla/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         deleteScheme: function(params) {
             return $http({
                 url: esquemaUrl +'delEsquema/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        guardarListaReduccion: function(params) {
+            return $http({
+                url: esquemaUrl +'guardarListaReduccion/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        obtenListaReduccion: function(params) {
+            return $http({
+                url: esquemaUrl +'obtenListaReduccion/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
@@ -76,16 +99,11 @@ appModule.factory('esquemaFactory', function($http) {
 
             var formControls = [
                 { value: control.nombre, name: 'Nombre', regExp: expresion.todo },
-                { value: control.descripcion, name: 'Descripción', regExp: expresion.todo },
                 { value: control.diasGracia, name: 'Dias Gracia', regExp: expresion.entero1 },
                 { value: control.plazo, name: 'Plazo', regExp: expresion.entero1 },
-                { value: control.interesMoratorio, name: 'Interes Moratorio', regExp: expresion.decimal1 },
                 { value: control.tasaInteres, name: 'Tasa interes', regExp: expresion.decimal1 },
-                { value: control.porcentajePenetracion, name: 'Porcentaje penetración', regExp: expresion.decimal1 },
                 { value: control.fechaInicio, name: 'Fecha inicio', regExp: expresion.todo },
                 { value: control.fechaFin, name: 'Fecha fin', regExp: expresion.todo },
-                { value: control.tiie, name: 'TIIE', regExp: expresion.entero1 }, { value: control.selectedOption === null ? null : control.selectedOption.tipoTiieId, name: 'Tipo TIIE ', regExp: expresion.entero1 }
-
             ];
             return formControls;
         }

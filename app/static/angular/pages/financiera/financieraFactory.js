@@ -84,7 +84,7 @@ appModule.factory('financieraFactory', function($http) {
             var formControls = [
                 { value: control.tipoCobroInteresID, name: 'Tipo Cobro Interes', regExp: expresion.entero1 },
                 { value: control.tipoPagoInteresID, name: 'Tipo Pago Interes', regExp: expresion.entero1 },
-                { value: control.tipoPagoMensualID, name: 'Tipo Pago Mensual', regExp: expresion.entero1 },
+                { value: control.tipoPagoInteresFinMesID, name: 'Tipo Pago Interes fin Mes', regExp: expresion.entero1 },
                 { value: control.tipoSOFOMID, name: 'Tipo SOFOM', regExp: expresion.entero1 },
 
             ];
