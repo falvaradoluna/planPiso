@@ -90,7 +90,7 @@ $scope.ColateralChange= function(){
         $scope.showAddBtn = true;
         $scope.currentPanel = "pnlFinanciera";
         $scope.currentFinancialName = financialObj.nombre;
-        $scope.currentFinancialID = financialObj.financieraID;
+        $scope.currentFinancialID = financialObj.financieraIDBP;
         $scope.currentFinancialIDAP = financialObj.financieraIDAP;
         $scope.getSchemas($scope.financieraIDAP);
     };
