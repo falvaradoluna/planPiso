@@ -96,7 +96,7 @@ $scope.ColateralChange= function(){
     };
     $scope.getSchemas = function() {
         $('#mdlLoading').modal('show');
-        commonFactory.getSchemasBP( $scope.currentFinancialIDAP).then(function(result) {
+        commonFactory.getSchemas( $scope.currentFinancialIDAP).then(function(result) {
             $('#tblSchemas').DataTable().destroy();
             $scope.lstSchemas = result.data;
             $('#mdlLoading').modal('hide');
