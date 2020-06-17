@@ -114,4 +114,31 @@ ApiEsquema.prototype.get_delEsquema = function(req, res, next) {
         });
     });
 };
+ApiEsquema.prototype.get_guardarListaReduccion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'lista', value: req.query.lista, type: self.model.types.STRING },
+    { name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }];
+
+    self.model.query('uspguardarListaReduccion', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiEsquema.prototype.get_obtenListaReduccion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT }];
+
+    self.model.query('uspobtenListaReduccion', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiEsquema;

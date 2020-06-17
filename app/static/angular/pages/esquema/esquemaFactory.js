@@ -54,6 +54,22 @@ appModule.factory('esquemaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        guardarListaReduccion: function(params) {
+            return $http({
+                url: esquemaUrl +'guardarListaReduccion/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        obtenListaReduccion: function(params) {
+            return $http({
+                url: esquemaUrl +'obtenListaReduccion/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         formIsvalid: function(controls) {
             var esValido = false;
 

@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="col-sm-2">
-        <div class="form-group">
+        <div class="form-group" ng-show="esquemaHeader.selectedOption.textbox==1">
             <label for="fTiie">Tiie:</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="fTiie" ng-model="esquemaHeader.tiie" placeholder="Ej.: 10.0">
@@ -94,24 +94,28 @@
         </div>
     </div>
 </div>
-<div class="row" ng-show="esquemaHeader.tieneReduccion == 1">
+<div class="row jumbotron" ng-show="esquemaHeader.tieneReduccion == 1">
    
     <div class="col-sm-6">
+        <h3>Tabla de reducción</h3> 
+        <button type="button" class="btn btn-default" ng-click="AgregarDetail()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
         <table id="tblAddByDate" class="table table-striped">
             <tr>
-                <th>Día</th>
+                <th>Días</th>
                 <th>Porcentaje</th>
-               
+               <th></th>
             </tr>
-            <tr ng-repeat="itemDetail in lstSchemeDetail">
-                <td>{{itemDetail.dia | number:2}} </td>
-                <td>{{itemDetail.porcentaje | number:2}} %}}</td>
+            <tr ng-repeat="itemDetail in esquemaHeader.lstreduccion">
+                <td>{{itemDetail.dia }} </td>
+                <td>{{itemDetail.porcentaje | number:2 }}%</td>
               
                 <td>
-                    <button type="button" class="btn btn-default" ng-click="editDetail(itemDetail)">
+                    <button type="button" class="btn btn-default" ng-click="EditarDetail(itemDetail)">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-                    <button type="button" class="btn btn-default" ng-click="">
+                    <button type="button" class="btn btn-default" ng-click="BorrarDetail(itemDetail)">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -119,27 +123,26 @@
         </table>
     </div>
    
-    <div class="col-sm-6">
+    <div class="col-sm-6" ng-show="agregareditar">
         <div class="form-group">
             <div class="form-group">
-                <label for="fdia">Día:</label>
+                <label for="fdia">Días:</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fdia" ng-model="esquemaHeader.dia" placeholder="Ej.: 10">
+                    <input type="text" class="form-control" id="fdia" ng-model="ctrl.dia" ng-disabled="nuevo==0" placeholder="Ej.: 10">
                 </div>
-            </div>
-            <div class="form-group">
                 <label for="fporcentaje">Porcentaje:</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="fporcentaje" ng-model="esquemaHeader.porcentaje" placeholder="Ej.: 10">
-                    <div class="input-group-addon">%</div>
+                    <input type="text" class="form-control" id="fporcentaje" ng-model="ctrl.porcentaje" placeholder="Ej.: 10">
                 </div>
             </div>
+            
             <div class="form-group">
-            <button type="button" class="btn btn-default" ng-click="editDetail(itemDetail)">
-                <span class="glyphicon glyphicon-edit"></span>
+           
+            <button type="button" class="btn btn-default" ng-click="CancelarDetail()">
+                <span class="glyphicon glyphicon-floppy-remove"></span>
             </button>
-            <button type="button" class="btn btn-default" ng-click="">
-                <span class="glyphicon glyphicon-trash"></span>
+            <button type="button" class="btn btn-default" ng-click="GuardarDetail()">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
             </button>
         </div>
         </div>

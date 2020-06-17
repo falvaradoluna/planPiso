@@ -16,6 +16,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     $scope.currentFinancialID = 0;
     $scope.showAddBtn = false;
     $scope.showEditBtn = false;
+    $scope.agregareditar=false;
     $scope.esquemaHeader = esquemaFactory.initSchemaHeader();
 
     $scope.topBarNav = staticFactory.esquemaBar();
@@ -57,6 +58,26 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
 
         esquemaFactory.putScheme(params).then(function(result) {
             console.log(result.data);
+            $scope.currentEsquema=result.data[0].id;
+            if($scope.esquemaHeader.tieneReduccion==1)
+            {
+                var resultado='';
+                for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
+                    resultado=resultado+'|'+$scope.esquemaHeader.lstreduccion[i].dia+','+$scope.esquemaHeader.lstreduccion[i].porcentaje
+                  }
+                 
+                  if(resultado.length>0)
+                  {
+                    resultado=resultado.substring(1,resultado.length);
+                    var params2 = {
+                        lista: resultado,
+                        esquemaID: $scope.currentEsquema
+                    };
+                    esquemaFactory.guardarListaReduccion(params2).then(function(result) {
+                        console.log(result.data);
+                    });
+                  }
+            }
             swal('Guardado', 'Insertado con exito', 'success');
             $scope.getSchemas($scope.currentFinancialID);
             $scope.backToPrincipal();
@@ -81,10 +102,72 @@ $scope.ColateralChange= function(){
         $scope.esquemaHeader.tieneDPP = result.data[0].tieneDPP;
         $scope.esquemaHeader.fechaInicio = result.data[0].fechaInicio;
         $scope.esquemaHeader.fechaFin = result.data[0].fechaFin;
-        //$scope.esquemaHeader.tiie = objSchema.tiie;
+        $scope.esquemaHeader.lstreduccion = $scope.regresatabla(result.data[0].reducciondetalle);
         $scope.esquemaHeader.selectedOption = _.where($scope.lstTiie, { tipoTiieId: result.data[0].tipoTiieCID })[0];
         $scope.esquemaHeader.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: result.data[0].tipoColateralID })[0];
     });
+}
+$scope.regresatabla= function(arreglo)
+{
+    var tablaregreso=[];
+    var array = arreglo.split('|');
+    for (var i=0; i<array.length; i++) {
+        var array2 = array[i].split(',');
+        var newobject={
+            dia:array2[0],
+            porcentaje:array2[1]
+        }
+        tablaregreso.push(newobject);
+      }
+
+    return tablaregreso;
+
+
+}
+$scope.AgregarDetail=function(){
+    $scope.agregareditar=true;
+    $scope.nuevo=1;
+    $scope.ctrl={};
+    $scope.ctrl.dia=0;
+    $scope.ctrl.porcentaje=0;
+}
+$scope.GuardarDetail=function(){
+    if($scope.nuevo==1)
+    {
+        var newobject={
+            dia:$scope.ctrl.dia,
+            porcentaje:$scope.ctrl.porcentaje
+        }
+        $scope.esquemaHeader.lstreduccion.push(newobject);
+    }else
+    {
+        for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
+            if ($scope.esquemaHeader.lstreduccion[i].dia == $scope.ctrl.dia) {
+                $scope.esquemaHeader.lstreduccion[i].porcentaje = $scope.ctrl.porcentaje;
+               break; //Stop this loop, we found it!
+            }
+          }
+
+    }
+    $scope.ctrl.dia=0;
+    $scope.ctrl.porcentaje=0;
+    $scope.agregareditar=false;
+}
+$scope.CancelarDetail=function(){
+    $scope.ctrl.dia=0;
+    $scope.ctrl.porcentaje=0;
+    $scope.agregareditar=false;
+}
+$scope.EditarDetail=function(item){
+    $scope.agregareditar=true;
+    $scope.ctrl={};
+    $scope.nuevo=0;
+    $scope.ctrl.dia=item.dia;
+    $scope.ctrl.porcentaje=item.porcentaje;
+   
+}
+$scope.BorrarDetail=function(item){
+    $scope.esquemaHeader.lstreduccion.splice($scope.esquemaHeader.lstreduccion.findIndex(v =>v.dia===item.dia),1);
 }
     $scope.setCurrentFinancial = function(financialObj) {
         $scope.showAddBtn = true;
@@ -148,6 +231,13 @@ $scope.ColateralChange= function(){
         $scope.showEditBtn = true;
         $scope.currentPanel = "pnlEsquema";
         $scope.editAddTitle = "Editando esquema: " + objSchema.nombre;
+        var params2 = {
+            esquemaID: $scope.currentEsquema
+        };
+        esquemaFactory.obtenListaReduccion(params2).then(function(result) {
+            $scope.esquemaHeader.lstreduccion=result.data;
+        });
+
         $scope.setSchemaHeaderData(objSchema);
     };
     $scope.setSchemaHeaderData = function(objSchema) {
@@ -164,8 +254,7 @@ $scope.ColateralChange= function(){
         $scope.esquemaHeader.tiie = objSchema.tiie;
         $scope.esquemaHeader.selectedOption = _.where($scope.lstTiie, { tipoTiieId: objSchema.tipoTiieCID })[0];
         $scope.esquemaHeader.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: objSchema.tipoColateralId })[0];
-        
-    
+
     };
     $scope.validateSchemaHeaderEdit = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
@@ -195,6 +284,25 @@ $scope.ColateralChange= function(){
 
         esquemaFactory.updEsquema(params).then(function(result) {
             swal('Guardado', 'Esquema guardado con exito', 'success');
+            if($scope.esquemaHeader.tieneReduccion==1)
+            {
+                var resultado='';
+                for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
+                    resultado=resultado+'|'+$scope.esquemaHeader.lstreduccion[i].dia+','+$scope.esquemaHeader.lstreduccion[i].porcentaje
+                  }
+                 
+                  if(resultado.length>0)
+                  {
+                    resultado=resultado.substring(1,resultado.length-1);
+                    var params2 = {
+                        lista: resultado,
+                        esquemaID: $scope.currentEsquema
+                    };
+                    esquemaFactory.guardarListaReduccion(params2).then(function(result) {
+                        console.log(result.data);
+                    });
+                  }
+            }
             $scope.getSchemas($scope.currentFinancialID);
             $scope.backToPrincipal();
         });
