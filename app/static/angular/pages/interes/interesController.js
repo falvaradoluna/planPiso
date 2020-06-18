@@ -786,7 +786,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     });
     $scope.callCompensation = function() {
         $scope.consecCompensacion = 0;
-
+        $scope.montoTotal = 0;
+        $scope.saldoCompensar = 0;
+        $scope.facturasTotal = [];
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
@@ -800,31 +802,57 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         $scope.unidadCompensacion = item;
                         console.log(item, 'SOY EL SELECCIONADO');
                         $scope.currentPanel = "pnlCompensacion";
-                        interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
-                            console.log(result.data);
-                        }, function error(err) {
-                            console.log(err, 'Ocurrio un error al cargar la factura')
+                        var facturas = [];
+                        facturas.push(interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        Promise.all(facturas).then(function(results) {
+                            console.log(results, 'Facturaaaas')
+                            angular.forEach(results, function(value, key) {
+                                console.log(value.data.length);
+                                if (value.data.length > 0) {
+                                    angular.forEach(value.data, function(value2, key) {
+                                        $scope.montoTotal = $scope.montoTotal + value2.total;
+                                        $scope.$apply(function() {
+                                            $scope.facturasTotal.push(value2);
+                                        });
+                                    });
+                                }
+                            });
+                            $scope.$apply(function() {
+                                $scope.saldoCompensar = $scope.montoTotal - $scope.unidadCompensacion.importe;
+                                $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
+                            });
+
+                            console.log($scope.facturasTotal, 'TOTAL FACTURAS');
                         });
-                        interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
-                            console.log(result.data);
-                        }, function error(err) {
-                            console.log(err, 'Ocurrio un error al cargar la factura')
-                        });
-                        interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
-                            console.log(result.data);
-                        }, function error(err) {
-                            console.log(err, 'Ocurrio un error al cargar la factura')
-                        });
-                        interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
-                            console.log(result.data);
-                        }, function error(err) {
-                            console.log(err, 'Ocurrio un error al cargar la factura')
-                        });
-                        interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
-                            console.log(result.data);
-                        }, function error(err) {
-                            console.log(err, 'Ocurrio un error al cargar la factura')
-                        });
+                        // interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
 
                     }
                 });
@@ -890,7 +918,19 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.currentPanel = "pnlCompensacionResumen";
             $scope.saldoCompensar = saldoCompensar;
         } else {
-            swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+            // swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+            swal({
+                title: "¿Esta seguro?",
+                text: "Se creara la compensación de la unidad  para la unidad seleccionada.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aplicar",
+                closeOnConfirm: true
+            }, function() {
+                $scope.setPnlInteres();
+            });
+
         }
     };
     $scope.CreaCompensacion = function() {
