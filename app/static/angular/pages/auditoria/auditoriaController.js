@@ -51,7 +51,10 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     var increment   = 0;
     var contador    = 0;
 
-         
+$scope.openModalAuditoria= function()
+{
+    $("#modalNuevaAuditoria").modal('show');
+}         
     
     // Este es como funciona desde Branch Auditoria
     commonFactory.getFinancial(  $scope.session.empresaID ).then(function(result) {

@@ -1,99 +1,89 @@
 <div class="row">
     <div class="col-md-6">
-        <div ng-show="estatusConciliacion != 1">
+            <div class="alert alert-default"  style="overflow: hidden; background-color: #f4f4f4;"  role="alert" ng-show="situacion.gpoAndrade == 0 && situacion.financiera == 0">
+                
+                <div ng-show="!conciliacion">
+                    <h4 class="alert-heading">
+                        <table width="100%" border="0">
+                            <tr>
+                                <td width="40"> <i class="fa fa-exclamation-triangle text-warning" aria-hidden="true" style="font-size: 30px"></i> </td>
+                                <td> <span>No es posible realizar la conciliación</span> </td>
+                            </tr>
+                        </table>
+                    </h4>
 
-       
-        <div class="alert alert-default"
-             style="overflow: hidden; background-color: #f4f4f4;"
-             role="alert"
-             ng-show="situacion.gpoAndrade == 0 && situacion.financiera == 0">
-            
-            <div ng-show="!conciliacion">
-                <h4 class="alert-heading">
-                    <table width="100%" border="0">
-                        <tr>
-                            <td width="40"> <i class="fa fa-exclamation-triangle text-warning" aria-hidden="true" style="font-size: 30px"></i> </td>
-                            <td> <span>No es posible realizar la conciliación</span> </td>
-                        </tr>
-                    </table>
-                </h4>
-
-                <p>No es posible realizar la conciliación, asegurate de ajustar los montos de intereses a aplicar.</p>
-            </div>
-
-            <div ng-show="conciliacion">
-                <h4 class="alert-heading">
-                    <table width="100%" border="0">
-                        <tr>
-                            <td width="40"> <i class="fa fa-check-circle text-success" aria-hidden="true" style="font-size: 30px"></i>  </td>
-                            <td> <span>Conciliación lista</span> </td>
-                        </tr>
-                    </table>
-                </h4>
-
-                <p>Los montos de los intereses estan listos para su conciliación.</p>
-            </div>
-
-            <hr>
-
-            <button class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
-            <button class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
-        </div>
-
-        <div class="alert alert-warning"
-             style="overflow: hidden;" 
-             role="alert" 
-             ng-show="situacion.gpoAndrade != 0 && situacion.financiera == 0">
-            <h4 class="alert-heading">
-                <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px"></i> 
-                Unidades no reportadas por la Financiera!
-            </h4>
-            <p>Existen unidades reportadas por Grupo Andrade que la Financiera no esta reportando, para poder conciliar deselecciona aquellas que no reporte la financiera.</p>
-            <div ng-show="estSolAutorizacion == 3">
-                <hr>
-                <small>Fecha de autorización: {{autDetalle.fechaAutoriza}}</small>
-            </div>
-            <hr>
-            <!-- <div ng-show="true"> -->
-            <div ng-show="estSolAutorizacion == 0 || estSolAutorizacion == 3">
-                <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
-                <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
-                <button class="btn btn-warning btn-sm pull-right" ng-click="controlCheckDeseleccionar();">{{lbl_btn_descheck}}</button>
-            </div>
-
-            <!-- <div ng-show="false"> -->
-            <div ng-show="estSolAutorizacion == 1">
-                <button class="btn btn-warning btn-sm pull-right" ng-click="solicitaAutorizacion(1);">
-                    <i class="fa fa-key" aria-hidden="true"></i> Solicitar Autorización
-                </button>
-            </div>
-
-            <!-- <div ng-show="false"> -->
-            <div ng-show="estSolAutorizacion == 2" class="row">
-                <div class="col-sm-6 pull-right">
-                    <table border="0" class="pull-right">
-                        <tr>
-                            <td width="30"> <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 25px"></i> </td>
-                            <td class="text-right"> <b> En espera de autorización </b> </td>
-                        </tr>
-                    </table>                    
+                    <p>No es posible realizar la conciliación, asegurate de ajustar los montos de intereses a aplicar.</p>
                 </div>
-            </div>
-        </div>
 
-        <div class="alert alert-danger" role="alert" ng-show="situacion.financiera != 0">
-            <h4 class="alert-heading">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 20px"></i> 
-                Unidades no reportadas por Grupo Andrade!
-            </h4>
-            <p>No es posible realizar la CONCILIACIÓN debido a que Grupo Andrade no reporta unidades que en el Layout se especifican.</p>
-            <hr>
-            <p class="mb-0">
-                <b>NOTA:</b> Debera actualizar la cartera para cuadrar la conciliación.
-                <button type="button" class="btn btn-primary pull-right" ng-click="CompraVirtual()" >Compra Virtual</button>
-            </p>
-        </div>
-    </div>
+                <div ng-show="conciliacion">
+                    <h4 class="alert-heading">
+                        <table width="100%" border="0">
+                            <tr>
+                                <td width="40"> <i class="fa fa-check-circle text-success" aria-hidden="true" style="font-size: 30px"></i>  </td>
+                                <td> <span>Conciliación lista</span> </td>
+                            </tr>
+                        </table>
+                    </h4>
+
+                    <p>Los montos de los intereses estan listos para su conciliación.</p>
+                </div>
+
+                <hr>
+
+                <button class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
+                <button class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
+            </div>
+
+            <div class="alert alert-warning" style="overflow: hidden;"  role="alert"  ng-show="situacion.gpoAndrade != 0 && situacion.financiera == 0">
+                <h4 class="alert-heading">
+                    <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px"></i> 
+                    Unidades no reportadas por la Financiera!
+                </h4>
+                <p>Existen unidades reportadas por Grupo Andrade que la Financiera no esta reportando, para poder conciliar deselecciona aquellas que no reporte la financiera.</p>
+                <!-- <div ng-show="estSolAutorizacion == 3">
+                    <hr>
+                    <small>Fecha de autorización: {{autDetalle.fechaAutoriza}}</small>
+                </div> -->
+                <hr>
+            
+                <div ng-show="estSolAutorizacion == 0 || estSolAutorizacion == 3">
+                    <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" style="margin-right: 10px;" ng-click="ajusteAutomatico();">Ajuste General</button>
+                    <button ng-disabled="flagAjusteCaseTree" class="btn btn-primary btn-sm pull-left" ng-click="fnAjusteManual();">Ajuste Manual</button>
+                    <button class="btn btn-warning btn-sm pull-right" ng-click="controlCheckDeseleccionar();">{{lbl_btn_descheck}}</button>
+                </div>
+
+            
+                <!-- <div ng-show="estSolAutorizacion == 1">
+                    <button class="btn btn-warning btn-sm pull-right" ng-click="solicitaAutorizacion(1);">
+                        <i class="fa fa-key" aria-hidden="true"></i> Solicitar Autorización
+                    </button>
+                </div> -->
+
+            
+                <!-- <div ng-show="estSolAutorizacion == 2" class="row">
+                    <div class="col-sm-6 pull-right">
+                        <table border="0" class="pull-right">
+                            <tr>
+                                <td width="30"> <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 25px"></i> </td>
+                                <td class="text-right"> <b> En espera de autorización </b> </td>
+                            </tr>
+                        </table>                    
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="alert alert-danger" role="alert" ng-show="situacion.financiera != 0 && estatusConciliacion == 2 && frmConciliacion.lbltipoconciliacion == 1">
+                <h4 class="alert-heading">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 20px"></i> 
+                    Unidades no reportadas por Grupo Andrade!
+                </h4>
+                <p>No es posible realizar la CONCILIACIÓN debido a que Grupo Andrade no reporta unidades que en el Layout se especifican.</p>
+                <hr>
+                <p class="mb-0">
+                    <b>NOTA:</b> Debera actualizar la cartera para cuadrar la conciliación.
+                    <button type="button" class="btn btn-primary pull-right" ng-click="CompraVirtual()" >Compra Virtual</button>
+                </p>
+            </div>
     </div>
     <div class="col-md-6">
         <div class="row">
@@ -114,8 +104,10 @@
             </div>            
         </div>
     </div>
-</div>
+
+</div>  
 <hr>
+<div class="row">
 <table id="tblConciliacion" class="table table-hover borderless">
     <thead>
         <tr>
@@ -135,8 +127,9 @@
             <td>
                 <input  type="checkbox"
                         ng-checked="dato.checked"
-                        ng-disabled="true">
-                <!-- ng-checked="situacion.financiera == 0" -->
+                        ng-disabled="dato.equiparante != 3">
+                       
+                 <!-- ng-checked="situacion.financiera == 0"   ng-disabled="true"-->
             </td>
             <td>
                 <b>{{dato.numeroSerie}}</b><br>
@@ -202,16 +195,13 @@
         </tr>
     </tbody>
 </table>
-
+</div>
 <div class="row">
     <div class="col-sm-6">
         &nbsp;
     </div>
     <div class="col-sm-6">
-        <div class="alert alert-default"
-             style="overflow: hidden;"
-             role="alert"
-             ng-hide="situacion.financiera != 0">
+        <div class="alert alert-default" style="overflow: hidden;" role="alert" ng-show="estatusConciliacion == 2">
             <div ng-show="!conciliacion">
                 <h4 class="alert-heading">
                     <table width="100%" border="0">
@@ -247,8 +237,8 @@
             
             <button type="button" class="btn btn-primary pull-right" ng-click="guardaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>
         </div>
-
-        <div style="overflow: hidden;" ng-show="situacion.financiera != 0">
+        <!-- </div> -->
+        <div style="overflow: hidden;" ng-show="estatusConciliacion != 2">
              <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
          </div>
     </div>

@@ -168,54 +168,6 @@ appModule.factory('auditoriaFactory', function($http) {
                 params:{ idAuditoria: idAuditoria },
                 headers: { 'Content-Type': 'application/json' }
             });
-        } ,
-        getUnidadesCompraVirtual: function(idAuditoria) {
-            return $http({
-                url: auditoriaUrl + 'UnidadesCompraVirtual/',
-                method: "GET",
-                params:{ idAuditoria: idAuditoria },
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }, auditoriaPoliza: function(params) {
-            return $http({
-                url: auditoriaUrl + 'auditoriaPoliza/',
-                method: "GET",
-                params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },
-        auditoriaPolizaDetalle: function(params) {
-            return $http({
-                url: auditoriaUrl + 'auditoriaPolizaDetalle/',
-                method: "GET",
-                params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },
-        procesaauditoria: function( lastId ) {
-            return $http({
-                url: auditoriaUrl + 'procesaauditoria/',
-                method: "GET",
-                params: {
-                    idTraspasoFinanciera: lastId
-                },
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },  
-        getMesAuditoria: function(params) {
-            return $http({
-                url: auditoriaUrl + 'MesAuditoria/',
-                method: "GET",
-                params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },  
-        getTiposAuditoria: function() {
-            return $http({
-                url: auditoriaUrl + 'tiposAuditoria/',
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },   
+        }   
     };
 });

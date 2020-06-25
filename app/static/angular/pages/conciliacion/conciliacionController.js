@@ -53,7 +53,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
          
     
     // Este es como funciona desde Branch Conciliación
-    commonFactory.getFinancial( 1 ).then(function(result) {
+    commonFactory.getFinancial( $scope.session.empresaID ).then(function(result) {
         $scope.lstFinancial = result.data;
     });
     $scope.SelectFinanciera= function(item){
@@ -340,10 +340,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.readyConciliation();
 
         // Valida estatus de autorización
-        if($scope.situacion.gpoAndrade != 0 && $scope.situacion.financiera == 0){
-            $scope.estSolAutorizacion  = 1;
-            //$scope.conciliacion = false;
-        }
+        // if($scope.situacion.gpoAndrade != 0 && $scope.situacion.financiera == 0){
+        //     $scope.estSolAutorizacion  = 1;
+        //     //$scope.conciliacion = false;
+        // }
     };
 
     $scope.controlCheck = function() {
