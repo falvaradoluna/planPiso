@@ -25,24 +25,4 @@ appModule.directive('auditoriaDetalle', function() {
         restrict: 'E',
         templateUrl: auditoriaPath + 'auditoriaDocumentosDetalle.html'
     };
-}).directive('compraVirtualAplicar', function() {
-    return {
-        restrict: 'E',
-        templateUrl: auditoriaPath + 'compraVirtualAplicar.html'
-    };
-}).directive('compraVirtualContentHeader', function() {
-    return {
-        restrict: 'E',
-        templateUrl: auditoriaPath + 'compraVirtualContentHeader.html'
-    };
-}).directive('compraVirtualDetalle', function() {
-    return {
-        restrict: 'E',
-        templateUrl: auditoriaPath + 'compraVirtualDetalle.html'
-    };
-}).directive('compraVirtual', function() {
-        return {
-            restrict: 'E',
-            templateUrl: auditoriaPath + 'compraVirtual.html'
-        };
-    });
+});
