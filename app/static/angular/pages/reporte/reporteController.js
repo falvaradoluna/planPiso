@@ -20,10 +20,10 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             $scope.totalLineaUtilizada = $scope.totalLineaUtilizada + value.saldo;
             $scope.totalUnidadesInventario = $scope.totalUnidadesInventario + value.unidades;
             $scope.totalIventario = $scope.totalIventario + value.saldo;
-            $scope.unidadesEstrella = $scope.unidadesEstrella + 1;
-            $scope.totalEstrella = $scope.totalEstrella + 1;
-            $scope.unidadesDobleE = $scope.unidadesDobleE + 1;
-            $scope.totalDobleE = $scope.totalDobleE + 1;
+            $scope.unidadesEstrella = $scope.unidadesEstrella + value.estrella;
+            $scope.totalEstrella = $scope.totalEstrella + value.estrellaMonto;
+            $scope.unidadesDobleE = $scope.unidadesDobleE + value.dobleEstrella;
+            $scope.totalDobleE = $scope.totalDobleE + value.dobleEstrellaMonto;
         });
     }, function err(error) {
         console.log(error);

@@ -30,11 +30,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.consecPago = 0;
     $scope.todos = true;
     $scope.noExisten = false;
-    $rootScope.showwarningspread=false;
-    $rootScope.fechainicio='';
-    $rootScope.fechafin='';
-    $rootScope.tiie=0;
-    $rootScope.puntos=0;
+    $rootScope.showwarningspread = false;
+    $rootScope.fechainicio = '';
+    $rootScope.fechafin = '';
+    $rootScope.tiie = 0;
+    $rootScope.puntos = 0;
 
     $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
@@ -261,60 +261,56 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setBackToDetailUnit = function(unidad) {
         $scope.currentPanel = "pnlDetalleUnidad";
     }
-/////////////////////////
+    /////////////////////////
     $scope.setPnlSpread = function() {
         $scope.currentPanel = "pnlSpread";
         //  location.reload();
         //  $scope.showwarningspread=true;
     };
     commonFactory.getSpreads(sessionFactory.empresaID).then(function(result) {
-      if(result.data.length>0)
-      {
-          if($scope.lstSpreads == undefined)
-          {
-        $scope.lstSpreads=result.data[0];
-        $rootScope.fechainicio=result.data[1][0].fechainicio;
-        $rootScope.fechafin=result.data[1][0].fechafin;
-        $rootScope.showwarningspread=result.data[1][0].showwarningspread;
-        $rootScope.tiie=result.data[1][0].tiie;
-        $rootScope.puntos=0;
-    }
-      }
+        if (result.data.length > 0) {
+            if ($scope.lstSpreads == undefined) {
+                $scope.lstSpreads = result.data[0];
+                $rootScope.fechainicio = result.data[1][0].fechainicio;
+                $rootScope.fechafin = result.data[1][0].fechafin;
+                $rootScope.showwarningspread = result.data[1][0].showwarningspread;
+                $rootScope.tiie = result.data[1][0].tiie;
+                $rootScope.puntos = 0;
+            }
+        }
     });
     $scope.CargarNuevo = function() {
         $('#selectReporte').modal('show');
     };
-    $scope.GuardarDetail= function(puntos,tiie)
-    {
+    $scope.GuardarDetail = function(puntos, tiie) {
         var data = {
             idempresa: sessionFactory.empresaID,
-            puntos:puntos,
-            tiie:tiie,
-            fechainicio:$rootScope.fechainicio,
-            fechafin:$rootScope.fechafin
+            puntos: puntos,
+            tiie: tiie,
+            fechainicio: $rootScope.fechainicio,
+            fechafin: $rootScope.fechafin
         };
         interesFactory.saveSpread(data).then(function(resultSchema) {
-           
+
             commonFactory.getSpreads(sessionFactory.empresaID).then(function(result) {
-                if(result.data.length>0)
-                {
-                  $scope.lstSpreads=result.data[0];
-                  $rootScope.fechainicio=result.data[1][0].fechainicio;
-                  $rootScope.fechafin=result.data[1][0].fechafin;
-                  $rootScope.showwarningspread=result.data[1][0].showwarningspread;
-                  $rootScope.tiie=result.data[1][0].tiie;
-                  $rootScope.puntos=0;
-              
+                if (result.data.length > 0) {
+                    $scope.lstSpreads = result.data[0];
+                    $rootScope.fechainicio = result.data[1][0].fechainicio;
+                    $rootScope.fechafin = result.data[1][0].fechafin;
+                    $rootScope.showwarningspread = result.data[1][0].showwarningspread;
+                    $rootScope.tiie = result.data[1][0].tiie;
+                    $rootScope.puntos = 0;
+
                 }
                 $('#selectReporte').modal('hide');
                 swal("Ok", "Se guardo con exito", "success");
-              });
+            });
         });
 
     }
-// $scope.reporteCaratula = function() {
-//     $('#selectReporte').modal('hide');
-///////////////////////////
+    // $scope.reporteCaratula = function() {
+    //     $('#selectReporte').modal('hide');
+    ///////////////////////////
     $scope.setPnlDetalleUnidad = function(unidad) {
         interesFactory.getDetailUnits(unidad.unidadID).then(function(result) {
             $scope.unitDetail = result.data[0];
@@ -859,7 +855,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     if (item.isChecked === true) {
                         $scope.unidadCompensacion = item;
                         console.log(item, 'SOY EL SELECCIONADO');
-                        $scope.currentPanel = "pnlCompensacion";
                         var facturas = [];
                         facturas.push(interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         facturas.push(interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
@@ -868,6 +863,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         facturas.push(interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         Promise.all(facturas).then(function(results) {
                             console.log(results, 'Facturaaaas')
+                            var contadorFacturas = 0;
                             angular.forEach(results, function(value, key) {
                                 console.log(value.data.length);
                                 if (value.data.length > 0) {
@@ -876,6 +872,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         $scope.$apply(function() {
                                             $scope.facturasTotal.push(value2);
                                         });
+                                        contadorFacturas++;
                                     });
                                 }
                             });
@@ -883,7 +880,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 $scope.saldoCompensar = $scope.montoTotal - $scope.unidadCompensacion.importe;
                                 $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
                             });
-
+                            if (contadorFacturas > 0) {
+                                $scope.currentPanel = "pnlCompensacion";
+                            }else{
+                                swal("Aviso", "No se puede compensar este documento.", "warning");
+                            }
                             console.log($scope.facturasTotal, 'TOTAL FACTURAS');
                         });
                         // interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {

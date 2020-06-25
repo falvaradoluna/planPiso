@@ -56,10 +56,10 @@
                                         <td class="text-right">{{datoReporte.lineaAutorizada - datoReporte.saldo | currency}}</td>
                                         <td>{{datoReporte.unidades}}</td>
                                         <td class="text-right">{{datoReporte.saldo | currency}}</td>
-                                        <td>{{1}}</td>
-                                        <td>{{1}}</td>
-                                        <td>{{1}}</td>
-                                        <td>{{1}}</td>
+                                        <td>{{datoReporte.estrella}}</td>
+                                        <td class="text-right">{{datoReporte.estrellaMonto | currency}}</td>
+                                        <td>{{datoReporte.dobleEstrella}}</td>
+                                        <td class="text-right">{{datoReporte.dobleEstrellaMonto | currency}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -75,9 +75,9 @@
                                         <td>{{ totalUnidadesInventario }}</td>
                                         <td class="text-right">{{totalIventario | currency}}</td>
                                         <td>{{unidadesEstrella}}</td>
-                                        <td>{{totalEstrella}}</td>
+                                        <td class="text-right">{{totalEstrella | currency}}</td>
                                         <td>{{unidadesDobleE}}</td>
-                                        <td>{{totalDobleE}}</td>
+                                        <td class="text-right">{{totalDobleE | currency}}</td>
                                     </tr>
                                 </tfoot>
                             </table>
