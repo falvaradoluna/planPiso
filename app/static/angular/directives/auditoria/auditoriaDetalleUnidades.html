@@ -1,0 +1,148 @@
+<div class="row">
+      <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <h2><small>Financiera:</small> <br>{{ ctrl.lblFinanciera }}</h2>
+            </div>
+            <div class="col-md-3 text-right">
+                <h2><small>Número de Unidades:</small> <br>{{ ctrl.numveh }}</h2>
+            </div>
+            <div class="col-md-3 text-right">
+                <h2><small>Auditoría Num:</small> <br>{{ctrl.lblNum}}</h2>
+            </div>
+            <div class="col-md-3 text-right">
+                <h2><small>Fecha:</small> <br>{{ctrl.lblFecha}}</h2>
+            </div>
+            <div class="col-md-12">&nbsp;</div>
+            <div class="col-md-6 text-right">
+              
+            </div>
+            <div class="col-md-6 text-right">
+               
+            </div>            
+        </div>
+    </div>
+</div>
+<hr>
+<table id="tblNormales" class="table table-hover borderless">
+    <thead>
+        <tr>
+            <th>Documento</th>
+            <th>Número serie</th>
+            <th>Ubicación</th>
+            <th>Situación</th>
+            <th width="180">Observaciones</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(key, dato) in lstAuditoriaNormales" repeat-end="setTableStyle('#tblNormales')">
+            
+            <td>{{dato.documento}}</td>
+            <td>
+                <b>{{dato.vin}}</b><br>
+            </td>
+            <td>{{dato.Ubicacion}}</td>
+            <td>{{dato.Situacion}}</td>
+            <td>{{dato.observaciones}}</td>
+            <td >
+                <button type="button" class="btn btn-default" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </button>
+            </td>
+            <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
+        </tr>
+    </tbody>
+</table>
+<hr>
+<table id="tblFS" class="table table-hover borderless">
+    <thead>
+        <tr>
+            <th>Documento</th>
+            <th>Número serie</th>
+            <th>Ubicación</th>
+            <th>Situación</th>
+            <th>Fecha Salida</th>
+            <th>Saldo</th>
+            <th width="180">Observaciones</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(key, dato) in lstAuditoriaFS" repeat-end="setTableStyle('#tblFS')">
+            <td>{{dato.documento}}</td>
+            <td>
+                <b>{{dato.vin}}</b><br>
+            </td>
+            <td>{{dato.Ubicacion}}</td>
+            <td>{{dato.Situacion}}</td>
+            <td>{{dato.veh_fechasalida}}</td>
+            <td>{{dato.saldo | currency}}</td>
+            <td>{{dato.observaciones}}</td>
+            <td >
+                <button type="button" class="btn btn-default" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </button>
+            </td>
+            <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-sm-6">
+        &nbsp;
+    </div>
+   <div class="col-sm-6">
+
+        <div style="overflow: hidden;" ng-show="ctrl.idestatus != 1">
+             <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
+         </div>
+         <div style="overflow: hidden;" ng-show="ctrl.idestatus == 1">
+            <button type="button" class="btn btn-primary pull-right" ng-click="guardaAuditoria()" >Guardar Auditoría</button>
+            <button type="button" class="btn btn-default pull-right" ng-click="CancelarAuditoria()">Cancelar Auditoría</button>
+            <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
+        </div>
+        
+    </div>
+</div>
+<!--===================================================-->
+<!--Modal selectReporte-->
+<!--===================================================-->
+<div class="modal fade" id="selectObservaciones" role="dialog" tabindex="-1" data-focus-on="input:first" data-backdrop="static" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="row jumbotron">
+            <div class="modal-content">
+                <div class="media-body pad-lft">
+                    <div class="modal-body">
+                        <h3 class="text-title">Actualizar observaciones  de {{documento}} con vin: {{vin}} </h3>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                    <label for="fpuntos">Observaciones:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fpuntos" ng-model="observaciones" style="width: 500px;">
+                                   
+                            </div>
+                                
+                            <div class="form-group">
+                            
+                            <button type="button" class="btn btn-default" ng-click="CancelarDetail()">
+                                <span class="glyphicon glyphicon-floppy-remove"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="GuardarDetail(observaciones,idAuditoriaDetalle)">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                            </button>
+                            </div>
+                        </div>
+                        
+                        <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--===================================================-->
+<!--End Modal selectReporte-->
+<!--===================================================-->

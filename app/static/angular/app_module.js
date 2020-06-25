@@ -68,6 +68,11 @@ appModule.config(function($routeProvider, $locationProvider) {
         controller: 'conciliacionController'
     })
 
+    .when('/auditoria', {
+        templateUrl: 'angular/pages/auditoria/auditoria.html',
+        controller: 'auditoriaController'
+    })
+
     .when('/autoriza', {
         templateUrl: 'angular/pages/autoriza/autoriza.html',
         controller: 'autorizaController'

@@ -155,6 +155,7 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+
         facturaUnidad: function(idEmpresa, idSucursal, documento) {
             return $http({
                 url: interesesUrl + 'facturaUnidad/',
@@ -214,6 +215,14 @@ appModule.factory('interesFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        saveSpread: function(params) {
+            return $http({
+                url: interesesUrl + 'saveSpread/',
+                method: "GET",
+                params: params,
+        headers: { 'Content-Type': 'application/json' }
+    });
         }
 
     };

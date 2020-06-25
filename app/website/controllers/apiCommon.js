@@ -148,5 +148,19 @@ ApiCommon.prototype.get_financieraSucursal = function(req, res, next) {
         });
     });
 };
+ApiCommon.prototype.get_Spreads = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }        
+    ];
+
+    self.model.queryAllRecordSet('UspSpreads', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = ApiCommon;

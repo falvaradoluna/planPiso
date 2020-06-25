@@ -102,6 +102,7 @@ $scope.ColateralChange= function(){
         $scope.esquemaHeader.tieneDPP = result.data[0].tieneDPP;
         $scope.esquemaHeader.fechaInicio = result.data[0].fechaInicio;
         $scope.esquemaHeader.fechaFin = result.data[0].fechaFin;
+        if($scope.esquemaHeader.tieneReduccion==1)
         $scope.esquemaHeader.lstreduccion = $scope.regresatabla(result.data[0].reducciondetalle);
         $scope.esquemaHeader.selectedOption = _.where($scope.lstTiie, { tipoTiieId: result.data[0].tipoTiieCID })[0];
         $scope.esquemaHeader.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: result.data[0].tipoColateralID })[0];
