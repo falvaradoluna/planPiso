@@ -86,6 +86,10 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/fechaPromesa', {
         templateUrl: 'angular/pages/fechaPromesa/fechaPromesa.html',
         controller: 'fechaPromesaController'
+    })
+    .when('/reporte', {
+        templateUrl: 'angular/pages/reporte/reporte.html',
+        controller: 'reporteController'
     });
 
 

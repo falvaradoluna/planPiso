@@ -1,0 +1,90 @@
+<top-bar></top-bar>
+<div class="wrapper wrapper-content" ng-init="Init()">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>PLAN PISO {{currentEmpresa}}</h5>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            {{today}}
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="thNoneReporte"></th>
+                                        <th colspan="3" class="thReporte text-center">Tasa de Interés</th>
+                                        <th class="thNoneReporte"></th>
+                                        <th class="thNoneReporte"></th>
+                                        <th class="thNoneReporte"></th>
+                                        <th class="thNoneReporte"></th>
+                                        <th colspan="6" class="thReporte text-center">Unidades</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="thReporte thNoneReporte">Financiera</th>
+                                        <th class="thReporte">TIIE</th>
+                                        <th class="thReporte">Puntos</th>
+                                        <th class="thReporte"></th>
+                                        <th class="thReporte thNoneReporte">Línea Autorizada</th>
+                                        <th class="thReporte thNoneReporte"></th>
+                                        <th class="thReporte thNoneReporte">Línea utilizada</th>
+                                        <th class="thReporte thNoneReporte">Línea disponible</th>
+                                        <th class="thReporte"></th>
+                                        <th class="thReporte">Inventario</th>
+                                        <th class="thReporte">Unidades en Estrella</th>
+                                        <th class="thReporte">Estrella</th>
+                                        <th class="thReporte">Unidades doble Estrella</th>
+                                        <th class="thReporte">Doble Estrella</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="datoReporte in datosReporte">
+                                        <td>{{datoReporte.nombre}}</td>
+                                        <td>{{datoReporte.tiie}}</td>
+                                        <td>{{datoReporte.puntos}}</td>
+                                        <td>{{datoReporte.puntos + datoReporte.tiie}}</td>
+                                        <td class="text-right">{{datoReporte.lineaAutorizada | currency}}</td>
+                                        <td>{{datoReporte.unidades}}</td>
+                                        <td class="text-right">{{datoReporte.saldo | currency}}</td>
+                                        <td class="text-right">{{datoReporte.lineaAutorizada - datoReporte.saldo | currency}}</td>
+                                        <td>{{datoReporte.unidades}}</td>
+                                        <td class="text-right">{{datoReporte.saldo | currency}}</td>
+                                        <td>{{1}}</td>
+                                        <td>{{1}}</td>
+                                        <td>{{1}}</td>
+                                        <td>{{1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ totalUnidades }}</td>
+                                        <td class="text-right">{{ totalLineaUtilizada | currency}}</td>
+                                        <td></td>
+                                        <td>{{ totalUnidadesInventario }}</td>
+                                        <td class="text-right">{{totalIventario | currency}}</td>
+                                        <td>{{unidadesEstrella}}</td>
+                                        <td>{{totalEstrella}}</td>
+                                        <td>{{unidadesDobleE}}</td>
+                                        <td>{{totalDobleE}}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

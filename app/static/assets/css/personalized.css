@@ -333,10 +333,25 @@ tr.unSelect td {
 .cursor {
     cursor: pointer;
 }
-.positionRight{
+
+.positionRight {
     float: right !important;
 }
-.inputCenter{
+
+.inputCenter {
     vertical-align: bottom;
 }
+
 /*END Estilos tradidos de pagos*/
+/*BEGIN Estilos tabla Reporte*/
+.thNoneReporte {
+    border-top: hidden !important;
+}
+
+.thReporte {
+    border-bottom: 1px solid #FA7D00 !important;
+    color: #FA7D00;
+}
+
+
+/*END Estilo tabla Reporte*/

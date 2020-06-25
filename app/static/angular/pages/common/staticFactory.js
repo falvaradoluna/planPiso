@@ -73,6 +73,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Fecha Promesa de Pago', url: '#', isActive: true }
             ];
         },
+        reporteBar: function() {
+            return [
+                { name: 'Empresas', url: 'empresa', isActive: false },
+                { name: 'Reporte', url: '#', isActive: true }
+            ];
+        },
         message: function() {
             alert("Hello");
         },
