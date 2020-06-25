@@ -498,7 +498,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             });
             interesFactory.insertaDocumentosLote($scope.lstUnitsReduccions).then(function success(result) {
                 console.log(result);
-                window.location="/guardarLote?idPre=" + $scope.LastId;
+                window.location = "/guardarLote?idPre=" + $scope.LastId;
             }, function error(err) {
                 console.log(err)
             });
@@ -537,7 +537,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     };
     $scope.haveSelection = function() {
         for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-            if ($scope.lstNewUnits[i].isChecked === true) return true;
+            if ($scope.lstNewUnits[i].isChecked === true) {
+                return true;
+            }
         }
         return false;
     };
@@ -840,46 +842,129 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }
         }
     });
-
     $scope.callCompensation = function() {
         $scope.consecCompensacion = 0;
-
+        $scope.montoTotal = 0;
+        $scope.saldoCompensar = 0;
+        $scope.facturasTotal = [];
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
-            $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
-            if ($scope.listValida.length > 1) {
+            // $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
+            seleccionados();
+            if ($scope.unidadesSeleccionadas > 1) {
                 swal("Aviso", "Solo se puede seleccionar uno a la vez.", "warning");
             } else {
                 $scope.lstNewUnits.forEach(function(item) {
                     if (item.isChecked === true) {
-                        var data = {
-                            CCP_IDDOCTO: item.CCP_IDDOCTO
-                        };
+                        $scope.unidadCompensacion = item;
+                        console.log(item, 'SOY EL SELECCIONADO');
+                        $scope.currentPanel = "pnlCompensacion";
+                        var facturas = [];
+                        facturas.push(interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        facturas.push(interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        Promise.all(facturas).then(function(results) {
+                            console.log(results, 'Facturaaaas')
+                            angular.forEach(results, function(value, key) {
+                                console.log(value.data.length);
+                                if (value.data.length > 0) {
+                                    angular.forEach(value.data, function(value2, key) {
+                                        $scope.montoTotal = $scope.montoTotal + value2.total;
+                                        $scope.$apply(function() {
+                                            $scope.facturasTotal.push(value2);
+                                        });
+                                    });
+                                }
+                            });
+                            $scope.$apply(function() {
+                                $scope.saldoCompensar = $scope.montoTotal - $scope.unidadCompensacion.importe;
+                                $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
+                            });
 
-                        interesFactory.GetCompensacion(data).then(function(result) {
-                            $scope.currentPanel = "pnlCompensacion";
-                            $scope.saldoFinanciera = result.data[0].saldoFinanciera;
-                            $scope.precioUnidad = result.data[0].precioUnidad;
-                            $scope.anticipoUnidad = result.data[0].anticipoUnidad;
-                            $scope.saldoCliente = $scope.precioUnidad - $scope.anticipoUnidad;
-                            $scope.diferenciaSaldo = $scope.precioUnidad - $scope.saldoFinanciera;
-                            if ($scope.saldoFinanciera - $scope.saldoCliente > 0) {
-                                $scope.saldoCompensar = $scope.saldoCliente;
-                            } else {
-                                $scope.saldoCompensar = $scope.saldoFinanciera;
-                            }
-                        }, function(error) {
-                            $scope.error(error.data.Message);
-
+                            console.log($scope.facturasTotal, 'TOTAL FACTURAS');
                         });
+                        // interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaTramites(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
+                        // interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
+                        //     console.log(result.data);
+                        // }, function error(err) {
+                        //     console.log(err, 'Ocurrio un error al cargar la factura')
+                        // });
 
                     }
                 });
             }
 
         }
-    }
+    };
+    var seleccionados = function() {
+        $scope.unidadesSeleccionadas = 0;
+        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            if ($scope.lstNewUnits[i].isChecked === true) {
+                $scope.unidadesSeleccionadas++;
+            }
+        }
+    };
+    // $scope.callCompensation = function() {
+    //     $scope.consecCompensacion = 0;
+
+    //     if ($scope.haveSelection() === false) {
+    //         swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+    //     } else {
+    //         $scope.listValida = _.where($scope.lstNewUnits, { sePago: true });
+    //         if ($scope.listValida.length > 1) {
+    //             swal("Aviso", "Solo se puede seleccionar uno a la vez.", "warning");
+    //         } else {
+    //             $scope.lstNewUnits.forEach(function(item) {
+    //                 if (item.isChecked === true) {
+    //                     var data = {
+    //                         CCP_IDDOCTO: item.CCP_IDDOCTO
+    //                     };
+
+    //                     interesFactory.GetCompensacion(data).then(function(result) {
+    //                         $scope.currentPanel = "pnlCompensacion";
+    //                         $scope.saldoFinanciera = result.data[0].saldoFinanciera;
+    //                         $scope.precioUnidad = result.data[0].precioUnidad;
+    //                         $scope.anticipoUnidad = result.data[0].anticipoUnidad;
+    //                         $scope.saldoCliente = $scope.precioUnidad - $scope.anticipoUnidad;
+    //                         $scope.diferenciaSaldo = $scope.precioUnidad - $scope.saldoFinanciera;
+    //                         if ($scope.saldoFinanciera - $scope.saldoCliente > 0) {
+    //                             $scope.saldoCompensar = $scope.saldoCliente;
+    //                         } else {
+    //                             $scope.saldoCompensar = $scope.saldoFinanciera;
+    //                         }
+    //                     }, function(error) {
+    //                         $scope.error(error.data.Message);
+
+    //                     });
+
+    //                 }
+    //             });
+    //         }
+
+    //     }
+    // }
 
 
     $scope.setPnlCompensacion = function() {
@@ -891,7 +976,19 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.currentPanel = "pnlCompensacionResumen";
             $scope.saldoCompensar = saldoCompensar;
         } else {
-            swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+            // swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+            swal({
+                title: "¿Esta seguro?",
+                text: "Se creara la compensación de la unidad  para la unidad seleccionada.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aplicar",
+                closeOnConfirm: true
+            }, function() {
+                $scope.setPnlInteres();
+            });
+
         }
     };
     $scope.CreaCompensacion = function() {

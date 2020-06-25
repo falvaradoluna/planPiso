@@ -121,7 +121,7 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        procesaReduccion: function( lastId ) {
+        procesaReduccion: function(lastId) {
             return $http({
                 url: interesesUrl + 'procesaReduccion/',
                 method: "GET",
@@ -155,13 +155,74 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+
+        facturaUnidad: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaUnidad/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaTramites: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaTramites/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaServicios: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaServicios/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaOT: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaOT/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaAccesorios: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaAccesorios/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         saveSpread: function(params) {
             return $http({
                 url: interesesUrl + 'saveSpread/',
                 method: "GET",
                 params: params,
-                headers: { 'Content-Type': 'application/json' }
-            });
+        headers: { 'Content-Type': 'application/json' }
+    });
         }
 
     };

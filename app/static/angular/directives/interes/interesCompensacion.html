@@ -32,7 +32,84 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading">{{unidadCompensacion.CCP_IDDOCTO}}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Número de Serie: </label>
+                        <span>{{unidadCompensacion.vehNumserie}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Modelo: </label>
+                        <span>{{unidadCompensacion.VEH_TIPOAUTO}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Año: </label>
+                        <span>{{unidadCompensacion.VEH_ANMODELO}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Importe: </label>
+                        <span>{{unidadCompensacion.importe | currency}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Financiera: </label>
+                        <span>{{unidadCompensacion.financiera}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Saldo: </label>
+                        <span>{{unidadCompensacion.saldo | currency}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Días restantes: </label>
+                        <span>{{unidadCompensacion.diasRestantes}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Interes mes actual: </label>
+                        <span>{{unidadCompensacion.InteresMesActual | currency}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Interes total: </label>
+                        <span>{{unidadCompensacion.InteresTotal | currency}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Interes acumulado: </label>
+                        <span>{{unidadCompensacion.InteresAcumulado}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Interes Acumulado Financiera: </label>
+                        <span>{{unidadCompensacion.InteresAcumuladoFinanciera}}</span>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="left" style="width:200px">Documento</th>
+                        <th>Fecha</th>
+                        <th class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="factura in facturasTotal">
+                        <td>{{factura.tipoFactura}}</td>
+                        <td>{{factura.factura}}</td>
+                        <td>{{factura.fecha}}</td>
+                        <td class="text-right">{{factura.total | currency}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text"><strong>Total</strong></td>
+                        <td class="text-right">{{montoTotal | currency}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <!-- <div class="col-md-12"> -->
+    <!--  <div class="col-md-5">
             <table class="table table-striped">
                 <tr>
                     <th class="left" style="width:200px">Rubro</th>
@@ -109,8 +186,8 @@
                     <td style="text-align: right">{{facunidadmonto | number :2}}</td>
                 </tr>
             </table>
-        </div>
-        <!-- <div class="col-md-7">
+        </div> -->
+    <!-- <div class="col-md-7">
             <table class="table table-striped">
                 <tr>
                     <td class="left" style="width:200px">Saldo a Compensar: </td>
@@ -118,7 +195,7 @@
                 </tr>
             </table>
         </div> -->
-    </div>
+    <!-- </div> -->
 </div>
 <div>
     <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Regresar</button>
