@@ -78,6 +78,16 @@ appModule.factory('commonFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },   
+        getSpreads: function(idEmpresa) {
+            return $http({
+                url: commonUrl + 'Spreads/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

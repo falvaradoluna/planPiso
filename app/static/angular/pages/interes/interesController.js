@@ -30,6 +30,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.consecPago = 0;
     $scope.todos = true;
     $scope.noExisten = false;
+    $rootScope.showwarningspread=false;
+    $rootScope.fechainicio='';
+    $rootScope.fechafin='';
+    $rootScope.tiie=0;
+    $rootScope.puntos=0;
 
     $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
@@ -256,7 +261,60 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setBackToDetailUnit = function(unidad) {
         $scope.currentPanel = "pnlDetalleUnidad";
     }
+/////////////////////////
+    $scope.setPnlSpread = function() {
+        $scope.currentPanel = "pnlSpread";
+        //  location.reload();
+        //  $scope.showwarningspread=true;
+    };
+    commonFactory.getSpreads(sessionFactory.empresaID).then(function(result) {
+      if(result.data.length>0)
+      {
+          if($scope.lstSpreads == undefined)
+          {
+        $scope.lstSpreads=result.data[0];
+        $rootScope.fechainicio=result.data[1][0].fechainicio;
+        $rootScope.fechafin=result.data[1][0].fechafin;
+        $rootScope.showwarningspread=result.data[1][0].showwarningspread;
+        $rootScope.tiie=result.data[1][0].tiie;
+        $rootScope.puntos=0;
+    }
+      }
+    });
+    $scope.CargarNuevo = function() {
+        $('#selectReporte').modal('show');
+    };
+    $scope.GuardarDetail= function(puntos,tiie)
+    {
+        var data = {
+            idempresa: sessionFactory.empresaID,
+            puntos:puntos,
+            tiie:tiie,
+            fechainicio:$rootScope.fechainicio,
+            fechafin:$rootScope.fechafin
+        };
+        interesFactory.saveSpread(data).then(function(resultSchema) {
+           
+            commonFactory.getSpreads(sessionFactory.empresaID).then(function(result) {
+                if(result.data.length>0)
+                {
+                  $scope.lstSpreads=result.data[0];
+                  $rootScope.fechainicio=result.data[1][0].fechainicio;
+                  $rootScope.fechafin=result.data[1][0].fechafin;
+                  $rootScope.showwarningspread=result.data[1][0].showwarningspread;
+                  $rootScope.tiie=result.data[1][0].tiie;
+                  $rootScope.puntos=0;
+              
+                }
+                $('#selectReporte').modal('hide');
+                swal("Ok", "Se guardo con exito", "success");
+              });
+        });
 
+    }
+// $scope.reporteCaratula = function() {
+//     $('#selectReporte').modal('hide');
+///////////////////////////
     $scope.setPnlDetalleUnidad = function(unidad) {
         interesFactory.getDetailUnits(unidad.unidadID).then(function(result) {
             $scope.unitDetail = result.data[0];

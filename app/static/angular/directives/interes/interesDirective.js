@@ -45,10 +45,10 @@ appModule.directive('interesCambioAgencia', function() {
         restrict: 'E',
         templateUrl: interesPath + 'interesTraspasoFinanciera.html'
     };
-}).directive('interesPago', function() {
+}).directive('interesSpread', function() {
     return {
         restrict: 'E',
-        templateUrl: interesPath + 'interesPago.html'
+        templateUrl: interesPath + 'interesSpread.html'
     };
 }).directive('interesPagoUnidad', function() {
     return {

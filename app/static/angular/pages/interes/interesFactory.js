@@ -154,6 +154,14 @@ appModule.factory('interesFactory', function($http) {
                 data: array,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        saveSpread: function(params) {
+            return $http({
+                url: interesesUrl + 'saveSpread/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

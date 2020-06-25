@@ -305,15 +305,24 @@ ApiInteres.prototype.post_insertaDocumentosLote = function(req, res, next) {
             result: result
         });
     });
-    // var params = [{ name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT },
-    // { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
-    // { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT }];
-
-    // self.model.query('uspGetUnidadesInteresSeminuevas', params, function(error, result) {
-    //     self.view.expositor(res, {
-    //         error: error,
-    //         result: result
-    //     });
-    // });
 };
+ApiInteres.prototype.get_saveSpread = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idempresa', value: req.query.idempresa, type: self.model.types.INT },
+        { name: 'puntos', value: req.query.puntos, type: self.model.types.DECIMAL },
+        { name: 'tiie', value: req.query.tiie, type: self.model.types.DECIMAL },
+        { name: 'fechainicio', value: req.query.fechainicio, type: self.model.types.STRING },
+        { name: 'fechafin', value: req.query.fechafin, type: self.model.types.STRING }
+    ];
+
+    self.model.query('uspSaveSpreads', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiInteres;
