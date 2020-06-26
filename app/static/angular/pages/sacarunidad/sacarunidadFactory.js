@@ -1,19 +1,11 @@
 var apisacarunidadUrl = global_settings.urlCORS + 'api/apisacarunidad/';
 appModule.factory('sacarunidadFactory', function($http) {
     return {
-        getLote: function(estatusCID, pro_idtipoproceso) {
+        getDocumentos: function(idEmpresa) {
             return $http({
-                url: apisacarunidadUrl + 'Lote/',
+                url: apisacarunidadUrl + 'documentos/',
                 method: "GET",
-                params: { estatusCID: estatusCID, idtipoproceso: pro_idtipoproceso },
-                headers: { 'Content-Type': 'application/json' }
-            });
-        },
-        getLoteDetail: function(loteID) {
-            return $http({
-                url: apisacarunidadUrl + 'LoteDetail/',
-                method: "GET",
-                params: { loteID: loteID },
+                params: { idEmpresa: idEmpresa },
                 headers: { 'Content-Type': 'application/json' }
             });
         }

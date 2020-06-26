@@ -16,5 +16,6 @@
      apiTiie: require('./controllers/apiTiie'),
      apicrealote: require('./controllers/apicrealote'),
      apiFechaPromesa: require('./controllers/apiFechaPromesa'),
-     apiReporte: require('./controllers/apiReporte')
+     apiReporte: require('./controllers/apiReporte'),
+     apiSacarUnidad: require('./controllers/apiSacarUnidad')
  }

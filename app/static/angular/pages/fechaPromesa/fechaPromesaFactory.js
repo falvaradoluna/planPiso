@@ -13,7 +13,7 @@ appModule.factory('fechaPromesaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        pushCartera: function(idCartera,idEmpresa, fechaPromesa, anioCartera) {
+        pushCartera: function(idCartera, idEmpresa, fechaPromesa, anioCartera, documento) {
             return $http({
                 url: fechaPromesaUrl + 'pushCartera/',
                 method: "POST",
@@ -21,7 +21,8 @@ appModule.factory('fechaPromesaFactory', function($http) {
                     idEmpresa: idEmpresa,
                     idCartera: idCartera,
                     fechaPromesa: fechaPromesa,
-                    anioCartera: anioCartera
+                    anioCartera: anioCartera,
+                    documento: documento
                 },
                 headers: {
                     'Content-Type': 'application/json'

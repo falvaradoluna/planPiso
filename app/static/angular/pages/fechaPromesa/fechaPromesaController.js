@@ -12,16 +12,23 @@ appModule.controller('fechaPromesaController', function($scope, $rootScope, $loc
         console.log(sucursal);
         $scope.financieraSeleccionada = false;
         $scope.currentSucursalName = sucursal.nombreSucursal;
-        commonFactory.getFinancieraSucursal(sessionFactory.empresaID, sucursal.sucursalID).then(function success(result) {
+        commonFactory.getFinancial(sessionFactory.empresaID, $scope.idUsuario).then(function success(result) {
             $scope.nombreFinanciera = 'Seleccione Financiera';
             $scope.financieras = result.data;
             console.log(result.data);
         }, function error(err) {
             console.log(err, 'No se pudo obtener las financieras')
         });
+        // commonFactory.getFinancieraSucursal(sessionFactory.empresaID, sucursal.sucursalID).then(function success(result) {
+        //     $scope.nombreFinanciera = 'Seleccione Financiera';
+        //     $scope.financieras = result.data;
+        //     console.log(result.data);
+        // }, function error(err) {
+        //     console.log(err, 'No se pudo obtener las financieras')
+        // });
     };
     $scope.seleccionFinanciera = function(financiera) {
-        $scope.nombreFinanciera = financiera.financiera;
+        $scope.nombreFinanciera = financiera.nombre;
         $scope.financiera = financiera;
         $scope.financieraSeleccionada = true;
     };
@@ -32,7 +39,7 @@ appModule.controller('fechaPromesaController', function($scope, $rootScope, $loc
         getCarteras(1);
     };
     var getCarteras = function(tipoCartera) { // 0 Toda la cartera 1 Cartera Vencida
-        fechaPromesaFactory.getCartera(sessionFactory.empresaID, $scope.financiera.idPersona, tipoCartera).then(function success(result) {
+        fechaPromesaFactory.getCartera(sessionFactory.empresaID, $scope.financiera.financieraIDBP, tipoCartera).then(function success(result) {
             console.log(result.data);
             $scope.carteras = result.data;
             staticFactory.setTableStyleFechaPromesa('#carteras')
@@ -119,7 +126,7 @@ appModule.controller('fechaPromesaController', function($scope, $rootScope, $loc
                         // at this point the async function has started 
                         // and enters the 'pending' state  
                         // pushing the pending promise to an array. 
-                        promises.push(fechaPromesaFactory.pushCartera(value.pbp_consCartera, sessionFactory.empresaID, $scope.fechaPromesa, value.pbp_polAnnio));
+                        promises.push(fechaPromesaFactory.pushCartera(value.pbp_consCartera, sessionFactory.empresaID, $scope.fechaPromesa, value.pbp_polAnnio, value.pbp_documento));
                     })
                     Promise.all(promises).then(function response(result) {
                         console.log(result);

@@ -15,6 +15,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     $scope.totalDobleE = 0;
     reporteFactory.getReporteEmpresa(sessionFactory.empresaID).then(function success(result) {
         $scope.datosReporte = result.data;
+        console.log(JSON.stringify($scope.datosReporte))
         angular.forEach($scope.datosReporte, function(value, key) {
             $scope.totalUnidades = $scope.totalUnidades + value.unidades;
             $scope.totalLineaUtilizada = $scope.totalLineaUtilizada + value.saldo;
@@ -28,4 +29,30 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     }, function err(error) {
         console.log(error);
     });
+    $scope.descargarReporte = function() {
+        $scope.contenidoReporte = {
+            "empresa": sessionFactory.nombre,
+            "totalUnidades": $scope.totalUnidades,
+            "totalLineaUtilizada": $scope.totalLineaUtilizada,
+            "totalUnidadesInventario": $scope.totalUnidadesInventario,
+            "totalIventario": $scope.totalIventario,
+            "unidadesEstrella": $scope.unidadesEstrella,
+            "totalEstrella": $scope.totalEstrella,
+            "unidadesDobleE": $scope.unidadesDobleE,
+            "totalDobleE": $scope.totalDobleE,
+            "detalle": $scope.datosReporte,
+            "fecha": $scope.today
+        };
+        console.log('COMPLENTED', $scope.contenidoReporte);
+        reporteFactory.jsReporte($scope.contenidoReporte).then(function success(result) {
+            console.log(result);
+            var file = new Blob([result.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(file);
+            a.download = 'Reporte Plan Piso ' + sessionFactory.nombre;
+            a.click();
+        }, function err(error) {
+            console.log(error);
+        });
+    }
 });
