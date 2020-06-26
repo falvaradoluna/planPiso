@@ -5,10 +5,8 @@
     <div class="col-md-6">
         <div class="alert alert-info" role="alert">
             <form class="form-inline">
-                <div class="form-group">
-                    <label for="exampleInputName2">Saldo a Compensar:</label>
-                    <input type="text" class="form-control" ng-model="saldoCompensar">
-                </div>
+                <label for="exampleInputName2">Saldo a Compensar: </label>
+                {{saldoCompensar | currency}}
             </form>
             <!-- <div class="row">
                 <div class="col-md-12"> -->
@@ -35,7 +33,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">{{unidadCompensacion.CCP_IDDOCTO}}</div>
             <div class="panel-body">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-4">
                         <label>Número de Serie: </label>
                         <span>{{unidadCompensacion.vehNumserie}}</span>
@@ -80,31 +78,85 @@
                         <label>Interes Acumulado Financiera: </label>
                         <span>{{unidadCompensacion.InteresAcumuladoFinanciera}}</span>
                     </div>
-                </div>
+                </div> -->
             </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th colspan="5">Cuenta por pagar</th>
+                    </tr>
+                    <tr>
+                        <th>Financiera</th>
+                        <th class="left" style="width:200px">Documento</th>
+                        <th>Importe</th>
+                        <th class="text-right">Monto</th>
+                        <th class="text-right">Monto a Compensar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{unidadCompensacion.financiera}}</td>
+                        <td>{{unidadCompensacion.vehNumserie}}</td>
+                        <td>{{unidadCompensacion.importe}}</td>
+                        <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
+                        <td><input type="text" class="form-control" style="width: 100%"></td>
+                    </tr>
+                </tbody>
+                <!-- <tfoot>
+                    <tr>
+                        <td colspan="3" class="text"><strong>Total</strong></td>
+                        <td class="text-right">{{montoTotal | currency}}</td>
+                        <td></td>
+                    </tr>
+                </tfoot> -->
+            </table>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="5">Cuenta por cobrar</th>
+                    </tr>
+                    <tr>
+                        <th></th>
                         <th></th>
                         <th class="left" style="width:200px">Documento</th>
                         <th>Fecha</th>
                         <th class="text-right">Monto</th>
+                        <th class="text-right">Monto a Compensar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="factura in facturasTotal">
+                        <td>{{financieraCotizacion}}</td>
                         <td>{{factura.tipoFactura}}</td>
                         <td>{{factura.factura}}</td>
                         <td>{{factura.fecha}}</td>
                         <td class="text-right">{{factura.total | currency}}</td>
+                        <td><input type="text" class="form-control  text-right" style="width: 100%"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Enganche</td>
+                        <td class="text-right">{{engancheCotizacion.ucu_impenganche | currency }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Factura Comisión Dealer</td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Factura Incentivo Penetración</td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Factura UDI por pagar</td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
                     </tr>
                 </tbody>
-                <tfoot>
+                <!-- <tfoot>
                     <tr>
                         <td colspan="3" class="text"><strong>Total</strong></td>
                         <td class="text-right">{{montoTotal | currency}}</td>
+                        <td></td>
                     </tr>
-                </tfoot>
+                </tfoot> -->
             </table>
         </div>
     </div>

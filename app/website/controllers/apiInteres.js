@@ -414,5 +414,18 @@ ApiInteres.prototype.get_saveSpread = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_enganche = function(req, res, next) {
 
+    var self = this;
+
+    var params = [{ name: 'numeroSerie', value: req.query.vin, type: self.model.types.STRING }
+    ];
+
+    self.model.query('Usp_get_engancheCotizacion', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

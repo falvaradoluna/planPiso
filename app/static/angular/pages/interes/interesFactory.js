@@ -221,8 +221,16 @@ appModule.factory('interesFactory', function($http) {
                 url: interesesUrl + 'saveSpread/',
                 method: "GET",
                 params: params,
-        headers: { 'Content-Type': 'application/json' }
-    });
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        enganche: function(vin) {
+            return $http({
+                url: interesesUrl + 'enganche/',
+                method: "GET",
+                params: { vin: vin },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

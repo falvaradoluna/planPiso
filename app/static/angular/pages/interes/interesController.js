@@ -861,6 +861,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         facturas.push(interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         facturas.push(interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         facturas.push(interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+                        interesFactory.enganche(item.vehNumserie).then(function success(result) {
+                            console.log(result.data[0], 'COTIZACION')
+                            $scope.engancheCotizacion = result.data[0];
+                            $scope.financieraCotizacion = result.data[0].nombre;
+                        }, function err(error) {
+                            console.log(error)
+                        });
                         Promise.all(facturas).then(function(results) {
                             console.log(results, 'Facturaaaas')
                             var contadorFacturas = 0;
@@ -882,7 +889,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             });
                             if (contadorFacturas > 0) {
                                 $scope.currentPanel = "pnlCompensacion";
-                            }else{
+                            } else {
                                 swal("Aviso", "No se puede compensar este documento.", "warning");
                             }
                             console.log($scope.facturasTotal, 'TOTAL FACTURAS');
