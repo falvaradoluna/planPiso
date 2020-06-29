@@ -102,4 +102,85 @@ ApiFinanciera.prototype.get_delFinanciera = function(req, res, next) {
     });
 };
 
+ApiFinanciera.prototype.get_updFinanciera = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
+    { name: 'tipoCobroInteresID', value: req.query.tipoCobroInteresID, type: self.model.types.INT },
+    { name: 'tipoPagoInteresFinMesID', value: req.query.tipoPagoInteresFinMesID, type: self.model.types.INT },
+    { name: 'tipoPagoInteresID', value: req.query.tipoPagoInteresID, type: self.model.types.STRING },
+    { name: 'tipoSOFOMID', value: req.query.tipoSOFOMID, type: self.model.types.STRING },
+    { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
+
+    self.model.query('Usp_Financiera_UPD', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiFinanciera.prototype.get_insColateralLineaCredito = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idfinanciera', value: req.query.idfinanciera, type: self.model.types.INT },
+    { name: 'idtipoColateral', value: req.query.idtipoColateral , type: self.model.types.INT },
+    { name: 'LineaCredito', value: req.query.LineaCredito, type: self.model.types.DECIMAL },
+    { name: 'NumUnidades', value: req.query.NumUnidades, type: self.model.types.INT },
+    { name: 'fechainicio', value: req.query.fechainicio, type: self.model.types.STRING },
+    { name: 'fechafin', value: req.query.fechafin, type: self.model.types.STRING }];
+
+    self.model.query('INS_ColateralLineaCredito_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiFinanciera.prototype.get_updColateralLineaCredito = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idColateralLineaCredito', value: req.query.idColateralLineaCredito, type: self.model.types.INT },
+    { name: 'LineaCredito', value: req.query.LineaCredito, type: self.model.types.DECIMAL },
+    { name: 'NumUnidades', value: req.query.NumUnidades, type: self.model.types.INT },
+    { name: 'fechainicio', value: req.query.fechainicio, type: self.model.types.STRING },
+    { name: 'fechafin', value: req.query.fechafin, type: self.model.types.STRING }];
+
+    self.model.query('UPD_ColateralLineaCredito_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiFinanciera.prototype.get_ColateralLineaCredito = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idfinanciera', value: req.query.idfinanciera, type: self.model.types.INT }];
+
+    self.model.query('GET_ColateralLineaCredito_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiFinanciera.prototype.get_delColateralLineaCredito = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idColateralLineaCredito', value: req.query.idColateralLineaCredito, type: self.model.types.INT },
+    ];
+
+    self.model.query('DEL_ColateralLineaCredito_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiFinanciera;
