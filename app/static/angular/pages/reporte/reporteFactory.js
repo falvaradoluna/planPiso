@@ -26,6 +26,18 @@ appModule.factory('reporteFactory', function($http) {
                 },
                 responseType: 'arraybuffer'
             });
+        },
+        getReporteUnidades: function(idEmpresa, idFinanciera, key) {
+            return $http({
+                url: reporteUrl + 'reporteUnidades/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idFinanciera: idFinanciera,
+                    key: key
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 

@@ -19,7 +19,6 @@ var ApiReporte = function(conf) {
 ApiReporte.prototype.get_reporteEmpresa = function(req, res, next) {
 
     var self = this;
-
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING }];
 
     self.model.query('usp_get_reporte', params, function(error, result) {
@@ -29,5 +28,24 @@ ApiReporte.prototype.get_reporteEmpresa = function(req, res, next) {
         });
     });
 };
+
+ApiReporte.prototype.get_reporteUnidades = function(req, res, next) {
+
+    var self = this;
+    var key = req.query.key
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },
+        { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_unidades_reporte', params, function(error, result) {
+        result.key = key;
+        console.log(result)
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 
 module.exports = ApiReporte;
