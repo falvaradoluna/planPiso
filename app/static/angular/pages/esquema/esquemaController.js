@@ -176,6 +176,7 @@ $scope.BorrarDetail=function(item){
         $scope.currentFinancialName = financialObj.nombre;
         $scope.currentFinancialID = financialObj.financieraIDBP;
         $scope.currentFinancialIDAP = financialObj.financieraIDAP;
+        $scope.verTasaInteres=financialObj.verTasaInteres;
         $scope.getSchemas($scope.financieraIDAP);
     };
     $scope.getSchemas = function() {
@@ -195,8 +196,9 @@ $scope.BorrarDetail=function(item){
     $scope.newSchema = function() {
         $scope.isAddMode = true;
     };
-    $scope.CambiarReduccion = function() {
-        $scope.esquemaHeader.tieneReduccion = $scope.reducc;
+    $scope.CambiarReduccion = function(reducc) {
+        $scope.reducc=reducc;
+        $scope.esquemaHeader.tieneReduccion=reducc;
     };
     $scope.addSchema = function() {
         $scope.isAddMode = true;

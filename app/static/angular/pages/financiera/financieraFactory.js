@@ -89,6 +89,38 @@ appModule.factory('financieraFactory', function($http) {
 
             ];
             return formControls;
+        },
+        insColateralLineaCredito: function(params) {
+            return $http({
+                url: financieraUrl + 'insColateralLineaCredito/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        updColateralLineaCredito: function(params) {
+            return $http({
+                url: financieraUrl + 'updColateralLineaCredito/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        getColateralLineaCredito: function(params) {
+            return $http({
+                url: financieraUrl + 'ColateralLineaCredito/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        delColateralLineaCredito: function(params) {
+            return $http({
+                url: financieraUrl + 'delColateralLineaCredito/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
 
