@@ -1,4 +1,4 @@
-var appModule = angular.module("planPisoApp", ["ngRoute",'ui.grid', 'ui.grid.grouping', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.cellNav']);
+var appModule = angular.module("planPisoApp", ["ngRoute",'ui.grid', 'ui.grid.grouping', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.cellNav','ui.grid.expandable', 'ui.grid.pinning']);
 appModule.config(function($routeProvider, $locationProvider) {
 
 

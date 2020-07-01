@@ -1,4 +1,4 @@
-appModule.controller('reporteController', function($scope, $rootScope, $location, commonFactory, reporteFactory, staticFactory) {
+appModule.controller('reporteController', function($scope, $rootScope, $location, commonFactory, reporteFactory, staticFactory, uiGridConstants, uiGridGroupingConstants) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -15,6 +15,21 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     $scope.totalDobleE = 0;
     reporteFactory.getReporteEmpresa(sessionFactory.empresaID).then(function success(result) {
         $scope.datosReporte = result.data;
+        var promises = [];
+        $scope.datosReporte.map((value) => {
+            promises.push(reporteFactory.getReporteUnidades(sessionFactory.empresaID, value.financieraID));
+        })
+        Promise.all(promises).then(function response(result) {
+            console.log(result, 'UNIDADEEEES');
+            for (i = 0; i < $scope.datosReporte.length; i++) {
+                $scope.datosReporte[i].subGridOptions = {
+                    columnDefs: [{ name: 'CCP_IDDOCTO', field: 'CCP_IDDOCTO' }, { name: 'VIN', field: 'VIN' }],
+                    data: result[i].data
+                };
+            }
+            console.log($scope.datosReporte)
+            $scope.gridOptions.data = $scope.datosReporte;
+        }).catch(error => console.log('Ocurrio un error al cambiar la fecha promesa' + error))
         console.log(JSON.stringify($scope.datosReporte))
         angular.forEach($scope.datosReporte, function(value, key) {
             $scope.totalUnidades = $scope.totalUnidades + value.unidades;
@@ -54,5 +69,46 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         }, function err(error) {
             console.log(error);
         });
-    }
+    };
+    //BEGIN UI GRID
+    $scope.gridOptions = {
+        expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
+        expandableRowHeight: 150,
+        //subGridVariable will be available in subGrid scope
+        expandableRowScope: {
+            subGridVariable: 'subGridScopeVariable'
+        }
+    };
+    $scope.gridOptions.columnDefs = [
+        { name: 'Financiera', field: 'nombre' },
+        { name: 'TIIE', field: 'tiie' },
+        { name: 'Puntos', field: 'puntos' },
+        { name: '--', field: 'sumaTP' },
+        { name: 'Línea Autorizada', field: 'lineaAutorizada' },
+        { name: 'unidades', field: 'unidades' },
+        { name: 'Línea utilizada', field: 'saldo' },
+        { name: 'Línea disponible', field: 'lineaResto' },
+        { name: 'unidades', field: 'unidades' },
+        { name: 'Inventario', field: 'saldo' },
+        { name: 'Unidades en Estrella', field: 'estrella' },
+        { name: 'Estrella', field: 'estrellaMonto' },
+        { name: 'Unidades doble Estrella', field: 'dobleEstrella' },
+        { name: 'Doble Estrella', field: 'dobleEstrellaMonto' }
+    ];
+    $scope.gridOptions.onRegisterApi = function(gridApi) {
+        $scope.gridApi = gridApi;
+    };
+
+    $scope.expandAllRows = function() {
+        $scope.gridApi.expandable.expandAllRows();
+    };
+
+    $scope.collapseAllRows = function() {
+        $scope.gridApi.expandable.collapseAllRows();
+    };
+
+    $scope.toggleExpandAllBtn = function() {
+        $scope.gridOptions.showExpandAllButton = !vm.gridOptions.showExpandAllButton;
+    };
+    // END UI GRID
 });
