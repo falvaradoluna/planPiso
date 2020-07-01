@@ -49,12 +49,17 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
 
     var self = this;
     var fecha = req.body.fechaCalculo.replace('-', '').replace('-', '');
+    var fechaini = req.body.fechainicio.replace('-', '').replace('-', '');
+    var fechafn = req.body.fechafin.replace('-', '').replace('-', '');
     var params = [{ name: 'CCP_IDDOCTO', value: req.body.CCP_IDDOCTO, type: self.model.types.STRING },
     { name: 'userID', value: req.body.userID, type: self.model.types.INT },
     { name: 'esquemaID', value: req.body.esquemaID, type: self.model.types.INT },
     { name: 'fecha_Calculo', value: fecha, type: self.model.types.STRING },
+    { name: 'fechainicio', value: fechaini, type: self.model.types.STRING },
+    { name: 'fechafin', value: fechafn, type: self.model.types.STRING },
     { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
-    { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT }];
+    { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT },
+    { name: 'diasgracia', value: req.body.diasgracia, type: self.model.types.INT }];
 
     self.model.query('uspSetUnidadSchema', params, function(error, result) {
         self.view.expositor(res, {

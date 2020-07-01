@@ -128,9 +128,51 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             $scope.currentPanel = $scope.steps[$scope.currentStep].panelName;
             $scope.steps[$scope.currentStep].className = "active";
             $scope.showFilterButtons($scope.currentStep);
+            if($scope.currentStep==2)
+            {
+                angular.forEach($scope.lstNewUnits, function(value, key) {
+                    if (value.isChecked === true) {
+                       value.plazo=$scope.selectedSchema.plazo;
+                       value.diasgracia=$scope.selectedSchema.diasGracia;
+                       value.fechaRecibo=staticFactory.DateFormat(regresafechareal(value.fechaCalculoString));
+                       value.fechainicio=regresafechareal(value.fechaCalculoString);
+                       value.fechafin=sumarDias(regresafechareal(value.fechaCalculoString),value.plazo);
+                    }
+                });
+
+            }
         }
     };
+    function sumarDias(fecha, dias){
+        
 
+
+        var dateObject = new Date(fecha); 
+      
+        fecha=dateObject.setSeconds(dias*86400);
+        return fecha;
+      }
+      function regresafechareal(fecha){
+        var dateParts = fecha.split("/");
+
+
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 2, +dateParts[0]); 
+      
+        
+        return dateObject;
+      }
+      
+    $scope.Cambiarfecha= function(fecha,unidad)
+      {
+        angular.forEach($scope.lstNewUnits, function(value, key) {
+            if (value.isChecked === true && value.$$hashkey==unidad.$$hashkey) {
+               value.plazo=$scope.selectedSchema.plazo;
+               value.diasgracia=$scope.selectedSchema.diasGracia;
+               value.fechainicio=value.fechaRecibo;
+               value.fechafin=sumarDias(value.fechaRecibo,value.plazo);
+            }
+        });
+      }
     $scope.prevStep = function() {
         if (($scope.currentStep - 1) >= 0) {
             $scope.steps[$scope.currentStep].className = "visited";
@@ -187,7 +229,10 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             esquemaID: $scope.selectedSchema.esquemaID,
             saldoInicial: item.SALDO,
             interes: parseFloat(item.interes),
-            fechaCalculo: staticFactory.toISODate(item.fechaCalculoString)
+            fechaCalculo: staticFactory.toISODate(item.fechaCalculoString),
+            fechainicio: staticFactory.todayDateGiven(item.fechainicio),
+            fechafin: staticFactory.todayDateGiven(item.fechafin),
+            diasgracia:item.diasgracia
         };
 
         unuevasFactory.setUnitSchema(data).then(function(result) {

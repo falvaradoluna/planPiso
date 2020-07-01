@@ -14,7 +14,7 @@
                     <th>Año</th>
                     <th>Tipo</th>
                     <th>Fecha Inicio</th>
-                    <th>Fecha Salida</th>
+                    <th>Fecha Fin</th>
                     <th>Importe</th>
                     <th>Saldo</th>
                     <th>Saldo en CC</th>
@@ -40,8 +40,8 @@
                     <td>{{unidad.VEH_TIPOAUTO}}</td>
                     <td>{{unidad.VEH_ANMODELO}}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{unidad.fechainicio }}</td>
+                    <td>{{unidad.fechafin }}</td>
                     <td>{{unidad.importe | currency}}</td>
                     <td>{{unidad.saldo | currency}}</td>
                     <td></td>

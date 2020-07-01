@@ -104,6 +104,38 @@ appModule.factory('staticFactory', function($http) {
 
             return today;
         },
+        DateFormat: function(date) {
+            var today = new Date(date);
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = dd + '/' + mm + '/' + yyyy;
+
+            return today;
+        },
+        todayDateGiven: function(data) {
+            var today = new Date(data);
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = yyyy+ '-'+ mm + '-'  + dd  ;
+
+            return today;
+        },
         setCalendarStyle: function() {
             $('.date').datepicker({
                 todayBtn: "linked",

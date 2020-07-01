@@ -8,11 +8,12 @@
             <th>Marca</th>
             <th>Descripción Modelo</th>
             <th>Modelo</th>
-            <th>Precio venta</th>
+            <th>Valor plan piso</th>
+            <th>Dias gracia</th>
             <th>Fecha Cálculo</th>
             <th>Plazo esquema</th>
-            <th>Fecha Cálculo</th>
-            <th>Fecha Cálculo</th>
+            <th>Fecha inicio esquema</th>
+            <th>Fecha fin esquema</th>
             <th>Interes Acumulado</th>
             <th>Saldo Inicial</th>
             <th>Mensage</th>
@@ -28,10 +29,20 @@
             <td>{{unidadSeleccion.descModelo}}</td>
             <td>{{unidadSeleccion.modelo}}</td>
             <td>{{unidadSeleccion.IMPORTE}}</td>
-            <td>{{unidadSeleccion.fechaCalculoString}}</td>
+            <td>
+                <input type="text" class="form-control" ng-model="unidadSeleccion.diasgracia" style="width: 100px">
+            </td>
+            <td style="width:200px">
+                <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy" ng-model="unidadSeleccion.fechaRecibo" ng-change="Cambiarfecha(unidadSeleccion.fechaRecibo,unidadSeleccion)">
+                    <input type="text" class="form-control" ng-model="unidadSeleccion.fechaRecibo" ng-change="Cambiarfecha(unidadSeleccion.fechaRecibo,unidadSeleccion)" >
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </td>
             <td>{{unidadSeleccion.plazo}}</td>
-            <td>{{unidadSeleccion.fechainicio}}</td>
-            <td>{{unidadSeleccion.fechafin}}</td>
+            <td>{{unidadSeleccion.fechainicio | date:'dd/MM/yyyy'}}</td>
+            <td>{{unidadSeleccion.fechafin | date:'dd/MM/yyyy'}}</td>
             <td>{{unidadSeleccion.interes}}</td>
             <td>{{unidadSeleccion.SALDO}}</td>
 
