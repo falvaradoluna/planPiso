@@ -1,5 +1,10 @@
 <top-bar></top-bar>
-<div class="wrapper wrapper-content" ng-init="Init()">
+<div class="row m-t-md">
+    <div class="col-md-12">
+        <button class="btn btn-primary pull-right" ng-click="reporteEmpresas()">Generar Reporte General</button>
+    </div>
+</div>
+<div class="wrapper wrapper-content" ng-init="init()" ng-show="muestraxempresa">
     <div class="row">
         <div class="col-md-12">
             <div class="ibox float-e-margins">
@@ -87,6 +92,37 @@
                         </div> -->
                         <div class="col-md-12">
                             <div id="grid1" ui-grid="gridOptions" ui-grid-pinning ui-grid-expandable></div>
+                        </div>
+                        <div class="col-md-12 m-t-md">
+                            <button class="btn btn-primary pull-right" ng-click="descargarReporte()">Descargar Reporte</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content" ng-hide="muestraxempresa">
+    <div class="row" ng-repeat="empresa in encabezadoReporte">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>PLAN PISO {{empresa.emp_nombre}}</h5>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            {{today}}
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="grid1" ui-grid="empresa.group" ui-grid-pinning ui-grid-expandable></div>
+                        </div>
+                        <div class="col-md-12 m-t-md">
+                            <button class="btn btn-primary pull-right" ng-click="descargarReporte()">Descargar Reporte</button>
                         </div>
                     </div>
                 </div>

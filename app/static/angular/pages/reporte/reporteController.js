@@ -1,4 +1,4 @@
-appModule.controller('reporteController', function($scope, $rootScope, $location, $interval, commonFactory, reporteFactory, staticFactory, uiGridConstants, uiGridGroupingConstants) {
+appModule.controller('reporteController', function($scope, $rootScope, $location, $interval, commonFactory, reporteFactory, staticFactory, uiGridConstants, uiGridGroupingConstants, empresaFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -13,6 +13,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     $scope.totalEstrella = 0;
     $scope.unidadesDobleE = 0;
     $scope.totalDobleE = 0;
+    $scope.muestraxempresa = true;
     reporteFactory.getReporteEmpresa(sessionFactory.empresaID).then(function success(result) {
         $scope.datosReporte = result.data;
         var promises = [];
@@ -29,7 +30,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                         { name: 'Plazo', field: 'plazo' },
                         { name: 'Dias', field: 'dias' },
                         { name: 'TIIE', field: 'tiie' },
-                        { name: 'Puntos', field: 'puntos' },
+                        { name: 'Spread', field: 'puntos' },
                         { name: 'Intereses', field: 'totalInteres' },
                         { name: 'Estrella', field: 'estrella' },
                         { name: 'Doble Estrella', field: 'dobleEstrella' }
@@ -96,7 +97,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     $scope.gridOptions.columnDefs = [
         { name: 'Financiera', field: 'nombre' },
         { name: 'TIIE', field: 'tiie' },
-        { name: 'Puntos', field: 'puntos' },
+        { name: 'Spread', field: 'puntos' },
         { name: '--', field: 'sumaTP' },
         { name: 'Línea Autorizada', field: 'lineaAutorizada' },
         { name: 'unidades', field: 'unidades' },
@@ -122,7 +123,137 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     };
 
     $scope.toggleExpandAllBtn = function() {
-        $scope.gridOptions.showExpandAllButton = !vm.gridOptions.showExpandAllButton;
+        $scope.gridOptions.showExpandAllButton = !$scope.gridOptions.showExpandAllButton;
     };
     // END UI GRID
+    $scope.reporteEmpresas = function() {
+        $scope.muestraxempresa = false;
+        empresaFactory.getEmpresa($scope.idUsuario).then(function(result) {
+            $scope.lstEmpresa = result.data;
+            $scope.encabezadoReporte = [];
+            var promises = [];
+            $scope.lstEmpresa.map((value) => {
+                promises.push(reporteFactory.getReporteEmpresa(value.emp_idempresa));
+            })
+            Promise.all(promises).then(function response(result) {
+                console.log(result, 'Reportes');
+                var reporteEncabezado = result;
+                var contador = 0;
+                var contador2 = 0;
+                var idEmpresa = 0;
+                angular.forEach($scope.lstEmpresa, function(value, key) {
+                    if (reporteEncabezado[key].data.length > 0) {
+                        $scope.encabezadoReporte.push(value);
+                        idEmpresa = value.emp_idempresa;
+                        $scope.encabezadoReporte[contador].reporte = reporteEncabezado[key].data;
+                        var promises2 = [];
+                        $scope.encabezadoReporte[contador].reporte.map((value) => {
+                            promises2.push(reporteFactory.getReporteUnidades(idEmpresa, value.financieraID));
+                        })
+                        Promise.all(promises2).then(function response(result) {
+                            console.log(result.data)
+                            for (i = 0; i < $scope.encabezadoReporte[contador2].reporte.length; i++) {
+                                $scope.encabezadoReporte[contador2].reporte[i].subGridOptions = {
+                                    columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
+                                        { name: 'VIN', field: 'VIN' },
+                                        { name: 'Saldo documento', field: 'saldo' },
+                                        { name: 'Plazo', field: 'plazo' },
+                                        { name: 'Dias', field: 'dias' },
+                                        { name: 'TIIE', field: 'tiie' },
+                                        { name: 'Spread', field: 'puntos' },
+                                        { name: 'Intereses', field: 'totalInteres' },
+                                        { name: 'Estrella', field: 'estrella' },
+                                        { name: 'Doble Estrella', field: 'dobleEstrella' }
+                                    ],
+                                    data: result[i].data
+                                };
+                            }
+                            contador2++;
+                        }).catch(error => console.log('Ocurrio un error al obtener datos reporte' + error))
+                        // angular.forEach(reporteEncabezado[key].data, function(value, key) {
+                        //     value.subGridOptions = {
+                        //         columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
+                        //             { name: 'VIN', field: 'VIN' },
+                        //             { name: 'Saldo documento', field: 'saldo' },
+                        //             { name: 'Plazo', field: 'plazo' },
+                        //             { name: 'Dias', field: 'dias' },
+                        //             { name: 'TIIE', field: 'tiie' },
+                        //             { name: 'Spread', field: 'puntos' },
+                        //             { name: 'Intereses', field: 'totalInteres' },
+                        //             { name: 'Estrella', field: 'estrella' },
+                        //             { name: 'Doble Estrella', field: 'dobleEstrella' }
+                        //         ],
+                        //         data: [{
+                        //             'CCP_IDDOCTO': 'hola',
+                        //             'VIN': 'hola',
+                        //             'saldo': 'hola',
+                        //             'plazo': 'hola',
+                        //             'dias': 'hola',
+                        //             'tiie': 'hola',
+                        //             'puntos': 'hola',
+                        //             'totalInteres': 'hola',
+                        //             'estrella': 'hola',
+                        //             'dobleEstrella': 'hola'
+                        //         }]
+                        //     };
+                        // });
+                        // $scope.encabezadoReporte[contador].reporte = reporteEncabezado[key].data;
+                        contador++;
+                    }
+                });
+                console.log($scope.encabezadoReporte, 'Soy las empresas que si tiene detalle')
+                angular.forEach($scope.encabezadoReporte, function(value, key) {
+                    
+                    //BEGIN UI GRID
+                    $scope.gridOptions[key] = {
+                        expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
+                        expandableRowHeight: 150,
+                        //subGridVariable will be available in subGrid scope
+                        expandableRowScope: {
+                            subGridVariable: 'subGridScopeVariable'
+                        }
+                    };
+                    $scope.gridOptions[key].columnDefs = [
+                        { name: 'Financiera', field: 'nombre' },
+                        { name: 'TIIE', field: 'tiie' },
+                        { name: 'Spread', field: 'puntos' },
+                        { name: '--', field: 'sumaTP' },
+                        { name: 'Línea Autorizada', field: 'lineaAutorizada' },
+                        { name: 'unidades', field: 'unidades' },
+                        { name: 'Línea utilizada', field: 'saldo' },
+                        { name: 'Línea disponible', field: 'lineaResto' },
+                        { name: 'unidades', field: 'unidades' },
+                        { name: 'Inventario', field: 'saldo' },
+                        { name: 'Unidades en Estrella', field: 'estrella' },
+                        { name: 'Estrella', field: 'estrellaMonto' },
+                        { name: 'Unidades doble Estrella', field: 'dobleEstrella' },
+                        { name: 'Doble Estrella', field: 'dobleEstrellaMonto' }
+                    ];
+                    $scope.gridOptions[key].onRegisterApi = function(gridApi) {
+                        $scope.gridApi[key] = gridApi;
+                    };
+
+                    $scope.expandAllRows = function() {
+                        $scope.gridApi[key].expandable.expandAllRows();
+                    };
+
+                    $scope.collapseAllRows = function() {
+                        $scope.gridApi[key].expandable.collapseAllRows();
+                    };
+
+                    $scope.toggleExpandAllBtn = function() {
+                        $scope.gridOptions[key].showExpandAllButton = !$scope.gridOptions[key].showExpandAllButton;
+                    };
+                    // END UI GRID
+                    $scope.gridOptions[key].data = value.reporte;
+                    value.group = $scope.gridOptions[key];
+                })
+                $scope.$apply();
+            }).catch(error => console.log('Ocurrio un error al obtener datos reporte' + error))
+            // angular.forEach($scope.lstEmpresa, function(value, key) {
+
+            // });
+            console.log($scope.lstEmpresa, 'LASEMPRESAS :S')
+        });
+    };
 });
