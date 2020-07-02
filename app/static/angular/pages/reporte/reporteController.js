@@ -1,4 +1,4 @@
-appModule.controller('reporteController', function($scope, $rootScope, $location, commonFactory, reporteFactory, staticFactory, uiGridConstants, uiGridGroupingConstants) {
+appModule.controller('reporteController', function($scope, $rootScope, $location, $interval, commonFactory, reporteFactory, staticFactory, uiGridConstants, uiGridGroupingConstants) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -23,13 +23,27 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             console.log(result, 'UNIDADEEEES');
             for (i = 0; i < $scope.datosReporte.length; i++) {
                 $scope.datosReporte[i].subGridOptions = {
-                    columnDefs: [{ name: 'CCP_IDDOCTO', field: 'CCP_IDDOCTO' }, { name: 'VIN', field: 'VIN' }],
+                    columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
+                        { name: 'VIN', field: 'VIN' },
+                        { name: 'Saldo documento', field: 'saldo' },
+                        { name: 'Plazo', field: 'plazo' },
+                        { name: 'Dias', field: 'dias' },
+                        { name: 'TIIE', field: 'tiie' },
+                        { name: 'Puntos', field: 'puntos' },
+                        { name: 'Intereses', field: 'totalInteres' },
+                        { name: 'Estrella', field: 'estrella' },
+                        { name: 'Doble Estrella', field: 'dobleEstrella' }
+                    ],
                     data: result[i].data
                 };
             }
+
             console.log($scope.datosReporte)
             $scope.gridOptions.data = $scope.datosReporte;
-        }).catch(error => console.log('Ocurrio un error al cambiar la fecha promesa' + error))
+            $interval(function() {
+                $scope.gridApi.core.handleWindowResize();
+            }, 500, 10);
+        }).catch(error => console.log('Ocurrio un error al obtener datos reporte' + error))
         console.log(JSON.stringify($scope.datosReporte))
         angular.forEach($scope.datosReporte, function(value, key) {
             $scope.totalUnidades = $scope.totalUnidades + value.unidades;
