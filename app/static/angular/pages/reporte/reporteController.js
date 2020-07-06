@@ -22,21 +22,31 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         })
         Promise.all(promises).then(function response(result) {
             console.log(result, 'UNIDADEEEES');
+            console.log($scope.datosReporte, 'DATOS REPORTE')
             for (i = 0; i < $scope.datosReporte.length; i++) {
-                $scope.datosReporte[i].subGridOptions = {
-                    columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
-                        { name: 'VIN', field: 'VIN' },
-                        { name: 'Saldo documento', field: 'saldo' },
-                        { name: 'Plazo', field: 'plazo' },
-                        { name: 'Dias', field: 'dias' },
-                        { name: 'TIIE', field: 'tiie' },
-                        { name: 'Spread', field: 'puntos' },
-                        { name: 'Intereses', field: 'totalInteres' },
-                        { name: 'Estrella', field: 'estrella' },
-                        { name: 'Doble Estrella', field: 'dobleEstrella' }
-                    ],
-                    data: result[i].data
-                };
+                if ($scope.datosReporte[i].financieraID == -5 || $scope.datosReporte[i].financieraID == -6) {
+                    $scope.datosReporte[i].subGridOptions = {
+                        columnDefs: [{ name: 'Número de Serie', field: 'veh_numserie', width: '5%' },
+                            { name: 'Importe', field: 'IMPORTE' }
+                        ],
+                        data: result[i].data
+                    };
+                } else {
+                    $scope.datosReporte[i].subGridOptions = {
+                        columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
+                            { name: 'VIN', field: 'VIN' },
+                            { name: 'Saldo documento', field: 'saldo' },
+                            { name: 'Plazo', field: 'plazo' },
+                            { name: 'Dias', field: 'dias' },
+                            { name: 'TIIE', field: 'tiie' },
+                            { name: 'Spread', field: 'puntos' },
+                            { name: 'Intereses', field: 'totalInteres' },
+                            { name: 'Estrella', field: 'estrella' },
+                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                        ],
+                        data: result[i].data
+                    };
+                }
             }
 
             console.log($scope.datosReporte)
@@ -95,20 +105,23 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         }
     };
     $scope.gridOptions.columnDefs = [
-        { name: 'Financiera', field: 'nombre' },
-        { name: 'TIIE', field: 'tiie' },
-        { name: 'Spread', field: 'puntos' },
-        { name: '--', field: 'sumaTP' },
-        { name: 'Línea Autorizada', field: 'lineaAutorizada' },
-        { name: 'unidades', field: 'unidades' },
-        { name: 'Línea utilizada', field: 'saldo' },
-        { name: 'Línea disponible', field: 'lineaResto' },
-        { name: 'unidades', field: 'unidades' },
-        { name: 'Inventario', field: 'saldo' },
-        { name: 'Unidades en Estrella', field: 'estrella' },
-        { name: 'Estrella', field: 'estrellaMonto' },
-        { name: 'Unidades doble Estrella', field: 'dobleEstrella' },
-        { name: 'Doble Estrella', field: 'dobleEstrellaMonto' }
+        { name: 'Financiera', field: 'nombre', width: '40%' },
+        { name: 'TIIE', field: 'tiie', width: '5%' },
+        { name: 'Spread', field: 'puntos', width: '7%' },
+        { name: '--', field: 'sumaTP', width: '5%' },
+        { name: 'Línea Autorizada', field: 'lineaAutorizada', width: '15%' },
+        { name: 'unidades', field: 'unidades', width: '10%' },
+        { name: 'Línea utilizada', field: 'saldo', width: '15%' },
+        { name: 'Línea disponible', field: 'lineaResto', width: '15%' },
+        { name: 'unidades', field: 'unidades', width: '10%' },
+        { name: 'Inventario', field: 'saldo', width: '10%' },
+        { name: 'Unidades en días de gracia', field: 'unidadesDiaGracia', width: '18%' },
+        { name: 'Unidades en Estrella', field: 'estrella', width: '15%' },
+        { name: 'Estrella', field: 'estrellaMonto', width: '10%' },
+        { name: 'Unidades doble Estrella', field: 'dobleEstrella', width: '18%' },
+        { name: 'Doble Estrella', field: 'dobleEstrellaMonto', width: '10%' },
+        { name: 'Unidades días de gracia', field: 'unidadesDiaGracia', width: '18%' },
+        { name: 'Unidades que genera Intereses', field: 'unidadesGeneraIntereses', width: '18%' }
     ];
     $scope.gridOptions.onRegisterApi = function(gridApi) {
         $scope.gridApi = gridApi;
@@ -153,20 +166,30 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                         Promise.all(promises2).then(function response(result) {
                             console.log(result.data)
                             for (i = 0; i < $scope.encabezadoReporte[contador2].reporte.length; i++) {
-                                $scope.encabezadoReporte[contador2].reporte[i].subGridOptions = {
-                                    columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
-                                        { name: 'VIN', field: 'VIN' },
-                                        { name: 'Saldo documento', field: 'saldo' },
-                                        { name: 'Plazo', field: 'plazo' },
-                                        { name: 'Dias', field: 'dias' },
-                                        { name: 'TIIE', field: 'tiie' },
-                                        { name: 'Spread', field: 'puntos' },
-                                        { name: 'Intereses', field: 'totalInteres' },
-                                        { name: 'Estrella', field: 'estrella' },
-                                        { name: 'Doble Estrella', field: 'dobleEstrella' }
-                                    ],
-                                    data: result[i].data
-                                };
+                                if ($scope.encabezadoReporte[contador2].reporte[i].financieraID == -5 || $scope.encabezadoReporte[contador2].reporte[i].financieraID == -6) {
+                                    $scope.encabezadoReporte[contador2].reporte[i].subGridOptions = {
+                                        columnDefs: [{ name: 'Número de Serie', field: 'veh_numserie', width: '5%' },
+                                            { name: 'Importe', field: 'IMPORTE' }
+                                        ],
+                                        data: result[i].data
+                                    };
+                                } else {
+                                    $scope.encabezadoReporte[contador2].reporte[i].subGridOptions = {
+
+                                        columnDefs: [{ name: 'Documento', field: 'CCP_IDDOCTO' },
+                                            { name: 'VIN', field: 'VIN' },
+                                            { name: 'Saldo documento', field: 'saldo' },
+                                            { name: 'Plazo', field: 'plazo' },
+                                            { name: 'Dias', field: 'dias' },
+                                            { name: 'TIIE', field: 'tiie' },
+                                            { name: 'Spread', field: 'puntos' },
+                                            { name: 'Intereses', field: 'totalInteres' },
+                                            { name: 'Estrella', field: 'estrella' },
+                                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                                        ],
+                                        data: result[i].data
+                                    };
+                                }
                             }
                             contador2++;
                         }).catch(error => console.log('Ocurrio un error al obtener datos reporte' + error))
@@ -203,7 +226,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                 });
                 console.log($scope.encabezadoReporte, 'Soy las empresas que si tiene detalle')
                 angular.forEach($scope.encabezadoReporte, function(value, key) {
-                    
+
                     //BEGIN UI GRID
                     $scope.gridOptions[key] = {
                         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
@@ -214,20 +237,23 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                         }
                     };
                     $scope.gridOptions[key].columnDefs = [
-                        { name: 'Financiera', field: 'nombre' },
-                        { name: 'TIIE', field: 'tiie' },
-                        { name: 'Spread', field: 'puntos' },
-                        { name: '--', field: 'sumaTP' },
-                        { name: 'Línea Autorizada', field: 'lineaAutorizada' },
-                        { name: 'unidades', field: 'unidades' },
-                        { name: 'Línea utilizada', field: 'saldo' },
-                        { name: 'Línea disponible', field: 'lineaResto' },
-                        { name: 'unidades', field: 'unidades' },
-                        { name: 'Inventario', field: 'saldo' },
-                        { name: 'Unidades en Estrella', field: 'estrella' },
-                        { name: 'Estrella', field: 'estrellaMonto' },
-                        { name: 'Unidades doble Estrella', field: 'dobleEstrella' },
-                        { name: 'Doble Estrella', field: 'dobleEstrellaMonto' }
+                        { name: 'Financiera', field: 'nombre', width: '40%' },
+                        { name: 'TIIE', field: 'tiie', width: '5%' },
+                        { name: 'Spread', field: 'puntos', width: '7%' },
+                        { name: '--', field: 'sumaTP', width: '5%' },
+                        { name: 'Línea Autorizada', field: 'lineaAutorizada', width: '15%' },
+                        { name: 'unidades', field: 'unidades', width: '10%' },
+                        { name: 'Línea utilizada', field: 'saldo', width: '15%' },
+                        { name: 'Línea disponible', field: 'lineaResto', width: '15%' },
+                        { name: 'unidades', field: 'unidades', width: '10%' },
+                        { name: 'Inventario', field: 'saldo', width: '10%' },
+                        { name: 'Unidades en días de gracia', field: 'unidadesDiaGracia', width: '18%' },
+                        { name: 'Unidades en Estrella', field: 'estrella', width: '15%' },
+                        { name: 'Estrella', field: 'estrellaMonto', width: '10%' },
+                        { name: 'Unidades doble Estrella', field: 'dobleEstrella', width: '18%' },
+                        { name: 'Doble Estrella', field: 'dobleEstrellaMonto', width: '10%' },
+                        { name: 'Unidades días de gracia', field: 'unidadesDiaGracia', width: '18%' },
+                        { name: 'Unidades que genera Intereses', field: 'unidadesGeneraIntereses', width: '18%' }
                     ];
                     $scope.gridOptions[key].onRegisterApi = function(gridApi) {
                         $scope.gridApi[key] = gridApi;
