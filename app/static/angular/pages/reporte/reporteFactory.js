@@ -27,14 +27,13 @@ appModule.factory('reporteFactory', function($http) {
                 responseType: 'arraybuffer'
             });
         },
-        getReporteUnidades: function(idEmpresa, idFinanciera, key) {
+        getReporteUnidades: function(idEmpresa, idFinanciera) {
             return $http({
                 url: reporteUrl + 'reporteUnidades/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
-                    idFinanciera: idFinanciera,
-                    key: key
+                    idFinanciera: idFinanciera
                 },
                 headers: { 'Content-Type': 'application/json' }
             });

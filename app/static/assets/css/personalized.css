@@ -355,3 +355,8 @@ tr.unSelect td {
 
 
 /*END Estilo tabla Reporte*/
+/*BEGIN UI-GRID*/
+.currencyGrid{
+    text-align:right;
+}
+/*END UI-GRID*/
