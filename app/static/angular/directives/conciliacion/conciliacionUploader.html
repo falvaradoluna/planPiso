@@ -3,11 +3,21 @@
     <button class="btn btn-warning pull-right" ng-click="openModalConciliacion()"><i class="fa fa-copy"></i> Nueva Conciliación </button>
 </h2>
 <hr>
-<!-- <div class="row row_dropzone onlyPrint" ng-init="porAutorizar();">
-    <div class="col-sm-12">
-        <h1>Hola</h1>
+<div class="row" ng-init="obtienePeriodosActivos();">
+    <div class="dropdown setInline">
+       
+        <label>Periodo:  </label>
+        <button class="btn btn-warning" type="button" data-toggle="dropdown">{{currentNombrePeriodo}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="item in lstPeriodos">
+                <a ng-click="setPeriodo(item)">{{item.NombrePeriodo}}</a>
+            </li>
+        </ul>
+    
     </div>
-</div>-->
+</div>
 <div ng-show="lstPendiente.length != 0" class="row row_dropzone onlyPrint" ng-init="porAutorizar();">
     <div class="col-sm-12">
         <table class="table table-hover">

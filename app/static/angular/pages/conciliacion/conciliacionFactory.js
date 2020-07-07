@@ -208,6 +208,14 @@ appModule.factory('conciliacionFactory', function($http) {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             });
-        },   
+        },
+        obtienePeriodosActivos: function(parametros) {
+            return $http({
+                url: conciliacionUrl + 'obtienePeriodosActivos/',
+                method: "GET",
+                params:parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }   
     };
 });

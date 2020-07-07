@@ -124,5 +124,32 @@ ApiAuditoria.prototype.get_readPdf = function(req, res, next) {
             result: base64String
         });
 };
+ApiAuditoria.prototype.get_cambiarEncontrada = function(req, res, next) {
 
+    var self = this;
+    var params = [{ name: 'idAuditoriadetalle', value: req.query.idAuditoriaDetalle, type: self.model.types.INT },
+    { name: 'encontrada', value: req.query.encontrada, type: self.model.types.INT }
+          ];
+
+    self.model.queryAllRecordSet('UPD_cambiarEncontrada_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_guardarObservacionesGeneral = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idAuditoriadetalle', value: req.query.idAuditoriadetalle, type: self.model.types.STRING },
+    { name: 'observaciones', value: req.query.observaciones, type: self.model.types.STRING }
+          ];
+
+    self.model.queryAllRecordSet('UPD_ObservacionesGenerales_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiAuditoria;

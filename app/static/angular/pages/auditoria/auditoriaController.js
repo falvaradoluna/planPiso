@@ -102,7 +102,8 @@ $scope.openModalAuditoria= function()
             $scope.ctrl.lblFinanciera = result.data[0][0].financiera;
             $scope.ctrl.idestatus = result.data[0][0].idestatus;
             $scope.lstAuditoriaNormales = result.data[1];
-            $scope.lstAuditoriaFS = result.data[2];
+            $scope.lstAuditoriaDPP = result.data[2];
+            $scope.lstAuditoriaFS = result.data[3];
             $scope.currentPanel = 'pnlAuditoriaUnidades';
            
         }, function(error) {
@@ -116,6 +117,17 @@ $scope.openModalAuditoria= function()
         auditoriaFactory.getAuditorias(parametros).then(function(result) {
             if(result.data[0].length>0)
            $scope.lstAuditorias = result.data[0];
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
+    $scope.Encontrada = function(dato) {
+        var parametros = {
+            idAuditoriaDetalle: dato.idAuditoriaDetalle,
+            encontrada:dato.encontrada?1:0
+        }
+        auditoriaFactory.cambiarEncontrada(parametros).then(function(result) {
+          var solo = result;
         }, function(error) {
             console.log("Error", error);
         });
@@ -159,6 +171,16 @@ $scope.openModalAuditoria= function()
         $rootScope.tipo=valor.idtipoDetalleAuditoria;
         $('#selectObservaciones').modal('show');
     };
+    $scope.editDetailGeneral = function() {
+
+        $rootScope.observaciones='';
+        $('#selectObservacionesGeneral').modal('show');
+    };
+    $scope.Buscarunidad = function() {
+
+        $rootScope.observaciones='';
+        $('#selectBuscarUnidad').modal('show');
+    };
     $scope.GuardarDetail= function(observaciones,idAuditoriaDetalle)
     {
         $rootScope.observaciones=observaciones;
@@ -178,7 +200,17 @@ $scope.openModalAuditoria= function()
 
                 }
             }
-           }else
+           }else  if( $rootScope.tipo==2)
+           {
+            for(var i=0;i<$scope.lstAuditoriaDPP.length;i++)
+            {
+                if($scope.lstAuditoriaDPP[i].idAuditoriaDetalle==$rootScope.idAuditoriaDetalle)
+                {
+                    $scope.lstAuditoriaDPP[i].observaciones=$rootScope.observaciones;
+
+                }
+            }
+           }else  if( $rootScope.tipo==3)
            {
             for(var i=0;i<$scope.lstAuditoriaFS.length;i++)
             {
@@ -191,6 +223,73 @@ $scope.openModalAuditoria= function()
            }
            $scope.apply;
                 $('#selectObservaciones').modal('hide');
+                swal("Ok", "Se guardo con exito", "success");
+            
+        });
+    }
+    $scope.GuardarDetailGeneral= function(observaciones)
+    {
+        $rootScope.observaciones=observaciones;
+        $scope.iddetalle='';
+        for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
+        {
+            if($scope.lstAuditoriaNormales[i].isChecked)
+            {
+                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaNormales[i].idAuditoriaDetalle+','
+
+            }
+        }
+        for(var i =0;i<$scope.lstAuditoriaDPP.length;i++)
+        {
+            if($scope.lstAuditoriaDPP[i].isChecked)
+            {
+                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaDPP[i].idAuditoriaDetalle+','
+
+            }
+        }
+        for(var i =0;i<$scope.lstAuditoriaFS.length;i++)
+        {
+            if($scope.lstAuditoriaFS[i].isChecked)
+            {
+                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaFS[i].idAuditoriaDetalle+','
+
+            }
+        }
+
+var ids = $scope.iddetalle.substring(0,$scope.iddetalle.length-1);
+        var data = {
+            idAuditoriadetalle: ids,
+            observaciones:$rootScope.observaciones,
+        };
+        auditoriaFactory.guardarObservacionesGeneral(data).then(function(resultSchema) {
+           
+            for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
+            {
+                if($scope.lstAuditoriaNormales[i].isChecked)
+                {
+                    $scope.lstAuditoriaNormales[i].observaciones=$rootScope.observaciones;
+
+                }
+            }
+            for(var i=0;i<$scope.lstAuditoriaDPP.length;i++)
+            {
+                if($scope.lstAuditoriaDPP[i].isChecked)
+                {
+                    $scope.lstAuditoriaDPP[i].observaciones=$rootScope.observaciones;
+
+                }
+            }
+            for(var i=0;i<$scope.lstAuditoriaFS.length;i++)
+            {
+                if($scope.lstAuditoriaFS[i].isChecked)
+                {
+                    $scope.lstAuditoriaFS[i].observaciones=$rootScope.observaciones;
+
+                }
+            }
+          
+           $scope.apply;
+                $('#selectObservacionesGeneral').modal('hide');
                 swal("Ok", "Se guardo con exito", "success");
             
         });

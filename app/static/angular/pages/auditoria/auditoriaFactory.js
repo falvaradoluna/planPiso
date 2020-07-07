@@ -168,6 +168,22 @@ appModule.factory('auditoriaFactory', function($http) {
                 params:{ idAuditoria: idAuditoria },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }   
+        },
+        cambiarEncontrada: function(parametros) {
+            return $http({
+                url: auditoriaUrl + 'cambiarEncontrada/',
+                method: "GET",
+                params:parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        guardarObservacionesGeneral: function(parametros) {
+            return $http({
+                url: auditoriaUrl + 'guardarObservacionesGeneral/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
     };
 });

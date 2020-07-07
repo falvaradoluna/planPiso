@@ -20,6 +20,16 @@ appModule.factory('empresaFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getUsuarioPermisos: function( idUsuario ) {
+            return $http({
+                url: empresaUrl + 'UsuarioPermisos/',
+                method: "GET",
+                params:{
+                	idUsuario: idUsuario
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 

@@ -43,5 +43,18 @@ ApiEmpresas.prototype.get_UsuarioNombre = function(req, res, next) {
         });
     });
 };
+ApiEmpresas.prototype.get_UsuarioPermisos= function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+
+    self.model.queryAllRecordSet('USUARIOPermisos_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = ApiEmpresas;

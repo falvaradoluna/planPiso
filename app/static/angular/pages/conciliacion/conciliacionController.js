@@ -44,14 +44,33 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
     $scope.situacion            = { ok:0, financiera:0, gpoAndrade: 0 };
     $scope.diferencias          = { iguales:0, diferentes: 0 };
+    $scope.currentPeriodo={};
+    $scope.currentPeriodo.periodo=null;
 
    
 
     var increment   = 0;
     var contador    = 0;
 
-         
-    
+    $scope.obtienePeriodosActivos= function(){
+        var parametros = {
+            idEmpresa:      $scope.session.empresaID
+          
+        }
+        conciliacionFactory.obtienePeriodosActivos(parametros).then(function(result) {
+            if( result.data.length != 0 ){
+                $scope.lstPeriodos = result.data;
+                $scope.setPeriodo($scope.lstPeriodos[0]);
+            }
+        });
+    }   
+    $scope.setPeriodo = function(item) {
+        // $scope.listUnidades = _.where($scope.lstNewUnits, { isChecked: true });
+        $scope.currentPeriodo =item;
+        $scope.currentNombrePeriodo =item.NombrePeriodo;
+        $scope.obtieneCociliacion();
+      
+    };
     // Este es como funciona desde Branch Conciliación
     commonFactory.getFinancial( $scope.session.empresaID ).then(function(result) {
         $scope.lstFinancial = result.data;
@@ -634,16 +653,16 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             }
         });
     }
-
+   
     $scope.obtieneCociliacion = function(){
         var parametros = {
             idEmpresa:      $scope.session.empresaID,
-          
+            periodo:  $scope.currentPeriodo.periodo
         }
         conciliacionFactory.obtieneCociliacion(parametros).then(function(result) {
-            if( result.data.length != 0 ){
+         
                 $scope.lstConciliacion = result.data;
-            }
+          
         });
     }
 
@@ -713,6 +732,8 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     $scope.nextStep = function() {
         var contador = 0;
+        var Financiera=  _.where($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera })[0];
+        $scope.setCurrentFinancialHead(Financiera);
         angular.forEach($scope.lstNewUnits, function(value, key) {
             
                 contador++;

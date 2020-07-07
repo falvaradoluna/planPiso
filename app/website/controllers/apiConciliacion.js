@@ -301,7 +301,9 @@ ApiConciliacion.prototype.get_generaConciliacion = function(req, res, next) {
 ApiConciliacion.prototype.get_obtieneConciliacion = function(req, res, next) {
 
     var self = this;
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },];
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },];
+
 
     self.model.query('CONC_OBTIENETODAS_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -421,6 +423,18 @@ ApiConciliacion.prototype.get_tiposConciliacion = function(req, res, next) {
     var params = [];
 
     self.model.query('CONC_TIPOSCONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_obtienePeriodosActivos = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },];
+
+    self.model.query('Get_PeriodosActivos_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

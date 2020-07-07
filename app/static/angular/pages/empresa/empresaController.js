@@ -15,7 +15,7 @@ appModule.controller('empresaController', function($scope, $rootScope, $location
         var sessionFactory = { nombre: current.emp_nombre, empresaID: current.emp_idempresa, empresaRfc: current.rfc };
         console.log( sessionFactory );
         sessionStorage.setItem("sessionFactory", JSON.stringify(sessionFactory));
-        window.location = "/unuevas";
+        window.location = "/interes";
     };
 
 
