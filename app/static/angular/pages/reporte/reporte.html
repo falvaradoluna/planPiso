@@ -2,6 +2,7 @@
 <div class="row m-t-md">
     <div class="col-md-12">
         <button class="btn btn-primary pull-right" ng-click="reporteEmpresas()">Generar Reporte General</button>
+        <button class="btn btn-primary pull-right" ng-click="descargarReporteEmpresas()" ng-show="encabezadoReporte">Descargar Reporte</button>
     </div>
 </div>
 <div class="wrapper wrapper-content" ng-init="init()" ng-show="muestraxempresa">
@@ -94,7 +95,7 @@
                             <div id="grid1" ui-grid="gridOptions" ui-grid-pinning ui-grid-expandable></div>
                         </div>
                         <div class="col-md-12 m-t-md">
-                            <button class="btn btn-primary pull-right" ng-click="descargarReporte()">Descargar Reporte</button>
+                            <button class="btn btn-primary pull-right" ng-click="descargarReporteEmpresa()">Descargar Reporte</button>
                         </div>
                     </div>
                 </div>
@@ -120,10 +121,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div id="grid1" ui-grid="empresa.group" ui-grid-pinning ui-grid-expandable></div>
-                        </div>
-                        <div class="col-md-12 m-t-md">
-                            <button class="btn btn-primary pull-right" ng-click="descargarReporte()">Descargar Reporte</button>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
