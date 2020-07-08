@@ -1,12 +1,22 @@
 appModule.controller("indexController", function($scope, empresaFactory) {
     // $scope.nombreUsuario    = localStorage.getItem("nombreUsuario");
     $scope.nombreUsuario    = "";
-  
+    $scope.permisos=function(user)
+    {
+        empresaFactory.getUsuarioPermisos( user ).then(function(result) {                
+            if(result.data[0].length>0)
+            {
+            $scope.lstModulos=result.data[0];
+
+            }
+         });
+    }
     
     setTimeout(function(){ $(".init-loading").hide(); }, 500)
     
     if (!($('#idUsuario').val().indexOf('[') > -1)) {
         localStorage.setItem("idUsuario", $('#idUsuario').val())
+        $scope.permisos($('#idUsuario').val());
         empresaFactory.getUsuarioNombre( $('#idUsuario').val() ).then(function(result) {
             localStorage.setItem("nombreUsuario", result.data[0].nombre);
             $scope.nombreUsuario    = result.data[0].nombre;
@@ -25,6 +35,7 @@ appModule.controller("indexController", function($scope, empresaFactory) {
                 localStorage.setItem("nombreUsuario", result.data[0].nombre);
                 $scope.nombreUsuario    = result.data[0].nombre;
             });
+           $scope.permisos(idUser);
             $(".init-mgs").hide();
             $("#wrapper").show();
         }
