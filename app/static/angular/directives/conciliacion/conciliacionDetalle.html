@@ -81,7 +81,7 @@
                 <hr>
                 <p class="mb-0">
                     <b>NOTA:</b> Debera actualizar la cartera para cuadrar la conciliación.
-                    <button type="button" class="btn btn-primary pull-right" ng-click="CompraVirtual()" >Compra Virtual</button>
+                    <button type="button" class="btn btn-primary pull-right"  ng-show="MuestracompraVirtual" ng-click="CompraVirtual()" >Compra Virtual</button>
                 </p>
             </div>
     </div>
@@ -232,7 +232,7 @@
 
             <hr>
             <button type="button" class="btn btn-default" ng-click="prevStep()">Regresar</button>
-            <button type="button" class="btn btn-default" ng-click="prevStep()">Cancelar Conciliación</button>
+            <button type="button" class="btn btn-default" ng-show="Muestracancelar" ng-click="prevStep()">Cancelar Conciliación</button>
             <!-- <button type="button" class="btn btn-default" ng-click="solicitaAutorizacion(3);">Guardar conciliación</button> -->
             
             <button type="button" class="btn btn-primary pull-right" ng-click="guardaConciliacion()" ng-disabled="!conciliacion">Generar Conciliación</button>

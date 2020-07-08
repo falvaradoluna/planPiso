@@ -1,7 +1,7 @@
 appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory,  commonFactory, staticFactory, filterFilter ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
-
+    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck     = "Desmarcar Unidades";
     $scope.currentPanel         = 'pnlCargaArchivo';
@@ -9,6 +9,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.titleDocumentos        = '';
     $scope.titleDocumentosDetalle = '';
     $scope.tipoConciliacion=0;
+    $scope.MuestranuevaConciliacion=false;
+    $scope.MuestracompraVirtual=false;
+    $scope.MuestragenerarConciliacion=false;
+    $scope.Muestracancelar=false;
     /* =========================== 
         [ estSolAutorizacion ]
     Valida la aplicación de la conci
@@ -51,7 +55,18 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     var increment   = 0;
     var contador    = 0;
-
+    $scope.init=function()
+    {
+        var valor=_.where($scope.lstPermisoBoton, { idModulo: 9,Boton: "nuevaConciliacion" })[0];
+        $scope.MuestranuevaConciliacion=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 9,Boton: "compraVirtual" })[0];
+        $scope.MuestracompraVirtual=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 9,Boton: "generarConciliacion" })[0];
+        $scope.MuestragenerarConciliacion=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 9,Boton: "cancelar" })[0];
+        $scope.Muestracancelar=valor != undefined;
+    }
+    $scope.init();
     $scope.obtienePeriodosActivos= function(){
         var parametros = {
             idEmpresa:      $scope.session.empresaID

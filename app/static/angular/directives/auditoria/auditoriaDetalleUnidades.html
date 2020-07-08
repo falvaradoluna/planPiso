@@ -25,7 +25,7 @@
 </div>
 <hr>
 
-<button type="button" class="btn btn-default" ng-click="editDetailGeneral()">
+<button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetailGeneral()">
  Cambiar observaciones en general  <span class="glyphicon glyphicon-edit"></span>
 </button>
 <button type="button" class="btn btn-default" ng-click="Buscarunidad()">
@@ -61,7 +61,7 @@
             <td><input  type="checkbox"    ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.observaciones}}</td>
             <td >
-                <button type="button" class="btn btn-default" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
+                <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
                     <span class="glyphicon glyphicon-edit"></span>
                 </button>
             </td>
@@ -102,7 +102,7 @@
             <td><input  type="checkbox"    ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.observaciones}}</td>
             <td >
-                <button type="button" class="btn btn-default" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
+                <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
                     <span class="glyphicon glyphicon-edit"></span>
                 </button>
             </td>
@@ -145,7 +145,7 @@
             <td><input  type="checkbox"    ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.observaciones}}</td>
             <td >
-                <button type="button" class="btn btn-default" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
+                <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
                     <span class="glyphicon glyphicon-edit"></span>
                 </button>
             </td>
@@ -163,8 +163,8 @@
              <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
          </div>
          <div style="overflow: hidden;" ng-show="ctrl.idestatus == 1">
-            <button type="button" class="btn btn-primary pull-right" ng-click="guardaAuditoria()" >Guardar Auditoría</button>
-            <button type="button" class="btn btn-default pull-right" ng-click="CancelarAuditoria()">Cancelar Auditoría</button>
+            <button type="button" class="btn btn-primary pull-right" ng-show="MuestraguardarAuditoria" ng-click="guardaAuditoria()" >Guardar Auditoría</button>
+            <button type="button" class="btn btn-default pull-right" ng-show="MuestracancelarAuditoria" ng-click="CancelarAuditoria()">Cancelar Auditoría</button>
             <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
         </div>
         
