@@ -1,5 +1,7 @@
 appModule.controller('tiieController', function($scope, $rootScope, $location, commonFactory, staticFactory, tiieFactory) {
     var sessionFactory      = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
+    
     $scope.idUsuario        = localStorage.getItem("idUsuario");
     $scope.currentEmpresa   = sessionFactory.nombre;
 
@@ -8,6 +10,7 @@ appModule.controller('tiieController', function($scope, $rootScope, $location, c
     $scope.currentPanel     = 'pnlTiie';
     $scope.lstTiie          = [];
     $rootScope.currentTIIEData  = {};
+    $scope.MuestraAgregar=false;
 
     setTimeout( function(){
         console.log("rootScope", $rootScope.currentTIIEData);
@@ -15,6 +18,8 @@ appModule.controller('tiieController', function($scope, $rootScope, $location, c
     
 
     $scope.Init = function(){
+        var valor=_.where($scope.lstPermisoBoton, { idModulo: 14,Boton: "agregar" })[0];
+        $scope.MuestraAgregar=valor != undefined;
         tiieFactory.getTiie().then(function(result) {
             $scope.lstTiie = result.data;
         });

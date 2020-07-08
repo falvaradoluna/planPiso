@@ -1,4 +1,4 @@
-appModule.controller("indexController", function($scope, empresaFactory) {
+appModule.controller("indexController", function($scope,$rootScope, empresaFactory) {
     // $scope.nombreUsuario    = localStorage.getItem("nombreUsuario");
     $scope.nombreUsuario    = "";
     $scope.permisos=function(user)
@@ -7,7 +7,7 @@ appModule.controller("indexController", function($scope, empresaFactory) {
             if(result.data[0].length>0)
             {
             $scope.lstModulos=result.data[0];
-
+            sessionStorage.setItem("PermisoUsuario",JSON.stringify( result.data[1]));
             }
          });
     }
