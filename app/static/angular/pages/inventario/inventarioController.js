@@ -1,6 +1,7 @@
-appModule.controller('inventarioController', function($scope, $rootScope, $location,filterFilter, commonFactory, staticFactory, inventarioFactory) {
+appModule.controller('inventarioController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, inventarioFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
 
     $scope.currentSucursalName = "Sucursal Todas";
@@ -23,7 +24,8 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
     // $scope.currentPayName = 'Todos';
     // $scope.showDropDown = true;
     $('#mdlLoading').modal('show');
-
+    var finalizar = _.where($scope.lstPermisoBoton, { idModulo: 7, Boton: "finalizar" })[0];
+    $scope.muestrafinalizar = finalizar != undefined ? false : true;
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
     });
@@ -119,49 +121,47 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         else
             $scope.ddlFinancialShow = true;
     };
-    $scope.showMsg = function() 
-    {
+    $scope.showMsg = function() {
         swal({
-            title: "¿Estas Seguro?",
-            text: "Se le generara póliza a todos los documentos seleccionados.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#21B9BB",
-            confirmButtonText: "Continuar",
-            closeOnConfirm: false
-        },
-        function() 
-        {
-            var parainventario = {
-                idUsuario: $scope.idUsuario,
-                idEmpresa: sessionFactory.empresaID,
-                idtipopoliza:3 //Unidades de inventario
-            }
+                title: "¿Estas Seguro?",
+                text: "Se le generara póliza a todos los documentos seleccionados.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Continuar",
+                closeOnConfirm: false
+            },
+            function() {
+                var parainventario = {
+                    idUsuario: $scope.idUsuario,
+                    idEmpresa: sessionFactory.empresaID,
+                    idtipopoliza: 3 //Unidades de inventario
+                }
 
-            inventarioFactory.inventarioPoliza(parainventario).then(function( respuesta ) {
-                $scope.LastId = respuesta.data[0].LastId;
-                $scope.lstUnitsinventarios = filterFilter( $scope.lstNewUnits , {isChecked: true} );
-                $scope.guardaDetalle();
-            }, function(error) {
-                $scope.error(error.data.Message);
+                inventarioFactory.inventarioPoliza(parainventario).then(function(respuesta) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    $scope.lstUnitsinventarios = filterFilter($scope.lstNewUnits, { isChecked: true });
+                    $scope.guardaDetalle();
+                }, function(error) {
+                    $scope.error(error.data.Message);
+                });
+
+
+
             });
-           
-            
-            
-        });
     };
-    
+
     $scope.LastId = 0;
     var contTraspadoDetalle = 0;
-    $scope.guardaDetalle = function(){
-        if( contTraspadoDetalle < $scope.lstUnitsinventarios.length ){
-            var item = $scope.lstUnitsinventarios[ contTraspadoDetalle ];
-           
+    $scope.guardaDetalle = function() {
+        if (contTraspadoDetalle < $scope.lstUnitsinventarios.length) {
+            var item = $scope.lstUnitsinventarios[contTraspadoDetalle];
+
             var parainventarioDetalle = {
                 idpoliza: $scope.LastId,
                 empresaID: item.idEmpresa,
                 sucursalID: item.idSucursal,
-                CCP_IDDOCTO : item.CCP_IDDOCTO,
+                CCP_IDDOCTO: item.CCP_IDDOCTO,
                 idfinancieraO: $scope.FinancieraSel.financieraID,
                 idEsquemaO: $scope.selectedSchema.esquemaID,
                 idfinancieraD: 0,
@@ -169,9 +169,9 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                 idUsuario: $scope.idUsuario
             }
 
-            inventarioFactory.inventarioPolizaDetalle(parainventarioDetalle).then(function( response ) {
-                if( response.data.length != 0 ){
-                    if( contTraspadoDetalle < $scope.lstUnitsinventarios.length ){
+            inventarioFactory.inventarioPolizaDetalle(parainventarioDetalle).then(function(response) {
+                if (response.data.length != 0) {
+                    if (contTraspadoDetalle < $scope.lstUnitsinventarios.length) {
                         contTraspadoDetalle++;
                         $scope.guardaDetalle();
                     }
@@ -179,17 +179,15 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-        }
-        else{
+        } else {
             // swal("inventario Plan Piso", "Se ha efectuado correctamente su inventario.");
-            inventarioFactory.procesainventario($scope.LastId).then(function( response ) {
-                if( response.length != 0 ){
-                    swal(
-                    {
+            inventarioFactory.procesainventario($scope.LastId).then(function(response) {
+                if (response.length != 0) {
+                    swal({
                         title: "Unidades de inventario Plan Piso",
                         text: "Se ha efectuado correctamente su póliza.",
                         type: "warning"
-                    }, function(){
+                    }, function() {
                         location.reload();
                     });
                 }

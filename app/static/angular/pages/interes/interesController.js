@@ -1,5 +1,6 @@
 appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = staticFactory.interesBar();
@@ -35,7 +36,18 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $rootScope.fechafin = '';
     $rootScope.tiie = 0;
     $rootScope.puntos = 0;
-
+    var CargarSpreadTiie = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "CargarSpreadTiie" })[0];
+    var cambiarEsquema = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "cambiarEsquema" })[0];
+    var traspasoFinanciera = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "traspasoFinanciera" })[0];
+    var pagarReduccion = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "pagarReduccion" })[0];
+    var generarPolizaInteres = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "generarPolizaInteres" })[0];
+    var compensacion = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "compensacion" })[0];
+    $scope.muestraCargarSpreadTiie = CargarSpreadTiie != undefined ? false : true;
+    $scope.muestracambiarEsquema = cambiarEsquema != undefined ? false : true;
+    $scope.muestratraspasoFinanciera = traspasoFinanciera != undefined ? false : true;
+    $scope.muestrapagarReduccion = pagarReduccion != undefined ? false : true;
+    $scope.muestragenerarPolizaInteres = generarPolizaInteres != undefined ? false : true;
+    $scope.muestracompensacion = compensacion != undefined ? false : true;
     $scope.initAmounts = function() {
         $scope.lstNewUnits = [];
         $scope.interesPagado = 0;

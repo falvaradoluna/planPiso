@@ -1,6 +1,7 @@
 appModule.controller('financieraController', function($scope, $rootScope, $filter, $location, commonFactory, staticFactory, financieraFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     var regularExpression = staticFactory.getRegExp();
 
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -19,6 +20,9 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
 
     $scope.topBarNav = staticFactory.financieraBar();
 
+    var editar = _.where($scope.lstPermisoBoton, { idModulo: 3, Boton: "editar" })[0];
+    $scope.muestraeditar = editar != undefined ? false : true;
+
     commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
@@ -28,7 +32,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.lsttipoPagoInteres = result.data[1];
         $scope.lsttipoPagoInteresFinMes = result.data[2];
         $scope.lsttipoSOFOM = result.data[3];
-       
+
     });
     $scope.validateSchemaHeader = function() {
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
@@ -103,13 +107,13 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.financieraHeader.tipoCobroInteresID = objSchema.tipoCobroInteresID;
         $scope.financieraHeader.tipoPagoInteresID = objSchema.tipoPagoInteresID;
         $scope.financieraHeader.tipoPagoInteresFinMesID = objSchema.tipoPagoInteresFinMesID;
-      
+
 
         $scope.financieraHeader.selectedtipoCobroInteres = _.where($scope.lsttipoCobroInteres, { tipoCobroInteresID: objSchema.tipoCobroInteresID })[0];
         $scope.financieraHeader.selectedtipoPagoInteres = _.where($scope.lsttipoPagoInteres, { tipoPagoInteresID: objSchema.tipoPagoInteresID })[0];
         $scope.financieraHeader.selectedtipoPagoInteresFinMes = _.where($scope.lsttipoPagoInteresFinMes, { tipoPagoInteresFinMesID: objSchema.tipoPagoInteresFinMesID })[0];
         $scope.financieraHeader.selectedtipoSOFOM = _.where($scope.lsttipoSOFOM, { tipoSOFOMID: objSchema.tipoSOFOMID })[0];
-     
+
         $scope.regresatabla();
 
     };
@@ -118,7 +122,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
         $scope.financieraHeader.tipoPagoInteresFinMesID = $scope.financieraHeader.selectedtipoPagoInteresFinMes.tipoPagoInteresFinMesID;
         $scope.financieraHeader.tipoPagoInteresID = $scope.financieraHeader.selectedtipoPagoInteres.tipoPagoInteresID;
         $scope.financieraHeader.tipoSOFOMID = $scope.financieraHeader.selectedtipoSOFOM.tipoSOFOMID;
-      
+
 
         var financieraFormControls = financieraFactory.setHeaderValues($scope.financieraHeader, regularExpression);
         var isValid = financieraFactory.formIsvalid(financieraFormControls);
@@ -170,101 +174,98 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
     commonFactory.getTipoColateral().then(function(result) {
         $scope.lstTipoColateral = result.data;
     });
-    $scope.regresatabla= function()
-{
-    var params = {
-        idfinanciera: $scope.financieraHeader.financieraID,
-        //,usuarioID: localStorage.getItem('idUsuario')
-    };
-
-    financieraFactory.getColateralLineaCredito(params).then(function(result) {
-               $scope.lstLista = result.data;
-
-    });
-
-
-}
-$scope.AgregarDetail=function(){
-    $scope.agregareditar=true;
-    $scope.nuevo=1;
-    $scope.ctrl={};
-   
-}
-$scope.GuardarDetail=function(){
-    if($scope.nuevo==1)
-    {
-        // var newobject={
-        //     dia:$scope.ctrl.dia,
-        //     porcentaje:$scope.ctrl.porcentaje
-        // }
-      //  $scope.esquemaHeader.lstreduccion.push(newobject);
-      var params = {
-        idfinanciera:  $scope.financieraHeader.financieraID,
-        idtipoColateral: $scope.ctrl.selectedtipoColateral.idtipoColateral,
-        LineaCredito: $scope.ctrl.LineaCredito,
-        NumUnidades: $scope.ctrl.NumUnidades,
-        fechainicio: $scope.ctrl.fechainicio,
-        fechafin: $scope.ctrl.fechafin
-        //,usuarioID: localStorage.getItem('idUsuario')
-    };
-
-    financieraFactory.insColateralLineaCredito(params).then(function(result) {
-        swal('Guardado', 'Financiera guardada con exito', 'success');
-        $scope.regresatabla();
-
-    });
-    }else
-    {
-        // for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
-        //     if ($scope.esquemaHeader.lstreduccion[i].dia == $scope.ctrl.dia) {
-        //         $scope.esquemaHeader.lstreduccion[i].porcentaje = $scope.ctrl.porcentaje;
-        //        break; //Stop this loop, we found it!
-        //     }
-        //   }
+    $scope.regresatabla = function() {
         var params = {
-            idColateralLineaCredito: $scope.ctrl.idColateralLineaCredito,
-            LineaCredito: $scope.ctrl.LineaCredito,
-            NumUnidades: $scope.ctrl.NumUnidades,
-            fechainicio: $scope.ctrl.fechainicio,
-            fechafin: $scope.ctrl.fechafin
+            idfinanciera: $scope.financieraHeader.financieraID,
             //,usuarioID: localStorage.getItem('idUsuario')
         };
-    
-        financieraFactory.updColateralLineaCredito(params).then(function(result) {
-            swal('Guardado', 'Financiera guardada con exito', 'success');
-            $scope.regresatabla();
-    
+
+        financieraFactory.getColateralLineaCredito(params).then(function(result) {
+            $scope.lstLista = result.data;
+
         });
 
+
     }
-    $scope.agregareditar=false;
-}
-$scope.CancelarDetail=function(){
-    $scope.agregareditar=false;
-}
-$scope.EditarDetail=function(item){
-    $scope.agregareditar=true;
-    $scope.ctrl={};
-    $scope.nuevo=0;
-    $scope.ctrl.idColateralLineaCredito=item.idColateralLineaCredito;
-    $scope.ctrl.idtipoColateral=item.idtipoColateral; 
-    $scope.ctrl.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: item.idtipoColateral })[0];
-    $scope.ctrl.LineaCredito=item.LineaCredito;
-    $scope.ctrl.NumUnidades=item.NumUnidades;
-    $scope.ctrl.fechainicio=item.fechainicio;
-    $scope.ctrl.fechafin=item.fechafin;
-   
-}
-$scope.BorrarDetail=function(item){
-    var params = {
-        idColateralLineaCredito:item.idColateralLineaCredito
-        //,usuarioID: localStorage.getItem('idUsuario')
-    };
+    $scope.AgregarDetail = function() {
+        $scope.agregareditar = true;
+        $scope.nuevo = 1;
+        $scope.ctrl = {};
 
-    financieraFactory.delColateralLineaCredito(params).then(function(result) {
-        swal('Guardado', 'Financiera guardada con exito', 'success');
-        $scope.regresatabla();
+    }
+    $scope.GuardarDetail = function() {
+        if ($scope.nuevo == 1) {
+            // var newobject={
+            //     dia:$scope.ctrl.dia,
+            //     porcentaje:$scope.ctrl.porcentaje
+            // }
+            //  $scope.esquemaHeader.lstreduccion.push(newobject);
+            var params = {
+                idfinanciera: $scope.financieraHeader.financieraID,
+                idtipoColateral: $scope.ctrl.selectedtipoColateral.idtipoColateral,
+                LineaCredito: $scope.ctrl.LineaCredito,
+                NumUnidades: $scope.ctrl.NumUnidades,
+                fechainicio: $scope.ctrl.fechainicio,
+                fechafin: $scope.ctrl.fechafin
+                //,usuarioID: localStorage.getItem('idUsuario')
+            };
 
-    });
-}                     
+            financieraFactory.insColateralLineaCredito(params).then(function(result) {
+                swal('Guardado', 'Financiera guardada con exito', 'success');
+                $scope.regresatabla();
+
+            });
+        } else {
+            // for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
+            //     if ($scope.esquemaHeader.lstreduccion[i].dia == $scope.ctrl.dia) {
+            //         $scope.esquemaHeader.lstreduccion[i].porcentaje = $scope.ctrl.porcentaje;
+            //        break; //Stop this loop, we found it!
+            //     }
+            //   }
+            var params = {
+                idColateralLineaCredito: $scope.ctrl.idColateralLineaCredito,
+                LineaCredito: $scope.ctrl.LineaCredito,
+                NumUnidades: $scope.ctrl.NumUnidades,
+                fechainicio: $scope.ctrl.fechainicio,
+                fechafin: $scope.ctrl.fechafin
+                //,usuarioID: localStorage.getItem('idUsuario')
+            };
+
+            financieraFactory.updColateralLineaCredito(params).then(function(result) {
+                swal('Guardado', 'Financiera guardada con exito', 'success');
+                $scope.regresatabla();
+
+            });
+
+        }
+        $scope.agregareditar = false;
+    }
+    $scope.CancelarDetail = function() {
+        $scope.agregareditar = false;
+    }
+    $scope.EditarDetail = function(item) {
+        $scope.agregareditar = true;
+        $scope.ctrl = {};
+        $scope.nuevo = 0;
+        $scope.ctrl.idColateralLineaCredito = item.idColateralLineaCredito;
+        $scope.ctrl.idtipoColateral = item.idtipoColateral;
+        $scope.ctrl.selectedtipoColateral = _.where($scope.lstTipoColateral, { idtipoColateral: item.idtipoColateral })[0];
+        $scope.ctrl.LineaCredito = item.LineaCredito;
+        $scope.ctrl.NumUnidades = item.NumUnidades;
+        $scope.ctrl.fechainicio = item.fechainicio;
+        $scope.ctrl.fechafin = item.fechafin;
+
+    }
+    $scope.BorrarDetail = function(item) {
+        var params = {
+            idColateralLineaCredito: item.idColateralLineaCredito
+            //,usuarioID: localStorage.getItem('idUsuario')
+        };
+
+        financieraFactory.delColateralLineaCredito(params).then(function(result) {
+            swal('Guardado', 'Financiera guardada con exito', 'success');
+            $scope.regresatabla();
+
+        });
+    }
 });

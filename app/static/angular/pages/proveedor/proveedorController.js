@@ -1,6 +1,7 @@
-appModule.controller('proveedorController', function($scope, $rootScope, $location,filterFilter, commonFactory, staticFactory, proveedorFactory) {
+appModule.controller('proveedorController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, proveedorFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
 
     $scope.currentSucursalName = "Sucursal Todas";
@@ -24,6 +25,8 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
     // $scope.showDropDown = true;
     $('#mdlLoading').modal('show');
 
+    var finalizar = _.where($scope.lstPermisoBoton, { idModulo: 6, Boton: "finalizar" })[0];
+    $scope.muestrafinalizar = finalizar != undefined ? false : true;
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
     });
@@ -118,49 +121,47 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
         else
             $scope.ddlFinancialShow = true;
     };
-    $scope.showMsg = function() 
-    {
+    $scope.showMsg = function() {
         swal({
-            title: "¿Estas Seguro?",
-            text: "Se le generara póliza a todos los documentos seleccionados.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#21B9BB",
-            confirmButtonText: "Continuar",
-            closeOnConfirm: false
-        },
-        function() 
-        {
-            var paraproveedor = {
-                idUsuario: $scope.idUsuario,
-                idEmpresa: sessionFactory.empresaID,
-                idtipopoliza:1 //Unidades de proovedoores
-            }
+                title: "¿Estas Seguro?",
+                text: "Se le generara póliza a todos los documentos seleccionados.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Continuar",
+                closeOnConfirm: false
+            },
+            function() {
+                var paraproveedor = {
+                    idUsuario: $scope.idUsuario,
+                    idEmpresa: sessionFactory.empresaID,
+                    idtipopoliza: 1 //Unidades de proovedoores
+                }
 
-            proveedorFactory.proveedorPoliza(paraproveedor).then(function( respuesta ) {
-                $scope.LastId = respuesta.data[0].LastId;
-                $scope.lstUnitsproveedors = filterFilter( $scope.lstNewUnits , {isChecked: true} );
-                $scope.guardaDetalle();
-            }, function(error) {
-                $scope.error(error.data.Message);
+                proveedorFactory.proveedorPoliza(paraproveedor).then(function(respuesta) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    $scope.lstUnitsproveedors = filterFilter($scope.lstNewUnits, { isChecked: true });
+                    $scope.guardaDetalle();
+                }, function(error) {
+                    $scope.error(error.data.Message);
+                });
+
+
+
             });
-           
-            
-            
-        });
     };
-    
+
     $scope.LastId = 0;
     var contTraspadoDetalle = 0;
-    $scope.guardaDetalle = function(){
-        if( contTraspadoDetalle < $scope.lstUnitsproveedors.length ){
-            var item = $scope.lstUnitsproveedors[ contTraspadoDetalle ];
-           
+    $scope.guardaDetalle = function() {
+        if (contTraspadoDetalle < $scope.lstUnitsproveedors.length) {
+            var item = $scope.lstUnitsproveedors[contTraspadoDetalle];
+
             var paraproveedorDetalle = {
                 idpoliza: $scope.LastId,
                 empresaID: item.idEmpresa,
                 sucursalID: item.idSucursal,
-                CCP_IDDOCTO : item.CCP_IDDOCTO,
+                CCP_IDDOCTO: item.CCP_IDDOCTO,
                 idfinancieraO: $scope.FinancieraSel.financieraID,
                 idEsquemaO: $scope.selectedSchema.esquemaID,
                 idfinancieraD: 0,
@@ -168,9 +169,9 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
                 idUsuario: $scope.idUsuario
             }
 
-            proveedorFactory.proveedorPolizaDetalle(paraproveedorDetalle).then(function( response ) {
-                if( response.data.length != 0 ){
-                    if( contTraspadoDetalle < $scope.lstUnitsproveedors.length ){
+            proveedorFactory.proveedorPolizaDetalle(paraproveedorDetalle).then(function(response) {
+                if (response.data.length != 0) {
+                    if (contTraspadoDetalle < $scope.lstUnitsproveedors.length) {
                         contTraspadoDetalle++;
                         $scope.guardaDetalle();
                     }
@@ -178,17 +179,15 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
             }, function(error) {
                 $scope.error(error.data.Message);
             });
-        }
-        else{
+        } else {
             // swal("proveedor Plan Piso", "Se ha efectuado correctamente su proveedor.");
-            proveedorFactory.procesaproveedor($scope.LastId).then(function( response ) {
-                if( response.length != 0 ){
-                    swal(
-                    {
+            proveedorFactory.procesaproveedor($scope.LastId).then(function(response) {
+                if (response.length != 0) {
+                    swal({
                         title: "Unidades de proveedor Plan Piso",
                         text: "Se ha efectuado correctamente su póliza.",
                         type: "warning"
-                    }, function(){
+                    }, function() {
                         location.reload();
                     });
                 }

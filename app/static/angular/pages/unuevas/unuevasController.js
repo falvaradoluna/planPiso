@@ -1,6 +1,7 @@
 appModule.controller('unuevasController', function($scope, $rootScope, $location, unuevasFactory, commonFactory, staticFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
 
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = unuevasFactory.topNavBar();
@@ -26,7 +27,8 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.FinancieraSel = [];
 
     $('#mdlLoading').modal('show');
-
+    var finalizar = _.where($scope.lstPermisoBoton, { idModulo: 1, Boton: "finalizar" })[0];
+    $scope.muestrafinalizar = finalizar != undefined ? false : true;
 
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
@@ -80,8 +82,8 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             $scope.lstSchemas = result.data;
         });
     };
-    $scope.getSchemasBP = function(financieraID,idempresa) {
-        commonFactory.getSchemasBP(financieraID,idempresa).then(function(result) {
+    $scope.getSchemasBP = function(financieraID, idempresa) {
+        commonFactory.getSchemasBP(financieraID, idempresa).then(function(result) {
             $('#tblSchemas').DataTable().destroy();
             $scope.lstSchemas = result.data;
         });
@@ -128,51 +130,51 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             $scope.currentPanel = $scope.steps[$scope.currentStep].panelName;
             $scope.steps[$scope.currentStep].className = "active";
             $scope.showFilterButtons($scope.currentStep);
-            if($scope.currentStep==2)
-            {
+            if ($scope.currentStep == 2) {
                 angular.forEach($scope.lstNewUnits, function(value, key) {
                     if (value.isChecked === true) {
-                       value.plazo=$scope.selectedSchema.plazo;
-                       value.diasgracia=$scope.selectedSchema.diasGracia;
-                       value.fechaRecibo=staticFactory.DateFormat(regresafechareal(value.fechaCalculoString));
-                       value.fechainicio=regresafechareal(value.fechaCalculoString);
-                       value.fechafin=sumarDias(regresafechareal(value.fechaCalculoString),value.plazo);
+                        value.plazo = $scope.selectedSchema.plazo;
+                        value.diasgracia = $scope.selectedSchema.diasGracia;
+                        value.fechaRecibo = staticFactory.DateFormat(regresafechareal(value.fechaCalculoString));
+                        value.fechainicio = regresafechareal(value.fechaCalculoString);
+                        value.fechafin = sumarDias(regresafechareal(value.fechaCalculoString), value.plazo);
                     }
                 });
 
             }
         }
     };
-    function sumarDias(fecha, dias){
-        
+
+    function sumarDias(fecha, dias) {
 
 
-        var dateObject = new Date(fecha); 
-      
-        fecha=dateObject.setSeconds(dias*86400);
+
+        var dateObject = new Date(fecha);
+
+        fecha = dateObject.setSeconds(dias * 86400);
         return fecha;
-      }
-      function regresafechareal(fecha){
+    }
+
+    function regresafechareal(fecha) {
         var dateParts = fecha.split("/");
 
 
-        var dateObject = new Date(+dateParts[2], dateParts[1] - 2, +dateParts[0]); 
-      
-        
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 2, +dateParts[0]);
+
+
         return dateObject;
-      }
-      
-    $scope.Cambiarfecha= function(fecha,unidad)
-      {
+    }
+
+    $scope.Cambiarfecha = function(fecha, unidad) {
         angular.forEach($scope.lstNewUnits, function(value, key) {
-            if (value.isChecked === true && value.$$hashkey==unidad.$$hashkey) {
-               value.plazo=$scope.selectedSchema.plazo;
-               value.diasgracia=$scope.selectedSchema.diasGracia;
-               value.fechainicio=value.fechaRecibo;
-               value.fechafin=sumarDias(value.fechaRecibo,value.plazo);
+            if (value.isChecked === true && value.$$hashkey == unidad.$$hashkey) {
+                value.plazo = $scope.selectedSchema.plazo;
+                value.diasgracia = $scope.selectedSchema.diasGracia;
+                value.fechainicio = value.fechaRecibo;
+                value.fechafin = sumarDias(value.fechaRecibo, value.plazo);
             }
         });
-      }
+    }
     $scope.prevStep = function() {
         if (($scope.currentStep - 1) >= 0) {
             $scope.steps[$scope.currentStep].className = "visited";
@@ -232,7 +234,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             fechaCalculo: staticFactory.toISODate(item.fechaCalculoString),
             fechainicio: staticFactory.todayDateGiven(item.fechainicio),
             fechafin: staticFactory.todayDateGiven(item.fechafin),
-            diasgracia:item.diasgracia
+            diasgracia: item.diasgracia
         };
 
         unuevasFactory.setUnitSchema(data).then(function(result) {

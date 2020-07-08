@@ -37,10 +37,10 @@
             <td>{{schema.tipoTiie}}</td>
             <td>{{schema.tiie}}</td>
             <td>
-                <button type="button" class="btn btn-success" ng-click="editSchema(schema)">
+                <button type="button" class="btn btn-success" ng-click="editSchema(schema)" ng-hide="muestraeditar">
                     <span class="glyphicon glyphicon-edit"> </span>
                 </button>
-                <button type="button" class="btn btn-danger" ng-disabled="esquema.numAsignado > 0" ng-click="deleteSchema(schema)">
+                <button type="button" class="btn btn-danger" ng-disabled="esquema.numAsignado > 0" ng-click="deleteSchema(schema)" ng-hide="muestraborrar">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
             </td>
