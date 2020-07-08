@@ -65,48 +65,11 @@
                         <li>
                             <a href="empresa"><i class="fa fa-bank"></i> <span class="nav-label">Empresas</span> </a>
                         </li>
-                        <li ng-hide="unuevas !=undefined">
-                            <a href="unuevas"><i class="fa fa-car"></i> <span class="nav-label">Unidades Plan Piso</span></a>
+
+                        <li ng-repeat="item in lstModulos">
+                            <a href="{{item.Modulo}}"><i class="{{item.class}}"></i> <span class="nav-label">{{item.Descripcion}}</span></a>
                         </li>
-                        <li ng-hide="esquema !=undefined">
-                            <a href="esquema"><i class="fa fa-edit"></i> <span class="nav-label">Esquemas</span></span></a>
-                        </li>
-                        <li ng-hide="financiera !=undefined">
-                            <a href="financiera"><i class="fa fa-pencil"></i> <span class="nav-label">Financieras</span></span></a>
-                        </li>
-                        <li ng-hide="interes !=undefined">
-                            <a href="interes"><i class="fa fa-area-chart"></i> <span class="nav-label">Plan Piso </span></a>
-                        </li>
-                        <li ng-hide="polizas !=undefined">
-                            <a href="polizas"><i class="fa fa-usd"></i> <span class="nav-label">Polizas</span> </a>
-                        </li>
-                        <li ng-hide="proveedor !=undefined">
-                            <a href="proveedor"><i class="glyphicon glyphicon-transfer"></i> <span class="nav-label">Unidades en proveedores</span> </a>
-                        </li>
-                        <li ng-hide="inventario !=undefined">
-                            <a href="inventario"><i class="fa fa-file"></i> <span class="nav-label">Unidades en Inventario</span> </a>
-                        </li>
-                        <li ng-hide="sacarunidad !=undefined">
-                            <a href="sacarunidad"><i class="fa fa-car"></i> <span class="nav-label">Sacar unidad de plan piso</span> </a>
-                        </li>
-                        <li ng-hide="conciliacion !=undefined">
-                            <a href="conciliacion"><i class="fa fa-copy"></i> <span class="nav-label">Conciliación</span> </a>
-                        </li>
-                        <li ng-hide="auditoria !=undefined">
-                            <a href="auditoria"><i class="fa fa-bank"></i> <span class="nav-label">Auditoría</span> </a>
-                        </li>
-                        <li ng-hide="crealote !=undefined">
-                            <a href="crealote"><i class="fa fa-random"></i> <span class="nav-label">Crear Lote</span> </a>
-                        </li>
-                        <li ng-hide="fechaPromesa !=undefined">
-                            <a href="fechaPromesa"><i class="fa fa-calendar"></i> <span class="nav-label">Fecha Promesa Pago</span> </a>
-                        </li>
-                        <li ng-hide="reporte !=undefined">
-                            <a href="reporte"><i class="fa fa-file-text"></i> <span class="nav-label">Reporte</span> </a>
-                        </li>
-                        <li ng-hide="tiie !=undefined">
-                            <a href="tiie"><i class="fa">%</i> <span class="nav-label">TIIE</span> </a>
-                        </li>
+                        
                     </ul>
                 </div>
             </nav>

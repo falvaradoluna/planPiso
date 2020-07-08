@@ -16,9 +16,19 @@ appModule.controller('empresaController', function($scope, $rootScope, $location
         console.log( sessionFactory );
         sessionStorage.setItem("sessionFactory", JSON.stringify(sessionFactory));
         window.location = "/interes";
+        $scope.permisos(  $scope.idUsuario );
     };
 
+    $scope.permisos=function(user)
+    {
+        empresaFactory.getUsuarioPermisos( user ).then(function(result) {                
+            if(result.data[0].length>0)
+            {
+            $scope.lstModulos=result.data[0];
 
+            }
+         });
+    }
     // $scope.test = function() {
     //     staticFactory.message();
     // };
