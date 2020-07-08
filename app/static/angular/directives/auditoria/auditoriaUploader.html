@@ -1,6 +1,6 @@
 <h2>
     <span class="text-navy">Auditoría</span>
-    <button class="btn btn-warning pull-right" ng-click="openModalAuditoria()"><i class="fa fa-copy"></i> Nueva Auditoría </button>
+    <button class="btn btn-warning pull-right" ng-show="MuestranuevaAuditoria" ng-click="openModalAuditoria()"><i class="fa fa-copy"></i> Nueva Auditoría </button>
 </h2>
 <hr>
 <div ng-show="lstPendiente.length != 0" class="row row_dropzone onlyPrint" ng-init="porAutorizar();">

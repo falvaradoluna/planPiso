@@ -1,6 +1,7 @@
 appModule.controller('auditoriaController', function($scope, $rootScope, $location, auditoriaFactory,  commonFactory, staticFactory, utils ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
+    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
 
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck     = "Desmarcar Unidades";
@@ -9,6 +10,10 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.titleDocumentos        = '';
     $scope.titleDocumentosDetalle = '';
     $scope.tipoauditoria=0;
+    $scope.MuestranuevaAuditoria=false;
+    $scope.Muestraeditar=false;
+    $scope.MuestraguardarAuditoria=false;
+    $scope.MuestracancelarAuditoria=false;
     /* =========================== 
         [ estSolAutorizacion ]
     Valida la aplicación de la conci
@@ -50,7 +55,18 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
 
     var increment   = 0;
     var contador    = 0;
-
+    $scope.init=function()
+    {
+        var valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "nuevaAuditoria" })[0];
+        $scope.MuestranuevaAuditoria=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "editar" })[0];
+        $scope.Muestraeditar=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "guardarAuditoria" })[0];
+        $scope.MuestraguardarAuditoria=valor != undefined;
+         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "cancelarAuditoria" })[0];
+        $scope.MuestracancelarAuditoria=valor != undefined;
+    }
+    $scope.init();
 $scope.openModalAuditoria= function()
 {
     $("#modalNuevaAuditoria").modal('show');
