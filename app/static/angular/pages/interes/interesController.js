@@ -621,7 +621,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 idpoliza: $scope.LastId,
                 idmovimiento: item.movimientoID,
                 idUsuario: $scope.idUsuario,
-                saldo: item.InteresMesActual
+                saldo: item.InteresMes
             }
 
             interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function(response) {

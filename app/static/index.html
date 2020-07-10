@@ -62,11 +62,11 @@
                                 GA
                             </div>
                         </li>
-                        <li>
+                        <li data-toggle="tooltip" data-placement="left" title="Empresas">
                             <a href="empresa"><i class="fa fa-bank"></i> <span class="nav-label">Empresas</span> </a>
                         </li>
 
-                        <li ng-repeat="item in lstModulos">
+                        <li ng-repeat="item in lstModulos" data-toggle="tooltip" data-placement="left" title="{{item.Descripcion}}">
                             <a href="{{item.Modulo}}"><i class="{{item.class}}"></i> <span class="nav-label">{{item.Descripcion}}</span></a>
                         </li>
                         
