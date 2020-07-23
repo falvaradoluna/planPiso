@@ -161,7 +161,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                 idpoliza: $scope.LastId,
                 empresaID: item.idEmpresa,
                 sucursalID: item.idSucursal,
-                CCP_IDDOCTO: item.CCP_IDDOCTO,
+                CCP_IDDOCTO: item.veh_numserie,
                 idfinancieraO: $scope.FinancieraSel.financieraID,
                 idEsquemaO: $scope.selectedSchema.esquemaID,
                 idfinancieraD: 0,
