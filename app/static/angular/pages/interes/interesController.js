@@ -36,6 +36,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $rootScope.fechafin = '';
     $rootScope.tiie = 0;
     $rootScope.puntos = 0;
+    $scope.montoCompensar = 0;
     var CargarSpreadTiie = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "CargarSpreadTiie" })[0];
     var cambiarEsquema = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "cambiarEsquema" })[0];
     var traspasoFinanciera = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "traspasoFinanciera" })[0];
@@ -1006,10 +1007,58 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 confirmButtonText: "Aplicar",
                 closeOnConfirm: true
             }, function() {
-                $scope.setPnlInteres();
+                var paraCompensacion = {
+                    idUsuario: $scope.idUsuario,
+                    idEmpresa: sessionFactory.empresaID,
+                    idtipopoliza: 8 //cambio de financiera
+                }
+
+                interesFactory.cabeceraPoliza(paraCompensacion).then(function(respuesta) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    $scope.lstUnitsCompensacion = filterFilter($scope.lstNewUnits, { isChecked: true });
+                    $scope.guardaCompensacionDetalle();
+                }, function(error) {
+                    $scope.error(error.data.Message);
+                });
+                // $scope.setPnlInteres();
             });
 
         }
+    };
+    $scope.guardaCompensacionDetalle = function() {
+        var item = $scope.lstUnitsCompensacion[0];
+        var paraCompensacionDetalle = {
+            idpoliza: $scope.LastId,
+            idmovimiento: item.movimientoID,
+            idUsuario: $scope.idUsuario,
+            saldo: item.InteresMes
+        }
+
+        interesFactory.compensacionDetalle(paraCompensacionDetalle).then(function(response) {
+            detalleBproCompensacion();
+            // $scope.setPnlInteres();
+        }, function(error) {
+            $scope.error(error.data.Message);
+        });
+
+    };
+    var detalleBproCompensacion = function() {
+        var item = $scope.lstUnitsCompensacion[0];
+        angular.forEach($scope.facturasTotal, function(value, key) {
+            var paraCompensacionDetalle = {
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idUsuario: $scope.idUsuario,
+                saldo: value.total,
+                tipoProducto: value.tipoProducto,
+                documento: value.factura
+            }
+            interesFactory.detalleBproCompensacion(paraCompensacionDetalle).then(function(response) {
+                console.log('ANDAAAAA', response.data);
+            }, function(error) {
+                $scope.error(error.data.Message);
+            });
+        });
     };
     $scope.CreaCompensacion = function() {
         swal({
@@ -1063,5 +1112,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
 
     });
+    $scope.sumaCompensar = function() {
+        //unidadCompensacion
+        $scope.auxSumaCxp = 0;
+        $scope.auxSumaCxp = $scope.auxSumaCxp + $scope.unidadCompensacion.montoCompensar;
+
+        totalCompensar();
+    };
+    var totalCompensar = function() {
+        $scope.montoCompensar = $scope.auxSumaCxp;
+    };
 
 });

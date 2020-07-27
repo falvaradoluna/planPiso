@@ -418,10 +418,61 @@ ApiInteres.prototype.get_enganche = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'numeroSerie', value: req.query.vin, type: self.model.types.STRING }
-    ];
+    var params = [{ name: 'numeroSerie', value: req.query.vin, type: self.model.types.STRING }];
 
     self.model.query('Usp_get_engancheCotizacion', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_cabeceraPoliza = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT }
+    ];
+
+    self.model.query('Pol_Cabecera_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_compensacionDetalle = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+        { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+        { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL }
+    ];
+
+    self.model.query('Pol_Poliza13Detalle_INS', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+        { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+        { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
+        { name: 'tipoProducto', value: req.query.tipoProducto, type: self.model.types.STRING },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('Pol_Poliza13DetalleBPRO_INS', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

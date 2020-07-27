@@ -231,6 +231,30 @@ appModule.factory('interesFactory', function($http) {
                 params: { vin: vin },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        cabeceraPoliza: function(params) {
+            return $http({
+                url: interesesUrl + 'cabeceraPoliza/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        compensacionDetalle: function(params) {
+            return $http({
+                url: interesesUrl + 'compensacionDetalle/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        detalleBproCompensacion: function(params) {
+            return $http({
+                url: interesesUrl + 'detalleBproCompensacion/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

@@ -6,7 +6,7 @@
         <div class="alert alert-info" role="alert">
             <form class="form-inline">
                 <label for="exampleInputName2">Saldo a Compensar: </label>
-                {{saldoCompensar | currency}}
+                {{montoCompensar | currency}}
             </form>
             <!-- <div class="row">
                 <div class="col-md-12"> -->
@@ -99,7 +99,7 @@
                         <td>{{unidadCompensacion.vehNumserie}}</td>
                         <td>{{unidadCompensacion.importe}}</td>
                         <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
-                        <td><input type="text" class="form-control" style="width: 100%"></td>
+                        <td><input type="text" class="form-control" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensar()"></td>
                     </tr>
                 </tbody>
                 <!-- <tfoot>
@@ -135,9 +135,9 @@
                     </tr>
                     <tr>
                         <td colspan="5">Enganche</td>
-                        <td class="text-right">{{engancheCotizacion.ucu_impenganche | currency }}</td>
+                        <td class="text-right">{{engancheCotizacion.ucu_impenganche ? engancheCotizacion.ucu_impenganche : 0 | currency }}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td colspan="5">Factura Comisión Dealer</td>
                         <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
                     </tr>
@@ -148,7 +148,7 @@
                     <tr>
                         <td colspan="5">Factura UDI por pagar</td>
                         <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
-                    </tr>
+                    </tr> -->
                 </tbody>
                 <!-- <tfoot>
                     <tr>
