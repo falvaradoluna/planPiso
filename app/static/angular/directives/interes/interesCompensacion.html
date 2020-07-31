@@ -8,6 +8,14 @@
                 <label for="exampleInputName2">Saldo a Compensar: </label>
                 {{montoCompensar | currency}}
             </form>
+            <form class="form-inline">
+                <label for="exampleInputName2">Diferencia vs plan piso: </label>
+                {{diferenciaPP | currency}}
+            </form>
+            <form class="form-inline">
+                <label for="exampleInputName2">Compra: </label>
+                {{compra | currency}}
+            </form>
             <!-- <div class="row">
                 <div class="col-md-12"> -->
             <!-- <div class="col-md-6 text-right">
@@ -89,7 +97,7 @@
                         <th>Financiera</th>
                         <th class="left" style="width:200px">Documento</th>
                         <th>Importe</th>
-                        <th class="text-right">Monto</th>
+                        <th class="text-right">Saldo</th>
                         <th class="text-right">Monto a Compensar</th>
                     </tr>
                 </thead>
@@ -120,7 +128,8 @@
                         <th></th>
                         <th class="left" style="width:200px">Documento</th>
                         <th>Fecha</th>
-                        <th class="text-right">Monto</th>
+                        <th class="text-right">Importe</th>
+                        <th class="text-right">Saldo</th>
                         <th class="text-right">Monto a Compensar</th>
                     </tr>
                 </thead>
@@ -130,7 +139,8 @@
                         <td>{{factura.tipoFactura}}</td>
                         <td>{{factura.factura}}</td>
                         <td>{{factura.fecha}}</td>
-                        <td class="text-right">{{factura.total | currency}}</td>
+                        <td class="text-right">{{factura.cargo | currency}}</td>
+                        <td class="text-right">{{factura.saldo | currency}}</td>
                         <td><input type="text" class="form-control  text-right" style="width: 100%"></td>
                     </tr>
                     <tr>
