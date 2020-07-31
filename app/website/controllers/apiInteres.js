@@ -479,4 +479,20 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_notaCredito = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_notacredito', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

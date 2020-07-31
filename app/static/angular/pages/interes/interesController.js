@@ -854,7 +854,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.callCompensation = function() {
         $scope.consecCompensacion = 0;
         $scope.montoTotal = 0;
+        $scope.compra = 0;
         $scope.saldoCompensar = 0;
+        $scope.diferenciaPP = 0;
         $scope.facturasTotal = [];
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
@@ -874,13 +876,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         facturas.push(interesFactory.facturaServicios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         facturas.push(interesFactory.facturaOT(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
                         facturas.push(interesFactory.facturaAccesorios(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
-                        interesFactory.enganche(item.vehNumserie).then(function success(result) {
-                            console.log(result.data[0], 'COTIZACION')
-                            $scope.engancheCotizacion = result.data[0];
-                            $scope.financieraCotizacion = result.data[0].nombre;
-                        }, function err(error) {
-                            console.log(error)
-                        });
+                        // facturas.push(interesFactory.notaCredito(item.empresaID, item.sucursalID, item.CCP_IDDOCTO));
+
                         Promise.all(facturas).then(function(results) {
                             console.log(results, 'Facturaaaas')
                             var contadorFacturas = 0;
@@ -888,18 +885,35 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 console.log(value.data.length);
                                 if (value.data.length > 0) {
                                     angular.forEach(value.data, function(value2, key) {
-                                        $scope.montoTotal = $scope.montoTotal + value2.total;
+                                        if (value2.tipoProducto != 'NCR') {
+                                            $scope.montoTotal = $scope.montoTotal + value2.cargo;
+                                        } else if (value2.tipoProducto == 'NCR') {
+                                            $scope.compra = $scope.montoTotal - value2.cargo;
+                                            $scope.documentoNCR = value2.factura;
+                                            $scope.importeNCR = value2.cargo;
+                                        }
                                         $scope.$apply(function() {
                                             $scope.facturasTotal.push(value2);
                                         });
+
                                         contadorFacturas++;
                                     });
                                 }
                             });
-                            $scope.$apply(function() {
+                            interesFactory.enganche(item.vehNumserie).then(function success(result) {
+                                console.log(result.data[0], 'COTIZACION')
+                                $scope.engancheCotizacion = result.data[0];
+                                $scope.financieraCotizacion = result.data[0].nombre;
+                                // $scope.$apply(function() {
+
+                                $scope.diferenciaPP = $scope.montoTotal - $scope.engancheCotizacion.ucu_impenganche;
                                 $scope.saldoCompensar = $scope.montoTotal - $scope.unidadCompensacion.importe;
                                 $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
+                                // });
+                            }, function err(error) {
+                                console.log(error)
                             });
+
                             if (contadorFacturas > 0) {
                                 $scope.currentPanel = "pnlCompensacion";
                             } else {
@@ -1044,12 +1058,36 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     };
     var detalleBproCompensacion = function() {
         var item = $scope.lstUnitsCompensacion[0];
+        //Agrego al arreglo la de compra
+        // $scope.facturasTotal.push({
+        //     'tipoFactura': 'Compra',
+        //     'cargo': $scope.compra,
+        //     'iva': '',
+        //     'total': $scope.compra,
+        //     'fecha': '',
+        //     'factura': $scope.documentoNCR,
+        //     'numeroSerie': '',
+        //     'saldo': '',
+        //     'tipoProducto': 'COMPRA'
+        // });
+        // //Agrego el arreglo del PAG
+        // $scope.facturasTotal.push({
+        //     'tipoFactura': 'Compra',
+        //     'cargo': $scope.importeNCR,
+        //     'iva': '',
+        //     'total': $scope.importeNCR,
+        //     'fecha': '',
+        //     'factura': $scope.documentoNCR,
+        //     'numeroSerie': '',
+        //     'saldo': '',
+        //     'tipoProducto': 'PAG'
+        // });
         angular.forEach($scope.facturasTotal, function(value, key) {
             var paraCompensacionDetalle = {
                 idpoliza: $scope.LastId,
                 idmovimiento: item.movimientoID,
                 idUsuario: $scope.idUsuario,
-                saldo: value.total,
+                saldo: value.cargo,
                 tipoProducto: value.tipoProducto,
                 documento: value.factura
             }

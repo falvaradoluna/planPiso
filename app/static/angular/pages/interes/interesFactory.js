@@ -255,6 +255,18 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        notaCredito: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'notaCredito/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };
