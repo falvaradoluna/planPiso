@@ -551,6 +551,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     item = $scope.lstConceal[ i ];
                     parametrosDetalle = {
                         idConciliacion:         result.data[0].LastId,
+                        movimientoID:           item.movimientoID,
                         CCP_IDDOCTO:            item.CCP_IDDOCTO,
                         VIN:                    item.numeroSerie,
                         interesGrupoAndrade:    item.InteresMesActual,
@@ -582,6 +583,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     item = $scope.lstConceal[ i ];
                     parametrosDetalle = {
                         idConciliacion:         $scope.idconciliacion,
+                        movimientoID:           item.movimientoID,
                         CCP_IDDOCTO:            item.CCP_IDDOCTO,
                         VIN:                    item.numeroSerie,
                         interesGrupoAndrade:    item.InteresMesActual,

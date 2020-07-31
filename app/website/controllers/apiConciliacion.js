@@ -238,6 +238,7 @@ ApiConciliacion.prototype.get_creaConciliacionDetalle = function(req, res, next)
     var self = this;
    
     var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT },
+    { name: 'movimientoID', value: req.query.movimientoID, type: self.model.types.INT },
     { name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },
     { name: 'VIN', value: req.query.VIN, type: self.model.types.STRING },
     { name: 'interesGrupoAndrade', value: req.query.interesGrupoAndrade, type: self.model.types.INT },
