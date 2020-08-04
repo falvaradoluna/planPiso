@@ -5,6 +5,7 @@
             <!-- <th>Descripcion</th>
             <th>Tipo documento</th> -->
             <th>VIN</th>
+            <th>Tipo Entrada</th>
             <th>Marca</th>
             <th>Descripción Modelo</th>
             <th>Modelo</th>
@@ -25,12 +26,13 @@
             <!-- <td>{{unidadSeleccion.DES_CARTERA}}</td>
             <td>{{unidadSeleccion.DES_TIPODOCTO}}</td> -->
             <td>{{unidadSeleccion.veh_numserie}}</td>
+            <td>{{unidadSeleccion.tipoCompra}}</td>
             <td>{{unidadSeleccion.marca}}</td>
             <td>{{unidadSeleccion.descModelo}}</td>
             <td>{{unidadSeleccion.modelo}}</td>
             <td>{{unidadSeleccion.IMPORTE}}</td>
             <td>
-                <input type="text" class="form-control" ng-model="unidadSeleccion.diasgracia" style="width: 100px">
+                <input type="text" class="form-control" ng-model="unidadSeleccion.diasgracia" style="width: 50px">
             </td>
             <td style="width:200px">
                 <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy" ng-model="unidadSeleccion.fechaRecibo" ng-change="Cambiarfecha(unidadSeleccion.fechaRecibo,unidadSeleccion)">
