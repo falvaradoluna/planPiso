@@ -129,9 +129,10 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Continuar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
+                $('#mdlLoading').modal('show');
                 var paraproveedor = {
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
@@ -182,6 +183,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
         } else {
             // swal("proveedor Plan Piso", "Se ha efectuado correctamente su proveedor.");
             proveedorFactory.procesaproveedor($scope.LastId).then(function(response) {
+                $('#mdlLoading').modal('hide');
                 if (response.length != 0) {
                     swal({
                         title: "Unidades de proveedor Plan Piso",
@@ -192,6 +194,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
                     });
                 }
             }, function(error) {
+                $('#mdlLoading').modal('hide');
                 $scope.error(error.data.Message);
             });
         }

@@ -129,9 +129,10 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Continuar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
+                $('#mdlLoading').modal('show');
                 var parainventario = {
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
@@ -182,6 +183,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         } else {
             // swal("inventario Plan Piso", "Se ha efectuado correctamente su inventario.");
             inventarioFactory.procesainventario($scope.LastId).then(function(response) {
+                $('#mdlLoading').modal('hide');
                 if (response.length != 0) {
                     swal({
                         title: "Unidades de inventario Plan Piso",
@@ -192,6 +194,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                     });
                 }
             }, function(error) {
+                $('#mdlLoading').modal('hide');
                 $scope.error(error.data.Message);
             });
         }
