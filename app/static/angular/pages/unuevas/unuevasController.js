@@ -33,13 +33,33 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
+        var promises = [];
+        $scope.lstSucursal.map((value) => {
+            promises.push(unuevasFactory.getNewUnitsBySucursal(sessionFactory.empresaID, value.sucursalID, null));
+        })
+        Promise.all(promises).then(function response(result) {
+            console.log(result, 'UNIDADEEEES');
+            angular.forEach(result, function(value, key) {
+                var unidadesFor = value.data;
+                // $scope.lstNewUnits.push(value.data);
+                angular.forEach(unidadesFor, function(value2, key2) {
+                    $scope.lstNewUnits.push(value2);
+                });
+            });
+            console.log($scope.lstNewUnits);
+            $scope.initTblUnidadesNuevas();
+            $scope.$apply(function() {
+                $scope.lstNewUnits;
+            });
+            $('#mdlLoading').modal('hide');
+        });
     });
 
-    unuevasFactory.getNewUnits(sessionFactory.empresaID).then(function(result) {
-        $scope.lstNewUnits = result.data;
-        $scope.initTblUnidadesNuevas();
-        $('#mdlLoading').modal('hide');
-    });
+    // unuevasFactory.getNewUnits(sessionFactory.empresaID).then(function(result) {
+    //     $scope.lstNewUnits = result.data;
+    //     $scope.initTblUnidadesNuevas();
+    //     $('#mdlLoading').modal('hide');
+    // });
 
     $scope.setCurrentSucursal = function(sucursalObj) {
         $scope.SucursalSel = sucursalObj;

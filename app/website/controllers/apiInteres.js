@@ -450,7 +450,8 @@ ApiInteres.prototype.get_compensacionDetalle = function(req, res, next) {
     var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
         { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
         { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
-        { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL }
+        { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
+        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING }
     ];
 
     self.model.query('Pol_Poliza13Detalle_INS', params, function(error, result) {
@@ -469,9 +470,10 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
         { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
         { name: 'tipoProducto', value: req.query.tipoProducto, type: self.model.types.STRING },
-        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING },
+        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING }
     ];
-
+    console.log(params);
     self.model.query('Pol_Poliza13DetalleBPRO_INS', params, function(error, result) {
         self.view.expositor(res, {
             error: error,

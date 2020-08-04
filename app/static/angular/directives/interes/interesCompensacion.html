@@ -14,7 +14,7 @@
             </form>
             <form class="form-inline">
                 <label for="exampleInputName2">Compra: </label>
-                {{compra | currency}}
+                {{saldoCompensar | currency}}
             </form>
             <!-- <div class="row">
                 <div class="col-md-12"> -->
@@ -105,7 +105,7 @@
                     <tr>
                         <td>{{unidadCompensacion.financiera}}</td>
                         <td>{{unidadCompensacion.vehNumserie}}</td>
-                        <td>{{unidadCompensacion.importe}}</td>
+                        <td>{{unidadCompensacion.importe || currency}}</td>
                         <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
                         <td><input type="text" class="form-control" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensar()"></td>
                     </tr>

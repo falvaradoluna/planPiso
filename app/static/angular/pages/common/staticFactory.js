@@ -232,7 +232,7 @@ appModule.factory('staticFactory', function($http) {
                         }
                     }]
                 });
-            }, 1)
+            }, 100)
         },
         setTableStyleFechaPromesa: function(tblID) {
             console.log('Hola setTableStyleOne');

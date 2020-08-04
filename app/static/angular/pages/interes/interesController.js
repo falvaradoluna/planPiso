@@ -885,13 +885,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 console.log(value.data.length);
                                 if (value.data.length > 0) {
                                     angular.forEach(value.data, function(value2, key) {
-                                        if (value2.tipoProducto != 'NCR') {
-                                            $scope.montoTotal = $scope.montoTotal + value2.cargo;
-                                        } else if (value2.tipoProducto == 'NCR') {
-                                            $scope.compra = $scope.montoTotal - value2.cargo;
-                                            $scope.documentoNCR = value2.factura;
-                                            $scope.importeNCR = value2.cargo;
-                                        }
+                                        // if (value2.tipoProducto != 'NCR') {
+                                        $scope.montoTotal = $scope.montoTotal + value2.cargo;
+                                        // } else if (value2.tipoProducto == 'NCR') {
+                                        //     $scope.compra = $scope.montoTotal - value2.cargo;
+                                        //     $scope.documentoNCR = value2.factura;
+                                        //     $scope.importeNCR = value2.cargo;
+                                        // }
                                         $scope.$apply(function() {
                                             $scope.facturasTotal.push(value2);
                                         });
@@ -1040,36 +1040,42 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
     };
     $scope.guardaCompensacionDetalle = function() {
+        var tiempo = new Date().toLocaleTimeString();
         var item = $scope.lstUnitsCompensacion[0];
         var paraCompensacionDetalle = {
             idpoliza: $scope.LastId,
             idmovimiento: item.movimientoID,
             idUsuario: $scope.idUsuario,
-            saldo: item.InteresMes
+            saldo: item.InteresMes,
+            tiempo:tiempo
         }
 
         interesFactory.compensacionDetalle(paraCompensacionDetalle).then(function(response) {
-            detalleBproCompensacion();
+            detalleBproCompensacion(tiempo);
             // $scope.setPnlInteres();
         }, function(error) {
             $scope.error(error.data.Message);
         });
 
     };
-    var detalleBproCompensacion = function() {
+    var detalleBproCompensacion = function(tiempo) {
         var item = $scope.lstUnitsCompensacion[0];
-        //Agrego al arreglo la de compra
-        // $scope.facturasTotal.push({
-        //     'tipoFactura': 'Compra',
-        //     'cargo': $scope.compra,
-        //     'iva': '',
-        //     'total': $scope.compra,
-        //     'fecha': '',
-        //     'factura': $scope.documentoNCR,
-        //     'numeroSerie': '',
-        //     'saldo': '',
-        //     'tipoProducto': 'COMPRA'
-        // });
+        // var d = new Date();
+        // var hora = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+
+        var tiempo = tiempo;
+        // Agrego al arreglo la de compra
+        $scope.facturasTotal.push({
+            'tipoFactura': 'Compra',
+            'cargo': $scope.saldoCompensar,
+            'iva': '',
+            'total': $scope.saldoCompensar,
+            'fecha': '',
+            'factura': '',
+            'numeroSerie': '',
+            'saldo': '',
+            'tipoProducto': 'COMPRA'
+        });
         // //Agrego el arreglo del PAG
         // $scope.facturasTotal.push({
         //     'tipoFactura': 'Compra',
@@ -1083,14 +1089,28 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         //     'tipoProducto': 'PAG'
         // });
         angular.forEach($scope.facturasTotal, function(value, key) {
-            var paraCompensacionDetalle = {
-                idpoliza: $scope.LastId,
-                idmovimiento: item.movimientoID,
-                idUsuario: $scope.idUsuario,
-                saldo: value.cargo,
-                tipoProducto: value.tipoProducto,
-                documento: value.factura
+            if (value.tipoProducto = 'FU') {
+                var paraCompensacionDetalle = {
+                    idpoliza: $scope.LastId,
+                    idmovimiento: item.movimientoID,
+                    idUsuario: $scope.idUsuario,
+                    saldo: $scope.saldoCompensar,
+                    tipoProducto: value.tipoProducto,
+                    documento: value.factura,
+                    tiempo: tiempo
+                }
+            } else {
+                var paraCompensacionDetalle = {
+                    idpoliza: $scope.LastId,
+                    idmovimiento: item.movimientoID,
+                    idUsuario: $scope.idUsuario,
+                    saldo: $scope.saldoCompensar,
+                    tipoProducto: value.tipoProducto,
+                    documento: value.factura,
+                    tiempo: tiempo
+                }
             }
+
             interesFactory.detalleBproCompensacion(paraCompensacionDetalle).then(function(response) {
                 console.log('ANDAAAAA', response.data);
             }, function(error) {
