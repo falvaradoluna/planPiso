@@ -104,7 +104,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             $scope.esquemaHeader.tasaInteres = result.data[0].tasaInteres;
             $scope.esquemaHeader.porcentajePenetracion = result.data[0].porcentajePenetracion;
             $scope.esquemaHeader.tieneReduccion = result.data[0].tieneReduccion;
-            $scope.esquemaHeader.tieneDPP = result.data[0].tieneDPP;
+           // $scope.esquemaHeader.tieneDPP = result.data[0].tieneDPP;
             $scope.esquemaHeader.fechaInicio = result.data[0].fechaInicio;
             $scope.esquemaHeader.fechaFin = result.data[0].fechaFin;
             if ($scope.esquemaHeader.tieneReduccion == 1)
