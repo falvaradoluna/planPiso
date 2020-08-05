@@ -39,8 +39,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     });
     $scope.validateSchemaHeader = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.insertSchemaHeader();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true) 
+        $scope.insertSchemaHeader();
     };
     $scope.insertSchemaHeader = function() {
 
@@ -263,8 +264,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     };
     $scope.validateSchemaHeaderEdit = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.updSchemaHeader();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true) 
+        $scope.updSchemaHeader();
     };
     $scope.updSchemaHeader = function() {
 
@@ -313,8 +315,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
 
     $scope.validateSchemaDetailsEdit = function() {
         var esquemaFormControls = esquemaFactory.setDetailsValues($scope.esquemaDetalle, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.updSchemaDetails();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true)
+         $scope.updSchemaDetails();
     };
     $scope.cancelDetailEdit = function() {
         $scope.esquemaDetalle = esquemaFactory.initSchemaDetail();

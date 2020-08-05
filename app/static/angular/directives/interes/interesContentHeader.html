@@ -2,7 +2,10 @@
     <div class="col-sm-12">
         <div class="col-sm-8">
             <div ng-show="showwarningspread">
-                <button class="btn btn-danger" ng-click="setPnlSpread()"  ng-hide="muestraCargarSpreadTiie"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Cargar Spread TIEE</button>
+                <button class="btn btn-danger" ng-click="setPnlSpread()"  ng-hide="muestraCargarSpreadTiie"><span class="glyphicon glyphicon-usd"></span> Cargar Spread TIEE</button>
+            </div>
+            <div ng-show="!showwarningspread">
+                <button class="btn btn-primary" ng-click="setPnlSpread()"  ng-hide="muestraCargarSpreadTiie"><span class="glyphicon glyphicon-usd"></span> Cargar Spread TIEE</button>
             </div>
             <div ng-show="showButtons">
                 <button class="btn btn-primary" ng-click="setPnlTraspasoFinanciero(4)" ng-hide="muestracambiarEsquema"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Cambiar Esquema</button>
