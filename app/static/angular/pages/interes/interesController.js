@@ -17,6 +17,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.currentPanel = "pnlInteres";
     $rootScope.currentSucursalName = "Sucursal Todas";
     $rootScope.currentFinancialName = "Selecciona Financiera";
+    $rootScope.currentFinancialName2 = "Selecciona Financiera";
+    $rootScope.currentSchemaName2 = 'Seleccione Esquema';
     $scope.currentSucursal = [];
     $scope.currentFinancial = [];
     $scope.allUnits = { isChecked: false };
@@ -189,7 +191,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         //  $scope.currentPanel = "pnlResumen";
         $rootScope.currentFinancialName2 = financialObj.nombre;
         $rootScope.currentFinancial2 = financialObj;
-        $rootScope.currentSchemaName2 = '';
+        $rootScope.currentSchemaName2 = 'Seleccione Esquema';
         $rootScope.currentSchema2 = [];
 
         // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
@@ -222,8 +224,29 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.filterDay = function(days) {
         //  $('#tblUnidadesNuevas').DataTable().destroy();
+        $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+        var days = days;
         $scope.initDashboardCounters();
-        $scope.setFilterDay($scope.lstNewUnits, 0, days);
+        angular.forEach($scope.lstNewUnits, function(value, key) {
+            if (value.diasInteres <= days) {
+                value.excludeField = false;
+                $scope.interesPagado += value.InteresCortePagado;
+                $scope.interesMesActual += value.InteresMesActual;
+                $scope.interesAcumulado += value.InteresAcumuladoFinanciera;
+                $scope.numUnidades++;
+            } else {
+                value.excludeField = true;
+            }
+        });
+        // $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+        // $('#tblUnidadesNuevas').DataTable().destroy();
+        console.log($scope.lstNewUnits, 'DIAAAAAS')
+        // $scope.$apply(function() {
+        $scope.lstNewUnits;
+
+        // });
+        $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+        // $scope.setFilterDay($scope.lstNewUnits, 0, days);
     };
 
 
@@ -1047,7 +1070,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             idmovimiento: item.movimientoID,
             idUsuario: $scope.idUsuario,
             saldo: item.InteresMes,
-            tiempo:tiempo
+            tiempo: tiempo
         }
 
         interesFactory.compensacionDetalle(paraCompensacionDetalle).then(function(response) {

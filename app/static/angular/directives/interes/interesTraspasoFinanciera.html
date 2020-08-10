@@ -18,13 +18,13 @@
                     <div class="col-md-12">
                         <h3>Financiera Destino:</h3>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         Financiera:<br>
                         <div class="dropdown" style="display:inline-block">
                             <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{currentFinancialName2}}
-                            <span class="caret"></span>
-                        </button>
+                                {{currentFinancialName2}}
+                                <span class="caret"></span>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li ng-repeat="financial in lstTraspasoFinanciera">
                                     <a ng-click="setCurrentFinance2(financial)">{{financial.nombre}}</a>
@@ -32,13 +32,13 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         Esquema:<br>
                         <div class="dropdown" style="display:inline-block">
                             <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                                    {{currentSchemaName2}}
-                                    <span class="caret"></span>
-                                </button>
+                                {{currentSchemaName2}}
+                                <span class="caret"></span>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li ng-repeat="schema in lstSchemas">
                                     <a ng-click="setCurrentSchema2(schema)">{{schema.nombre}}</a>
@@ -46,12 +46,19 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="ftienereduccion">Unidades doble estrella:</label>
+                            <div class="input-group">
+                                <input type="checkbox"  ng-model="dobleEstrella" ng-click="cambioEstrella()"> 
+                                <!-- ng-checked=""  ng-click="" ng-click="!dobleEstrella"-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr>
             <div class="row">
-
-
                 <div class="col-md-4">
                 </div>
             </div>
@@ -75,7 +82,6 @@
                     <th>Interes MesActual</th>
                     <th>Interes Acumulado Financiera</th>
                     <th>Interes Total</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -99,7 +105,7 @@
 </div>
 <div>
     <button class="btn btn-primary" ng-click="setPnlInteres()" style="margin:10px"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Cancelar</button>
-    <button class="btn btn-primary pull-right" ng-click="setPanelResumen()" style="margin:10px">Siguiente 
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </button>
+    <button class="btn btn-primary pull-right" ng-click="setPanelResumen()" style="margin:10px">Siguiente
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    </button>
 </div>
