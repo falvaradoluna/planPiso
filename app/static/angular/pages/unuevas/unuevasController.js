@@ -169,12 +169,37 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
 
 
 
-        var dateObject = new Date(fecha);
+        if(isDate(fecha))
+        {
+        var dateObject=new Date(fecha);
+        }
+        else
+        {
+        var dateParts = fecha.split("/");
+
+
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        }
+
+       
 
         fecha = dateObject.setSeconds(dias * 86400);
         return fecha;
     }
-
+    function isDate(value) {
+        switch (typeof value) {
+            case 'number':
+                return true;
+            case 'string':
+                return false;
+            case 'object':
+                if (value instanceof Date) {
+                    return !isNaN(value.getTime());
+                }
+            default:
+                return false;
+        }
+    }
     function regresafechareal(fecha) {
         var dateParts = fecha.split("/");
 
@@ -254,7 +279,8 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             fechaCalculo: staticFactory.toISODate(item.fechaCalculoString),
             fechainicio: staticFactory.todayDateGiven(item.fechainicio),
             fechafin: staticFactory.todayDateGiven(item.fechafin),
-            diasgracia: item.diasgracia
+            diasgracia: item.diasgracia,
+            tipoEntrada:item.tipoCompra
         };
 
         unuevasFactory.setUnitSchema(data).then(function(result) {

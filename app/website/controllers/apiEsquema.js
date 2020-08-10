@@ -80,6 +80,7 @@ ApiEsquema.prototype.get_updEsquema = function(req, res, next) {
     var params = [{ name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT },
     { name: 'diasGracia', value: req.query.diasGracia, type: self.model.types.INT },
     { name: 'plazo', value: req.query.plazo, type: self.model.types.INT },
+    { name: 'recalendarizacion', value: req.query.recalendarizacion, type: self.model.types.INT },
     { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
     { name: 'nombre', value: req.query.nombre, type: self.model.types.STRING },
     { name: 'interesMoratorio', value: req.query.interesMoratorio, type: self.model.types.INT },
@@ -141,4 +142,20 @@ ApiEsquema.prototype.get_obtenListaReduccion = function(req, res, next) {
         });
     });
 };
+ApiEsquema.prototype.get_guardarEsquemaCopia = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'esquemaID', value: req.query.esquemaID, type: self.model.types.INT },
+    { name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT },
+    { name: 'financieraIDDest', value: req.query.financieraIDDest, type: self.model.types.INT }];
+
+    self.model.query('uspGuardarEsquemaCopia', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiEsquema;
+

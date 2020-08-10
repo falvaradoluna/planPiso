@@ -107,7 +107,14 @@ appModule.factory('esquemaFactory', function($http) {
             ];
             return formControls;
         }
-
+        ,guardarEsquemaCopia: function(params) {
+            return $http({
+                url: esquemaUrl +'guardarEsquemaCopia/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
 
 
     };

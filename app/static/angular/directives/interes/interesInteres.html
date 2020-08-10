@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12" ng-show="lstNewUnits.length > 0">
-        <table id="tblUnidadesNuevas" class="table table-striped">
+        <table id="tblUnidadesNuevas" class="table tblUnidadesNuevas">
             <thead>
                 <tr>
                     <th>
@@ -12,6 +12,7 @@
                     <th>Esquema</th>
                     <th>Modelo</th>
                     <th>Año</th>
+                    <th>TipoEntrada</th>
                     <th>Tipo</th>
                     <th>Fecha Inicio</th>
                     <th>Fecha Fin</th>
@@ -29,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstNewUnits | filter:{excludeField:false}">
+                <tr ng-repeat="unidad in lstNewUnits | filter:{excludeField:false}" ng-class="{'alert alert-warning':unidad.ccs==1,'alert alert-danger':unidad.ccs==2}">
                     <td>
                         <input type="checkbox" ng-model="unidad.isChecked" ng-click="checkUnits(unidad)">
                     </td>
@@ -39,6 +40,7 @@
                     <td>{{unidad.nombre}}</td>
                     <td>{{unidad.VEH_TIPOAUTO}}</td>
                     <td>{{unidad.VEH_ANMODELO}}</td>
+                    <td>{{unidad.tipoEntrada}}</td>
                     <td>{{unidad.tipoColateral}}</td>
                     <td>{{unidad.fechainicio }}</td>
                     <td>{{unidad.fechafin }}</td>
