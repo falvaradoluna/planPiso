@@ -221,35 +221,31 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.ObtenUnidadesInteres();
 
     $scope.filterDay = function(days) {
-        //  $('#tblUnidadesNuevas').DataTable().destroy();
-        $scope.initDashboardCounters();
-        $scope.setFilterDay($scope.lstNewUnits, 0, days);
+        $scope.interesPagado = 0;
+        $scope.interesMesActual = 0;
+        $scope.interesAcumulado =0;
+      for(var i=0;i<$scope.lstNewUnits.length;i++)
+      {
+        if (parseInt($scope.lstNewUnits[i].diasRestantes) <= days) {
+          $scope.lstNewUnits[i].excludeField = false;
+          $scope.interesPagado +=  $scope.lstNewUnits[i].InteresCortePagado;
+          $scope.interesMesActual +=  $scope.lstNewUnits[i].InteresMesActual;
+          $scope.interesAcumulado +=  $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
+          $scope.numUnidades++;
+        }  else {
+            $scope.lstNewUnits[i].excludeField = true;
+        }
+
+      }
+      if(days==1000)
+      {
+        $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+      }
+       
     };
 
 
-    $scope.setFilterDay = function(dataArray, index, value) {
-
-        if (index === undefined) index = 0;
-        if (index >= dataArray.length) {
-            //   $scope.setDelayTableStyle('#tblUnidadesNuevas');
-            return;
-        }
-
-        if (parseInt(dataArray[index].diasInteres) <= value) {
-            dataArray[index].excludeField = false;
-            $scope.interesPagado += dataArray[index].InteresCortePagado;
-            $scope.interesMesActual += dataArray[index].InteresMesActual;
-            $scope.interesAcumulado += dataArray[index].InteresAcumuladoFinanciera;
-            $scope.numUnidades++;
-        } else {
-            dataArray[index].excludeField = true;
-        }
-
-        $scope.setFilterDay(dataArray, ++index, value);
-    };
-
-
-
+  
     $scope.getSchemas = function(financialId) {
         $('#mdlLoading').modal('show');
         commonFactory.getSchemas(financialId).then(function(result) {
