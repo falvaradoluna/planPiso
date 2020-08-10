@@ -41,9 +41,15 @@
             <input type="text" class="form-control" id="ePlazo" ng-model="esquemaHeader.plazo" ng-disabled="!isAddMode" placeholder="Días de financiamiento">
         </div>
     </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="ePlazo">Recalendarización:</label>
+            <input type="text" class="form-control" id="erecalendarizacion" ng-model="esquemaHeader.recalendarizacion" ng-disabled="!isAddMode" placeholder="Recalendarizacion">
+        </div>
+    </div>
     <div class="col-sm-3">
         <div class="form-group" ng-show="verTasaInteres">
-            <label for="fTasa">Tasa Intéres:</label>
+            <label for="fTasa">Spread:</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="fTasa" ng-model="esquemaHeader.tasaInteres" placeholder="Ej.: 10.0">
                 <div class="input-group-addon">%</div>
@@ -120,6 +126,12 @@
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
+            </tr>
+            <tr><td>Total</td>
+            <td>
+{{SumaPorcentaje| number:2 }}%
+            </td>
+            <td></td>
             </tr>
         </table>
     </div>

@@ -121,7 +121,19 @@ appModule.factory('staticFactory', function($http) {
             return today;
         },
         todayDateGiven: function(data) {
-            var today = new Date(data);
+            if(isDate(data))
+            {
+            var today=new Date(data);
+            }
+            else
+            {
+            var dateParts = data.split("/");
+
+
+            var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    
+            var today = new Date(dateObject);
+            }
             var dd = today.getDate();
             var mm = today.getMonth() + 1; //January is 0!
 
@@ -404,3 +416,17 @@ appModule.factory('staticFactory', function($http) {
     };
 
 });
+function isDate(value) {
+    switch (typeof value) {
+        case 'number':
+            return true;
+        case 'string':
+            return false;
+        case 'object':
+            if (value instanceof Date) {
+                return !isNaN(value.getTime());
+            }
+        default:
+            return false;
+    }
+}

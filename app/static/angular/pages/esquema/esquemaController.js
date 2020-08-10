@@ -19,7 +19,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     $scope.showEditBtn = false;
     $scope.agregareditar = false;
     $scope.esquemaHeader = esquemaFactory.initSchemaHeader();
-
+    $scope.SumaPorcentaje =0;
     $scope.topBarNav = staticFactory.esquemaBar();
     var nuevoEsquema = _.where($scope.lstPermisoBoton, { idModulo: 2, Boton: "nuevoEsquema" })[0];
     var editar = _.where($scope.lstPermisoBoton, { idModulo: 2, Boton: "editar" })[0];
@@ -39,8 +39,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     });
     $scope.validateSchemaHeader = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.insertSchemaHeader();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true) 
+        $scope.insertSchemaHeader();
     };
     $scope.insertSchemaHeader = function() {
 
@@ -95,7 +96,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             idtipoColateral: item.idtipoColateral,
             idfinanciera: $scope.currentFinancialID
         };
-
+        $scope.SumaPorcentaje =0;
         esquemaFactory.getPlantilla(params).then(function(result) {
 
             $scope.esquemaHeader.diasGracia = result.data[0].diasGracia;
@@ -122,6 +123,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
                 dia: array2[0],
                 porcentaje: array2[1]
             }
+            $scope.SumaPorcentaje += array2[1];
             tablaregreso.push(newobject);
         }
 
@@ -151,6 +153,10 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
                 }
             }
 
+        }
+        $scope.SumaPorcentaje=0;
+        for (var i = 0; i < $scope.esquemaHeader.lstreduccion.length; i++) {
+            $scope.SumaPorcentaje +=  parseInt($scope.esquemaHeader.lstreduccion[i].porcentaje,10);
         }
         $scope.ctrl.dia = 0;
         $scope.ctrl.porcentaje = 0;
@@ -184,13 +190,17 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     $scope.getSchemas = function() {
         $('#mdlLoading').modal('show');
         commonFactory.getSchemas($scope.currentFinancialIDAP).then(function(result) {
-            $('#tblSchemas').DataTable().destroy();
+            if( $scope.lstSchemas !=undefined)
+            {
+           $('#tblSchemas1').DataTable().destroy();
+            }
+    //        $scope.initTblSchemas();
             $scope.lstSchemas = result.data;
             $('#mdlLoading').modal('hide');
         });
     };
     $scope.initTblSchemas = function() {
-        $scope.setTableStyle('#tblSchemas');
+        $scope.setTableStyle('#tblSchemas1');
     };
     $scope.setTableStyle = function(tblID) {
         staticFactory.setTableStyleOne(tblID);
@@ -241,14 +251,62 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
         };
         esquemaFactory.obtenListaReduccion(params2).then(function(result) {
             $scope.esquemaHeader.lstreduccion = result.data;
+            $scope.SumaPorcentaje=0;
+            for (var i = 0; i < $scope.esquemaHeader.lstreduccion.length; i++) {
+                $scope.SumaPorcentaje +=  $scope.esquemaHeader.lstreduccion[i].porcentaje;
+            }
+         
         });
 
         $scope.setSchemaHeaderData(objSchema);
+    };
+    $scope.copySchema = function(objSchema) {
+        $("#modalcopiarEsquema").modal('show');
+        $scope.esquemacopiar=objSchema;
+        $scope.esquema=objSchema.nombre;
+        commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
+            $scope.lstFinancialCopy = result.data;
+        });
+        // $scope.currentEsquema = objSchema.esquemaID;
+        // $scope.isAddMode = true;
+        // $scope.showAddBtn = false;
+        // $scope.showEditBtn = true;
+        // $scope.currentPanel = "pnlEsquema";
+        // $scope.editAddTitle = "Editando esquema: " + objSchema.nombre;
+        // var params2 = {
+        //     esquemaID: $scope.currentEsquema
+        // };
+        // esquemaFactory.obtenListaReduccion(params2).then(function(result) {
+        //     $scope.esquemaHeader.lstreduccion = result.data;
+        // });
+
+        // $scope.setSchemaHeaderData(objSchema);
+    };
+    $scope.GuardarCopy=function(){
+
+        var params2 = {
+            esquemaID: $scope.esquemacopiar.esquemaID,
+            financieraID:$scope.currentFinancialIDAP,
+            financieraIDDest:$scope.currentFinancialIDCopy.financieraID
+        };
+        esquemaFactory.guardarEsquemaCopia(params2).then(function(result) {
+            if(result.data.length>0)
+            {
+                $("#modalcopiarEsquema").modal('hide');
+                swal('Guardado', 'Copia de esquema guardado con éxito', 'success');
+            }
+        });
+    }
+    $scope.setCurrentFinancialCopy = function(financialObj) {
+       
+        $scope.currentFinancialNameCopy = financialObj.nombre;
+        $scope.currentFinancialIDCopy = financialObj;
     };
     $scope.setSchemaHeaderData = function(objSchema) {
         $scope.esquemaHeader.nombre = objSchema.nombre;
         $scope.esquemaHeader.diasGracia = objSchema.diasGracia;
         $scope.esquemaHeader.plazo = objSchema.plazo;
+        $scope.esquemaHeader.recalendarizacion=objSchema.recalendarizacion;
         $scope.esquemaHeader.interesMoratorio = objSchema.interesMoratorio;
         $scope.esquemaHeader.tasaInteres = objSchema.tasaInteres;
         $scope.esquemaHeader.porcentajePenetracion = objSchema.porcentajePenetracion;
@@ -263,8 +321,14 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     };
     $scope.validateSchemaHeaderEdit = function() {
         var esquemaFormControls = esquemaFactory.setHeaderValues($scope.esquemaHeader, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.updSchemaHeader();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true) 
+        if($scope.SumaPorcentaje==0 || $scope.SumaPorcentaje==100)
+        {
+        $scope.updSchemaHeader();
+        }else
+        swal('Verificar', 'La lista de reducción debe ser 0% o 100%');
+
     };
     $scope.updSchemaHeader = function() {
 
@@ -274,6 +338,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             financieraID: $scope.currentFinancialIDAP,
             diasGracia: $scope.esquemaHeader.diasGracia,
             plazo: $scope.esquemaHeader.plazo,
+            recalendarizacion:$scope.esquemaHeader.recalendarizacion,
             nombre: $scope.esquemaHeader.nombre,
             interesMoratorio: $scope.esquemaHeader.interesMoratorio,
             tasaInteres: $scope.esquemaHeader.tasaInteres,
@@ -296,7 +361,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
                 }
 
                 if (resultado.length > 0) {
-                    resultado = resultado.substring(1, resultado.length - 1);
+                    resultado = resultado.substring(1, resultado.length);
                     var params2 = {
                         lista: resultado,
                         esquemaID: $scope.currentEsquema
@@ -313,8 +378,9 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
 
     $scope.validateSchemaDetailsEdit = function() {
         var esquemaFormControls = esquemaFactory.setDetailsValues($scope.esquemaDetalle, regularExpression);
-        var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
-        if (isValid === true) $scope.updSchemaDetails();
+        // var isValid = esquemaFactory.formIsvalid(esquemaFormControls);
+        // if (isValid === true)
+         $scope.updSchemaDetails();
     };
     $scope.cancelDetailEdit = function() {
         $scope.esquemaDetalle = esquemaFactory.initSchemaDetail();

@@ -59,7 +59,8 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
     { name: 'fechafin', value: fechafn, type: self.model.types.STRING },
     { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
     { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT },
-    { name: 'diasgracia', value: req.body.diasgracia, type: self.model.types.INT }];
+    { name: 'diasgracia', value: req.body.diasgracia, type: self.model.types.INT },
+    { name: 'tipoEntrada', value: req.body.tipoEntrada, type: self.model.types.STRING }];
 
     self.model.query('uspSetUnidadSchema', params, function(error, result) {
         self.view.expositor(res, {
