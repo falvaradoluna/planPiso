@@ -138,14 +138,15 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                     idEmpresa: sessionFactory.empresaID,
                     idtipopoliza: 3 //Unidades de inventario
                 }
-
-                inventarioFactory.inventarioPoliza(parainventario).then(function(respuesta) {
-                    $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsinventarios = filterFilter($scope.lstNewUnits, { isChecked: true });
-                    $scope.guardaDetalle();
-                }, function(error) {
-                    $scope.error(error.data.Message);
-                });
+                $scope.lstUnitsinventarios = filterFilter($scope.lstNewUnits, { isChecked: true });
+                $scope.guardaDetalle();
+                // inventarioFactory.inventarioPoliza(parainventario).then(function(respuesta) {
+                //     $scope.LastId = respuesta.data[0].LastId;
+                //     $scope.lstUnitsinventarios = filterFilter($scope.lstNewUnits, { isChecked: true });
+                //     $scope.guardaDetalle();
+                // }, function(error) {
+                //     $scope.error(error.data.Message);
+                // });
 
 
 
@@ -159,7 +160,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
             var item = $scope.lstUnitsinventarios[contTraspadoDetalle];
 
             var parainventarioDetalle = {
-                idpoliza: $scope.LastId,
+                idtipopoliza: 3,
                 empresaID: item.idEmpresa,
                 sucursalID: item.idSucursal,
                 CCP_IDDOCTO: item.veh_numserie,
@@ -167,7 +168,8 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                 idEsquemaO: $scope.selectedSchema.esquemaID,
                 idfinancieraD: 0,
                 idEsquemaD: 0,
-                idUsuario: $scope.idUsuario
+                idUsuario: $scope.idUsuario,
+                montoFinanciar: item.montoFinanciar
             }
 
             inventarioFactory.inventarioPolizaDetalle(parainventarioDetalle).then(function(response) {
