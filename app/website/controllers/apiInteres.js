@@ -497,4 +497,19 @@ ApiInteres.prototype.get_notaCredito = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_guardarTraspaso = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
+        { name: 'idmovimientostring', value: req.query.idmovimientostring, type: self.model.types.STRING }
+    ];
+
+    self.model.query('uspSaveTraspaso', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

@@ -267,6 +267,13 @@ appModule.factory('interesFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        }, guardarTraspaso: function(params) {
+            return $http({
+                url: interesesUrl + 'guardarTraspaso/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

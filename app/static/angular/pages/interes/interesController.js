@@ -1,5 +1,6 @@
 appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
@@ -240,6 +241,20 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         }
         if (days == 1000) {
             $scope.setResetTable('tblUnidadesNuevas', 'Unidades Nuevas', 20);
+        }
+        if (days == 2000) {
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                if (parseInt($scope.lstNewUnits[i].ccs) == 3) {
+                    $scope.lstNewUnits[i].excludeField = false;
+                    $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
+                    $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
+                    $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
+                    $scope.numUnidades++;
+                } else {
+                    $scope.lstNewUnits[i].excludeField = true;
+                }
+    
+            }
         }
 
     };
@@ -1176,5 +1191,43 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     var totalCompensar = function() {
         $scope.montoCompensar = $scope.auxSumaCxp;
     };
-
+    ///////////////////////////////
+    /////traspaso sucursal
+    ///////////////////////////////
+   $scope.TraspasoSucursal=function()
+   {
+    $('#modaltraspasoSucursal').modal('show');
+    commonFactory.getSucursal($scope.session.empresaID, $scope.idUsuario).then(function(result) {
+        $scope.lstSucursalTraspaso = result.data;
+    });
+   }
+   $scope.setCurrentSucursalTraspaso = function(sucursalObj) {
+    $scope.SucursalSelTraspaso = sucursalObj;
+  
+    $scope.currentSucursalNameTraspaso = sucursalObj.nombreSucursal;
+    };
+    $scope.GuardarTraspasoSucursal=function(){
+        var resultado = '';
+        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            
+                if ($scope.lstNewUnits[i].isChecked === true)
+                {
+                    resultado = resultado  + ',' + $scope.lstNewUnits[i].movimientoID;
+                }
+        }
+        resultado=resultado.substring(1,resultado.length);
+        var params2 = {
+            sucursalID: $scope.SucursalSelTraspaso.sucursalID,
+            idmovimientostring:resultado
+        };
+        interesFactory.guardarTraspaso(params2).then(function(result) {
+            if(result.data.length>0)
+            {
+                $("#modaltraspasoSucursal").modal('hide');
+                swal('Guardado', 'Traspaso de sucursal guardado con éxito', 'success');
+            }
+        });
+    }
+    /////////////////////////////
+    ///////////////////////////
 });
