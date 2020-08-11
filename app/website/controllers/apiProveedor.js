@@ -90,7 +90,7 @@ Apiproveedor.prototype.get_ProveedorPolizaDetalle = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+    var params = [{ name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT },
     { name: 'empresaID', value: req.query.empresaID, type: self.model.types.INT },
     { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
     { name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },

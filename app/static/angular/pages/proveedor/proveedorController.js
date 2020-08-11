@@ -133,19 +133,21 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
             },
             function() {
                 $('#mdlLoading').modal('show');
-                var paraproveedor = {
-                    idUsuario: $scope.idUsuario,
-                    idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza: 1 //Unidades de proovedoores
-                }
-
-                proveedorFactory.proveedorPoliza(paraproveedor).then(function(respuesta) {
-                    $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsproveedors = filterFilter($scope.lstNewUnits, { isChecked: true });
-                    $scope.guardaDetalle();
-                }, function(error) {
-                    $scope.error(error.data.Message);
-                });
+                // var paraproveedor = {
+                //     idUsuario: $scope.idUsuario,
+                //     idEmpresa: sessionFactory.empresaID,
+                //     idtipopoliza: 1 //Unidades de proovedoores
+                // }
+                $scope.lstUnitsproveedors = filterFilter($scope.lstNewUnits, { isChecked: true });
+                console.log($scope.lstUnitsproveedors, 'LAS PLIZAS A GENERAR')
+                $scope.guardaDetalle();
+                // proveedorFactory.proveedorPoliza(paraproveedor).then(function(respuesta) {
+                //     $scope.LastId = respuesta.data[0].LastId;
+                //     $scope.lstUnitsproveedors = filterFilter($scope.lstNewUnits, { isChecked: true });
+                //     $scope.guardaDetalle();
+                // }, function(error) {
+                //     $scope.error(error.data.Message);
+                // });
 
 
 
@@ -159,7 +161,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
             var item = $scope.lstUnitsproveedors[contTraspadoDetalle];
 
             var paraproveedorDetalle = {
-                idpoliza: $scope.LastId,
+                idtipopoliza: 1,
                 empresaID: item.idEmpresa,
                 sucursalID: item.idSucursal,
                 CCP_IDDOCTO: item.CCP_IDDOCTO,

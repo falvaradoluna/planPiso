@@ -1176,6 +1176,17 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
 
         }
     };
+    $scope.actualizarCartera = function() {
+        $('#mdlLoading').modal('show');
+        crealoteFactory.actualizarCartera(sessionFactory.empresaID).then(function success(result) {
+            console.log(result.data);
+            $('#mdlLoading').modal('hide');
+            alertFactory.success('Se actualizo correctamente');
+        }, function error(err) {
+            $('#mdlLoading').modal('hide');
+            console.log('Error al actualizar Cartera', err)
+        });
+    };
     /////////-----------------------------
     //FAL crea los campos del grid y las rutinas en los eventos del grid.
 

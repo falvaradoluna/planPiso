@@ -9,21 +9,25 @@
             <th>Modelo</th>
             <th>Precio venta</th>
             <th>Saldo Inicial</th>
+            <th>Monto a financiar</th>
             <th>
                 <input type="checkbox" ng-click="checkAllUnits()" ng-model="allUnits.isChecked" style="margin-left: 20px;">
             </th>
         </tr>
     </thead>
     <tbody>
-            <tr ng-repeat="unidad in lstNewUnits">
+        <tr ng-repeat="unidad in lstNewUnits">
             <td>{{unidad.CCP_IDDOCTO}}</td>
             <td>{{unidad.veh_numserie}}</td>
             <td>{{unidad.marca}}</td>
             <td>{{unidad.nombreFinanciera}}</td>
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
-            <td class="text-right">{{unidad.IMPORTE | currency}}</td>            
+            <td class="text-right">{{unidad.IMPORTE | currency}}</td>
             <td class="text-right">{{unidad.SALDO | currency}}</td>
+            <td>
+                <input type="text" class="form-control" ng-init="unidad.montoFinanciar = unidad.SALDO" ng-model="unidad.montoFinanciar" style="width: 100px">
+            </td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
             </td>

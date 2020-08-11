@@ -1,19 +1,19 @@
 appModule.controller('guardarLoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
-    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
-  
- 
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
+
+
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = staticFactory.crealoteBar();
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
     $scope.idPoliza = $location.search().idPre;
-    $scope.BotonGuardarLote=false;
+    $scope.BotonGuardarLote = false;
     console.log($location.search().idPre, 'LO QUE VIENE DE LA URL')
     var cargaInfoGridLotes = function() {
-        var valor=_.where($scope.lstPermisoBoton, { idModulo: 11,Boton: "guardarLote" })[0];
-        $scope.BotonGuardarLote=valor != undefined;
+        var valor = _.where($scope.lstPermisoBoton, { idModulo: 11, Boton: "guardarLote" })[0];
+        $scope.BotonGuardarLote = valor != undefined;
         $scope.sumaDocumentos = undefined;
         crealoteFactory.getescenario(sessionFactory.empresaID).then(function success(result) {
             console.log(result.data, 'SOY EL ESCENARIO');
@@ -884,5 +884,16 @@ appModule.controller('guardarLoteController', function($scope, $rootScope, $loca
                 alertFactory.error('Error al insertar en tabla padre.');
             });
 
+    };
+    $scope.actualizarCartera = function() {
+        $('#mdlLoading').modal('show');
+        crealoteFactory.actualizarCartera(sessionFactory.empresaID).then(function success(result) {
+            console.log(result.data);
+            $('#mdlLoading').modal('hide');
+            alertFactory.success('Se actualizo correctamente');
+        }, function error(err) {
+            $('#mdlLoading').modal('hide');
+            console.log('Error al actualizar Cartera', err)
+        });
     };
 });

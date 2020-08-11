@@ -92,6 +92,16 @@ appModule.factory('crealoteFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        actualizarCartera: function(idEmpresa) {
+            return $http({
+                url: crealoteUrl + 'actualizarCartera/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 });
