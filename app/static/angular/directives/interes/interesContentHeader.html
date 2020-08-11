@@ -8,6 +8,7 @@
                 <button class="btn btn-primary" ng-click="setPnlSpread()"  ng-hide="muestraCargarSpreadTiie"><span class="glyphicon glyphicon-usd"></span> Cargar Spread TIEE</button>
             </div>
             <div ng-show="showButtons">
+                <button class="btn btn-primary" ng-click="TraspasoSucursal()" ng-hide="muestratraspasoSucursal"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Traspaso Sucursal</button>
                 <button class="btn btn-primary" ng-click="setPnlTraspasoFinanciero(4)" ng-hide="muestracambiarEsquema"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Cambiar Esquema</button>
                 <button class="btn btn-primary" ng-click="setPnlTraspasoFinanciero(3)" ng-hide="muestratraspasoFinanciera"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Traspaso Financiera</button>
                 <button class="btn btn-primary" ng-click="callPayCapital()" ng-hide="muestrapagarReduccion"><span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span> Pagar Reducción </button>
@@ -22,6 +23,7 @@
                 <button class="btn btn-info setInline" type="button" ng-click="filterDay(60)"><i class="glyphicon glyphicon-sort"></i>&nbsp;60</button>
                 <button class="btn btn-info setInline" type="button" ng-click="filterDay(90)"><i class="glyphicon glyphicon-sort"></i>&nbsp;90</button>
                 <button class="btn btn-info setInline" type="button" ng-click="filterDay(1000)"><i class="glyphicon glyphicon-sort"></i>&nbsp;90+</button>
+                <button class="btn btn-info setInline" type="button" ng-click="filterDay(2000)"><i class="glyphicon glyphicon-sort"></i>&nbsp;Reducción</button>
             </div>
         </div>
     </div>
@@ -35,3 +37,67 @@
         <button class="btn btn-info btn-outline tabInteres">Seminuevas</button> -->
     </div>
 </div>
+<!--===================================================-->
+<!--Modal modalcopiarEsquema-->
+<!--===================================================-->
+<div class="modal fade" id="modaltraspasoSucursal" role="dialog" tabindex="-1" data-focus-on="input:first" data-backdrop="static" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="row jumbotron">
+            <div class="modal-content">
+                <div class="media-body pad-lft">
+                    <div class="modal-body" style="height:250px">
+                        <h3 class="text-title">Cambiar a sucursal : {{currentSucursalNameTraspaso}}</h3>
+                        <div class="col-sm-12">
+                            <div class="dropdown setInline">
+                                <button class="btn btn-warning" type="button" data-toggle="dropdown">{{currentSucursalNameTraspaso}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="sucursal in lstSucursalTraspaso">
+                                        <a ng-click="setCurrentSucursalTraspaso(sucursal)">{{sucursal.nombreSucursal}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-12" ng-show="lstNewUnits.length > 0">
+                                <table id="tblUnidadesNuevas2" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Documento</th>
+                                            <th>Numero Serie</th>
+                                            <th>Financiera</th>
+                                            <th>Esquema</th>
+                                            <th>Modelo</th>
+                                            <th>Año</th>
+                                            <th>TipoEntrada</th>
+                                            <th>Tipo</th>
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="unidad in lstNewUnits | filter:{isChecked:true}" ng-class="{'alert alert-warning':unidad.ccs==1,'alert alert-danger':unidad.ccs==2}">
+                                            <td>{{unidad.CCP_IDDOCTO}}</td>
+                                            <td>{{unidad.vehNumserie}}</td>
+                                            <td>{{unidad.financiera}}</td>
+                                            <td>{{unidad.nombre}}</td>
+                                            <td>{{unidad.VEH_TIPOAUTO}}</td>
+                                            <td>{{unidad.VEH_ANMODELO}}</td>
+                                            <td>{{unidad.tipoEntrada}}</td>
+                                            <td>{{unidad.tipoColateral}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <a class="btn btn-primary pull-right" ng-click="GuardarTraspasoSucursal()"> Guardar </a>
+                    <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--===================================================-->
+<!--End Modal modalcopiarEsquema-->
+<!--===================================================-->
