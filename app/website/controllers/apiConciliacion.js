@@ -244,9 +244,31 @@ ApiConciliacion.prototype.get_creaConciliacionDetalle = function(req, res, next)
     { name: 'interesGrupoAndrade', value: req.query.interesGrupoAndrade, type: self.model.types.INT },
     { name: 'interesFinanciera', value: req.query.interesFinanciera, type: self.model.types.INT },
     { name: 'interesAjuste', value: req.query.interesAjuste, type: self.model.types.INT },
-    { name: 'situacion', value: req.query.situacion, type: self.model.types.INT }];
+    { name: 'situacion', value: req.query.situacion, type: self.model.types.INT },
+    { name: 'checked', value: req.query.checked, type: self.model.types.INT }];
 
     self.model.query('CREACONCILIACIONDETALLE_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_guardaConciliacionDetalle = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT },
+    { name: 'movimientoID', value: req.query.movimientoID, type: self.model.types.INT },
+    { name: 'CCP_IDDOCTO', value: req.query.CCP_IDDOCTO, type: self.model.types.STRING },
+    { name: 'VIN', value: req.query.VIN, type: self.model.types.STRING },
+    { name: 'interesGrupoAndrade', value: req.query.interesGrupoAndrade, type: self.model.types.INT },
+    { name: 'interesFinanciera', value: req.query.interesFinanciera, type: self.model.types.INT },
+    { name: 'interesAjuste', value: req.query.interesAjuste, type: self.model.types.INT },
+    { name: 'situacion', value: req.query.situacion, type: self.model.types.INT },
+    { name: 'checked', value: req.query.checked, type: self.model.types.INT }];
+
+    self.model.query('guardaCONCILIACIONDETALLE_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

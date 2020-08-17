@@ -94,6 +94,14 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        guardaConciliacionDetalle: function( parametros ) {
+            return $http({
+                url: conciliacionUrl + 'creaConciliacionDetalle/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
         solicitaAutorizacion: function( parametros ) {
             return $http({
                 url: conciliacionUrl + 'solicitaAutorizacion/',

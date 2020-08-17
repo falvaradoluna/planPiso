@@ -27,6 +27,7 @@
                     <th>Interes Total</th>
                     <th>Estatus</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,9 @@
                         <button type="button" class="btn btn-success" ng-click="setPnlDetalleUnidad(unidad)">
                             <span class="glyphicon glyphicon-th-list"> </span>
                         </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" ng-click="TraspasoSucursal(unidad)" ng-hide="unidad.vin.length==0"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></button>
                     </td>
                 </tr>
             </tbody>

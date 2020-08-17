@@ -512,4 +512,20 @@ ApiInteres.prototype.get_guardarTraspaso = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_Refacciones = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
+    { name: 'vin', value: req.query.vin, type: self.model.types.STRING }
+        
+    ];
+
+    self.model.query('uspGetRefacciones', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

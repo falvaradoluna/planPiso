@@ -256,6 +256,20 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     
             }
         }
+        if (days == 3000) {
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                if ($scope.lstNewUnits[i].vin.length> 0) {
+                    $scope.lstNewUnits[i].excludeField = false;
+                    $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
+                    $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
+                    $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
+                    $scope.numUnidades++;
+                } else {
+                    $scope.lstNewUnits[i].excludeField = true;
+                }
+    
+            }
+        }
 
     };
 
@@ -1194,40 +1208,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     ///////////////////////////////
     /////traspaso sucursal
     ///////////////////////////////
-   $scope.TraspasoSucursal=function()
+   $scope.TraspasoSucursal=function(unidad)
    {
+       $scope.unidad=unidad;
     $('#modaltraspasoSucursal').modal('show');
-    commonFactory.getSucursal($scope.session.empresaID, $scope.idUsuario).then(function(result) {
-        $scope.lstSucursalTraspaso = result.data;
+    interesFactory.Refacciones(unidad.sucursalID,unidad.vin).then(function(result) {
+        $scope.lstRefacciones = result.data;
     });
    }
-   $scope.setCurrentSucursalTraspaso = function(sucursalObj) {
-    $scope.SucursalSelTraspaso = sucursalObj;
-  
-    $scope.currentSucursalNameTraspaso = sucursalObj.nombreSucursal;
-    };
-    $scope.GuardarTraspasoSucursal=function(){
-        var resultado = '';
-        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-            
-                if ($scope.lstNewUnits[i].isChecked === true)
-                {
-                    resultado = resultado  + ',' + $scope.lstNewUnits[i].movimientoID;
-                }
-        }
-        resultado=resultado.substring(1,resultado.length);
-        var params2 = {
-            sucursalID: $scope.SucursalSelTraspaso.sucursalID,
-            idmovimientostring:resultado
-        };
-        interesFactory.guardarTraspaso(params2).then(function(result) {
-            if(result.data.length>0)
-            {
-                $("#modaltraspasoSucursal").modal('hide');
-                swal('Guardado', 'Traspaso de sucursal guardado con éxito', 'success');
-            }
-        });
-    }
+ 
     /////////////////////////////
     ///////////////////////////
 });

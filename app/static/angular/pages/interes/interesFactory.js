@@ -275,6 +275,14 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
+        , Refacciones: function(sucursalID,vin) {
+            return $http({
+                url: interesesUrl + 'Refacciones/',
+                method: "GET",
+                params: {sucursalID:sucursalID,vin:vin},
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
     };
 });

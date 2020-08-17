@@ -204,10 +204,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             $scope.frmConciliacion.loadLayout = true;
                             $scope.loadingPanel = false;
                             $('#mdlLoading').modal('hide');
-                                if($scope.frmConciliacion.lbltipoconciliacion== 1)
-                                    $scope.currentPanel = 'pnlConciliar';
-                                else
-                                    $scope.currentPanel = 'pnlConciliarUnidades';
+                                // if($scope.frmConciliacion.lbltipoconciliacion== 1)
+                                //     $scope.currentPanel = 'pnlConciliar';
+                                // else
+                                //     $scope.currentPanel = 'pnlConciliarUnidades';
                             $scope.conceal();
                             $("#modalNuevaConciliacion").modal('hide');
                             var aux = filterFilter($scope.lstFinancial, { financieraID: $scope.frmConciliacion.idFinanciera });
@@ -547,40 +547,73 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             if( result.data[0].success == 1 ){
                 $scope.idconciliacion=result.data[0].LastId;
 
-                for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
-                    item = $scope.lstConceal[ i ];
-                    parametrosDetalle = {
-                        idConciliacion:         result.data[0].LastId,
-                        movimientoID:           item.movimientoID,
-                        CCP_IDDOCTO:            item.CCP_IDDOCTO,
-                        VIN:                    item.numeroSerie,
-                        interesGrupoAndrade:    item.InteresMesActual,
-                        interesFinanciera:      item.interes,
-                        interesAjuste:          item.ajuste,
-                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
-                    }
+                 var promises = [];
+                $scope.contador=0;
+                $scope.maxcontador=$scope.lstConceal.length;
+    
+                    $scope.lstConceal.map((item) => {
+                        parametrosDetalle = {
+                            idConciliacion:         $scope.idconciliacion,
+                            movimientoID:           item.movimientoID,
+                            CCP_IDDOCTO:            item.CCP_IDDOCTO,
+                            VIN:                    item.numeroSerie,
+                            interesGrupoAndrade:    item.InteresMesActual,
+                            interesFinanciera:      item.interes,
+                            interesAjuste:          item.ajuste,
+                            situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 ,// 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                            checked:                item.checked?1:0
+    
+                        }
+    
+                        
+                        promises.push(conciliacionFactory.creaConciliacionDetalle( parametrosDetalle ));
+                    })
+                   
+        Promise.all(promises).then(function response(result) {
+                console.log(result, 'UNIDADEEEES');
+                angular.forEach(result, function(value, key) {
+                    var unidadesFor = value.data;
+                    // $scope.lstNewUnits.push(value.data);
+                    angular.forEach(unidadesFor, function(value2, key2) {
+                        $scope.contador++;
+                       
+                    });
 
-                    conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
-
-                }
+                });
+             if($scope.contador==$scope.maxcontador)
+                        {
+                            $scope.$apply();
+                            swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
+                            setTimeout( function(){
+                            
+                                location.reload();
+                            },4000);
+                        }
+            
+            });
             }
         });
 
     }
+   
     $scope.guardaConciliacion = function() {
         var parametros = {
             idConciliacion:      $scope.idconciliacion,
             idEstatus:       1
 
         }
+        $('#mdlLoading').modal('show');
         var parametrosDetalle = {}
         var item = {};
+      
         conciliacionFactory.guardaConciliacion( parametros ).then(function(result) {
-            if( result.data[0].success == 1 ){
-              
+            if( result.data.length > 0 ){
+                var promises = [];
+            $scope.contador=0;
+            $scope.maxcontador=$scope.lstConceal.length;
 
-                for( var i = 0; i <= ( $scope.lstConceal.length - 1 ); i++ ){
-                    item = $scope.lstConceal[ i ];
+                $scope.lstConceal.map((item) => {
+                  
                     parametrosDetalle = {
                         idConciliacion:         $scope.idconciliacion,
                         movimientoID:           item.movimientoID,
@@ -589,30 +622,38 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         interesGrupoAndrade:    item.InteresMesActual,
                         interesFinanciera:      item.interes,
                         interesAjuste:          item.ajuste,
-                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 // 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                        situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 ,// 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
+                        checked:                 item.checked?1:0
+
                     }
 
-                    conciliacionFactory.creaConciliacionDetalle( parametrosDetalle );
-
-                    if( i >= ( $scope.lstConceal.length - 1 ) )
-                    {
-                       
-                            swal("Conciliación","Se ha generado de forma correcta la conciliacion del mes de " + $scope.lstMonth[ $scope.currentMonth ],"success");
-                            setTimeout( function(){
-                                conciliacionFactory.generaConciliacion( parametros.periodo, $scope.currentYear, parametros.idFinanciera ).then( function( result ){
-                                     location.reload();
-                                   // $scope.prevStep();
-                                    // location.href = "provision";
-
-                                });
-                            },2000);
-                       
-                    }
-                }
+                    
+                    promises.push(conciliacionFactory.guardaConciliacionDetalle( parametrosDetalle ));
+                })
+                
+                Promise.all(promises).then(function response(result) {
+                    console.log(result, 'UNIDADEEEES');
+                    angular.forEach(result, function(value, key) {
+                        var unidadesFor = value.data;
+                        // $scope.lstNewUnits.push(value.data);
+                        angular.forEach(unidadesFor, function(value2, key2) {
+                            $scope.contador++;
+                           
+                        });
+                    });
+                  
+            $scope.$apply();
+            $('#mdlLoading').modal('hide');
+            location.reload();
+                  
+                });
+                  
+                
             }
         });
 
     }
+  
     $scope.solicitaAutorizacion = function( estatus ) {
         var parametros = {
             consecutivo: contador,
