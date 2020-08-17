@@ -1122,18 +1122,18 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         'tipoProducto': 'NCR',
                         'montoCompensar': saldoNcr
                     });
-                    // $scope.facturasTotal.push({
-                    //     'tipoFactura': 'Compra',
-                    //     'cargo': saldoNcr,
-                    //     'iva': '',
-                    //     'total': saldoNcr,
-                    //     'fecha': '',
-                    //     'factura': value.factura,
-                    //     'numeroSerie': '',
-                    //     'saldo': '',
-                    //     'tipoProducto': 'PAG',
-                    //     'montoCompensar': saldoNcr
-                    // });
+                    $scope.facturasTotal.push({
+                        'tipoFactura': 'Compra',
+                        'cargo': saldoNcr,
+                        'iva': '',
+                        'total': saldoNcr,
+                        'fecha': '',
+                        'factura': value.factura,
+                        'numeroSerie': '',
+                        'saldo': '',
+                        'tipoProducto': 'PAG',
+                        'montoCompensar': saldoNcr
+                    });
                 }
             });
             console.log($scope.saldoCompensar - saldoNcr, 'COMPRA');
