@@ -471,7 +471,8 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
         { name: 'tipoProducto', value: req.query.tipoProducto, type: self.model.types.STRING },
         { name: 'documento', value: req.query.documento, type: self.model.types.STRING },
-        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING }
+        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
+        { name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.STRING }
     ];
     console.log(params);
     self.model.query('Pol_Poliza13DetalleBPRO_INS', params, function(error, result) {

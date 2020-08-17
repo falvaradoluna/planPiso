@@ -3,6 +3,7 @@
         <tr>
             <th>Num Documento</th>
             <th>VIN</th>
+            <th>Tipo Unidad</th>
             <th>Marca</th>
             <th>Proveedor</th>
             <th>Descripción Modelo</th>
@@ -19,6 +20,7 @@
         <tr ng-repeat="unidad in lstNewUnits">
             <td>{{unidad.CCP_IDDOCTO}}</td>
             <td>{{unidad.veh_numserie}}</td>
+            <td>{{unidad.tipoUnidad}}</td>
             <td>{{unidad.marca}}</td>
             <td>{{unidad.nombreFinanciera}}</td>
             <td>{{unidad.descModelo}}</td>

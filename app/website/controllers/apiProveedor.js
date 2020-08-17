@@ -98,7 +98,8 @@ Apiproveedor.prototype.get_ProveedorPolizaDetalle = function(req, res, next) {
     { name: 'idEsquemaO', value: req.query.idEsquemaO, type: self.model.types.INT },
     { name: 'idfinancieraD', value: req.query.idfinancieraD, type: self.model.types.INT },
     { name: 'idEsquemaD', value: req.query.idEsquemaD, type: self.model.types.INT },
-    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'montoFinanciar', value: req.query.montoFinanciar, type: self.model.types.INT }];
 
     self.model.query('Pol_Poliza4Detalle_INS', params, function(error, result) {
         self.view.expositor(res, {
