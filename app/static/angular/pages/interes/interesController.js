@@ -255,23 +255,24 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         $scope.lstNewUnits[i].excludeField = true;
                     }
                 }
-                if (days == 3000) {
-                    for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-                        if ($scope.lstNewUnits[i].vin.length> 0) {
-                            $scope.lstNewUnits[i].excludeField = false;
-                            $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
-                            $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
-                            $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
-                            $scope.numUnidades++;
-                        } else {
-                            $scope.lstNewUnits[i].excludeField = true;
-                        }
-            
+            }
+            if (days == 3000) {
+                for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                    if ($scope.lstNewUnits[i].vin.length> 0) {
+                        $scope.lstNewUnits[i].excludeField = false;
+                        $scope.interesPagado += $scope.lstNewUnits[i].InteresCortePagado;
+                        $scope.interesMesActual += $scope.lstNewUnits[i].InteresMesActual;
+                        $scope.interesAcumulado += $scope.lstNewUnits[i].InteresAcumuladoFinanciera;
+                        $scope.numUnidades++;
+                    } else {
+                        $scope.lstNewUnits[i].excludeField = true;
                     }
+        
                 }
+            }
 
                 
-            }
+           
 
         };
 
