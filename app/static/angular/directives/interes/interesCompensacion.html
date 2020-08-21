@@ -130,17 +130,18 @@
                         <td class="text-right">{{factura.cargo | currency}}</td>
                         <td class="text-right">{{factura.saldo | currency}}</td>
                         <td>
-                            <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar()">
+                            <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar(factura, $index, {{factura.montoCompensar}})" max="{{factura.saldo}}">
                         </td>
+                    </tr>
+                    <tr ng-repeat="facturaCompensacion in facturasCompensacion">
+                        <td></td>
+                        <td colspan="5">{{facturaCompensacion.tipoFactura}}</td>
+                        <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;"></td>
                     </tr>
                     <tr>
                         <td colspan="5">Enganche</td>
                         <td class="text-right">{{engancheCotizacion.ucu_impenganche ? engancheCotizacion.ucu_impenganche : 0 | currency }}</td>
                         <td></td>
-                    </tr>
-                    <tr ng-repeat="facturaCompensacion in facturasCompensacion">
-                        <td colspan="6">{{facturaCompensacion.tipoFactura}}</td>
-                        <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;"></td>
                     </tr>
                     <!-- <tr>
                         <td colspan="5">Factura Comisión Dealer</td>
