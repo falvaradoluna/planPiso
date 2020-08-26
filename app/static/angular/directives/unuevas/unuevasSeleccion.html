@@ -46,7 +46,7 @@
             </td>
             <td><input type="text" class="form-control" ng-model="unidad.SALDO" style="width: 100px"></td>
             <td style="text-align: center;">
-                <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
+                <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true" ng-click="EvaluarUnidad(unidad)">
             </td>
         </tr>
     </tbody>

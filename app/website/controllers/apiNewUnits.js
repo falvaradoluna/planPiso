@@ -69,5 +69,21 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
         });
     });
 };
+ApiNewUnits.prototype.get_SaldoFinanciera = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+    { name: 'idPersona', value: req.query.idPersona, type: self.model.types.INT} ,
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    { name: 'idColateral', value: req.query.idColateral, type: self.model.types.INT }];
+
+    self.model.query('usp_GetSaldoFinanciera', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = ApiNewUnits;

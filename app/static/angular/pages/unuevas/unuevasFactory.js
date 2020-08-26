@@ -50,7 +50,15 @@ appModule.factory('unuevasFactory', function($http) {
                 },
                 callback
             );
-        }
+        },
+        SaldoFinanciera: function(objectData) {
+            return $http({
+                url: apiNewUnitsUrl + 'SaldoFinanciera/',
+                method: "GET",
+                params: objectData,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
     };
 
 });
