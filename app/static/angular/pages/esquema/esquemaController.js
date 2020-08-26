@@ -61,6 +61,8 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             porcentajePenetracion: $scope.esquemaHeader.porcentajePenetracion,
             tipoTiieCID: $scope.esquemaHeader.selectedOption.tipoTiieId,
             tipoColateralId: $scope.esquemaHeader.selectedtipoColateral.idtipoColateral,
+            recalendarizacion:$scope.esquemaHeader.recalendarizacion,
+            tasarecalendarizacion:$scope.esquemaHeader.tasarecalendarizacion,
             tiie: $scope.esquemaHeader.tiie,
         };
 
@@ -307,6 +309,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
         $scope.esquemaHeader.diasGracia = objSchema.diasGracia;
         $scope.esquemaHeader.plazo = objSchema.plazo;
         $scope.esquemaHeader.recalendarizacion=objSchema.recalendarizacion;
+        $scope.esquemaHeader.tasarecalendarizacion = objSchema.tasarecalendarizacion;
         $scope.esquemaHeader.interesMoratorio = objSchema.interesMoratorio;
         $scope.esquemaHeader.tasaInteres = objSchema.tasaInteres;
         $scope.esquemaHeader.porcentajePenetracion = objSchema.porcentajePenetracion;
@@ -339,6 +342,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             diasGracia: $scope.esquemaHeader.diasGracia,
             plazo: $scope.esquemaHeader.plazo,
             recalendarizacion:$scope.esquemaHeader.recalendarizacion,
+            tasarecalendarizacion:$scope.esquemaHeader.tasarecalendarizacion,
             nombre: $scope.esquemaHeader.nombre,
             interesMoratorio: $scope.esquemaHeader.interesMoratorio,
             tasaInteres: $scope.esquemaHeader.tasaInteres,
@@ -350,6 +354,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
             tipoTiieCID: $scope.esquemaHeader.selectedOption.tipoTiieId,
             tipoColateralId: $scope.esquemaHeader.selectedtipoColateral.idtipoColateral,
             tiie: $scope.esquemaHeader.tiie,
+           
         };
 
         esquemaFactory.updEsquema(params).then(function(result) {

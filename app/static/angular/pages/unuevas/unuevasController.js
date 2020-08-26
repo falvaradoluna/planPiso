@@ -8,7 +8,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.steps = unuevasFactory.stepsBar();
     $scope.totalUnidades = 0;
     $scope.currentStep = 0;
-    $scope.userID = 875;
+    $scope.userID =  $scope.idUsuario;
     $scope.currentPanel = $scope.steps[0].panelName;
     $scope.lstSucursal = [];
     $scope.lstNewUnits = [];
@@ -122,8 +122,92 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         }
         itemSchemas.isChecked = true;
         $scope.selectedSchema = itemSchemas;
+        if($scope.selectedSchema.tipoColateralId !=undefined)
+        {
+                var data = {
+                idPersona: $scope.unidad.idPersona,
+            idEmpresa: $scope.unidad.idEmpresa,
+            idColateral:$scope.selectedSchema.tipoColateralId
+            };
+           
+            unuevasFactory.SaldoFinanciera(data).then(function(result) {
+                if(result.data.length>0)
+                {
+                    $scope.nombreFinanciera=result.data[0].nombrefinanciera;
+                    $scope.saldofinanciera=result.data[0].monto-result.data[0].saldofinanciera;
+                    $scope.idfinancierabp=result.data[0].idfinancierabp;
+                    // if($scope.saldofinanciera-$scope.saldounidad<=0)
+                    // {
+                    //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                    //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
+                    //         {
+                    //             $scope.lstNewUnits[i].isChecked=false;
+                    //         }
+                    //     }
+                    //     $scope.saldounidad=0;
+                    //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
+                        
+                    // }
+                }
+                
+            }, function(error) {
+                console.log("Error", error);
+            });
+        }
     };
 
+    $scope.EvaluarUnidad=function(unidadin)
+    {
+        $scope.unidad=unidadin;
+        
+        
+            $scope.saldounidad=0;
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                if($scope.lstNewUnits[i].isChecked)
+                {
+                    $scope.saldounidad=$scope.saldounidad+$scope.lstNewUnits[i].SALDO;
+                }
+            }
+            // if($scope.saldofinanciera!=undefined)
+            // {
+            //     if($scope.saldofinanciera-$scope.saldounidad<=0)
+            // {
+            //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
+            //         {
+            //             $scope.lstNewUnits[i].isChecked=false;
+            //         }
+            //     }
+            //     $scope.saldounidad=0;
+            //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
+            //     return;
+            // }
+            // }
+            
+            // if($scope.idfinancierabp==$scope.unidad.idPersona)
+            // {
+               
+            //     if($scope.saldounidad==0)
+            //     {
+            //         $scope.nombreFinanciera=undefined;
+            //         $scope.saldofinanciera=undefined;
+            //         $scope.idfinancierabp=undefined;
+            //     }
+            // }
+            // else
+            // {
+            //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
+            //         {
+            //             $scope.lstNewUnits[i].isChecked=false;
+            //         }
+            //         swal("Aviso", "La unidad debe de ser de la misma financiera que las otras seleccionadas", "warning");
+            // }
+        
+        //}
+   
+    }
+    
 
     $scope.nextStep = function() {
         if ($scope.currentStep == 0) {
@@ -255,7 +339,14 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     };
 
     $scope.showMsg = function() {
+        if($scope.saldofinanciera-$scope.saldounidad<=0)
+        {
+            swal("Aviso", "No puede continuar por que ya no tiene linea de crédito", "warning");
+        }
+        else
+        {
         unuevasFactory.assignMesage($scope.setSchema);
+        }
     };
 
     $scope.setSchema = function() {
