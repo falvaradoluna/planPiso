@@ -8,6 +8,17 @@ appModule.factory('sacarunidadFactory', function($http) {
                 params: { idEmpresa: idEmpresa },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getSaldoCuenta: function(idEmpresa, cuenta) {
+            return $http({
+                url: apisacarunidadUrl + 'saldoCuenta/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    cuenta: cuenta
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

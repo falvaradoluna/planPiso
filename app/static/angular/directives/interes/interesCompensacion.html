@@ -114,6 +114,7 @@
                     <tr>
                         <th></th>
                         <th></th>
+                        <th>Descripción</th>
                         <th class="left" style="width:200px">Documento</th>
                         <th>Fecha</th>
                         <th class="text-right">Importe</th>
@@ -125,6 +126,7 @@
                     <tr ng-repeat="factura in facturasTotal">
                         <td>{{financieraCotizacion}}</td>
                         <td>{{factura.tipoFactura}}</td>
+                        <td>{{factura.descripcion}}</td>
                         <td>{{factura.factura}}</td>
                         <td>{{factura.fecha}}</td>
                         <td class="text-right">{{factura.cargo | currency}}</td>
@@ -135,11 +137,11 @@
                     </tr>
                     <tr ng-repeat="facturaCompensacion in facturasCompensacion">
                         <td></td>
-                        <td colspan="5">{{facturaCompensacion.tipoFactura}}</td>
+                        <td colspan="6">{{facturaCompensacion.tipoFactura}}</td>
                         <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;"></td>
                     </tr>
                     <tr>
-                        <td colspan="5">Enganche</td>
+                        <td colspan="6">Enganche</td>
                         <td class="text-right">{{engancheCotizacion.ucu_impenganche ? engancheCotizacion.ucu_impenganche : 0 | currency }}</td>
                         <td></td>
                     </tr>

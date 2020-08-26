@@ -29,5 +29,20 @@ Apisacarunidad.prototype.get_documentos = function(req, res, next) {
         });
     });
 };
+Apisacarunidad.prototype.get_saldoCuenta = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'empresaSeleccionada', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'nombreCuenta', value: req.query.cuenta, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_saldoCuentaBanco', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = Apisacarunidad;
