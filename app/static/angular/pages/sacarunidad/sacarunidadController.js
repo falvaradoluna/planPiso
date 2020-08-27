@@ -484,6 +484,20 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                 enableCellEdit: false,
                 visible: true,
                 cellTemplate: '<div ng-if="row.entity.autorizado == 1">Autorizado</div><div ng-if="row.entity.autorizado == 0">No autorizado</div>'
+            },
+            {
+                name: 'tipoPago',
+                displayName: 'Tipo Pago',
+                width: '20%',
+                enableCellEdit: false,
+                visible: true
+            },
+            {
+                name: 'tipoCobroInteres',
+                displayName: 'Tipo Cobro',
+                width: '20%',
+                enableCellEdit: false,
+                visible: true
             }
         ],
         rowTemplate: '<div ng-class="{\'ordenBloqueada\':(row.entity.ordenBloqueada==\'True\' && ((row.entity.idEstatus < 1 || row.entity.idEstatus > 5) && row.entity.idEstatus != 20) && !row.isSelected)' +
