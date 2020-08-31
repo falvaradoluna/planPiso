@@ -27,6 +27,7 @@
                     <th>Interes Total</th> -->
                     <th>Interes Total</th>
                     <th>Estatus</th>
+                    <th>Susceptible de pago</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -56,6 +57,7 @@
                     <!-- <td>{{unidad.InteresAcumuladoFinanciera | currency}}</td> -->
                     <td>{{unidad.InteresTotal | currency}}</td>
                     <td></td>
+                    <td>{{unidad.susceptible}}</td>
                     <td>
                         <button type="button" class="btn btn-success" ng-click="setPnlDetalleUnidad(unidad)">
                             <span class="glyphicon glyphicon-th-list"> </span>
