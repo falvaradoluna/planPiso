@@ -170,26 +170,214 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         //subGridVariable will be available in subGrid scope
         expandableRowScope: {
             subGridVariable: 'subGridScopeVariable'
+        },
+        headerTemplate: 'header.html',
+        headerAppends: {
+            index: [0, 1],
+            height: 35
         }
     };
-    $scope.gridOptions.columnDefs = [
-        { name: 'Financiera', field: 'nombre', width: '40%', footerCellTemplate: '<div class="ui-grid-cell-contents" >Total</div>' },
-        { name: 'TIIE', field: 'tiie', width: '5%' },
-        { name: 'Spread', field: 'puntos', width: '7%' },
-        { name: '--', field: 'sumaTP', width: '5%' },
-        { name: 'Línea Autorizada', field: 'lineaAutorizada', width: '15%', cellFilter: 'currency', cellClass: 'currencyGrid' },
-        { name: 'unidades', field: 'unidades', width: '10%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>' },
-        { name: 'Línea utilizada', field: 'saldo', width: '15%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>', cellFilter: 'currency', cellClass: 'currencyGrid' },
-        { name: 'Línea disponible', field: 'lineaResto', width: '15%', cellFilter: 'currency', cellClass: 'currencyGrid' },
-        { name: 'Unidades Inventario', field: 'unidades', width: '10%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>' },
-        { name: 'Inventario', field: 'saldo', width: '10%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>', cellFilter: 'currency', cellClass: 'currencyGrid' },
-        { name: 'Unidades en días de gracia', field: 'unidadesDiaGracia', width: '18%' },
-        { name: 'Unidades en Estrella', field: 'estrella', width: '15%' },
-        { name: 'Estrella', field: 'estrellaMonto', width: '10%', cellFilter: 'currency', cellClass: 'currencyGrid', footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{grid.appScope.totalPropiasEstrella | currency }}</div>' },
-        { name: 'Unidades doble Estrella', field: 'dobleEstrella', width: '18%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>' },
-        { name: 'Doble Estrella', field: 'dobleEstrellaMonto', width: '10%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>', cellFilter: 'currency', cellClass: 'currencyGrid' },
-        { name: 'Unidades días de gracia', field: 'unidadesDiaGracia', width: '18%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>' },
-        { name: 'Unidades que genera Intereses', field: 'unidadesGeneraIntereses', width: '18%', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>' }
+    $scope.gridOptions.columnDefs = [{
+            name: 'Financiera',
+            field: 'nombre',
+            width: 600,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >Total</div>',
+            headers: [
+                { label: 'Financiera', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'TIIE',
+            field: 'tiie',
+            width: 80,
+            headers: [
+                { label: 'TIIE', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'Spread',
+            field: 'puntos',
+            width: 80,
+            headers: [
+                { label: 'Spread', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'Tasa',
+            field: 'sumaTP',
+            width: 80,
+            headers: [
+                { label: 'Tasa', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'Línea Autorizada',
+            field: 'unidades',
+            width: 80,
+            headers: [
+                { label: 'Línea Autorizada', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'unidades',
+            field: 'lineaAutorizada',
+            width: 150,
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Línea utilizada',
+            field: 'unidades',
+            width: 80,
+            headers: [
+                { label: 'Línea utilizada', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'Monto',
+            field: 'saldo',
+            width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Línea disponible',
+            field: 'unidades',
+            width: 80,
+            headers: [
+                { label: 'Línea disponible', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'Monto2    ',
+            field: 'lineaResto',
+            width: 150,
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Unidades Inventario',
+            field: 'unidades',
+            width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Inventario', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'Inventario',
+            field: 'saldo',
+            width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Unidades en días de gracia',
+            field: 'unidadesDiaGracia',
+            width: 180,
+            headers: [
+                { label: 'Unidades en días de gracia', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'Unidades en Estrella',
+            field: 'estrella',
+            width: 80,
+            headers: [
+                { label: 'Unidades en Estrella', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'Estrella',
+            field: 'estrellaMonto',
+            width: 150,
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{grid.appScope.totalPropiasEstrella | currency }}</div>',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Unidades doble Estrella',
+            field: 'dobleEstrella',
+            width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Doble Estrella', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            name: 'Doble Estrella',
+            field: 'dobleEstrellaMonto',
+            width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            name: 'Unidades días de gracia',
+            field: 'unidadesDiaGracia',
+            width: 180,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Unidades días de gracia', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
+            name: 'Unidades que genera Intereses',
+            field: 'unidadesGeneraIntereses',
+            width: 190,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Unidades que genera Intereses', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        }
     ];
     $scope.gridOptions.onRegisterApi = function(gridApi) {
         $scope.gridApi = gridApi;

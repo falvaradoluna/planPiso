@@ -128,3 +128,29 @@
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="header.html">
+  <div role="rowgroup" class="ui-grid-header">
+    <!-- theader -->
+    <div class="ui-grid-top-panel">
+      <div class="ui-grid-header-viewport">
+        <div class="ui-grid-header-canvas">
+          <div class="ui-grid-header-cell-wrapper">
+            <table class="table table-bordered" ng-style="{width: colContainer.canvasWidth + 'px'}">
+              <colgroup>
+                <col ng-repeat="col in colContainer.visibleColumnCache track by col.uid" ng-style="{width: col.width + 'px'}">
+              </colgroup>
+              <thead>
+                <tr ng-repeat="pos in grid.options.headerAppends.index">
+                  <th ng-if="col.colDef.headers[pos].rowSpan !== '#rowSpan' && col.colDef.headers[pos].colSpan !== '#colSpan'" rowspan="{{col.colDef.headers[pos].rowSpan}}" colspan="{{col.colDef.headers[pos].colSpan}}" ng-style="{height: ((col.colDef.headers[pos].rowSpan || 1) * grid.options.headerAppends.height) + 'px'}"
+                  ng-repeat="col in colContainer.visibleColumnCache track by col.uid">
+                    {{col.colDef.headers[pos].label}}
+                  </th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
