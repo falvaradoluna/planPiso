@@ -53,7 +53,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.muestragenerarPolizaInteres = generarPolizaInteres != undefined ? false : true;
     $scope.muestracompensacion = compensacion != undefined ? false : true;
     $scope.facturasCompensacion = [{
-            'tipoFactura': 'Factura Comisión Dealer',
+            'tipoFactura': 'Comisión Dealer',
             'cargo': 0,
             'iva': '',
             'total': 0,
@@ -65,7 +65,19 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'montoCompensar': 0
         },
         {
-            'tipoFactura': 'Factura Incentivo Penetración',
+            'tipoFactura': 'Subsidio Dealer',
+            'cargo': 0,
+            'iva': '',
+            'total': 0,
+            'fecha': '',
+            'factura': '',
+            'numeroSerie': '',
+            'saldo': '',
+            'tipoProducto': 'PROV',
+            'montoCompensar': 0
+        },
+        {
+            'tipoFactura': 'Incentivo Penetración',
             'cargo': 0,
             'iva': '',
             'total': 0,
@@ -77,7 +89,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'montoCompensar': 0
         },
         {
-            'tipoFactura': 'Factura UDI por pagar',
+            'tipoFactura': 'UDI por pagar',
             'cargo': 0,
             'iva': '',
             'total': 0,
@@ -1146,25 +1158,25 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         var saldoNcr = 0;
         var FacturaUN = 0;
         angular.forEach($scope.facturasTotal, function(value, key) {
-            if (value.tipoProducto == 'FA') {
+            if (value.tipoProducto == 'FA' && value.garantia == 1 ) {
                 saldoNcr = value.montoCompensar * 0.75;
                 FacturaUN = value.factura;
                 console.log(saldoNcr, 'El saldo de la nota de credito')
                 //Agrego el arreglo del PAG
+                // $scope.facturasTotal.push({
+                //     'tipoFactura': 'Compra',
+                //     'cargo': saldoNcr,
+                //     'iva': '',
+                //     'total': saldoNcr,
+                //     'fecha': '',
+                //     'factura': value.factura,
+                //     'numeroSerie': '',
+                //     'saldo': '',
+                //     'tipoProducto': 'NCR',
+                //     'montoCompensar': saldoNcr
+                // });
                 $scope.facturasTotal.push({
-                    'tipoFactura': 'Compra',
-                    'cargo': saldoNcr,
-                    'iva': '',
-                    'total': saldoNcr,
-                    'fecha': '',
-                    'factura': value.factura,
-                    'numeroSerie': '',
-                    'saldo': '',
-                    'tipoProducto': 'NCR',
-                    'montoCompensar': saldoNcr
-                });
-                $scope.facturasTotal.push({
-                    'tipoFactura': 'Compra',
+                    'tipoFactura': 'PAG',
                     'cargo': saldoNcr,
                     'iva': '',
                     'total': saldoNcr,
@@ -1180,19 +1192,19 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         angular.forEach($scope.facturasCompensacion, function(value, key) {
             if (value.montoCompensar > 0) {
                 $scope.facturasTotal.push(value);
-                if (value.tipoProducto == 'CD') {
-                    $scope.facturasTotal.push({
-                        'tipoFactura': 'DEALER',
-                        'cargo': value.montoCompensar,
-                        'iva': '',
-                        'total': value.montoCompensar,
-                        'fecha': '',
-                        'factura': '',
-                        'numeroSerie': '',
-                        'saldo': '',
-                        'tipoProducto': 'PROV',
-                        'montoCompensar': value.montoCompensar
-                    });
+                if (value.tipoProducto == 'PROV') {
+                    // $scope.facturasTotal.push({
+                    //     'tipoFactura': 'DEALER',
+                    //     'cargo': value.montoCompensar,
+                    //     'iva': '',
+                    //     'total': value.montoCompensar,
+                    //     'fecha': '',
+                    //     'factura': '',
+                    //     'numeroSerie': '',
+                    //     'saldo': '',
+                    //     'tipoProducto': 'PROV',
+                    //     'montoCompensar': value.montoCompensar
+                    // });
                     $scope.facturasTotal.push({
                         'tipoFactura': 'DEALER',
                         'cargo': value.montoCompensar,

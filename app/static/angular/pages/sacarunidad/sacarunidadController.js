@@ -1,18 +1,18 @@
 appModule.controller('sacarunidadController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
-    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
-  
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
+
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.currentEmpresa = sessionFactory.nombre;
     $scope.topBarNav = staticFactory.sacarunidadBar();
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
-    $scope.BotonGuardarLote=false;
+    $scope.BotonGuardarLote = false;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
-        var valor=_.where($scope.lstPermisoBoton, { idModulo: 8,Boton: "guardarLote" })[0];
-        $scope.BotonGuardarLote=valor != undefined;
+        var valor = _.where($scope.lstPermisoBoton, { idModulo: 8, Boton: "guardarLote" })[0];
+        $scope.BotonGuardarLote = valor != undefined;
         crealoteFactory.getescenario(sessionFactory.empresaID).then(function success(result) {
             console.log(result.data, 'SOY EL ESCENARIO');
             $scope.escenarios = result.data;
@@ -58,6 +58,13 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
     $scope.getDocumentos = function(cuenta) {
         $scope.currentCuentaName = cuenta.cuenta;
         $scope.bancoPago = cuenta;
+        sacarunidadFactory.getSaldoCuenta(sessionFactory.empresaID, cuenta.cuenta).then(function success(result) {
+            $scope.saldoBanco = result.data[0].saldo;
+            console.log($scope.saldoBanco, 'SOY EL SALDO BANCARIO')
+        }, function error(err) {
+            console.log('Error al obtener el saldo de la cuenta bancaria')
+
+        });
     };
     var validaDocumentos = function(data) {
         $scope.data = data;
@@ -477,6 +484,20 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                 enableCellEdit: false,
                 visible: true,
                 cellTemplate: '<div ng-if="row.entity.autorizado == 1">Autorizado</div><div ng-if="row.entity.autorizado == 0">No autorizado</div>'
+            },
+            {
+                name: 'tipoPago',
+                displayName: 'Tipo Pago',
+                width: '20%',
+                enableCellEdit: false,
+                visible: true
+            },
+            {
+                name: 'tipoCobroInteres',
+                displayName: 'Tipo Cobro',
+                width: '20%',
+                enableCellEdit: false,
+                visible: true
             }
         ],
         rowTemplate: '<div ng-class="{\'ordenBloqueada\':(row.entity.ordenBloqueada==\'True\' && ((row.entity.idEstatus < 1 || row.entity.idEstatus > 5) && row.entity.idEstatus != 20) && !row.isSelected)' +
@@ -520,7 +541,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                         $scope.gridApi1.core.scrollTo($scope.gridOptions.data[rowCol.row.entity.id], $scope.gridOptions.columnDefs[32]);
                         $interval(function() {
                             $scope.gridApi1.core.handleWindowResize();
-                        }, 100, 10);
+                        }, 5000, 1000);
                         // return true;
                         console.log('tiene mas de una cuenta destino ')
                     } else {
