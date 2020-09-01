@@ -238,7 +238,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
                 angular.forEach($scope.lstNewUnits, function(value, key) {
                     if (value.isChecked === true) {
                         value.plazo = $scope.selectedSchema.plazo;
-                        value.diasgracia = $scope.selectedSchema.diasGracia;
+                        value.diasgracia = value.dias!=undefined?value.dias:$scope.selectedSchema.diasGracia;
                         value.fechaRecibo = staticFactory.DateFormat(regresafechareal(value.fechaCalculoString));
                         value.fechainicio = regresafechareal(value.fechaCalculoString);
                         value.fechafin = sumarDias(regresafechareal(value.fechaCalculoString), value.plazo);
