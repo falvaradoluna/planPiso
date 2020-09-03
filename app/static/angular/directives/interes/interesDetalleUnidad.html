@@ -160,6 +160,49 @@
             </tr>
         </table>
     </div>
+  
+    <div class="row">
+        <hr>
+        <div class="col-md-12">
+            
+            <div class="col-md-12">
+                <h2><span class="glyphicon glyphicon-stats"></span>Intereses</h2>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table id="tblInteres" class="table table-striped">
+                <tr>
+                    <th>Saldo</th>
+                    <th>Puntos</th>
+                    <th>Tiie</th>
+                    <th>Fecha tiie</th>
+                    <th>Penetracion</th>
+                    <th>Plazo</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Interes</th>
+                    <th>Dias</th>
+                    <th>Total Interes</th>
+                    <th>Fecha ejecución</th>
+                </tr>
+                <tr ng-repeat="item in lstInteresesMov">
+                    <td>{{item.saldo | number:2 }}</td>
+                    <td>{{item.puntos | number:2}}</td>
+                    <td>{{item.tiie | number:4}}</td>
+                    <td>{{item.fechatiie | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                    <td>{{item.penetracion | number:2}}</td>
+                    <td>{{item.plazo }}</td>
+                    <td>{{item.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                    <td>{{item.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                    <td>{{item.Interes | number:2 }}</td>
+                    <td>{{item.dias }}</td>
+                    <td>{{item.totalInteres | number:2}}</td>
+                    <td>{{item.fechaejecucion | date:'dd/MM/yyyy' : 'UTC'}}</td>
+    
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row">

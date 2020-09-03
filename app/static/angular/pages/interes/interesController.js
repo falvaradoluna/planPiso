@@ -412,6 +412,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 $scope.lstSchemeDetail = resultSchema.data[0];
                 $scope.unitDetail = resultSchema.data[1][0];
                 $scope.unitDetailEsquema = resultSchema.data[2][0];
+                $scope.lstInteresesMov = resultSchema.data[3];
             });
         });
 
