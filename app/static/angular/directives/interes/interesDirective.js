@@ -80,4 +80,9 @@ appModule.directive('interesCambioAgencia', function() {
         restrict: 'E',
         templateUrl: interesPath + 'interesPago.html'
     };
+}).directive('interesRecalcular', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'interesRecalcular.html'
+    };
 });

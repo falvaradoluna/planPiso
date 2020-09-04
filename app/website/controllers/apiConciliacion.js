@@ -1,7 +1,8 @@
 var ApiConciliacionView = require('../views/reference'),
     ApiConciliacionModel = require('../models/dataAccess'),
     XLSX = require('xlsx'),
-    multer = require('multer');
+    multer = require('multer') ,
+    fs=require('fs');
 
 
 
@@ -458,6 +459,104 @@ ApiConciliacion.prototype.get_obtienePeriodosActivos = function(req, res, next) 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },];
 
     self.model.query('Get_PeriodosActivos_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_readFile = function(req, res, next) {
+    var self = this;
+    // fs.mkdir('./create',function(e){
+    //     if(!e || (e && e.code === 'EEXIST')){
+    //         //do something with contents
+    //     } else {
+    //         //debug
+    //         console.log(e);
+    //     }
+    // });
+  var binaryData = fs.readFileSync('./files/Layout.xlsx');
+  var base64String = new Buffer(binaryData).toString("base64");
+  var error=undefined;
+        self.view.expositor(res, {
+            error: error,
+            result: base64String
+        });
+};
+ApiConciliacion.prototype.get_abonoContable = function (req, res, next) {
+
+    var self = this;
+
+    var params = [
+       
+        { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
+    ];
+    
+    this.model.query('uspGetAbonoContable', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiConciliacion.prototype.get_cargoContable = function (req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
+    ];
+    
+    this.model.query('uspGetCargoContabilidad', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiConciliacion.prototype.get_abonoBancario = function (req, res, next) {
+
+    var self = this;
+
+    var params = [
+      
+        { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
+    ];
+    
+    this.model.query('uspGetAbonoFinanciera', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiConciliacion.prototype.get_cargoBancario = function (req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
+    ];
+    
+    this.model.query('uspGetCargosFinanciera', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_DatosReporte = function (req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
+    ];
+    
+    this.model.query('uspGetDatosreporte', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

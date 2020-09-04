@@ -398,6 +398,64 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
 
     }
+    $scope.setPnlRecalcular = function() {
+        $scope.currentPanel = "pnlRecalcular";
+        $scope.deshabilitaBoton=false;
+        //  location.reload();
+        commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
+            $scope.lstFinanciale = result.data;
+        });
+        $scope.currentFinancialeName='Selecciona Financiera';
+    };
+    $scope.setCurrentFinanciale = function(financialeObj) {
+        //  $scope.currentPanel = "pnlResumen";
+        $scope.currentFinancialeName = financialeObj.nombre;
+        $scope.currentFinanciale = financialeObj;
+        $('#mdlLoading').modal('show');
+        interesFactory.Meses(financialeObj.financieraID).then(function(result) {
+            $scope.lstMes = result.data;
+            $('#mdlLoading').modal('hide');
+        });
+    };
+    $scope.setCurrentMes = function(mesObj) {
+        //  $scope.currentPanel = "pnlResumen";
+        $scope.currentMesName = mesObj.mes;
+        $scope.currentMes = mesObj;
+        
+    };
+    $scope.recalculaInteres = function()
+    {
+        swal({
+            title: "Recalcular Intereses", 
+            text: "¿Esta seguro de recalcular intereses?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            confirmButtonText: "Recalcula",
+            cancelButtonText: "Cerrar"
+        }, function() {
+            $('#mdlLoading').modal('show');
+            $scope.deshabilitaBoton=true;
+            var data = {
+                financieraId: $scope.currentFinanciale.financieraID,
+                anio: $scope.currentMes.anio,
+                mes: $scope.currentMes.nummes
+            };
+            interesFactory.RecalculaInteres(data).then(function(result) {
+                if (result.data.length > 0) {
+                    $('#mdlLoading').modal('hide');
+                    $scope.deshabilitaBoton=false;
+                    swal("Ok", "Se recalculo con exito", "success");
+                    $scope.setPnlInteres();
+                }
+             
+               
+              
+            });
+    
+        });
+
+    }
     // $scope.reporteCaratula = function() {
     //     $('#selectReporte').modal('hide');
     ///////////////////////////
