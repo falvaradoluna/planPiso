@@ -95,7 +95,7 @@
                         <td>{{unidadCompensacion.vehNumserie}}</td>
                         <td>{{unidadCompensacion.importe || currency}}</td>
                         <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
-                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensar()"></td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensarCxP(unidadCompensacion.montoCompensar, {{unidadCompensacion.montoCompensar}})"></td>
                     </tr>
                 </tbody>
                 <!-- <tfoot>
@@ -132,7 +132,7 @@
                         <td class="text-right">{{factura.cargo | currency}}</td>
                         <td class="text-right">{{factura.saldo | currency}}</td>
                         <td>
-                            <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar(factura, $index, {{factura.montoCompensar}})" max="{{factura.saldo}}">
+                            <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar(factura, $index, {{factura.montoCompensar}})">
                         </td>
                     </tr>
                     <tr ng-repeat="facturaCompensacion in facturasCompensacion">

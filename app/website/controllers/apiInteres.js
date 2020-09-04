@@ -529,4 +529,19 @@ ApiInteres.prototype.get_Refacciones = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.post_insertaDocumentosLoteCompensacion = function(req, res, next) {
+
+    var self = this;
+    console.log(req.body);
+    var table = '[PlanPiso].[dbo].[documentosLoteCompensacion]'
+    var values = req.body;
+    self.model.queryInsertDocumentosLoteCompensacion(table, values, function(error, result) {
+        console.log(error, 'SOY EL ERROR')
+        console.log(result, 'SOY EL RESULTADO')
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });    
+};
 module.exports = ApiInteres;

@@ -282,6 +282,14 @@ appModule.factory('interesFactory', function($http) {
                 params: {sucursalID:sucursalID,vin:vin},
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        insertaDocumentosLoteCompensacion: function(array) {
+            return $http({
+                url: interesesUrl + 'insertaDocumentosLoteCompensacion/',
+                method: "POST",
+                data: array,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

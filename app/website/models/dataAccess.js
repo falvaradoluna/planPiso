@@ -198,6 +198,36 @@ DataAccess.prototype.queryInsertDocumentosLote = function(tabla, values, callbac
             });
     });
 };
+DataAccess.prototype.queryInsertDocumentosLoteCompensacion = function(tabla, values, callback) {
+    var self = this.connection;
+    this.connection.connect(function(err) {
+        // console.log(tabla)
+        // values.forEach(function(element) {            
+        //    console.log(element.CCP_IDDOCTO, element.idUsuario, element.idPoliza, element.pagoReduccion, element.estatus) 
+        // });
+
+        const table = new sql.Table(tabla);
+        table.create = false;
+        table.columns.add('documento', sql.VarChar(200))
+        table.columns.add('idUsuario', sql.Int)
+        table.columns.add('idPoliza', sql.Int)
+        table.columns.add('pagoCompensacion', sql.Int)
+        table.columns.add('estatus', sql.Int)
+        values.forEach(function(element) {            
+            table.rows.add(element.CCP_IDDOCTO, element.idUsuario, element.idPoliza, element.pagoCompensacion, element.estatus);
+        });
+        var request = new sql.Request(self);
+        // console.log(table)
+        request.bulk(table)
+            .then(function(recordsets) {
+                // console.log(recordsets, 'ENtre al exito');
+                callback(null, recordsets);
+            }).catch(function(err) {
+                // console.log(err, 'Entre al ERROR')
+                callback(err);
+            });
+    });
+};
 
 //exportación del modelo
 module.exports = DataAccess;

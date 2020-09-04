@@ -972,7 +972,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         // }
 
                                         // value2.montoCompensar = value2.cargo - $scope.unidadCompensacion.importe;
-                                        value2.montoCompensar = value2.saldo;
+                                        if (value2.saldo > $scope.unidadCompensacion.saldo) {
+                                            value2.montoCompensar = $scope.unidadCompensacion.saldo;
+                                        } else {
+                                            value2.montoCompensar = value2.saldo;
+                                        }
                                         value2.montoCompensar = value2.montoCompensar.toFixed(2);
                                         if (value2.tipoProducto == 'FU') {
                                             $scope.saldoFU = value2.montoCompensar;
@@ -996,6 +1000,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
                                 // $scope.unidadCompensacion.montoCompensar = $scope.unidadCompensacion.montoCompensar; 
                                 $scope.unidadCompensacion.montoCompensar = $scope.unidadCompensacion.saldo;
+                                $scope.unidadCompensacion.montoCompensar = $scope.unidadCompensacion.montoCompensar.toFixed(2);
                                 $scope.saldoFU = $scope.saldoFU - $scope.engancheCotizacion.ucu_impenganche;
                                 console.log($scope.unidadCompensacion.montoCompensar, 'MMMTTAAAA')
                                 // });
@@ -1158,7 +1163,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         var saldoNcr = 0;
         var FacturaUN = 0;
         angular.forEach($scope.facturasTotal, function(value, key) {
-            if (value.tipoProducto == 'FA' && value.garantia == 1 ) {
+            if (value.tipoProducto == 'FA' && value.garantia == 1) {
                 saldoNcr = value.montoCompensar * 0.75;
                 FacturaUN = value.factura;
                 console.log(saldoNcr, 'El saldo de la nota de credito')
@@ -1261,6 +1266,18 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         tiempo: tiempo,
                         consecutivo: auxConta
                     }
+                    var preLoteCompensacion = [{
+                        'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
+                        'idUsuario': $scope.idUsuario,
+                        'idPoliza':$scope.LastId,
+                        'pagoCompensacion': $scope.unidadCompensacion.saldo - $scope.saldoCompensar - saldoNcr,
+                        'estatus': 1
+                    }];
+                    interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result){
+                        console.log(result)
+                    }, function err(error){
+                        console.log(error)
+                    });
                     break;
                 default:
                     paraCompensacionDetalle = {
@@ -1342,27 +1359,47 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.sumaCompensar = function(factura, index, oldValue) {
         console.log(factura, index, event)
         if (factura.montoCompensar <= factura.saldo) {
-            $scope.facturasTotal[index].montoCompensar = factura.montoCompensar;
-            //unidadCompensacion
-            var auxSumaCxc = 0;
-            var auxSumaCxcTotal = 0;
-            // $scope.auxSumaCxp = 0;
-            // $scope.auxSumaCxp = $scope.auxSumaCxp + $scope.unidadCompensacion.montoCompensar;
-            // totalCompensar();
-            angular.forEach($scope.facturasTotal, function(value, key) {
-                if (value.tipoProducto == 'FU') {
-                    auxSumaCxc = value.montoCompensar
+            if (factura.montoCompensar <= $scope.unidadCompensacion.montoCompensar) {
+                $scope.facturasTotal[index].montoCompensar = factura.montoCompensar;
+                //unidadCompensacion
+                var auxSumaCxc = 0;
+                var auxSumaCxcTotal = 0;
+                // $scope.auxSumaCxp = 0;
+                // $scope.auxSumaCxp = $scope.auxSumaCxp + $scope.unidadCompensacion.montoCompensar;
+                // totalCompensar();
+                angular.forEach($scope.facturasTotal, function(value, key) {
+                    if (value.tipoProducto == 'FU') {
+                        auxSumaCxc = value.montoCompensar
+                    }
+                    auxSumaCxcTotal = auxSumaCxcTotal + Number(value.montoCompensar);
+                });
+                if (auxSumaCxcTotal <= $scope.unidadCompensacion.montoCompensar) {
+                    $scope.saldoFU = auxSumaCxc;
+                    $scope.saldoCompensar = auxSumaCxcTotal;
+                    $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
+                } else {
+                    $scope.facturasTotal[index].montoCompensar = oldValue;
+                    alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
                 }
-                auxSumaCxcTotal = auxSumaCxcTotal + Number(value.montoCompensar);
-            });
-            $scope.saldoFU = auxSumaCxc;
-            $scope.saldoCompensar = auxSumaCxcTotal;
-            $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
-        }else{
+
+            } else {
+                $scope.facturasTotal[index].montoCompensar = oldValue;
+                alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
+            }
+        } else {
             $scope.facturasTotal[index].montoCompensar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
 
+    };
+    $scope.sumaCompensarCxP = function(newValue, oldValue) {
+        console.log(newValue, oldValue, 'CuentasXpagar')
+        if (newValue <= $scope.unidadCompensacion.saldo) {
+            $scope.unidadCompensacion.montoCompensar = newValue;
+        } else {
+            $scope.unidadCompensacion.montoCompensar = oldValue;
+            alertFactory.warning('No puede ingresar un valor mayor al saldo');
+        }
     };
     var totalCompensar = function() {
         $scope.montoCompensar = $scope.auxSumaCxp;
