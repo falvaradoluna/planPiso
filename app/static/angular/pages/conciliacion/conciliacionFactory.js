@@ -224,6 +224,97 @@ appModule.factory('conciliacionFactory', function($http) {
                 params:parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }   
+        },    getreadFile: function( parametros ) {
+            return $http({
+                url: conciliacionUrl + 'readFile/',
+                method: "GET",
+                params:parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+
+        getReporteTesoreria: function(myJson) {
+            console.log(myJson);
+            return $http({
+                //LQMA changed 01022018
+                //url: 'http://189.204.141.193:5488/api/report',
+                url: 'http://192.168.20.89:5488/api/report',
+                method: "POST",
+                data: {
+                    template: { name: myJson.template.name },
+                    data: myJson.data
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            });
+        }, getAbonoContable: function(id) {
+            return $http({
+                url: conciliacionUrl + 'abonoContable/',
+                method: "GET",
+                params: {
+                   
+                    id:id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+        getCargoContable: function(id) {
+            return $http({
+                url: conciliacionUrl + 'cargoContable/',
+                method: "GET",
+                params: {                    
+                    id:id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+        getCargoBancario: function(id) {
+            return $http({
+                url: conciliacionUrl + 'cargoBancario/',
+                method: "GET",
+                params: {                    
+                    id:id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+        getAbonoBancario: function(id) {
+            return $http({
+                url: conciliacionUrl + 'abonoBancario/',
+                method: "GET",
+                params: {                    
+                    id:id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+        getDatosReporte: function(id) {
+            return $http({
+                url: conciliacionUrl + 'DatosReporte/',
+                method: "GET",
+                params: {                    
+                    id:id
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        }
+
     };
 });

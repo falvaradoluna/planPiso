@@ -291,6 +291,21 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
+        , Meses: function(financieraID) {
+            return $http({
+                url: interesesUrl + 'Meses/',
+                method: "GET",
+                params: {financieraID:financieraID},
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }, RecalculaInteres: function(params) {
+            return $http({
+                url: interesesUrl + 'RecalculaInteres/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
     };
 });

@@ -518,8 +518,8 @@ ApiInteres.prototype.get_Refacciones = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT },
-    { name: 'vin', value: req.query.vin, type: self.model.types.STRING }
-        
+        { name: 'vin', value: req.query.vin, type: self.model.types.STRING }
+
     ];
 
     self.model.query('uspGetRefacciones', params, function(error, result) {
@@ -542,6 +542,39 @@ ApiInteres.prototype.post_insertaDocumentosLoteCompensacion = function(req, res,
             error: error,
             result: result
         });
-    });    
+    });
 };
+ApiInteres.prototype.get_Meses = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT }];
+
+    self.model.query('uspGetMeses', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_RecalculaInteres = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'financieraId', value: req.query.financieraId, type: self.model.types.INT },
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT },
+        { name: 'mes', value: req.query.mes, type: self.model.types.INT }
+
+    ];
+
+    self.model.query('Usp_RecalculaInteres_INS', params, function(error, result) { 
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiInteres;

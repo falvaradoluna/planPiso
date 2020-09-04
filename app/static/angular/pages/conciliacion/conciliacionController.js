@@ -1,4 +1,4 @@
-appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory,  commonFactory, staticFactory, filterFilter ) {
+appModule.controller('conciliacionController', function($scope, $rootScope, $location, conciliacionFactory,  commonFactory, staticFactory, filterFilter, utils ,$window,$sce ) {
     $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
     $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
     $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -947,4 +947,249 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             });
         }
     }
+    $scope.VerArchivo=function(){
+
+       var arregloBytes = [];
+        $rootScope.pdf = undefined;
+        conciliacionFactory.getreadFile().then(function(result) {
+            arregloBytes = result.data;
+    
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdf = 1;
+                $rootScope.pdf = [];
+            } else {
+    
+                $rootScope.NohayPdf = undefined;
+                $rootScope.excel = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+    
+                $('#polizaCancelada').modal('show');
+            }
+    
+            setTimeout(function() {
+                $window.open($rootScope.excel);
+            }, 100);
+            $('#mdlLoading').modal('hide');
+            console.log( $rootScope.excel , 'Soy el arreglo ')
+        }, function(error) {
+            console.log("Error", error);
+        });
+            
+    
+       
+    }
+
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    $scope.reporteConsulta = function(){
+        console.log( 'Loading...' );
+     //   $('#mdlLoading').modal('show');
+        $scope.abonosContables=[];
+        $scope.abonosBancarios=[];
+        $scope.cargosContables=[];
+        $scope.cargosBancarios=[];
+        $scope.totalAbonoContable = 0;
+        $scope.totalAbonoBancario = 0;
+        $scope.totalCargoContable = 0;
+        $scope.totalCargoBancario = 0;
+        conciliacionFactory.getDatosReporte($scope.idconciliacion)
+        .then(function(result) {
+            if (result.data.length > 0) {
+                    $scope.busqueda = result.data[0];
+              
+            }
+            $scope.getAbonoContable();
+            
+        });
+      
+       
+       
+    };  
+    $scope.getAbonoContable = function() {
+        conciliacionFactory.getAbonoContable($scope.idconciliacion)
+        .then(function(result) {
+            if (result.data.length > 0) {
+                    $scope.abonosContables = result.data;
+                    for (var i = 0, len = result.data.length; i < len; i++)
+                        $scope.totalAbonoContable = $scope.totalAbonoContable + result.data[i].saldo;
+               
+            } else {
+                $scope.abonosContables = [];
+                $scope.totalAbonoContable = 0;
+            }
+            $scope.getAbonoBancario();
+            
+        });
+    };
+    $scope.getAbonoBancario = function() {
+        conciliacionFactory.getAbonoBancario($scope.idconciliacion)
+        .then(function(result) {
+            if (result.data.length > 0) {
+  
+                    $scope.abonosBancarios = result.data;
+                    for (var i = 0, len = result.data.length; i < len; i++)
+                        $scope.totalAbonoBancario = $scope.totalAbonoBancario + result.data[i].saldo;
+
+                   
+            }
+            else
+            {
+                $scope.abonosBancarios = [];
+                $scope.totalAbonoBancario = 0;
+            }
+            $scope.getCargoContable();
+        });
+    };
+    $scope.getCargoContable = function() {
+        conciliacionFactory.getCargoContable($scope.idconciliacion)
+        .then(function(result) {
+            if (result.data.length > 0) {
+                    $scope.cargosContables = result.data;
+                    for (var i = 0, len = result.data.length; i < len; i++)
+                        $scope.totalCargoContable = $scope.totalCargoContable + result.data[i].saldo;
+            } else {
+                $scope.cargosContables = [];
+                $scope.totalCargoContable = 0;
+            }
+                $scope.getCargoBancario();
+        });
+    };
+    $scope.getCargoBancario = function() {
+        conciliacionFactory.getCargoBancario($scope.idconciliacion)
+        .then(function(result) {
+            if (result.data.length > 0) {
+                    $scope.cargosBancarios = result.data;
+
+                    for (var i = 0, len = result.data.length; i < len; i++)
+                        $scope.totalCargoBancario = $scope.totalCargoBancario + result.data[i].saldo;
+               
+            }else{
+                $scope.cargosBancarios = [];
+                $scope.totalCargoBancario = 0;
+
+            }
+           
+       $scope.generarLoading($scope.abonosContables,$scope.abonosBancarios,$scope.cargosContables,$scope.cargosBancarios);
+
+            
+        });
+    };
+    $scope.generarLoading = function(abonosContables,abonosBancarios,cargosContables,cargosBancarios){
+       
+        
+        $scope.generaInfoReport(abonosContables,abonosBancarios,cargosContables,cargosBancarios);    
+         
+     
+    };
+
+
+    $scope.generaInfoReport = function (abonosContables,abonosBancarios,cargosContables,cargosBancarios) {
+        console.log( 'GO!' );
+       //  $('#Loading').modal('show');
+
+        // Validamos fecha de elaboración
+        var mesAux = 9;
+        var d = new Date(2020, mesAux, 0);
+
+        var newDate =  2020 + '/' + zfill(mesAux,2) + '/' + 10;
+
+        $('reproteModalPdf').modal('show');
+        //Genero la promesa para enviar la estructura del reporte 
+        new Promise(function (resolve, reject) {
+            var rptDetalleConciliacionBancaria=[];
+                rptDetalleConciliacionBancaria =
+            {
+                "titulo": "CONCILIACIÓN  PLAN PISO",
+                "titulo2": "BANCOS",
+                "titulo3": "FA04",
+                "empresa": $scope.busqueda.Empresa,
+                "fechaElaboracion": newDate,
+                "conciliacionBancaria": $scope.busqueda.Financiera,
+                "chequera": newDate,
+                "bancoCuenta": $scope.busqueda.Cuenta,
+                "clabe": $scope.busqueda.Cuenta,
+                "cuentaContable": $scope.busqueda.CuentaContable,
+                "estadoCuenta": 0,
+                "aCNB":  $scope.totalAbonoContable,
+                "aBNC": $scope.totalAbonoBancario,
+                "cCNB": $scope.totalCargoContable,
+                "cBNC": $scope.totalCargoBancario,
+                "saldoConciliacion": 0,
+                "saldoContabilidad": 0,
+                "diferencia": 0,
+                //Detalle de Diferencias
+                "DetalleAbonosContables": abonosContables,
+                "DetalleAbonosBancarios": abonosBancarios,
+                "DetalleCargosContables": cargosContables,
+                "DetalleCargoBancario": cargosBancarios,
+
+                "firmas":
+                    [
+                        {
+                            "titulo": "ELABORÓ",
+
+                            "nombre": "JOSUÉ ELÍAS PÉREZ RODRÍGUEZ",
+
+                            "fecha": ""
+                        },
+                        {
+                            "titulo": "GERENTE ADMINISTRATIVO",
+                            "nombre": "JUAN ARTURO LOPEZ",
+                            "fecha": ""
+                        },
+                        {
+                            "titulo": "CONTADOR",
+                            "nombre": "GUADALUPE HERNANDEZ",
+                            "fecha": ""
+                        }
+                    ]
+            };
+            var jsonData = {
+                "template": {
+                    "name": "ResumenConciliacionPP_rpt"
+                },
+                "data": rptDetalleConciliacionBancaria
+            }
+            resolve(jsonData);
+        }).then(function (jsonData) {
+            conciliacionFactory.getReporteTesoreria(jsonData).then(function (result) {
+                $('#Loading').modal('hide');
+                var file = new Blob([result.data], { type: 'application/pdf' });
+                var fileURL = URL.createObjectURL(file);
+                $scope.rptResumenConciliacion = $sce.trustAsResourceUrl(fileURL);
+               
+                $("<object id='embedReporte' data="+$scope.rptResumenConciliacion+" style='width:800px;height:800px;'></object>").appendTo('#htmlReporteConciliacion');
+                $('#reproteModalPdf').modal('show');
+                                
+                $scope.abonosContables=[];
+                $scope.abonosBancarios=[];
+                $scope.cargosContables=[];
+                $scope.cargosBancarios=[];
+            });
+        });
+   
+    };
+    $("#reproteModalPdf").on('hidden.bs.modal', function () {
+        $("#embedReporte").remove();
+    });
+    function zfill(number, width) {
+        var numberOutput = Math.abs(number); /* Valor absoluto del número */
+        var length = number.toString().length; /* Largo del número */ 
+        var zero = "0"; /* String de cero */  
+        
+        if (width <= length) {
+            if (number < 0) {
+                 return ("-" + numberOutput.toString()); 
+            } else {
+                 return numberOutput.toString(); 
+            }
+        } else {
+            if (number < 0) {
+                return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+            } else {
+                return ((zero.repeat(width - length)) + numberOutput.toString()); 
+            }
+        }
+    }
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
 });
