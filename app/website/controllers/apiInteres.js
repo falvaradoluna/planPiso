@@ -568,7 +568,7 @@ ApiInteres.prototype.get_RecalculaInteres = function(req, res, next) {
 
     ];
 
-    self.model.query('Usp_RecalculaInteres_INS', params, function(error, result) { 
+    self.model.query('Usp_RecalculaInteres_INS', params, function(error, result) {
 
         self.view.expositor(res, {
             error: error,
@@ -576,5 +576,132 @@ ApiInteres.prototype.get_RecalculaInteres = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_historiaFolios = function(req, res, next) {
 
+    var self = this;
+
+    var params = [
+        { name: 'folioTPP', value: req.query.folio, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_historialFolios', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_movimientosFolio = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'CCP_IDDOCTO', value: req.query.folio, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_movimientosFolio', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_historialCotizacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'folioTPP', value: req.query.folio, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_historialCotizacion', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_facturaUnidadH = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_facturaUnidadConsulta', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_facturaTramitesH = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_facturaTramitesConsulta', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_facturaServiciosH = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_facturaServicioConsulta', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_facturaOTH = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_facturaOTConsulta', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_facturaAccesoriosH = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+    console.log(params)
+    self.model.query('usp_get_facturaAccerosioConsulta', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

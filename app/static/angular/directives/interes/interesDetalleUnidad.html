@@ -1,9 +1,9 @@
 <style>
-    .detailCol {
-        padding-right: 20px;
-        padding-bottom: 5px;
-        font-weight: bold;
-    }
+.detailCol {
+    padding-right: 20px;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
 </style>
 <h2>Detalle Unidad</h2>
 <hr>
@@ -120,7 +120,6 @@
                 <td class="detailCol">Nombre:</td>
                 <td>{{unitDetailEsquema.nombre}}</td>
             </tr>
-
             <tr>
                 <td class="detailCol">Días Gracia:</td>
                 <td>{{unitDetailEsquema.diasGracia}} días</td>
@@ -133,7 +132,6 @@
                 <td class="detailCol">Intéres Moratorio: </td>
                 <td>{{unitDetailEsquema.interesMoratorio}} %</td>
             </tr>
-
         </table>
     </div>
     <div class="col-md-8">
@@ -146,7 +144,6 @@
                 <th>Esquema</th>
                 <th>Interes acumulado</th>
                 <th>Fecha</th>
-
             </tr>
             <tr ng-repeat="itemDetail in lstSchemeDetail ">
                 <td>{{itemDetail.tipoMovimiento }}</td>
@@ -156,15 +153,12 @@
                 <td>{{itemDetail.esquema }}</td>
                 <td>{{itemDetail.monto | number:2}}</td>
                 <td>{{itemDetail.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
-
             </tr>
         </table>
     </div>
-  
     <div class="row">
         <hr>
         <div class="col-md-12">
-            
             <div class="col-md-12">
                 <h2><span class="glyphicon glyphicon-stats"></span>Intereses</h2>
             </div>
@@ -198,9 +192,68 @@
                     <td>{{item.dias }}</td>
                     <td>{{item.totalInteres | number:2}}</td>
                     <td>{{item.fechaejecucion | date:'dd/MM/yyyy' : 'UTC'}}</td>
-    
                 </tr>
             </table>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <h2><span class="glyphicon glyphicon-folder-open"></span> Cuentas por pagar </h2>
+        <div ng-repeat="historialFolio in historialFolios">
+            <div class="col-md-12">
+                <h3> {{historialFolio.oce_folioorden}} </h3>
+            </div>
+            <div class="col-md-12" ng-show="historialFolio.detalle.length > 0">
+                <table id="tblAddByDate" class="table table-striped">
+                    <tr>
+                        <th>Tipo Movimiento</th>
+                        <th>Sucursal Destino</th>
+                        <th>Sucursal Origen</th>
+                        <th>Financiera</th>
+                        <th>Esquema</th>
+                        <th>Interes acumulado</th>
+                        <th>Fecha</th>
+                    </tr>
+                    <tr ng-repeat="detalleHistorial in historialFolio.detalle ">
+                        <td>{{detalleHistorial.tipoMovimiento }}</td>
+                        <td>{{detalleHistorial.sucorigen }}</td>
+                        <td>{{detalleHistorial.sucdestino }}</td>
+                        <td>{{detalleHistorial.financiera }}</td>
+                        <td>{{detalleHistorial.esquema }}</td>
+                        <td>{{detalleHistorial.monto | number:2}}</td>
+                        <td>{{detalleHistorial.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row" ng-show="cotizacionHistorial.length > 0">
+        <h2><span class="glyphicon glyphicon-folder-open"></span> Cuentas por cobrar </h2>
+        <div ng-repeat="cotizacion in cotizacionHistorial">
+            <div class="col-md-12">
+                <h3> {{cotizacion.ucu_foliocotizacion}} </h3>
+            </div>
+            <div class="col-md-12">
+                <table id="tblAddByDate" class="table table-striped">
+                    <tr>
+                        <th>Tipo Factura</th>
+                        <th>Factura</th>
+                        <th>Monto</th>
+                        <th>Saldo</th>
+                        <th>Fecha</th>
+                    </tr>
+                    <tr ng-repeat="detalleCotiza in cotizacion.detalle | orderBy:'fecha'">
+                        <td>{{detalleCotiza.tipoFactura }}</td>
+                        <td>{{detalleCotiza.factura }}</td>
+                        <td>{{detalleCotiza.total }}</td>
+                        <td>{{detalleCotiza.saldo }}</td>
+                        <td>{{detalleCotiza.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
