@@ -267,19 +267,20 @@ appModule.factory('interesFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }, guardarTraspaso: function(params) {
+        },
+        guardarTraspaso: function(params) {
             return $http({
                 url: interesesUrl + 'guardarTraspaso/',
                 method: "GET",
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
-        , Refacciones: function(sucursalID,vin) {
+        },
+        Refacciones: function(sucursalID, vin) {
             return $http({
                 url: interesesUrl + 'Refacciones/',
                 method: "GET",
-                params: {sucursalID:sucursalID,vin:vin},
+                params: { sucursalID: sucursalID, vin: vin },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -290,15 +291,16 @@ appModule.factory('interesFactory', function($http) {
                 data: array,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
-        , Meses: function(financieraID) {
+        },
+        Meses: function(financieraID) {
             return $http({
                 url: interesesUrl + 'Meses/',
                 method: "GET",
-                params: {financieraID:financieraID},
+                params: { financieraID: financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }, RecalculaInteres: function(params) {
+        },
+        RecalculaInteres: function(params) {
             return $http({
                 url: interesesUrl + 'RecalculaInteres/',
                 method: "GET",
@@ -310,6 +312,113 @@ appModule.factory('interesFactory', function($http) {
                 url: interesesUrl + 'ResumenInteresMes/',
                 method: "GET",
                 params: {idfinanciera:idfinanciera},
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        historiaFolios: function(folio) {
+            return $http({
+                url: interesesUrl + 'historiaFolios/',
+                method: "GET",
+                params: { folio: folio },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        movimientosFolio: function(folio) {
+            return $http({
+                url: interesesUrl + 'movimientosFolio/',
+                method: "GET",
+                params: { folio: folio },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        historialCotizacion: function(folio) {
+            return $http({
+                url: interesesUrl + 'historialCotizacion/',
+                method: "GET",
+                params: { folio: folio },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+
+        facturaUnidadH: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaUnidadH/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaTramitesH: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaTramitesH/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaServiciosH: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaServiciosH/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaOTH: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaOTH/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        facturaAccesoriosH: function(idEmpresa, idSucursal, documento) {
+            return $http({
+                url: interesesUrl + 'facturaAccesoriosH/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idSucursal: idSucursal,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        movimientoscxp: function(folio) {
+            return $http({
+                url: interesesUrl + 'movimientoscxp/',
+                method: "GET",
+                params: {
+                    folio: folio
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        movimientoscxc: function(folio, documento) {
+            return $http({
+                url: interesesUrl + 'movimientoscxc/',
+                method: "GET",
+                params: {
+                    folio: folio,
+                    documento: documento
+                },
+
                 headers: { 'Content-Type': 'application/json' }
             });
         }

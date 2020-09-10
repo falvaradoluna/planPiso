@@ -400,12 +400,12 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     }
     $scope.setPnlRecalcular = function() {
         $scope.currentPanel = "pnlRecalcular";
-        $scope.deshabilitaBoton=false;
+        $scope.deshabilitaBoton = false;
         //  location.reload();
         commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
             $scope.lstFinanciale = result.data;
         });
-        $scope.currentFinancialeName='Selecciona Financiera';
+        $scope.currentFinancialeName = 'Selecciona Financiera';
     };
     $scope.setCurrentFinanciale = function(financialeObj) {
         //  $scope.currentPanel = "pnlResumen";
@@ -421,12 +421,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         //  $scope.currentPanel = "pnlResumen";
         $scope.currentMesName = mesObj.mes;
         $scope.currentMes = mesObj;
-        
+
     };
-    $scope.recalculaInteres = function()
-    {
+    $scope.recalculaInteres = function() {
         swal({
-            title: "Recalcular Intereses", 
+            title: "Recalcular Intereses",
             text: "¿Esta seguro de recalcular intereses?",
             type: "warning",
             showCancelButton: true,
@@ -435,7 +434,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             cancelButtonText: "Cerrar"
         }, function() {
             $('#mdlLoading').modal('show');
-            $scope.deshabilitaBoton=true;
+            $scope.deshabilitaBoton = true;
             var data = {
                 financieraId: $scope.currentFinanciale.financieraID,
                 anio: $scope.currentMes.anio,
@@ -444,15 +443,15 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             interesFactory.RecalculaInteres(data).then(function(result) {
                 if (result.data.length > 0) {
                     $('#mdlLoading').modal('hide');
-                    $scope.deshabilitaBoton=false;
+                    $scope.deshabilitaBoton = false;
                     swal("Ok", "Se recalculo con exito", "success");
                     $scope.setPnlInteres();
                 }
-             
-               
-              
+
+
+
             });
-    
+
         });
 
     }
@@ -460,6 +459,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     //     $('#selectReporte').modal('hide');
     ///////////////////////////
     $scope.setPnlDetalleUnidad = function(unidad) {
+        historiaFolios(unidad.CCP_IDDOCTO);
         interesFactory.getDetailUnits(unidad.unidadID).then(function(result) {
             $scope.unitDetail = result.data[0];
             var data = {
@@ -1341,13 +1341,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     var preLoteCompensacion = [{
                         'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
                         'idUsuario': $scope.idUsuario,
-                        'idPoliza':$scope.LastId,
+                        'idPoliza': $scope.LastId,
                         'pagoCompensacion': $scope.unidadCompensacion.saldo - $scope.saldoCompensar - saldoNcr,
                         'estatus': 1
                     }];
-                    interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result){
+                    interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result) {
                         console.log(result)
-                    }, function err(error){
+                    }, function err(error) {
                         console.log(error)
                     });
                     break;
@@ -1489,5 +1489,84 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     /////////////////////////////
     ///////////////////////////
+    // Obtiene historial de folios
+    var historiaFolios = function(folio) {
+        interesFactory.historiaFolios(folio).then(function(result) {
+            console.log(result.data, 'HISTORIAL');
+            $scope.historialFolios = result.data;
+            var promises = [];
+            $scope.historialFolios.map((value) => {
+                promises.push(interesFactory.movimientosFolio(value.oce_folioorden));
+            })
+            Promise.all(promises).then(function response(result) {
+                var respuesta = result;
+                console.log(respuesta);
+                angular.forEach($scope.historialFolios, function(value, key) {
+                    console.log(respuesta[key].data, 'que pasa');
+                    value.detalle = respuesta[key].data;
+                });
+                console.log($scope.historialFolios, 'Como quedo')
+            });
+        }, function error(err) {
+            console.log('Ocurrio un error al tratar de obtener el historial de los folios', err);
+        });
+        interesFactory.historialCotizacion(folio).then(function success(result) {
+            console.log(result.data)
+            $scope.cotizacionHistorial = result.data;
+            if ($scope.cotizacionHistorial.length > 0) {
+                var facturas = [];
+                $scope.cotizacionHistorial.map((value) => {
+                    facturas.push(interesFactory.facturaUnidadH(value.ucu_idempresa, value.ucu_idsucursal, folio));
+                    facturas.push(interesFactory.facturaTramitesH(value.ucu_idempresa, value.ucu_idsucursal, folio));
+                    facturas.push(interesFactory.facturaServiciosH(value.ucu_idempresa, value.ucu_idsucursal, folio));
+                    facturas.push(interesFactory.facturaOTH(value.ucu_idempresa, value.ucu_idsucursal, folio));
+                    facturas.push(interesFactory.facturaAccesoriosH(value.ucu_idempresa, value.ucu_idsucursal, folio));
+                })
+
+
+                Promise.all(facturas).then(function(results) {
+                    var resultadoFacturas = results
+                    $scope.cotizacionHistorial[0].detalle = [];
+                    angular.forEach(resultadoFacturas, function(value, key) {
+                        if (value.data.length > 0) {
+                            angular.forEach(value.data, function(value2, key) {
+                                $scope.$apply(function() {
+                                    $scope.cotizacionHistorial[0].detalle.push(value2);
+                                });
+                            });
+                        }
+                    });
+                    console.log($scope.cotizacionHistorial, 'Queda Cotizacion')
+                });
+            }
+        }, function error(err) {
+            console.log(err)
+        });
+    };
+    $scope.movimientoscxp = function(folio) {
+        $scope.movimientos = [];
+        $scope.documentoModal = "";
+        $scope.documentoModal = folio;
+        interesFactory.movimientoscxp(folio).then(function success(result) {
+            console.log(result.data);
+            $scope.movimientos = result.data;
+            $("#movimientoDocumento").modal('show');
+        }, function error(err) {
+            console.log(err, 'Ocurrio un error al obtener los movimientos')
+        });
+    };
+    $scope.movimientocxc = function(folio, documento) {
+        $scope.movimientos = [];
+        $scope.documentoModal = "";
+        $scope.documentoModal = folio;
+        interesFactory.movimientoscxc(folio, documento).then(function success(result) {
+            console.log(result.data);
+            $scope.movimientos = result.data;
+            $("#movimientoDocumento").modal('show');
+        }, function error(err) {
+            console.log(err, 'Ocurrio un error al obtener los movimientos')
+        });
+    };
+    // 
 
 });
