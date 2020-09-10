@@ -704,4 +704,37 @@ ApiInteres.prototype.get_facturaAccesoriosH = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_movimientoscxp = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'folio', value: req.query.folio, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_movimientosCxp', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_movimientoscxc = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'folio', value: req.query.folio, type: self.model.types.STRING },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_movimientoscxc', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

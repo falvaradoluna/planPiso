@@ -392,6 +392,27 @@ appModule.factory('interesFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        movimientoscxp: function(folio) {
+            return $http({
+                url: interesesUrl + 'movimientoscxp/',
+                method: "GET",
+                params: {
+                    folio: folio
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        movimientoscxc: function(folio, documento) {
+            return $http({
+                url: interesesUrl + 'movimientoscxc/',
+                method: "GET",
+                params: {
+                    folio: folio,
+                    documento: documento
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

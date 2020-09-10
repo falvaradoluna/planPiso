@@ -1529,6 +1529,30 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             console.log(err)
         });
     };
+    $scope.movimientoscxp = function(folio) {
+        $scope.movimientos = [];
+        $scope.documentoModal = "";
+        $scope.documentoModal = folio;
+        interesFactory.movimientoscxp(folio).then(function success(result) {
+            console.log(result.data);
+            $scope.movimientos = result.data;
+            $("#movimientoDocumento").modal('show');
+        }, function error(err) {
+            console.log(err, 'Ocurrio un error al obtener los movimientos')
+        });
+    };
+    $scope.movimientocxc = function(folio, documento) {
+        $scope.movimientos = [];
+        $scope.documentoModal = "";
+        $scope.documentoModal = folio;
+        interesFactory.movimientoscxc(folio, documento).then(function success(result) {
+            console.log(result.data);
+            $scope.movimientos = result.data;
+            $("#movimientoDocumento").modal('show');
+        }, function error(err) {
+            console.log(err, 'Ocurrio un error al obtener los movimientos')
+        });
+    };
     // 
 
 });
