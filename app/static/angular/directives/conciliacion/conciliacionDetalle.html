@@ -115,6 +115,7 @@
             <th>Numero Serie</th>
             <th>Saldo G.A.</th>
             <th>Sando Financiera</th>
+            <th>Interes Acumulado Grupo Andrade</th>
             <th>Interes Grupo Andrade</th>
             <th>Interes Financiera</th>
             <th ng-show="ajusteManual">Ajuste de Interes</th>
@@ -137,6 +138,7 @@
             </td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.valor | currency}}</td>
+            <td>{{dato.InteresAcumulado | currency}}</td>
             <td>{{dato.InteresMesActual | currency}}</td>
             <td>{{dato.interes | currency}}</td>
             <td ng-show="ajusteManual" width="120" style="border-left: solid 1px #ddd; 

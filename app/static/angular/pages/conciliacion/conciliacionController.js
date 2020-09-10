@@ -557,6 +557,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             movimientoID:           item.movimientoID,
                             CCP_IDDOCTO:            item.CCP_IDDOCTO,
                             VIN:                    item.numeroSerie,
+                            interesAcumuladoGA:     item.InteresMesAcumulado,
                             interesGrupoAndrade:    item.InteresMesActual,
                             interesFinanciera:      item.interes,
                             interesAjuste:          item.ajuste,

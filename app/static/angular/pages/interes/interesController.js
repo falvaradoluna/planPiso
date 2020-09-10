@@ -691,7 +691,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.callPayInteres = function() {
 
-
+        $scope.lstSelectPay=[];
         $scope.currentPanel = "pnlPagoInteres";
         $scope.lstNewUnits.forEach(function(item) {
             if (item.isChecked === true) {
@@ -699,6 +699,12 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 $scope.lstSelectPay.push(item);
 
             }
+        });
+        interesFactory.ResumenInteresMes($scope.lstSelectPay[0].financieraID).then(function success(result) {
+            $scope.lstInteresesMes=result.data;
+            
+        }, function error(err) {
+            console.log(err)
         });
 
     };
@@ -722,7 +728,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.CrearProvision = function() {
         swal({
             title: "¿Esta seguro?",
-            text: "Se creara la poliza para el pago de interes para las unidades seleccionadas.",
+            text: "Se creara la poliza para el pago de interes para la financiera de la unidad seleccionada.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
@@ -735,13 +741,21 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 var paraProvision = {
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza: 7 //cambio de financiera
+                    idtipopoliza: 7,
+                    idFinanciera:$scope.lstSelectPay[0].financieraID
                 }
 
-                interesFactory.getProvisionToday(paraProvision).then(function(respuesta) {
+                interesFactory.ProvisionFinancieraDetalle(paraProvision).then(function(respuesta) {
                     $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsProvisions = filterFilter($scope.lstNewUnits, { isChecked: true });
-                    $scope.guardaProvisionDetalle();
+                    if (response.length != 0) {
+                        swal({
+                            title: "Provisión Plan Piso",
+                            text: "Se ha efectuado correctamente su Provisión.",
+                            type: "warning"
+                        }, function() {
+                            location.reload();
+                        });
+                    }
                 }, function(error) {
                     $scope.error(error.data.Message);
                 });
@@ -751,43 +765,43 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
     }
     var contProvisionDetalle = 0;
-    $scope.guardaProvisionDetalle = function() {
-        if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
-            var item = $scope.lstUnitsProvisions[contProvisionDetalle];
-            var paraProvisionDetalle = {
-                idpoliza: $scope.LastId,
-                idmovimiento: item.movimientoID,
-                idUsuario: $scope.idUsuario,
-                saldo: item.InteresMes
-            }
+    // $scope.guardaProvisionDetalle = function() {
+    //     if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
+    //         var item = $scope.lstUnitsProvisions[contProvisionDetalle];
+    //         var paraProvisionDetalle = {
+    //             idpoliza: $scope.LastId,
+                
+    //             idUsuario: $scope.idUsuario,
+    //             saldo: item.InteresMes
+    //         }
 
-            interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function(response) {
-                if (response.length != 0) {
-                    if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
-                        contProvisionDetalle++;
-                        $scope.guardaProvisionDetalle();
-                    }
-                }
-            }, function(error) {
-                $scope.error(error.data.Message);
-            });
-        } else {
-            // swal("Provision Plan Piso", "Se ha efectuado correctamente su Provision.");
-            interesFactory.procesaReduccion($scope.LastId).then(function(response) {
-                if (response.length != 0) {
-                    swal({
-                        title: "Provisión Plan Piso",
-                        text: "Se ha efectuado correctamente su Provisión.",
-                        type: "warning"
-                    }, function() {
-                        location.reload();
-                    });
-                }
-            }, function(error) {
-                $scope.error(error.data.Message);
-            });
-        }
-    }
+    //         interesFactory.ProvisionFinancieraDetalle(paraProvisionDetalle).then(function(response) {
+    //             if (response.length != 0) {
+    //                 if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
+    //                     contProvisionDetalle++;
+    //                     $scope.guardaProvisionDetalle();
+    //                 }
+    //             }
+    //         }, function(error) {
+    //             $scope.error(error.data.Message);
+    //         });
+    //     } else {
+    //         // swal("Provision Plan Piso", "Se ha efectuado correctamente su Provision.");
+    //         interesFactory.procesaReduccion($scope.LastId).then(function(response) {
+    //             if (response.length != 0) {
+    //                 swal({
+    //                     title: "Provisión Plan Piso",
+    //                     text: "Se ha efectuado correctamente su Provisión.",
+    //                     type: "warning"
+    //                 }, function() {
+    //                     location.reload();
+    //                 });
+    //             }
+    //         }, function(error) {
+    //             $scope.error(error.data.Message);
+    //         });
+    //     }
+    // }
     $scope.CrearPago = function() {
         swal({
             title: "¿Esta seguro?",

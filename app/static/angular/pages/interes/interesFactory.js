@@ -305,6 +305,13 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        }, ResumenInteresMes: function(idfinanciera) {
+            return $http({
+                url: interesesUrl + 'ResumenInteresMes/',
+                method: "GET",
+                params: {idfinanciera:idfinanciera},
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

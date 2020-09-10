@@ -25,9 +25,15 @@ ApiConciliacion.prototype.get_insExcelData = function(req, res, next) {
 
     var self = this;
     var itemObject = JSON.parse(req.query.lstUnidades);
+if(itemObject.dato2==undefined)
+itemObject.dato2=0;
+if(itemObject.dato3==undefined)
+itemObject.dato3=0;
+if(itemObject.consecutivo==undefined)
+itemObject.consecutivo=0;
     var params = [{ name: 'numeroSerie', value: itemObject.dato1, type: self.model.types.STRING },
-        { name: 'valor', value: itemObject.dato2, type: self.model.types.INT },
-        { name: 'interes', value: itemObject.dato3, type: self.model.types.INT },
+        { name: 'valor', value: itemObject.dato2, type: self.model.types.DECIMAL },
+        { name: 'interes', value: itemObject.dato3, type: self.model.types.DECIMAL },
         { name: 'consecutivo', value: itemObject.consecutivo, type: self.model.types.INT }
     ];
 
