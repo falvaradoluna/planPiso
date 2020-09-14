@@ -40,6 +40,7 @@
             <th>Número serie</th>
             <th>Ubicación</th>
             <th>Situación</th>
+            <th>Saldo</th>
             <th>Saldo CXC</th>
             <th>Unidad encontrada?</th>
             <th width="180">Observaciones</th>
@@ -57,6 +58,7 @@
             </td>
             <td>{{dato.Ubicacion}}</td>
             <td>{{dato.Situacion}}</td>
+            <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td><input  type="checkbox"    ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.observaciones}}</td>
@@ -68,6 +70,12 @@
             <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
         </tr>
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="5" style="text-align:right">Total:</th>
+            <th>{{lstAuditoriaNormalesTotal | currency}}</th>
+        </tr>
+    </tfoot>
 </table>
 <hr>
 <h2 >Unidades Plan Piso DPP</h2>
@@ -79,8 +87,11 @@
             <th>Número serie</th>
             <th>Ubicación</th>
             <th>Situación</th>
+            <th>Saldo</th>
             <th>Saldo CXC</th>
             <th>Fecha fin DPP</th>
+            <th>Fecha factura</th>
+            <th>Factura</th>
             <th>Unidad encontrada?</th>
             <th width="180">Observaciones</th>
             <th></th>
@@ -97,8 +108,11 @@
             </td>
             <td>{{dato.Ubicacion}}</td>
             <td>{{dato.Situacion}}</td>
+            <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.fechafin}}</td>
+            <td>{{dato.ucn_fechaalta}}</td>
+            <td>{{dato.ucn_idFactura}}</td>
             <td><input  type="checkbox"    ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.observaciones}}</td>
             <td >
@@ -109,6 +123,12 @@
             <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
         </tr>
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="5" style="text-align:right">Total:</th>
+            <th>{{lstAuditoriaDPPTotal  | currency}}</th>
+        </tr>
+    </tfoot>
 </table>
 <hr>
 <h2>Unidades Plan Piso Fecha de Salida con saldo</h2>
@@ -120,6 +140,8 @@
             <th>Número serie</th>
             <th>Ubicación</th>
             <th>Situación</th>
+            <th>Fecha factura</th>
+            <th>Factura</th>
             <th>Fecha Salida</th>
             <th>Saldo</th>
             <th>Saldo CXC</th>
@@ -139,6 +161,8 @@
             </td>
             <td>{{dato.Ubicacion}}</td>
             <td>{{dato.Situacion}}</td>
+            <td>{{dato.ucn_fechaalta}}</td>
+            <td>{{dato.ucn_idFactura}}</td>
             <td>{{dato.veh_fechasalida}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
@@ -152,6 +176,12 @@
             <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
         </tr>
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="5" style="text-align:right">Total:</th>
+            <th>{{lstAuditoriaFSTotal | currency}}</th>
+        </tr>
+    </tfoot>
 </table>
 <div class="row">
     <div class="col-sm-6">
@@ -182,9 +212,9 @@
                         <h3 class="text-title">Actualizar observaciones  de {{documento}} con vin: {{vin}} </h3>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                    <label for="fpuntos">Observaciones:</label>
+                                    <label for="fpuntos1">Observaciones:</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="fpuntos" ng-model="observaciones" style="width: 500px;">
+                                        <input type="text" class="form-control" id="fpuntos1" ng-model="observaciones" style="width: 500px;">
                                    
                             </div>
                                 
@@ -224,9 +254,9 @@
                         <h3 class="text-title">Actualizar observaciones </h3>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                    <label for="fpuntos">Observaciones:</label>
+                                    <label for="fpuntos2">Observaciones:</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="fpuntos" ng-model="observaciones" style="width: 500px;">
+                                        <input type="text" class="form-control" id="fpuntos2" ng-model="observaciones" style="width: 500px;">
                                    
                             </div>
                                 
@@ -265,9 +295,9 @@
                         <h3 class="text-title">Buscar unidad </h3>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                    <label for="fpuntos">VIN:</label>
+                                    <label for="fpuntos3">VIN:</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="fpuntos" ng-model="buscar" style="width: 500px;">
+                                        <input type="text" class="form-control" id="fpuntos3" ng-model="buscar" style="width: 500px;">
                                    
                             </div>
                                 

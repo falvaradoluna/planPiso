@@ -40,6 +40,11 @@
                             <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}">{{financial.nombre}}</option>
                         </select>
                         <br>
+                        <label>Tipo auditoria</label>
+                        <select class="form-control" ng-model="frmauditoria.idtipoauditoria" >
+                            <option ng-repeat="tipo in lstTipoAuditoria" value="{{tipo.idtipoAuditoria}}" >{{tipo.tipoAuditoria}}</option>
+                        </select>
+                        <br>
                     </div>
                 </div>
             </div>

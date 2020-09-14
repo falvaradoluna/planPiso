@@ -26,7 +26,8 @@ ApiAuditoria.prototype.get_insertaAuditoria = function(req, res, next) {
 
     var self = this;
     var params = [ { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-    { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT }
+    { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
+    { name: 'idtipoAuditoria', value: req.query.idtipoAuditoria, type: self.model.types.INT }
 ];
 
     self.model.query('INS_Auditoria_SP', params, function(error, result) {
@@ -146,6 +147,18 @@ ApiAuditoria.prototype.get_guardarObservacionesGeneral = function(req, res, next
           ];
 
     self.model.queryAllRecordSet('UPD_ObservacionesGenerales_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_tiposAuditoria = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+
+    self.model.query('GET_TiposAuditoria_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

@@ -246,6 +246,81 @@ appModule.factory('staticFactory', function($http) {
                 });
             }, 100)
         },
+        setTableStyleFooter: function(tblID,column) {
+            console.log('Hola setTableStyleFooter');
+            $(tblID).DataTable().destroy();
+            setTimeout(function() {
+                $(tblID).DataTable({
+                    dom: '<"html5buttons"B>lTfgitp',
+                    //iDisplayLength: 5,
+                    searching: true,
+                    order: [
+                        [0, "desc"]
+                    ],
+                    buttons: [{
+                        extend: 'copy'
+                    }, {
+                        extend: 'csv'
+                    }, {
+                        extend: 'excel',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'pdf',
+                        title: 'unidadesNuevas'
+                    }, {
+                        extend: 'print',
+                        customize: function(win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    },
+                    
+                       
+                    ]
+                },
+                {
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        var api = this.api(), data;
+             
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function ( i ) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '')*1 :
+                                typeof i === 'number' ?
+                                    i : 0;
+                        };
+             
+                        // Total over all pages
+                        total = api
+                            .column( column )
+                            .data()
+                            .reduce( function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0 );
+             
+                        // Total over this page
+                        pageTotal = api
+                            .column( column, { page: 'current'} )
+                            .data()
+                            .reduce( function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0 );
+             
+                        // Update footer
+                        $( api.column( column ).footer() ).html(
+                            '$'+pageTotal +' ( $'+ total +' total)'
+                        );
+                    }
+                } 
+           
+                
+                
+                );
+            }, 100)
+        },
         setTableStyleFechaPromesa: function(tblID) {
             console.log('Hola setTableStyleOne');
             $(tblID).DataTable().destroy()

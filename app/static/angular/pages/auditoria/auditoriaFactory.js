@@ -184,6 +184,12 @@ appModule.factory('auditoriaFactory', function($http) {
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },getTiposAuditoria: function() {
+            return $http({
+                url: auditoriaUrl + 'tiposAuditoria/',
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' }
+            });
         },
     };
 });
