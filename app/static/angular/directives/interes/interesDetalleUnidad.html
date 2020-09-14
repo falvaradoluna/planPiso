@@ -17,6 +17,9 @@
     <div class="col-md-4">
         <h2><span class="glyphicon glyphicon-eye-open m-r-xs"></span> Datos Plan Piso</h2>
     </div>
+    <!-- <div class="col-md-3">
+        <h2><span class="glyphicon glyphicon-list-alt m-r-xs"></span>Ultimo Esquema</h2>
+    </div> -->
 </div>
 <div class="row">
     <div class="col-md-4">
@@ -86,36 +89,21 @@
                 <td>{{unitDetailEsquema.nombre}}</td>
             </tr>
             <tr>
-                <td class="detailCol">Fecha Efectiva:</td>
-                <td>{{unitDetailEsquema.fechaEfectiva}}</td>
+                <td class="detailCol">Plazo:</td>
+                <td>{{unitDetailEsquema.plazo}} días</td>
             </tr>
             <tr>
                 <td class="detailCol">Días Gracia:</td>
                 <td>{{unitDetailEsquema.diasGracia}}</td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td class="detailCol">Descripción: </td>
                 <td>{{unitDetailEsquema.descripcion}}</td>
-            </tr>
+            </tr> -->
         </table>
     </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-4">
-        <h2><span class="glyphicon glyphicon-list-alt m-r-xs"></span>Ultimo Esquema</h2>
-    </div>
-    <div class="col-md-8">
-        <h2><span class="glyphicon glyphicon-stats m-r-xs"></span>Movimientos</h2>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
+    <!-- <div class="col-md-3">
         <table>
-            <!-- <tr>
-                <td class="detailCol">Tipo Esquema: </td>
-                <td>{{unitDetailEsquema.tipoEsquema}}</td>
-            </tr> -->
             <tr>
                 <td class="detailCol">Nombre:</td>
                 <td>{{unitDetailEsquema.nombre}}</td>
@@ -133,8 +121,38 @@
                 <td>{{unitDetailEsquema.interesMoratorio}} %</td>
             </tr>
         </table>
+    </div> -->
+</div>
+<hr>
+<!-- <div class="row">
+    <div class="col-md-4">
+        <h2><span class="glyphicon glyphicon-list-alt m-r-xs"></span>Ultimo Esquema</h2>
     </div>
     <div class="col-md-8">
+        <h2><span class="glyphicon glyphicon-stats m-r-xs"></span>Movimientos</h2>
+    </div>
+</div> -->
+<!-- <div class="col-md-4">
+        <table>
+            <tr>
+                <td class="detailCol">Nombre:</td>
+                <td>{{unitDetailEsquema.nombre}}</td>
+            </tr>
+            <tr>
+                <td class="detailCol">Días Gracia:</td>
+                <td>{{unitDetailEsquema.diasGracia}} días</td>
+            </tr>
+            <tr>
+                <td class="detailCol">Plazo:</td>
+                <td>{{unitDetailEsquema.plazo}} días</td>
+            </tr>
+            <tr>
+                <td class="detailCol">Intéres Moratorio: </td>
+                <td>{{unitDetailEsquema.interesMoratorio}} %</td>
+            </tr>
+        </table>
+    </div> -->
+<!-- <div class="col-md-8">
         <table id="tblAddByDate" class="table table-striped">
             <tr>
                 <th>Tipo Movimiento</th>
@@ -155,52 +173,77 @@
                 <td>{{itemDetail.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
             </tr>
         </table>
+    </div> -->
+<div class="row">
+    <!-- <hr> -->
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <h2><span class="glyphicon glyphicon-stats m-r-xs"></span>Intereses</h2>
+        </div>
     </div>
-    <div class="row">
-        <hr>
-        <div class="col-md-12">
-            <div class="col-md-12">
-                <h2><span class="glyphicon glyphicon-stats m-r-xs"></span>Intereses</h2>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <table id="tblInteres" class="table table-striped">
-                <tr>
-                    <th>Saldo</th>
-                    <th>Puntos</th>
-                    <th>Tiie</th>
-                    <th>Fecha tiie</th>
-                    <th>Penetracion</th>
-                    <th>Plazo</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha fin</th>
-                    <th>Interes</th>
-                    <th>Dias</th>
-                    <th>Total Interes</th>
-                    <th>Fecha ejecución</th>
-                </tr>
-                <tr ng-repeat="item in lstInteresesMov">
-                    <td>{{item.saldo | number:2 }}</td>
-                    <td>{{item.puntos | number:2}}</td>
-                    <td>{{item.tiie | number:4}}</td>
-                    <td>{{item.fechatiie | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                    <td>{{item.penetracion | number:2}}</td>
-                    <td>{{item.plazo }}</td>
-                    <td>{{item.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                    <td>{{item.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                    <td>{{item.Interes | number:2 }}</td>
-                    <td>{{item.dias }}</td>
-                    <td>{{item.totalInteres | number:2}}</td>
-                    <td>{{item.fechaejecucion | date:'dd/MM/yyyy' : 'UTC'}}</td>
-                </tr>
-            </table>
-        </div>
+    <div class="col-md-12">
+        <table id="tblInteres" class="table table-striped">
+            <tr>
+                <th>Saldo</th>
+                <th>Puntos</th>
+                <th>Tiie</th>
+                <th>Fecha tiie</th>
+                <th>Penetracion</th>
+                <th>Plazo</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Interes</th>
+                <th>Dias</th>
+                <th>Total Interes</th>
+                <th>Fecha ejecución</th>
+            </tr>
+            <tr ng-repeat="item in lstInteresesMov">
+                <td>{{item.saldo | number:2 }}</td>
+                <td>{{item.puntos | number:2}}</td>
+                <td>{{item.tiie | number:4}}</td>
+                <td>{{item.fechatiie | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                <td>{{item.penetracion | number:2}}</td>
+                <td>{{item.plazo }}</td>
+                <td>{{item.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                <td>{{item.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                <td>{{item.Interes | number:2 }}</td>
+                <td>{{item.dias }}</td>
+                <td>{{item.totalInteres | number:2}}</td>
+                <td>{{item.fechaejecucion | date:'dd/MM/yyyy' : 'UTC'}}</td>
+            </tr>
+        </table>
     </div>
 </div>
 <div>
     <div class="row">
-        <h2><span class="fa fa-cart-arrow-down m-r-xs"></span> Cuentas por pagar </h2>
-        <div ng-repeat="historialFolio in historialFolios">
+        <div class="col-md-12">
+            <h2><span class="fa fa-cart-arrow-down m-r-xs"></span> Cuentas por pagar </h2>
+        </div>
+        <div class="col-md-12" ng-show="ocHistorial.length > 0">
+            <table id="tblAddByDate" class="table table-striped">
+                <tr>
+                    <th>Folio</th>
+                    <th>Tipo Movimiento</th>
+                    <th>Sucursal Destino</th>
+                    <th>Sucursal Origen</th>
+                    <th>Financiera</th>
+                    <th>Esquema</th>
+                    <th>Interes acumulado</th>
+                    <th>Fecha</th>
+                </tr>
+                <tr ng-repeat="detalleHistorial in ocHistorial | orderBy:'fecha' ">
+                    <td ng-click="movimientoscxp(detalleHistorial.CCP_IDDOCTO)">{{detalleHistorial.CCP_IDDOCTO}}</td>
+                    <td>{{detalleHistorial.tipoMovimiento }}</td>
+                    <td>{{detalleHistorial.sucorigen }}</td>
+                    <td>{{detalleHistorial.sucdestino }}</td>
+                    <td>{{detalleHistorial.financiera }}</td>
+                    <td>{{detalleHistorial.esquema }}</td>
+                    <td>{{detalleHistorial.monto | number:2}}</td>
+                    <td>{{detalleHistorial.fecha | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                </tr>
+            </table>
+        </div>
+        <!-- <div ng-repeat="historialFolio in historialFolios">
             <div class="col-md-12 cursor" ng-click="movimientoscxp(historialFolio.oce_folioorden)">
                 <h3> {{historialFolio.oce_folioorden}} </h3>
             </div>
@@ -226,7 +269,7 @@
                     </tr>
                 </table>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 <div>

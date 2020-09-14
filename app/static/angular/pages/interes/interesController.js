@@ -691,7 +691,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
     $scope.callPayInteres = function() {
 
-        $scope.lstSelectPay=[];
+        $scope.lstSelectPay = [];
         $scope.currentPanel = "pnlPagoInteres";
         $scope.lstNewUnits.forEach(function(item) {
             if (item.isChecked === true) {
@@ -701,8 +701,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             }
         });
         interesFactory.ResumenInteresMes($scope.lstSelectPay[0].financieraID).then(function success(result) {
-            $scope.lstInteresesMes=result.data;
-            
+            $scope.lstInteresesMes = result.data;
+
         }, function error(err) {
             console.log(err)
         });
@@ -742,7 +742,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     idUsuario: $scope.idUsuario,
                     idEmpresa: sessionFactory.empresaID,
                     idtipopoliza: 7,
-                    idFinanciera:$scope.lstSelectPay[0].financieraID
+                    idFinanciera: $scope.lstSelectPay[0].financieraID
                 }
 
                 interesFactory.ProvisionFinancieraDetalle(paraProvision).then(function(respuesta) {
@@ -770,7 +770,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     //         var item = $scope.lstUnitsProvisions[contProvisionDetalle];
     //         var paraProvisionDetalle = {
     //             idpoliza: $scope.LastId,
-                
+
     //             idUsuario: $scope.idUsuario,
     //             saldo: item.InteresMes
     //         }
@@ -1500,12 +1500,29 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             })
             Promise.all(promises).then(function response(result) {
                 var respuesta = result;
-                console.log(respuesta);
-                angular.forEach($scope.historialFolios, function(value, key) {
-                    console.log(respuesta[key].data, 'que pasa');
-                    value.detalle = respuesta[key].data;
+                $scope.ocHistorial = [];
+                angular.forEach(respuesta, function(value, key) {
+                    if (value.data.length > 0) {
+                        angular.forEach(value.data, function(value2, key) {
+                            $scope.$apply(function() {
+                                $scope.ocHistorial.push(value2);
+                            });
+                        });
+                    } else {
+                        console.log(value.config.params.folio, 'MMTA PORFA')
+                        $scope.ocHistorial.push({
+                            "CCP_IDDOCTO": value.config.params.folio,
+                            "tipoMovimiento": "SIN MOVIMIENTOS"
+                        });
+                    }
                 });
-                console.log($scope.historialFolios, 'Como quedo')
+                console.log($scope.ocHistorial, 'el historial de las OC')
+                // console.log(respuesta);
+                // angular.forEach($scope.historialFolios, function(value, key) {
+                //     console.log(respuesta[key].data, 'que pasa');
+                //     value.detalle = respuesta[key].data;
+                // });
+                // console.log($scope.historialFolios, 'Como quedo')
             });
         }, function error(err) {
             console.log('Ocurrio un error al tratar de obtener el historial de los folios', err);
