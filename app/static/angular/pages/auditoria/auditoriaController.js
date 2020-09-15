@@ -1,19 +1,19 @@
-appModule.controller('auditoriaController', function($scope, $rootScope, $location, auditoriaFactory,  commonFactory, staticFactory, utils ) {
-    $scope.idUsuario            = parseInt( localStorage.getItem( "idUsuario" ) )
-    $scope.session  = JSON.parse( sessionStorage.getItem( "sessionFactory" ) );
-    $scope.lstPermisoBoton      = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
-
+appModule.controller('auditoriaController', function($scope, $rootScope, $location, auditoriaFactory, commonFactory, staticFactory, utils) {
+    $scope.idUsuario = parseInt(localStorage.getItem("idUsuario"))
+    $scope.session = JSON.parse(sessionStorage.getItem("sessionFactory"));
+    $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
+    console.log($scope.session)
     $scope.currentFinancialName = "Seleccionar Financiera";
-    $scope.lbl_btn_descheck     = "Desmarcar Unidades";
-    $scope.currentPanel         = 'pnlCargaArchivo';
+    $scope.lbl_btn_descheck = "Desmarcar Unidades";
+    $scope.currentPanel = 'pnlCargaArchivo';
 
-    $scope.titleDocumentos        = '';
+    $scope.titleDocumentos = '';
     $scope.titleDocumentosDetalle = '';
-    $scope.tipoauditoria=0;
-    $scope.MuestranuevaAuditoria=false;
-    $scope.Muestraeditar=false;
-    $scope.MuestraguardarAuditoria=false;
-    $scope.MuestracancelarAuditoria=false;
+    $scope.tipoauditoria = 0;
+    $scope.MuestranuevaAuditoria = false;
+    $scope.Muestraeditar = false;
+    $scope.MuestraguardarAuditoria = false;
+    $scope.MuestracancelarAuditoria = false;
     /* =========================== 
         [ estSolAutorizacion ]
     Valida la aplicación de la conci
@@ -26,54 +26,52 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     3 => Aprobada;
     4 => Rechazada;
     ============================== */
-    $scope.estSolAutorizacion   = 0;
+    $scope.estSolAutorizacion = 0;
 
-    $scope.currentMonth         = 0;
-    $scope.currentYear          = 0;
-    
-    $scope.flagAjusteCaseTree   = true;
-    $scope.ajusteManual         = false;
-    
-    $scope.lstMonth             = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-    $scope.cierreMes            = [];
-    $scope.lstConceal           = [];
-    $scope.lstFinancial         = [];
-    $scope.lstPendiente         = [];
-    $scope.lstauditoria      = [];
-    $scope.autDetalle           = [];
-    $scope.lstConciliaDetalle   = [];
-    
-    $scope.currentFinancial     = {};
-    $scope.currentauditoria  = {};
-    $scope.ctrl  = {};
-    $scope.total                = { sistema: 0, archivo: 0 };
-    $scope.frmauditoria      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
-    $scope.situacion            = { ok:0, financiera:0, gpoAndrade: 0 };
-    $scope.diferencias          = { iguales:0, diferentes: 0 };
+    $scope.currentMonth = 0;
+    $scope.currentYear = 0;
 
-   
+    $scope.flagAjusteCaseTree = true;
+    $scope.ajusteManual = false;
 
-    var increment   = 0;
-    var contador    = 0;
-    $scope.init=function()
-    {
-        var valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "nuevaAuditoria" })[0];
-        $scope.MuestranuevaAuditoria=valor != undefined;
-         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "editar" })[0];
-        $scope.Muestraeditar=valor != undefined;
-         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "guardarAuditoria" })[0];
-        $scope.MuestraguardarAuditoria=valor != undefined;
-         valor=_.where($scope.lstPermisoBoton, { idModulo: 10,Boton: "cancelarAuditoria" })[0];
-        $scope.MuestracancelarAuditoria=valor != undefined;
+    $scope.lstMonth = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    $scope.cierreMes = [];
+    $scope.lstConceal = [];
+    $scope.lstFinancial = [];
+    $scope.lstPendiente = [];
+    $scope.lstauditoria = [];
+    $scope.autDetalle = [];
+    $scope.lstConciliaDetalle = [];
+
+    $scope.currentFinancial = {};
+    $scope.currentauditoria = {};
+    $scope.ctrl = {};
+    $scope.total = { sistema: 0, archivo: 0 };
+    $scope.frmauditoria = { lblMes: 0, idFinanciera: 0, loadLayout: false }
+    $scope.situacion = { ok: 0, financiera: 0, gpoAndrade: 0 };
+    $scope.diferencias = { iguales: 0, diferentes: 0 };
+
+
+
+    var increment = 0;
+    var contador = 0;
+    $scope.init = function() {
+        var valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "nuevaAuditoria" })[0];
+        $scope.MuestranuevaAuditoria = valor != undefined;
+        valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "editar" })[0];
+        $scope.Muestraeditar = valor != undefined;
+        valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "guardarAuditoria" })[0];
+        $scope.MuestraguardarAuditoria = valor != undefined;
+        valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "cancelarAuditoria" })[0];
+        $scope.MuestracancelarAuditoria = valor != undefined;
     }
     $scope.init();
-$scope.openModalAuditoria= function()
-{
-    $("#modalNuevaAuditoria").modal('show');
-}         
-    
+    $scope.openModalAuditoria = function() {
+        $("#modalNuevaAuditoria").modal('show');
+    }
+
     // Este es como funciona desde Branch Auditoria
-    commonFactory.getFinancial(  $scope.session.empresaID ).then(function(result) {
+    commonFactory.getFinancial($scope.session.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
     });
     auditoriaFactory.getTiposAuditoria().then(function(result) {
@@ -82,37 +80,33 @@ $scope.openModalAuditoria= function()
         console.log("Error", error);
     });
     $scope.nexStep = function() {
-        if( $scope.frmauditoria.idFinanciera == 0){
-            swal("Auditoria","No se ha especificado la financiera.");   
-        }
-       
-        else{
+        if ($scope.frmauditoria.idFinanciera == 0) {
+            swal("Auditoria", "No se ha especificado la financiera.");
+        } else {
             $scope.insertAuditoria();
         }
         $("#modalNuevaAuditoria").modal('hide');
-       
+
     };
     $scope.insertAuditoria = function() {
-        try{
+        try {
             var parametros = {
                 idEmpresa: $scope.session.empresaID,
                 idFinanciera: $scope.frmauditoria.idFinanciera,
-                idtipoAuditoria:$scope.frmauditoria.idtipoauditoria
+                idtipoAuditoria: $scope.frmauditoria.idtipoauditoria
             }
             auditoriaFactory.insertaAuditoria(parametros).then(function(result) {
-               var id= result.data[0].id;
-               if(id != undefined)
-               {
-                $scope.getauditoria(id);
+                var id = result.data[0].id;
+                if (id != undefined) {
+                    $scope.getauditoria(id);
 
-               }
-              
+                }
+
             })
-                 
-        }
-        catch( e ){
-            console.log( "Error", e );
-            swal("Auditoria","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+
+        } catch (e) {
+            console.log("Error", e);
+            swal("Auditoria", "El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
         }
     }
     $scope.getauditoria = function(id) {
@@ -127,20 +121,17 @@ $scope.openModalAuditoria= function()
             $scope.lstAuditoriaDPP = result.data[2];
             $scope.lstAuditoriaFS = result.data[3];
             $scope.currentPanel = 'pnlAuditoriaUnidades';
-            $scope.lstAuditoriaNormalesTotal=0;
-            $scope.lstAuditoriaDPPTotal=0;
-            $scope.lstAuditoriaFSTotal=0;
-            for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
-            {
-               $scope.lstAuditoriaNormalesTotal+=$scope.lstAuditoriaNormales[i].saldo;
+            $scope.lstAuditoriaNormalesTotal = 0;
+            $scope.lstAuditoriaDPPTotal = 0;
+            $scope.lstAuditoriaFSTotal = 0;
+            for (var i = 0; i < $scope.lstAuditoriaNormales.length; i++) {
+                $scope.lstAuditoriaNormalesTotal += $scope.lstAuditoriaNormales[i].saldo;
             }
-            for(var i =0;i<$scope.lstAuditoriaDPP.length;i++)
-            {
-               $scope.lstAuditoriaDPPTotal+=$scope.lstAuditoriaDPP[i].saldo;
+            for (var i = 0; i < $scope.lstAuditoriaDPP.length; i++) {
+                $scope.lstAuditoriaDPPTotal += $scope.lstAuditoriaDPP[i].saldo;
             }
-            for(var i =0;i<$scope.lstAuditoriaFS.length;i++)
-            {
-               $scope.lstAuditoriaFSTotal+=$scope.lstAuditoriaFS[i].saldo;
+            for (var i = 0; i < $scope.lstAuditoriaFS.length; i++) {
+                $scope.lstAuditoriaFSTotal += $scope.lstAuditoriaFS[i].saldo;
             }
         }, function(error) {
             console.log("Error", error);
@@ -151,8 +142,8 @@ $scope.openModalAuditoria= function()
             idEmpresa: $scope.session.empresaID
         }
         auditoriaFactory.getAuditorias(parametros).then(function(result) {
-            if(result.data[0].length>0)
-           $scope.lstAuditorias = result.data[0];
+            if (result.data[0].length > 0)
+                $scope.lstAuditorias = result.data[0];
         }, function(error) {
             console.log("Error", error);
         });
@@ -160,33 +151,33 @@ $scope.openModalAuditoria= function()
     $scope.Encontrada = function(dato) {
         var parametros = {
             idAuditoriaDetalle: dato.idAuditoriaDetalle,
-            encontrada:dato.encontrada?1:0
+            encontrada: dato.encontrada ? 1 : 0
         }
         auditoriaFactory.cambiarEncontrada(parametros).then(function(result) {
-          var solo = result;
+            var solo = result;
         }, function(error) {
             console.log("Error", error);
         });
     };
-   
-  
 
-    $scope.muestraAuditoriaPendiente = function( idauditoria ){
-        $scope.idauditoria=idauditoria.idAuditoria;
+
+
+    $scope.muestraAuditoriaPendiente = function(idauditoria) {
+        $scope.idauditoria = idauditoria.idAuditoria;
         // $scope.estatusauditoria=idauditoria.estatus;
         // $scope.frmauditoria.lbltipoauditoria=idauditoria.idTipo;
-                                    
 
-        $scope.getauditoria(  $scope.idauditoria) ;
+
+        $scope.getauditoria($scope.idauditoria);
     }
 
-   
+
     $scope.setCurrentFinancial = function(financialObj) {
         $scope.currentFinancial = financialObj;
         $scope.currentFinancialName = financialObj.nombre;
     };
 
-   
+
 
     $scope.prevStep = function() {
         location.reload();
@@ -194,155 +185,131 @@ $scope.openModalAuditoria= function()
     };
 
     $scope.setTableStyle = function(tblID) {
-        staticFactory.setTableStyleFooter(tblID,5);
-      
+        staticFactory.setTableStyleFooter(tblID, 5);
+
     };
 
     $scope.editDetail = function(valor) {
-        var item=valor;
-        $rootScope.documento=valor.documento;
-        $rootScope.vin=valor.vin;
-        $rootScope.observaciones=valor.observaciones;
-        $rootScope.idAuditoriaDetalle=valor.idAuditoriaDetalle;
-        $rootScope.idAuditoria=valor.idAuditoria;
-        $rootScope.tipo=valor.idtipoDetalleAuditoria;
+        var item = valor;
+        $rootScope.documento = valor.documento;
+        $rootScope.vin = valor.vin;
+        $rootScope.observaciones = valor.observaciones;
+        $rootScope.idAuditoriaDetalle = valor.idAuditoriaDetalle;
+        $rootScope.idAuditoria = valor.idAuditoria;
+        $rootScope.tipo = valor.idtipoDetalleAuditoria;
         $('#selectObservaciones').modal('show');
     };
     $scope.editDetailGeneral = function() {
 
-        $rootScope.observaciones='';
+        $rootScope.observaciones = '';
         $('#selectObservacionesGeneral').modal('show');
     };
     $scope.Buscarunidad = function() {
 
-        $rootScope.observaciones='';
+        $rootScope.observaciones = '';
         $('#selectBuscarUnidad').modal('show');
     };
-    $scope.GuardarDetail= function(observaciones,idAuditoriaDetalle)
-    {
-        $rootScope.observaciones=observaciones;
-        $rootScope.idAuditoriaDetalle=idAuditoriaDetalle;
+    $scope.GuardarDetail = function(observaciones, idAuditoriaDetalle) {
+        $rootScope.observaciones = observaciones;
+        $rootScope.idAuditoriaDetalle = idAuditoriaDetalle;
         var data = {
             idAuditoriadetalle: $rootScope.idAuditoriaDetalle,
-            observaciones:$rootScope.observaciones,
+            observaciones: $rootScope.observaciones,
         };
         auditoriaFactory.guardarObservaciones(data).then(function(resultSchema) {
-           if( $rootScope.tipo==1)
-           {
-            for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
-            {
-                if($scope.lstAuditoriaNormales[i].idAuditoriaDetalle==$rootScope.idAuditoriaDetalle)
-                {
-                    $scope.lstAuditoriaNormales[i].observaciones=$rootScope.observaciones;
+            if ($rootScope.tipo == 1) {
+                for (var i = 0; i < $scope.lstAuditoriaNormales.length; i++) {
+                    if ($scope.lstAuditoriaNormales[i].idAuditoriaDetalle == $rootScope.idAuditoriaDetalle) {
+                        $scope.lstAuditoriaNormales[i].observaciones = $rootScope.observaciones;
 
+                    }
+                }
+            } else if ($rootScope.tipo == 2) {
+                for (var i = 0; i < $scope.lstAuditoriaDPP.length; i++) {
+                    if ($scope.lstAuditoriaDPP[i].idAuditoriaDetalle == $rootScope.idAuditoriaDetalle) {
+                        $scope.lstAuditoriaDPP[i].observaciones = $rootScope.observaciones;
+
+                    }
+                }
+            } else if ($rootScope.tipo == 3) {
+                for (var i = 0; i < $scope.lstAuditoriaFS.length; i++) {
+                    if ($scope.lstAuditoriaFS[i].idAuditoriaDetalle == $rootScope.idAuditoriaDetalle) {
+                        $scope.lstAuditoriaFS[i].observaciones = $rootScope.observaciones;
+
+                    }
                 }
             }
-           }else  if( $rootScope.tipo==2)
-           {
-            for(var i=0;i<$scope.lstAuditoriaDPP.length;i++)
-            {
-                if($scope.lstAuditoriaDPP[i].idAuditoriaDetalle==$rootScope.idAuditoriaDetalle)
-                {
-                    $scope.lstAuditoriaDPP[i].observaciones=$rootScope.observaciones;
+            $scope.apply;
+            $('#selectObservaciones').modal('hide');
+            swal("Ok", "Se guardo con exito", "success");
 
-                }
-            }
-           }else  if( $rootScope.tipo==3)
-           {
-            for(var i=0;i<$scope.lstAuditoriaFS.length;i++)
-            {
-                if($scope.lstAuditoriaFS[i].idAuditoriaDetalle==$rootScope.idAuditoriaDetalle)
-                {
-                    $scope.lstAuditoriaFS[i].observaciones=$rootScope.observaciones;
-
-                }
-            }
-           }
-           $scope.apply;
-                $('#selectObservaciones').modal('hide');
-                swal("Ok", "Se guardo con exito", "success");
-            
         });
     }
-    $scope.GuardarDetailGeneral= function(observaciones)
-    {
-        $rootScope.observaciones=observaciones;
-        $scope.iddetalle='';
-        for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
-        {
-            if($scope.lstAuditoriaNormales[i].isChecked)
-            {
-                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaNormales[i].idAuditoriaDetalle+','
+    $scope.GuardarDetailGeneral = function(observaciones) {
+        $rootScope.observaciones = observaciones;
+        $scope.iddetalle = '';
+        for (var i = 0; i < $scope.lstAuditoriaNormales.length; i++) {
+            if ($scope.lstAuditoriaNormales[i].isChecked) {
+                $scope.iddetalle = $scope.iddetalle + $scope.lstAuditoriaNormales[i].idAuditoriaDetalle + ','
 
             }
         }
-        for(var i =0;i<$scope.lstAuditoriaDPP.length;i++)
-        {
-            if($scope.lstAuditoriaDPP[i].isChecked)
-            {
-                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaDPP[i].idAuditoriaDetalle+','
+        for (var i = 0; i < $scope.lstAuditoriaDPP.length; i++) {
+            if ($scope.lstAuditoriaDPP[i].isChecked) {
+                $scope.iddetalle = $scope.iddetalle + $scope.lstAuditoriaDPP[i].idAuditoriaDetalle + ','
 
             }
         }
-        for(var i =0;i<$scope.lstAuditoriaFS.length;i++)
-        {
-            if($scope.lstAuditoriaFS[i].isChecked)
-            {
-                $scope.iddetalle=$scope.iddetalle+$scope.lstAuditoriaFS[i].idAuditoriaDetalle+','
+        for (var i = 0; i < $scope.lstAuditoriaFS.length; i++) {
+            if ($scope.lstAuditoriaFS[i].isChecked) {
+                $scope.iddetalle = $scope.iddetalle + $scope.lstAuditoriaFS[i].idAuditoriaDetalle + ','
 
             }
         }
 
-var ids = $scope.iddetalle.substring(0,$scope.iddetalle.length-1);
+        var ids = $scope.iddetalle.substring(0, $scope.iddetalle.length - 1);
         var data = {
             idAuditoriadetalle: ids,
-            observaciones:$rootScope.observaciones,
+            observaciones: $rootScope.observaciones,
         };
         auditoriaFactory.guardarObservacionesGeneral(data).then(function(resultSchema) {
-           
-            for(var i =0;i<$scope.lstAuditoriaNormales.length;i++)
-            {
-                if($scope.lstAuditoriaNormales[i].isChecked)
-                {
-                    $scope.lstAuditoriaNormales[i].observaciones=$rootScope.observaciones;
+
+            for (var i = 0; i < $scope.lstAuditoriaNormales.length; i++) {
+                if ($scope.lstAuditoriaNormales[i].isChecked) {
+                    $scope.lstAuditoriaNormales[i].observaciones = $rootScope.observaciones;
 
                 }
             }
-            for(var i=0;i<$scope.lstAuditoriaDPP.length;i++)
-            {
-                if($scope.lstAuditoriaDPP[i].isChecked)
-                {
-                    $scope.lstAuditoriaDPP[i].observaciones=$rootScope.observaciones;
+            for (var i = 0; i < $scope.lstAuditoriaDPP.length; i++) {
+                if ($scope.lstAuditoriaDPP[i].isChecked) {
+                    $scope.lstAuditoriaDPP[i].observaciones = $rootScope.observaciones;
 
                 }
             }
-            for(var i=0;i<$scope.lstAuditoriaFS.length;i++)
-            {
-                if($scope.lstAuditoriaFS[i].isChecked)
-                {
-                    $scope.lstAuditoriaFS[i].observaciones=$rootScope.observaciones;
+            for (var i = 0; i < $scope.lstAuditoriaFS.length; i++) {
+                if ($scope.lstAuditoriaFS[i].isChecked) {
+                    $scope.lstAuditoriaFS[i].observaciones = $rootScope.observaciones;
 
                 }
             }
-          
-           $scope.apply;
-                $('#selectObservacionesGeneral').modal('hide');
-                swal("Ok", "Se guardo con exito", "success");
-            
+
+            $scope.apply;
+            $('#selectObservacionesGeneral').modal('hide');
+            swal("Ok", "Se guardo con exito", "success");
+
         });
     }
-    $scope.guardaAuditoria= function ()
-    {
+    $scope.guardaAuditoria = function() {
         $('#modalCargarArchivo').modal('show');
-       //     $('#selectGuardarPDF').modal('show');
-            $scope.Dropzone();
-            
-        
+        //     $('#selectGuardarPDF').modal('show');
+        $scope.Dropzone();
+
+
     }
 
     var myDropzone;
     $scope.Dropzone = function() {
-        $("#templateDropzone").html( '' )
+        $("#templateDropzone").html('')
 
         var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
                         <div class="fallback">
@@ -350,14 +317,14 @@ var ids = $scope.iddetalle.substring(0,$scope.iddetalle.length-1);
                         </div>
                     </form>`;
 
-        $("#templateDropzone").html( html );
+        $("#templateDropzone").html(html);
         myDropzone = new Dropzone("#idDropzone", {
             url: "api/apiAuditoria/upload",
             uploadMultiple: 0,
             maxFiles: 1,
             autoProcessQueue: false,
             acceptedFiles: "application/pdf",
-            webkitRelativePath:"/uploads"
+            webkitRelativePath: "/uploads"
         });
 
         myDropzone.on("success", function(req, xhr) {
@@ -368,7 +335,7 @@ var ids = $scope.iddetalle.substring(0,$scope.iddetalle.length-1);
             $('#mdlLoading').modal('show');
             $scope.TerminarGuardar(filename);
 
-            $scope.limpiarDropzone = function(){
+            $scope.limpiarDropzone = function() {
                 _this.removeAllFiles();
                 myDropzone.enable()
                 $scope.frmauditoria.loadLayout = true;
@@ -379,56 +346,98 @@ var ids = $scope.iddetalle.substring(0,$scope.iddetalle.length-1);
             $scope.frmauditoria.loadLayout = true;
         });
     };
- 
-    $scope.readLayout = function(filename,idAuditoria) {
+
+    $scope.readLayout = function(filename, idAuditoria) {
         myDropzone.processQueue();
-       
+
     };
-$scope.TerminarGuardar=function(filename)
-{
-    auditoriaFactory.savePdf(filename, $scope.idauditoria).then(function(result) {
-        var res = result;
-        $('#mdlLoading').modal('hide');
-        $('#modalCargarArchivo').modal('hide');
-        $scope.loadingPanel=false;
-        swal("Ok", "Se guardo con exito el archivo", "success");
-      }, function(error) {
-          console.log("Error", error);
-      });
-}
-  
-$scope.VerArchivoPdf=function(item){
+    $scope.TerminarGuardar = function(filename) {
+        auditoriaFactory.savePdf(filename, $scope.idauditoria).then(function(result) {
+            var res = result;
+            $('#mdlLoading').modal('hide');
+            $('#modalCargarArchivo').modal('hide');
+            $scope.loadingPanel = false;
+            swal("Ok", "Se guardo con exito el archivo", "success");
+        }, function(error) {
+            console.log("Error", error);
+        });
+    }
 
-    var folioEmpresaSucursal = item;
-    var arregloBytes = [];
-    $rootScope.pdf = undefined;
-    auditoriaFactory.getreadPdf(item.ruta).then(function(result) {
-        arregloBytes = result.data;
+    $scope.VerArchivoPdf = function(item) {
 
-        if (arregloBytes.length == 0) {
-            $rootScope.NohayPdf = 1;
-            $rootScope.pdf = [];
-        } else {
+        var folioEmpresaSucursal = item;
+        var arregloBytes = [];
+        $rootScope.pdf = undefined;
+        auditoriaFactory.getreadPdf(item.ruta).then(function(result) {
+            arregloBytes = result.data;
 
-            $rootScope.NohayPdf = undefined;
-            $rootScope.pdf = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/pdf"));
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdf = 1;
+                $rootScope.pdf = [];
+            } else {
 
-            $('#polizaCancelada').modal('show');
-        }
+                $rootScope.NohayPdf = undefined;
+                $rootScope.pdf = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/pdf"));
 
-        setTimeout(function() {
-            $("#pdfArchivo").html('');
-            $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
+                $('#polizaCancelada').modal('show');
+            }
 
-        }, 100);
-        $('#loading').modal('hide');
-        console.log($scope.pdf, 'Soy el arreglo ')
-    }, function(error) {
-        console.log("Error", error);
-    });
-        
+            setTimeout(function() {
+                $("#pdfArchivo").html('');
+                $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
 
-   
-}
- 
+            }, 100);
+            $('#loading').modal('hide');
+            console.log($scope.pdf, 'Soy el arreglo ')
+        }, function(error) {
+            console.log("Error", error);
+        });
+
+
+
+    }
+    // -----------------------------------------
+    // --Reporte Excel desde jsreport
+    // -----------------------------------------
+    $scope.generaReporte = function() {
+        // console.log($scope.lstAuditoriaNormales, $scope.lstAuditoriaDPP, $scope.lstAuditoriaFS);
+        // console.log($scope.lstAuditoriaNormalesTotal, $scope.lstAuditoriaDPPTotal, $scope.lstAuditoriaFSTotal)
+        angular.forEach($scope.lstAuditoriaNormales, function(value, key) {
+            value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        });
+        angular.forEach($scope.lstAuditoriaDPP, function(value, key) {
+            value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        });
+        angular.forEach($scope.lstAuditoriaFS, function(value, key) {
+            value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        });
+        $scope.contenidoReporte = {
+            "detalle": [{
+                "titulo": "Unidades Plan Piso Normales",
+                "detalle": $scope.lstAuditoriaNormales,
+                "total": $scope.lstAuditoriaNormalesTotal
+            }, {
+                "titulo": "Unidades Plan Piso DPP",
+                "detalle": $scope.lstAuditoriaDPP,
+                "total": $scope.lstAuditoriaDPPTotal
+            }, {
+                "titulo": "Unidades Plan Piso Fecha de Salida con saldo",
+                "detalle": $scope.lstAuditoriaFS,
+                "total": $scope.lstAuditoriaFSTotal
+            }]
+
+        };
+        console.log('CONTEDIDO REPORTE', JSON.stringify($scope.contenidoReporte));
+
+        auditoriaFactory.reporteAuditoria($scope.contenidoReporte).then(function success(res) {
+            var file = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(file);
+            a.download = 'Reporte Auditoria - ' + $scope.session.nombre;
+            a.click();
+        }, function error(err) {
+            error(err);
+        });
+
+    };
 });

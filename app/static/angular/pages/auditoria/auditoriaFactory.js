@@ -191,5 +191,19 @@ appModule.factory('auditoriaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        reporteAuditoria: function(json) {
+            return $http({
+                url: 'http://localhost:5488/api/report',
+                method: "POST",
+                data: {
+                    template: { name: "auditoriaPP" },
+                    data: json
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            });
+        }
     };
 });
