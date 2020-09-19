@@ -165,4 +165,121 @@ ApiAuditoria.prototype.get_tiposAuditoria = function(req, res, next) {
         });
     });
 };
+ApiAuditoria.prototype.post_upload = function(req, res, next) {
+    var filename = String(new Date().getTime());
+  
+    var storage = multer.diskStorage({
+        destination: function(req, file, callback) {
+            callback(null, './uploads/');
+        },
+        filename: function(req, file, callback) {
+
+            callback(null, filename + '.xlsx');
+        }
+    });
+
+    var upload = multer({ storage: storage }).any();
+
+    upload(req, res, function(err) {
+        if (err) {
+            return res.end("Error uploading file.");
+        } else {
+            return res.end(filename);
+        }
+    });
+};
+ApiAuditoria.prototype.get_readLayout = function(req, res, next) {
+    var result = undefined;
+    var error = undefined;
+    try {
+        var self = this;
+        var workbook = XLSX.readFile('./uploads/' + req.query.LayoutName);
+        var sheet_name_list = workbook.SheetNames;
+        var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+      
+            if (xlData == undefined) {
+                return res.end("Error uploading file.");
+            } else {
+                setTimeout(function() {
+                    var fs = require("fs");
+                    // console.log( __dirname + '\\uploaded\\' + req.query.LayoutName );
+                    fs.unlink('./uploads/' + req.query.LayoutName, function(err) {
+                        if (err) {
+                            self.view.expositor(res, {
+                                error: err,
+                                result: result
+                            });
+                        } else {
+                            self.view.expositor(res, {
+                                error: error,
+                                result: xlData
+                            });
+
+                        }
+                    });
+                }, 5000);
+            }
+      
+    } catch (e) {
+        console.log("Error", e);
+        self.view.expositor(res, {
+            error: e,
+            result: result
+        });
+    }
+};
+ApiAuditoria.prototype.get_insExcelData = function(req, res, next) {
+
+    var self = this;
+    var itemObject = JSON.parse(req.query.lstUnidades);
+  
+        if(itemObject.dato1==undefined)
+        itemObject.dato1=0;
+        if(itemObject.dato2==undefined)
+         itemObject.dato2=0;
+        if(itemObject.dato3==undefined)
+        itemObject.dato3='';
+        if(itemObject.dato5==undefined)
+        itemObject.dato5='';
+        if(itemObject.dato6==undefined)
+        itemObject.dato6='';
+        if(itemObject.dato7==undefined)
+        itemObject.dato7='';
+        if(itemObject.dato8==undefined)
+        itemObject.dato8='';
+        if(itemObject.dato9==undefined)
+        itemObject.dato9='';
+        if(itemObject.consecutivo==undefined)
+        itemObject.consecutivo=0;
+    var params = [{ name: 'idAuditoria', value: itemObject.dato1, type: self.model.types.INT },
+        { name: 'idexcel', value: itemObject.dato2, type: self.model.types.STRING },
+        { name: 'modelo', value: itemObject.dato3, type: self.model.types.STRING },
+        { name: 'VIN', value: itemObject.dato4, type: self.model.types.STRING},
+        { name: 'colateral', value: itemObject.dato5, type: self.model.types.STRING },
+        { name: 'codigo', value: itemObject.dato6, type: self.model.types.STRING },
+        { name: 'fechaentrega', value: itemObject.dato7, type: self.model.types.STRING },
+        { name: 'fecharepuve', value: itemObject.dato8, type: self.model.types.STRING },
+        { name: 'clienteestatus', value: itemObject.dato9, type: self.model.types.STRING } ,
+        { name: 'consecutivo', value: itemObject.consecutivo, type: self.model.types.INT }      
+    ];
+
+    self.model.query('TEMPORALLAYOUTAuditoria_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_ConciliacionAuditoria = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+    params = [{ name: 'idAuditoria', value: req.query.idAuditoria, type: self.model.types.INT }];
+    self.model.query('GET_ConciliacionAuditoria_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiAuditoria;

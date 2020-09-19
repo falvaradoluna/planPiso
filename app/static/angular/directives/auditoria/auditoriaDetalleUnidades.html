@@ -31,6 +31,9 @@
 <button type="button" class="btn btn-default" ng-click="generaReporte()">
     Generar Reporte <span class="fa fa-wpforms"></span>
 </button>
+<button type="button" class="btn btn-default" ng-click="CargarAuditoria()">
+    Cargar auditoria en excel <span class="glyphicon glyphicon-search"></span>
+</button>
 <h2>Unidades Plan Piso Normales</h2>
 <table id="tblNormales" class="table table-hover borderless">
     <thead>
@@ -306,3 +309,37 @@
 <!--===================================================-->
 <!--End Modal selectReporte-->
 <!--===================================================-->
+
+<!-- Modal -->
+<div class="modal fade" id="modalNuevaConciliacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> <span class="text-navy">Carga de Archivo</span> </h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Carga Layout</label>
+                        <div id="templeteDropzone2"></div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div ng-show="!loadingPanel">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" ng-click="nextStep2()">Continuar</button>
+                </div>
+                <div ng-show="loadingPanel">
+                    <center>
+                        <img src="assets/img/loading-light.gif" width="30"> Cargando ...
+                    </center>
+                    <!-- <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin={{contador}} aria-valuemax={{maxcontador}} style="width: 75%"></div>
+                      </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

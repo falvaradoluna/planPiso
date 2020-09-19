@@ -10,6 +10,7 @@
                 <tr>
                     <th>Financiera</th>
                     <th>Periodo Contable</th>
+                  
                     <th>Fecha de Solicitud</th>
                     <th>Estatus</th>
                     <th>-</th>
@@ -19,6 +20,7 @@
                 <tr ng-repeat="(key, item) in lstPendiente">
                     <td>{{ item.nombre }}</td>
                     <td>{{ lstMonth[ item.periodoContable - 1 ] }}</td>
+                   
                     <td>{{ item.fechaSolicitud.split('T')[0] }}</td>
                     <td>
                         <span class="" ng-class="{ 'text-danger': item.estatus == 0, 'text-default' : item.estatus == 1, 'text-success' : item.estatus == 2}" style="overflow: hidden;">
@@ -60,6 +62,7 @@
                     <th>Num Auditoría</th>
                     <th>Empresa</th>
                     <th>Financiera</th>
+                    <th>Tipo de auditoría</th>
                     <th>fecha</th>
                     <th>Estatus</th>
                    
@@ -71,6 +74,7 @@
                     <td> <b>{{item.idAuditoria}}</b> </td>
                     <td> {{ item.empresa }} </td>
                     <td> {{ item.financiera }} </td>
+                    <td>{{item.tipoAuditoria}}</td>
                     <td> {{ item.fecha }}</td>
                     <td> 
                         <span ng-show="item.idestatus == 3" class="label label-danger">

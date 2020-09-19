@@ -193,7 +193,7 @@ appModule.factory('auditoriaFactory', function($http) {
         },
         reporteAuditoria: function(json) {
             return $http({
-                url: 'http://localhost:5488/api/report',
+                url: 'http://192.168.20.89:5488/api/report',
                 method: "POST",
                 data: {
                     template: { name: "auditoriaPP" },
@@ -204,6 +204,29 @@ appModule.factory('auditoriaFactory', function($http) {
                 },
                 responseType: 'arraybuffer'
             });
-        }
+        },
+        readLayout: function(LayoutName) {
+            return $http({
+                url: auditoriaUrl + 'readLayout/',
+                method: "GET",
+                params: { LayoutName: LayoutName },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        insExcelData: function(lstUnidades) {
+            return $http({
+                url: auditoriaUrl + 'insExcelData/',
+                method: "GET",
+                params: { lstUnidades: lstUnidades },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },getConciliacionAuditoria: function(idAuditoria) {
+            return $http({
+                url: auditoriaUrl + 'ConciliacionAuditoria/',
+                method: "GET",
+                params: { idAuditoria: idAuditoria },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
     };
 });
