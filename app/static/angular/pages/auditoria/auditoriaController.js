@@ -401,6 +401,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     // --Reporte Excel desde jsreport
     // -----------------------------------------
     $scope.generaReporte = function() {
+        $("#mdlLoading").modal('show');
         // console.log($scope.lstAuditoriaNormales, $scope.lstAuditoriaDPP, $scope.lstAuditoriaFS);
         // console.log($scope.lstAuditoriaNormalesTotal, $scope.lstAuditoriaDPPTotal, $scope.lstAuditoriaFSTotal)
         angular.forEach($scope.lstAuditoriaNormales, function(value, key) {
@@ -436,6 +437,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             a.href = URL.createObjectURL(file);
             a.download = 'Reporte Auditoria - ' + $scope.session.nombre;
             a.click();
+            $("#mdlLoading").modal('hide');
         }, function error(err) {
             error(err);
         });

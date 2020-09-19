@@ -193,7 +193,7 @@ appModule.factory('auditoriaFactory', function($http) {
         },
         reporteAuditoria: function(json) {
             return $http({
-                url: 'http://192.168.20.89:5488/api/report',
+                url: global_settings.urlJsReport,
                 method: "POST",
                 data: {
                     template: { name: "auditoriaPP" },
