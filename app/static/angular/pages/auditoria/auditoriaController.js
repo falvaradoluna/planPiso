@@ -6,7 +6,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck = "Desmarcar Unidades";
     $scope.currentPanel = 'pnlCargaArchivo';
-
+    $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
+ 
     $scope.titleDocumentos = '';
     $scope.titleDocumentosDetalle = '';
     $scope.tipoauditoria = 0;
@@ -442,4 +443,149 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         });
 
     };
+
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    var myDropzone;
+    $scope.Dropzone = function() {
+        $("#templeteDropzone2").html( '' )
+
+        var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" accept="text/csv, .csv" />
+                        </div>
+                    </form>`;
+
+        $("#templeteDropzone2").html( html );
+        myDropzone = new Dropzone("#idDropzone", {
+            url: "api/apiAuditoria/upload",
+            uploadMultiple: 0,
+            maxFiles: 1,
+            autoProcessQueue: false,
+            acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            webkitRelativePath:"/uploads"
+        });
+
+        myDropzone.on("success", function(req, xhr) {
+            var _this = this;
+
+            var filename = xhr + '.xlsx';
+            $scope.loadingPanel = true;
+            $('#mdlLoading').modal('show');
+            $scope.readLayout(filename);
+
+            $scope.limpiarDropzone = function(){
+                _this.removeAllFiles();
+                myDropzone.enable()
+                $scope.frmConciliacion.loadLayout = true;
+            }
+        });
+
+        myDropzone.on("addedfile", function() {
+            $scope.frmConciliacion.loadLayout = true;
+        });
+    };
+    var execelFields = [];
+    
+    $scope.readLayout = function(filename) {
+        auditoriaFactory.readLayout(filename).then(function(result) {
+            var LayoutFile = result.data;
+            var aux = [];
+            for (var i = 1; i < LayoutFile.length; i++) {
+                aux.push(LayoutFile[i]);
+            }
+
+            execelFields = $scope.arrayToObject(aux);
+            $scope.insertData();
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
+
+    $scope.insertData = function() {
+        try{
+            execelFields[increment]['consecutivo'] = contador;
+            auditoriaFactory.insExcelData(execelFields[increment]).then(function(result) {
+                if( !result.data ){
+                    swal("Auditoria","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                    $('#mdlLoading').modal('hide');
+                    $scope.loadingPanel = false;
+                }
+                else{
+                    if( result.data[0].success == 1 ){
+                        contador    = parseInt(result.data[0].consecutivo);
+
+                        if (increment >= (execelFields.length - 1)) {
+                            // $scope.nexStep();
+                            $scope.frmConciliacion.loadLayout = true;
+                            $scope.loadingPanel = false;
+                            $('#mdlLoading').modal('hide');
+                                // if($scope.frmConciliacion.lbltipoconciliacion== 1)
+                                //     $scope.currentPanel = 'pnlConciliar';
+                                // else
+                                //     $scope.currentPanel = 'pnlConciliarUnidades';
+                            $scope.conceal();
+                            $("#modalNuevaConciliacion").modal('hide');
+                        }
+                        else{
+                            increment++;
+                            $scope.insertData();
+                        }
+                    }                    
+                }
+            })
+            .catch(function(e){
+               console.log("got an error in initial processing",e);
+               throw e;
+            }).then(function(res){
+            });            
+        }
+        catch( e ){
+            console.log( "Error", e );
+            swal("Auditoria","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+        }
+    }
+    $scope.conceal = function() {
+      
+        auditoriaFactory.getConciliacionAuditoria( $scope.idauditoria ).then(function(result) {
+            swal("Auditoria","Archivo cargado correctamente.");
+            setTimeout(function() {
+                location.reload();
+            }, 5000);
+            
+        });
+    };
+    $scope.arrayToObject = function(array) {
+        var lst = [];
+        for (var i = 0; i < array.length; i++) {
+            if(array[i].__EMPTY_23 != undefined)
+            {
+            var obj = { dato1: $scope.idauditoria,
+                dato2: array[i].__EMPTY_11,
+                 dato3: array[i].__EMPTY_17,
+                 dato4: array[i].__EMPTY_23,
+                 dato5: array[i].__EMPTY_26,
+                 dato6: array[i].__EMPTY_27,
+                 dato7: array[i].__EMPTY_31,
+                 dato8: array[i].__EMPTY_34,
+                 dato9: array[i].__EMPTY_48 };
+            lst.push(obj);
+            }
+        }
+        return lst;
+    };
+    $scope.CargarAuditoria= function(){
+
+        $('#modalNuevaConciliacion').modal('show');
+        $scope.Dropzone();
+    }
+    $scope.nextStep2 = function() {
+        myDropzone.processQueue();
+        $scope.frmConciliacion.loadLayout = true;
+      
+    };
+
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
 });
