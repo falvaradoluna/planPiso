@@ -1,4 +1,4 @@
-appModule.controller('polizasController', function($scope, $rootScope, $location, commonFactory, staticFactory, polizasFactory) {
+appModule.controller('polizasController', function($scope, $rootScope, $location, commonFactory, staticFactory, polizasFactory, utils) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
 
@@ -62,6 +62,13 @@ appModule.controller('polizasController', function($scope, $rootScope, $location
         $scope.currentPanel = 'pnlDetalle';
         polizasFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
             $scope.lstUnitDeatil = result.data;
+        });
+    };
+    $scope.prueba = function() {
+        polizasFactory.pruebaReporte(341).then(function(result) {
+            console.log(result);
+            var file = new Blob([result.data], { type: 'application/pdf' });
+                    var fileURL = URL.createObjectURL(file);
         });
     };
 

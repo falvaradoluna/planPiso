@@ -16,6 +16,15 @@ appModule.factory('polizasFactory', function($http) {
                 params: { loteID: loteID },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        pruebaReporte: function(idUsuario) {
+            return $http({
+                url: global_settings.urlCORS + 'api/apiNotificaciones/reporteReduccion/',
+                method: "GET",
+                params: { idUsuario: idUsuario },
+                headers: { 'Content-Type': 'application/json' },
+                responseType: 'arraybuffer'
+            });
         }
 
     };
