@@ -32,7 +32,7 @@ ApiNotificaciones.prototype.get_reporteReduccion = function(req, res, next) {
             data: contenidoReporte
         }
         var options = {
-            uri: 'http://localhost:5488/api/report',
+            uri: urlReport,
             method: 'post',
             json: data
         }
