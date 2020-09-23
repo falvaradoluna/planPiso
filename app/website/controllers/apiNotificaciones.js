@@ -40,6 +40,30 @@ ApiNotificaciones.prototype.get_reporteReduccion = function(req, res, next) {
     });
 };
 
+ApiNotificaciones.prototype.get_prontoPagar = function(req, res, next) {
+    var self = this;
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    self.model.query('usp_get_notificacionProntoPago', params, function(error, result) {
+
+        var contenidoReporte = {
+            "detalle": result
+        };
+        var urlReport = self.conf.parameters.jsReport;
+        // console.log('CONTEDIDO REPORTE', JSON.stringify(contenidoReporte));
+
+        var data = {
+            template: { 'name': 'reporteNotificacionesPP' },
+            data: contenidoReporte
+        }
+        var options = {
+            uri: urlReport,
+            method: 'post',
+            json: data
+        }
+        request(options).pipe(res);
+    });
+};
+
 ApiNotificaciones.prototype.post_notificaciones = function(req, res, next) {
     var self = this;
     var params = [];
