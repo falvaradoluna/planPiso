@@ -229,5 +229,7 @@ DataAccess.prototype.queryInsertDocumentosLoteCompensacion = function(tabla, val
     });
 };
 
+
+
 //exportación del modelo
 module.exports = DataAccess;
