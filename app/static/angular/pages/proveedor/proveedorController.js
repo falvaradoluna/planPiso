@@ -1,4 +1,4 @@
-appModule.controller('proveedorController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, proveedorFactory) {
+appModule.controller('proveedorController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, proveedorFactory, alertFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -238,6 +238,14 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
         }
         itemSchemas.isChecked = true;
         $scope.selectedSchema = itemSchemas;
+    };
+    $scope.validaMonto = function(newValue, oldValue, saldo, index) {
+        if (newValue <= saldo) {
+            $scope.lstNewUnits[index].montoFinanciar = newValue;
+        } else {
+            $scope.lstNewUnits[index].montoFinanciar = oldValue;
+            alertFactory.warning('No puede ingresar un valor mayor al saldo');
+        }
     };
 
     // proveedorFactory.getLote(0, '1,3').then(function(result) {

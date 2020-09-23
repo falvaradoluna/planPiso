@@ -25,7 +25,7 @@
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
             <td>{{unidad.IMPORTE | currency}}</td>            
-            <td> <input type="text" class="form-control" ng-init="unidad.montoFinanciar = unidad.IMPORTE" ng-model="unidad.montoFinanciar" style="width: 100px"></td>
+            <td> <input type="text" class="form-control" ng-init="unidad.montoFinanciar = unidad.IMPORTE" ng-model="unidad.montoFinanciar" ng-change="validaMonto(unidad.montoFinanciar, {{unidad.montoFinanciar}}, unidad.IMPORTE, $index)" style="width: 100px"></td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
             </td>
