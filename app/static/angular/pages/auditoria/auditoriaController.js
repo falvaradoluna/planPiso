@@ -118,6 +118,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             $scope.ctrl.numveh = result.data[0][0].numveh;
             $scope.ctrl.lblFinanciera = result.data[0][0].financiera;
             $scope.ctrl.idestatus = result.data[0][0].idestatus;
+            $scope.ctrl.idtipoAuditoria = result.data[0][0].idtipoAuditoria;
             $scope.lstAuditoriaNormales = result.data[1];
             $scope.lstAuditoriaDPP = result.data[2];
             $scope.lstAuditoriaFS = result.data[3];
@@ -320,7 +321,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
 
         $("#templateDropzone").html(html);
         myDropzone = new Dropzone("#idDropzone", {
-            url: "api/apiAuditoria/upload",
+            url: "api/apiAuditoria/uploadpdf",
             uploadMultiple: 0,
             maxFiles: 1,
             autoProcessQueue: false,
@@ -348,7 +349,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         });
     };
 
-    $scope.readLayout = function(filename, idAuditoria) {
+    $scope.readLayoutauditoria = function(filename, idAuditoria) {
         myDropzone.processQueue();
 
     };
@@ -359,6 +360,9 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             $('#modalCargarArchivo').modal('hide');
             $scope.loadingPanel = false;
             swal("Ok", "Se guardo con exito el archivo", "success");
+            setTimeout(function() {
+                location.reload();
+            },3000);
         }, function(error) {
             console.log("Error", error);
         });
@@ -447,8 +451,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
 
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
-    var myDropzone;
-    $scope.Dropzone = function() {
+    var myDropzone2;
+    $scope.Dropzone2 = function() {
         $("#templeteDropzone2").html( '' )
 
         var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
@@ -458,7 +462,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
                     </form>`;
 
         $("#templeteDropzone2").html( html );
-        myDropzone = new Dropzone("#idDropzone", {
+        myDropzone2 = new Dropzone("#idDropzone", {
             url: "api/apiAuditoria/upload",
             uploadMultiple: 0,
             maxFiles: 1,
@@ -467,7 +471,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             webkitRelativePath:"/uploads"
         });
 
-        myDropzone.on("success", function(req, xhr) {
+        myDropzone2.on("success", function(req, xhr) {
             var _this = this;
 
             var filename = xhr + '.xlsx';
@@ -477,12 +481,12 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
 
             $scope.limpiarDropzone = function(){
                 _this.removeAllFiles();
-                myDropzone.enable()
+                myDropzone2.enable()
                 $scope.frmConciliacion.loadLayout = true;
             }
         });
 
-        myDropzone.on("addedfile", function() {
+        myDropzone2.on("addedfile", function() {
             $scope.frmConciliacion.loadLayout = true;
         });
     };
@@ -578,14 +582,25 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.CargarAuditoria= function(){
 
         $('#modalNuevaConciliacion').modal('show');
-        $scope.Dropzone();
+        $scope.Dropzone2();
     }
     $scope.nextStep2 = function() {
-        myDropzone.processQueue();
+        myDropzone2.processQueue();
         $scope.frmConciliacion.loadLayout = true;
       
     };
 
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+    $scope.BuscarDetailGeneral = function(dato) {
+        var parametros = {
+            vin: dato,
+            idEmpresa: $scope.session.empresaID
+        }
+        auditoriaFactory.buscaVIN(parametros).then(function(result) {
+            $scope.lstBuscar = result.data[0];
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
 });

@@ -9,7 +9,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     $scope.currentPanel = "pnlFinanciera";
     $scope.currentEsquema = 0;
     $scope.currentEsquemaDetail = 0;
-    $scope.usuarioID = 0;
+    $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.editAddTitle = "";
     $scope.lstFinancial = [];
     $scope.lstSchemeDetail = [];
@@ -265,24 +265,19 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
     $scope.copySchema = function(objSchema) {
         $("#modalcopiarEsquema").modal('show');
         $scope.esquemacopiar=objSchema;
-        $scope.esquema=objSchema.nombre;
-        commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
+         esquemaFactory.Empresa($scope.idUsuario).then(function(result) {
+            $scope.lstEmpresaCopy = result.data;
+        });
+       
+    };
+
+    $scope.setCurrentEmpresaCopy = function(EmpresaObj) {
+       
+        $scope.currentEmpresaNameCopy = EmpresaObj.emp_nombre;
+        $scope.empresa=EmpresaObj;
+        commonFactory.getFinancial($scope.empresa.emp_idempresa).then(function(result) {
             $scope.lstFinancialCopy = result.data;
         });
-        // $scope.currentEsquema = objSchema.esquemaID;
-        // $scope.isAddMode = true;
-        // $scope.showAddBtn = false;
-        // $scope.showEditBtn = true;
-        // $scope.currentPanel = "pnlEsquema";
-        // $scope.editAddTitle = "Editando esquema: " + objSchema.nombre;
-        // var params2 = {
-        //     esquemaID: $scope.currentEsquema
-        // };
-        // esquemaFactory.obtenListaReduccion(params2).then(function(result) {
-        //     $scope.esquemaHeader.lstreduccion = result.data;
-        // });
-
-        // $scope.setSchemaHeaderData(objSchema);
     };
     $scope.GuardarCopy=function(){
 

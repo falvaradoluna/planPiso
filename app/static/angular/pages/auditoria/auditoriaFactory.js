@@ -228,5 +228,13 @@ appModule.factory('auditoriaFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        buscaVIN: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'buscaVIN/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
     };
 });

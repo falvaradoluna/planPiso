@@ -63,6 +63,19 @@
                         <div class="col-sm-12">
                             <div class="dropdown" >
                                 <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                                    {{currentEmpresaNameCopy}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="Empresacopy in lstEmpresaCopy">
+                                        <a ng-click="setCurrentEmpresaCopy(Empresacopy)">{{Empresacopy.emp_nombre}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="dropdown" >
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
                                     {{currentFinancialNameCopy}}
                                     <span class="caret"></span>
                                 </button>

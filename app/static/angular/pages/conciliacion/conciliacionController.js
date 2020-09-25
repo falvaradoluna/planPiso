@@ -997,9 +997,9 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         .then(function(result) {
             if (result.data.length > 0) {
                     $scope.busqueda = result.data[0];
-              
+                    $scope.getAbonoContable();
             }
-            $scope.getAbonoContable();
+           
             
         });
       
@@ -1103,7 +1103,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 "titulo": "CONCILIACIÓN  PLAN PISO",
                 "titulo2": "BANCOS",
                 "titulo3": "FA04",
-                "empresa": $scope.busqueda.Empresa,
+                "empresa":  $scope.session.empresaID,
                 "fechaElaboracion": newDate,
                 "conciliacionBancaria": $scope.busqueda.Financiera,
                 "chequera": newDate,

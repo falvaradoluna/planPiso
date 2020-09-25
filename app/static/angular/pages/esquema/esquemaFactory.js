@@ -114,6 +114,13 @@ appModule.factory('esquemaFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
+        } ,Empresa: function(idusuario) {
+            return $http({
+                url: esquemaUrl +'Empresa/',
+                method: "GET",
+                params: {idusuario:idusuario},
+                headers: { 'Content-Type': 'application/json' }
+            });
         },
 
 

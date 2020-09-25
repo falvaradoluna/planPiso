@@ -160,5 +160,18 @@ ApiEsquema.prototype.get_guardarEsquemaCopia = function(req, res, next) {
         });
     });
 };
+ApiEsquema.prototype.get_Empresa = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idusuario, type: self.model.types.INT }];
+
+    self.model.query('EMPRESABYUSER_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiEsquema;
 

@@ -79,7 +79,7 @@ ApiAuditoria.prototype.get_Auditorias = function(req, res, next) {
     });
 };
 
-ApiAuditoria.prototype.post_upload = function(req, res, next) {
+ApiAuditoria.prototype.post_uploadpdf = function(req, res, next) {
     var filename = String(new Date().getTime());
   
     var storage = multer.diskStorage({
@@ -188,6 +188,7 @@ ApiAuditoria.prototype.post_upload = function(req, res, next) {
         }
     });
 };
+
 ApiAuditoria.prototype.get_readLayout = function(req, res, next) {
     var result = undefined;
     var error = undefined;
@@ -276,6 +277,20 @@ ApiAuditoria.prototype.get_ConciliacionAuditoria = function(req, res, next) {
     var params = [];
     params = [{ name: 'idAuditoria', value: req.query.idAuditoria, type: self.model.types.INT }];
     self.model.query('GET_ConciliacionAuditoria_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_buscaVIN = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'vin', value: req.query.vin, type: self.model.types.STRING },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+          ];
+
+    self.model.queryAllRecordSet('Usp_buscaVIN', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
