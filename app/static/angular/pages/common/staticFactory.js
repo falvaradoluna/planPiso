@@ -52,7 +52,7 @@ appModule.factory('staticFactory', function($http) {
         sacarunidadBar: function() {
             return [
                 { name: 'Empresas', url: 'empresa', isActive: false },
-                { name: 'Sacar Unidades de Plan Piso', url: '#', isActive: true }
+                { name: 'Pago de Unidades', url: '#', isActive: true }
             ];
         },
         conciliacionBar: function() {
