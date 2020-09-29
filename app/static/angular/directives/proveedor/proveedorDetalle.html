@@ -10,6 +10,7 @@
             <th>Modelo</th>
             <th>Precio venta</th>
             <th>Saldo Inicial</th>
+            <th>Porcentaje</th>
             <th>Monto a financiar</th>
             <th>
                 <input type="checkbox" ng-click="checkAllUnits()" ng-model="allUnits.isChecked" style="margin-left: 20px;">
@@ -28,8 +29,11 @@
             <td class="text-right">{{unidad.IMPORTE | currency}}</td>
             <td class="text-right">{{unidad.SALDO | currency}}</td>
             <td>
+                <input type="text" ng-init="unidad.porcentaje = 100" ng-model="unidad.porcentaje" style="width: 50px" ng-change="validaPorcentaje(unidad.porcentaje,{{unidad.porcentaje}}, $index)">
+            </td> 
+            <td>
                 <input type="text" class="form-control" ng-init="unidad.montoFinanciar = unidad.SALDO" ng-model="unidad.montoFinanciar" 
-                ng-change="validaMonto(unidad.montoFinanciar, {{unidad.montoFinanciar}}, unidad.IMPORTE, $index)" style="width: 100px">
+                ng-change="validaMonto(unidad.montoFinanciar, {{unidad.montoFinanciar}}, unidad.SALDO, $index)" style="width: 100px">
             </td>
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true">
