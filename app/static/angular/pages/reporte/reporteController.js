@@ -167,6 +167,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         showColumnFooter: true,
         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
         expandableRowHeight: 150,
+        enableGridMenu: true,
         //subGridVariable will be available in subGrid scope
         expandableRowScope: {
             subGridVariable: 'subGridScopeVariable'
