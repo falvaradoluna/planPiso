@@ -62,7 +62,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'numeroSerie': '',
             'saldo': '',
             'tipoProducto': 'CD',
-            'montoCompensar': 0
+            'montoCompensar': 0,
+            'bpro': 1
         },
         {
             'tipoFactura': 'Subsidio Dealer',
@@ -74,7 +75,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'numeroSerie': '',
             'saldo': '',
             'tipoProducto': 'PROV',
-            'montoCompensar': 0
+            'montoCompensar': 0,
+            'bpro': 1
         },
         {
             'tipoFactura': 'Incentivo Penetración',
@@ -86,7 +88,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'numeroSerie': '',
             'saldo': '',
             'tipoProducto': 'IP',
-            'montoCompensar': 0
+            'montoCompensar': 0,
+            'bpro': 1
         },
         {
             'tipoFactura': 'UDI por pagar',
@@ -98,7 +101,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'numeroSerie': '',
             'saldo': '',
             'tipoProducto': 'UDI',
-            'montoCompensar': 0
+            'montoCompensar': 0,
+            'bpro': 1
         }
     ]
     $scope.initAmounts = function() {
@@ -1065,6 +1069,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 console.log(result.data[0], 'COTIZACION')
                                 $scope.engancheCotizacion = result.data[0];
                                 $scope.financieraCotizacion = result.data[0].nombre;
+                                $scope.factura_unidad = result.data[0].ucn_idFactura
                                 // $scope.$apply(function() {
 
                                 $scope.diferenciaPP = $scope.montoTotal - $scope.engancheCotizacion.ucu_impenganche;
@@ -1266,6 +1271,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 });
             }
         });
+        var montoNCA = 0;
         angular.forEach($scope.facturasCompensacion, function(value, key) {
             if (value.montoCompensar > 0) {
                 $scope.facturasTotal.push(value);
@@ -1295,8 +1301,27 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         'montoCompensar': value.montoCompensar
                     });
                 }
+                if (value.bpro) {
+                    montoNCA = montoNCA + Number(value.montoCompensar);
+                    value.factura = $scope.factura_unidad;
+                }
             }
         });
+        console.log(montoNCA, 'ANDALE PLEASE')
+        if (montoNCA > 0) {
+            $scope.facturasTotal.unshift({
+                'tipoFactura': 'NCA',
+                'cargo': montoNCA,
+                'iva': '',
+                'total': montoNCA,
+                'fecha': '',
+                'factura': $scope.factura_unidad,
+                'numeroSerie': '',
+                'saldo': '',
+                'tipoProducto': 'NCA',
+                'montoCompensar': montoNCA
+            });
+        }
         console.log($scope.saldoCompensar - saldoNcr, 'COMPRA');
         $scope.facturasTotal.push({
             'tipoFactura': 'Compra',
@@ -1332,7 +1357,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         idpoliza: $scope.LastId,
                         idmovimiento: item.movimientoID,
                         idUsuario: $scope.idUsuario,
-                        saldo: $scope.saldoCompensar - saldoNcr,
+                        saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
                         tipoProducto: value.tipoProducto,
                         documento: value.factura,
                         tiempo: tiempo,
