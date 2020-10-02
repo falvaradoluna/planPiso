@@ -21,56 +21,94 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-md-12">
-                            <table class="table">
+                        <div >
+                            <table class="table reporteText">
                                 <thead>
                                     <tr>
                                         <th class="thNoneReporte"></th>
-                                        <th colspan="3" class="thReporte text-center">Tasa de Interés</th>
+                                        <!-- <th colspan="3" class="thReporte text-center">Tasa de Interés</th> -->
                                         <th colspan="2" class="thReporte text-center">Línea Autorizada</th>
+                                        <th colspan="2" class="thReporte text-center">Línea Utilizada</th>
+                                        <th colspan="2" class="thReporte text-center">Línea Disponible</th>
+                                        <th colspan="2" class="thReporte text-center">Inventario</th>
+                                        <th colspan="2" class="thReporte text-center">CXC</th>
                                         <th class="thNoneReporte"></th>
-                                        <th class="thNoneReporte"></th>
-                                        <th class="thNoneReporte"></th>
-                                        <th colspan="6" class="thReporte text-center">Unidades</th>
+                                        <th colspan="2" class="thReporte text-center">Estrella</th>
+                                        <th colspan="2" class="thReporte text-center">Doble Estrella</th>
+                                        <th colspan="2" class="thReporte text-center">Unidades</th>
                                     </tr>
                                     <tr>
                                         <th class="thReporte thNoneReporte">Financiera</th>
-                                        <th class="thReporte">TIIE</th>
+                                        <!-- <th class="thReporte">TIIE</th>
                                         <th class="thReporte">Spread</th>
-                                        <th class="thReporte">Tasa</th>
-                                        <th class="thReporte">Unidades</th>
-                                        <th class="thReporte">Monto</th>
-                                        <th class="thReporte thNoneReporte"></th>
-                                        <th class="thReporte thNoneReporte">Línea utilizada</th>
-                                        <th class="thReporte thNoneReporte">Línea disponible</th>
-                                        <th class="thReporte"></th>
-                                        <th class="thReporte">Inventario</th>
-                                        <th class="thReporte">Unidades en Estrella</th>
-                                        <th class="thReporte">Estrella</th>
-                                        <th class="thReporte">Unidades doble Estrella</th>
-                                        <th class="thReporte">Doble Estrella</th>
+                                        <th class="thReporte">Tasa</th> -->
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte thNoneReporte">Conciliación</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte thNoneReporte">Días de gracia</th>
+                                        <th class="thReporte thNoneReporte">Que generan intereses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="datoReporte in datosReporte">
                                         <td>{{datoReporte.nombre}}</td>
-                                        <td>{{datoReporte.tiie}}</td>
+                                        <!-- <td>{{datoReporte.tiie}}</td>
                                         <td>{{datoReporte.puntos}}</td>
-                                        <td>{{datoReporte.puntos + datoReporte.tiie}}</td>
+                                        <td>{{datoReporte.puntos + datoReporte.tiie}}</td> -->
                                         <td class="text-right">{{datoReporte.unidadesAutorizadas }}</td>
                                         <td class="text-right">{{datoReporte.lineaAutorizada | currency}}</td>
-                                        <td>{{datoReporte.unidades}}</td>
+                                        <td class="text-right">{{datoReporte.unidades}}</td>
                                         <td class="text-right">{{datoReporte.saldo | currency}}</td>
-                                        <td class="text-right">{{datoReporte.lineaAutorizada - datoReporte.saldo | currency}}</td>
-                                        <td>{{datoReporte.unidades}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesDisponibles}}</td>
+                                        <td class="text-right">{{datoReporte.lineaResto | currency}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesInventario}}</td>
                                         <td class="text-right">{{datoReporte.saldo | currency}}</td>
-                                        <td>{{datoReporte.estrella}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesCxc}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesCxcMonto | currency}}</td>
+                                        <td class="text-right">{{datoReporte.conciliacion}}</td>
+                                        <td class="text-right">{{datoReporte.estrella}}</td>
                                         <td class="text-right">{{datoReporte.estrellaMonto | currency}}</td>
-                                        <td>{{datoReporte.dobleEstrella}}</td>
+                                        <td class="text-right">{{datoReporte.dobleEstrella}}</td>
                                         <td class="text-right">{{datoReporte.dobleEstrellaMonto | currency}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesDiaGracia}}</td>
+                                        <td class="text-right">{{datoReporte.unidadesGeneraIntereses}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
+                                    <tr>
+                                        <td class="reporteTotal">TOTAL</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesAutorizadas'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'lineaAutorizada' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidades'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesDisponibles'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'lineaResto' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesInventario'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesCxc'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'conciliacion'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'estrella'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'estrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'dobleEstrella'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'dobleEstrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesDiaGracia'}}</td>
+                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesGeneraIntereses'}}</td>
+                                    </tr>
+                                </tfoot>
+                                <!-- <tfoot>
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -87,7 +125,7 @@
                                         <td>{{unidadesDobleE}}</td>
                                         <td class="text-right">{{totalDobleE | currency}}</td>
                                     </tr>
-                                </tfoot>
+                                </tfoot> -->
                             </table>
                         </div>
                     </div>
@@ -122,7 +160,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div id="grid1" ui-grid="empresa.group" ui-grid-pinning ui-grid-expandable></div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,7 +168,7 @@
     </div>
 </div>
 <script type="text/ng-template" id="header.html">
-  <div role="rowgroup" class="ui-grid-header">
+    <div role="rowgroup" class="ui-grid-header">
     <!-- theader -->
     <div class="ui-grid-top-panel">
       <div class="ui-grid-header-viewport">

@@ -382,3 +382,11 @@ tr.unSelect td {
 }
 
 /*END UI-GRID*/
+/*BEGIN estilos Reporte*/
+.reporteText{
+    font-size: 8.5px !important;
+}
+.reporteTotal{
+    font-weight: bold;
+}
+/*END estilos Reporte*/
