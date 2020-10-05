@@ -57,8 +57,8 @@
                                         <th class="thReporte text-center">Monto</th>
                                         <th class="thReporte text-center">Unidades</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte thNoneReporte">Días de gracia</th>
-                                        <th class="thReporte thNoneReporte">Que generan intereses</th>
+                                        <th class="thReporte">Días de gracia</th>
+                                        <th class="thReporte">Que generan intereses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,24 +88,24 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="reporteTotal">TOTAL</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesAutorizadas'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'lineaAutorizada' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidades'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesDisponibles'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'lineaResto' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesInventario'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesCxc'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'conciliacion'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'estrella'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'estrellaMonto' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'dobleEstrella'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'dobleEstrellaMonto' | currency}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesDiaGracia'}}</td>
-                                        <td class="text-right reporteTotal">{{datosReporte | sumOfValue:'unidadesGeneraIntereses'}}</td>
+                                        <td class="reporteTotal thReporte">TOTAL</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesAutorizadas'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'lineaAutorizada' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidades'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesDisponibles'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'lineaResto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesInventario'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesCxc'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'conciliacion'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'estrella'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'estrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'dobleEstrella'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'dobleEstrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesDiaGracia'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesGeneraIntereses'}}</td>
                                     </tr>
                                 </tfoot>
                                 <!-- <tfoot>

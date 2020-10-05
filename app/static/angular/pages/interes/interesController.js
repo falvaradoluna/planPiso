@@ -1239,6 +1239,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         // Agrego al arreglo la de compra  
         var saldoNcr = 0;
         var FacturaUN = 0;
+        var auxConta = 1;
         angular.forEach($scope.facturasTotal, function(value, key) {
             if (value.tipoProducto == 'FA' && value.garantia == 1) {
                 saldoNcr = value.montoCompensar * 0.75;
@@ -1294,7 +1295,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         'iva': '',
                         'total': value.montoCompensar,
                         'fecha': '',
-                        'factura': FacturaUN,
+                        'factura': $scope.factura_unidad,
                         'numeroSerie': '',
                         'saldo': '',
                         'tipoProducto': 'PLP',
@@ -1309,18 +1310,28 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
         console.log(montoNCA, 'ANDALE PLEASE')
         if (montoNCA > 0) {
-            $scope.facturasTotal.unshift({
-                'tipoFactura': 'NCA',
-                'cargo': montoNCA,
-                'iva': '',
-                'total': montoNCA,
-                'fecha': '',
-                'factura': $scope.factura_unidad,
-                'numeroSerie': '',
-                'saldo': '',
-                'tipoProducto': 'NCA',
-                'montoCompensar': montoNCA
-            });
+            var paraCompensacionDetalleNca = {
+                idpoliza: $scope.LastId,
+                idmovimiento: item.movimientoID,
+                idUsuario: $scope.idUsuario,
+                saldo: montoNCA,
+                tipoProducto: 'NCA',
+                documento: $scope.factura_unidad,
+                tiempo: tiempo,
+                consecutivo: auxConta
+            }
+            // $scope.facturasTotal.push({
+            //     'tipoFactura': 'NCA',
+            //     'cargo': montoNCA,
+            //     'iva': '',
+            //     'total': montoNCA,
+            //     'fecha': '',
+            //     'factura': $scope.factura_unidad,
+            //     'numeroSerie': '',
+            //     'saldo': '',
+            //     'tipoProducto': 'NCA',
+            //     'montoCompensar': montoNCA
+            // });
         }
         console.log($scope.saldoCompensar - saldoNcr, 'COMPRA');
         $scope.facturasTotal.push({
@@ -1337,69 +1348,140 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
         var paraCompensacionDetalle;
         var promises = [];
-        var auxConta = 1;
-        $scope.facturasTotal.map((value) => {
-            switch (value.tipoProducto) {
-                case 'FU':
-                    paraCompensacionDetalle = {
-                        idpoliza: $scope.LastId,
-                        idmovimiento: item.movimientoID,
-                        idUsuario: $scope.idUsuario,
-                        saldo: $scope.saldoFU,
-                        tipoProducto: value.tipoProducto,
-                        documento: value.factura,
-                        tiempo: tiempo,
-                        consecutivo: auxConta
+        if (montoNCA > 0) {
+            interesFactory.detalleBproCompensacion(paraCompensacionDetalleNca).then(function success(result) {
+                console.log(result);
+                auxConta++;
+                $scope.facturasTotal.map((value) => {
+                    switch (value.tipoProducto) {
+                        case 'FU':
+                            paraCompensacionDetalle = {
+                                idpoliza: $scope.LastId,
+                                idmovimiento: item.movimientoID,
+                                idUsuario: $scope.idUsuario,
+                                saldo: $scope.saldoFU,
+                                tipoProducto: value.tipoProducto,
+                                documento: value.factura,
+                                tiempo: tiempo,
+                                consecutivo: auxConta
+                            }
+                            break;
+                        case 'COMPRA':
+                            paraCompensacionDetalle = {
+                                idpoliza: $scope.LastId,
+                                idmovimiento: item.movimientoID,
+                                idUsuario: $scope.idUsuario,
+                                saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
+                                tipoProducto: value.tipoProducto,
+                                documento: value.factura,
+                                tiempo: tiempo,
+                                consecutivo: auxConta
+                            }
+                            var preLoteCompensacion = [{
+                                'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
+                                'idUsuario': $scope.idUsuario,
+                                'idPoliza': $scope.LastId,
+                                'pagoCompensacion': $scope.unidadCompensacion.saldo - $scope.saldoCompensar - saldoNcr,
+                                'estatus': 1
+                            }];
+                            interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result) {
+                                console.log(result)
+                            }, function err(error) {
+                                console.log(error)
+                            });
+                            break;
+                        default:
+                            paraCompensacionDetalle = {
+                                idpoliza: $scope.LastId,
+                                idmovimiento: item.movimientoID,
+                                idUsuario: $scope.idUsuario,
+                                saldo: value.montoCompensar,
+                                tipoProducto: value.tipoProducto,
+                                documento: value.factura,
+                                tiempo: tiempo,
+                                consecutivo: auxConta
+                            }
                     }
-                    break;
-                case 'COMPRA':
-                    paraCompensacionDetalle = {
-                        idpoliza: $scope.LastId,
-                        idmovimiento: item.movimientoID,
-                        idUsuario: $scope.idUsuario,
-                        saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
-                        tipoProducto: value.tipoProducto,
-                        documento: value.factura,
-                        tiempo: tiempo,
-                        consecutivo: auxConta
-                    }
-                    var preLoteCompensacion = [{
-                        'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
-                        'idUsuario': $scope.idUsuario,
-                        'idPoliza': $scope.LastId,
-                        'pagoCompensacion': $scope.unidadCompensacion.saldo - $scope.saldoCompensar - saldoNcr,
-                        'estatus': 1
-                    }];
-                    interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result) {
-                        console.log(result)
-                    }, function err(error) {
-                        console.log(error)
-                    });
-                    break;
-                default:
-                    paraCompensacionDetalle = {
-                        idpoliza: $scope.LastId,
-                        idmovimiento: item.movimientoID,
-                        idUsuario: $scope.idUsuario,
-                        saldo: value.montoCompensar,
-                        tipoProducto: value.tipoProducto,
-                        documento: value.factura,
-                        tiempo: tiempo,
-                        consecutivo: auxConta
-                    }
-            }
-            console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
-            promises.push(interesFactory.detalleBproCompensacion(paraCompensacionDetalle));
-            auxConta++;
-        });
-        Promise.all(promises).then(function response(result) {
-            console.log(result);
-            $('#mdlLoading').modal('hide');
-            swal("Ok", "Finalizó con exito", "success");
-            setTimeout(function() {
-                window.location = "/interes";
-            }, 1000);
-        });
+                    console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
+                    promises.push(interesFactory.detalleBproCompensacion(paraCompensacionDetalle));
+                    auxConta++;
+                });
+                Promise.all(promises).then(function response(result) {
+                    console.log(result);
+                    $('#mdlLoading').modal('hide');
+                    swal("Ok", "Finalizó con exito", "success");
+                    setTimeout(function() {
+                        window.location = "/interes";
+                    }, 1000);
+                });
+            }, function error(err) {
+                console.log('Ocurrio un error al intentar insertar NCA')
+            });
+        } else {
+            $scope.facturasTotal.map((value) => {
+                switch (value.tipoProducto) {
+                    case 'FU':
+                        paraCompensacionDetalle = {
+                            idpoliza: $scope.LastId,
+                            idmovimiento: item.movimientoID,
+                            idUsuario: $scope.idUsuario,
+                            saldo: $scope.saldoFU,
+                            tipoProducto: value.tipoProducto,
+                            documento: value.factura,
+                            tiempo: tiempo,
+                            consecutivo: auxConta
+                        }
+                        break;
+                    case 'COMPRA':
+                        paraCompensacionDetalle = {
+                            idpoliza: $scope.LastId,
+                            idmovimiento: item.movimientoID,
+                            idUsuario: $scope.idUsuario,
+                            saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
+                            tipoProducto: value.tipoProducto,
+                            documento: value.factura,
+                            tiempo: tiempo,
+                            consecutivo: auxConta
+                        }
+                        var preLoteCompensacion = [{
+                            'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
+                            'idUsuario': $scope.idUsuario,
+                            'idPoliza': $scope.LastId,
+                            'pagoCompensacion': $scope.unidadCompensacion.saldo - $scope.saldoCompensar - saldoNcr,
+                            'estatus': 1
+                        }];
+                        interesFactory.insertaDocumentosLoteCompensacion(preLoteCompensacion).then(function(result) {
+                            console.log(result)
+                        }, function err(error) {
+                            console.log(error)
+                        });
+                        break;
+                    default:
+                        paraCompensacionDetalle = {
+                            idpoliza: $scope.LastId,
+                            idmovimiento: item.movimientoID,
+                            idUsuario: $scope.idUsuario,
+                            saldo: value.montoCompensar,
+                            tipoProducto: value.tipoProducto,
+                            documento: value.factura,
+                            tiempo: tiempo,
+                            consecutivo: auxConta
+                        }
+                }
+                console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
+                promises.push(interesFactory.detalleBproCompensacion(paraCompensacionDetalle));
+                auxConta++;
+            });
+            Promise.all(promises).then(function response(result) {
+                console.log(result);
+                $('#mdlLoading').modal('hide');
+                swal("Ok", "Finalizó con exito", "success");
+                setTimeout(function() {
+                    window.location = "/interes";
+                }, 1000);
+            });
+        }
+
     };
     $scope.CreaCompensacion = function() {
         swal({
