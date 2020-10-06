@@ -167,6 +167,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         showColumnFooter: true,
         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
         expandableRowHeight: 150,
+        enableGridMenu: true,
         //subGridVariable will be available in subGrid scope
         expandableRowScope: {
             subGridVariable: 'subGridScopeVariable'
@@ -179,8 +180,9 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     };
     $scope.gridOptions.columnDefs = [{
             field: 'nombre',
-            width: 600,
+            width: 300,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >Total</div>',
+            pinnedLeft:true,
             headers: [
                 { label: 'Financiera', rowSpan: 2 },
                 { label: '', rowSpan: '#rowSpan' }
@@ -213,6 +215,8 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         {
             field: 'unidadesAutorizadas',
             width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: 'Línea Autorizada', colSpan: 2 },
                 { label: 'Unidades' }
@@ -221,10 +225,10 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         {
             field: 'lineaAutorizada',
             width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
             cellFilter: 'currency',
             cellClass: 'currencyGrid',
-            aggregationType: uiGridConstants.aggregationTypes.sum,
-            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: '', colSpan: '#colSpan' },
                 { label: 'Monto' }
@@ -233,6 +237,8 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         {
             field: 'unidades',
             width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: 'Línea utilizada', colSpan: 2 },
                 { label: 'Unidades' }
@@ -253,6 +259,8 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         {
             field: 'unidadesDisponibles',
             width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: 'Línea disponible', colSpan: 2 },
                 { label: 'Unidades' }
@@ -261,6 +269,8 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         {
             field: 'lineaResto',
             width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
             cellFilter: 'currency',
             cellClass: 'currencyGrid',
             headers: [
@@ -291,8 +301,42 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             ]
         },
         {
+            field: 'unidadesCxc',
+            width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Unidades cxc', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            field: 'unidadesCxcMonto',
+            width: 150,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
+            ]
+        },
+        {
+            field: 'conciliacion',
+            width: 100,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+            headers: [
+                { label: 'Concliacion', rowSpan: 2 },
+                { label: '', rowSpan: '#rowSpan' }
+            ]
+        },
+        {
             field: 'estrella',
             width: 80,
+            aggregationType: uiGridConstants.aggregationTypes.sum,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: 'Unidades en Estrella', colSpan: 2 },
                 { label: 'Unidades' }
@@ -348,16 +392,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
                 { label: 'Unidades que genera Intereses', rowSpan: 2 },
-                { label: '', rowSpan: '#rowSpan' }
-            ]
-        },
-        {
-            field: 'conciliacion',
-            width: 100,
-            aggregationType: uiGridConstants.aggregationTypes.sum,
-            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
-            headers: [
-                { label: 'Concliacion', rowSpan: 2 },
                 { label: '', rowSpan: '#rowSpan' }
             ]
         }

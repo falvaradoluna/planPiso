@@ -356,29 +356,41 @@ tr.unSelect td {
 
 /*END Estilo tabla Reporte*/
 /*BEGIN UI-GRID*/
-.currencyGrid{
-    text-align:right;
+.currencyGrid {
+    text-align: right;
 }
+
 .ui-grid-header-viewport .table {
-  table-layout: fixed;
-  margin-bottom: 0;
-  border-width: 0 0 0 1px;
+    table-layout: fixed;
+    margin-bottom: 0;
+    border-width: 0 0 0 1px;
 }
 
-.ui-grid-header-viewport .table.table-bordered > thead > tr > th:last-child {
-  //border-right-width: 2px;
+.ui-grid-header-viewport .table.table-bordered>thead>tr>th:last-child {
+    //border-right-width: 2px;
 }
 
-.ui-grid-header-viewport .table.table-bordered > thead > tr > th {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  border-width: 1px 1px 0 0;
-  border-style: solid;
-  border-color: #cecece;
-  text-align: center;
-  vertical-align: middle;
-  min-height: 35px;
+.ui-grid-header-viewport .table.table-bordered>thead>tr>th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+    border-color: #cecece;
+    text-align: center;
+    vertical-align: middle;
+    min-height: 35px;
 }
 
 /*END UI-GRID*/
+/*BEGIN estilos Reporte*/
+.reporteText {
+    font-size: 8.5px !important;
+}
+
+.reporteTotal {
+    font-weight: bold;
+    border-top: 1px solid #FA7D00 !important;
+}
+
+/*END estilos Reporte*/

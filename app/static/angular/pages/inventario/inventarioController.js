@@ -1,4 +1,4 @@
-appModule.controller('inventarioController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, inventarioFactory, alertFactory) {
+appModule.controller('inventarioController', function($scope, $rootScope, $location, filterFilter, commonFactory, staticFactory, inventarioFactory, alertFactory, unuevasFactory) {
 
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -37,6 +37,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         $scope.initTblProviders();
         $('#mdlLoading').modal('hide');
     });
+
     $scope.initTblProviders = function() {
         $scope.setTableStyle('#tblUnidadesInventario');
         $scope.totalUnidades = $scope.lstNewUnits.length;
@@ -238,6 +239,36 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         }
         itemSchemas.isChecked = true;
         $scope.selectedSchema = itemSchemas;
+        if ($scope.selectedSchema.tipoColateralId != undefined) {
+            var data = {
+                idPersona:  $scope.FinancieraSel.financieraIDBP,
+                idEmpresa: $scope.unidad.idEmpresa,
+                idColateral: $scope.selectedSchema.tipoColateralId
+            };
+
+            unuevasFactory.SaldoFinanciera(data).then(function(result) {
+                if (result.data.length > 0) {
+                    $scope.nombreFinanciera = result.data[0].nombrefinanciera;
+                    $scope.saldofinanciera = result.data[0].monto - result.data[0].saldofinanciera;
+                    $scope.idfinancierabp = result.data[0].idfinancierabp;
+                    // if($scope.saldofinanciera-$scope.saldounidad<=0)
+                    // {
+                    //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                    //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
+                    //         {
+                    //             $scope.lstNewUnits[i].isChecked=false;
+                    //         }
+                    //     }
+                    //     $scope.saldounidad=0;
+                    //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
+
+                    // }
+                }
+
+            }, function(error) {
+                console.log("Error", error);
+            });
+        }
     };
     $scope.validaMonto = function(newValue, oldValue, saldo, index) {
         if (newValue <= saldo) {
@@ -247,5 +278,27 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
     };
+    $scope.validaPorcentaje = function(newValue, oldValue, index) {
+        if (newValue > 100) {
+            $scope.lstNewUnits[index].porcentaje = oldValue;
+            alertFactory.warning('El porcentaje no puede ser mayor a 100')
+        } else {
+            $scope.lstNewUnits[index].porcentaje = newValue;
+            $scope.lstNewUnits[index].montoFinanciar = ($scope.lstNewUnits[index].IMPORTE * (newValue / 100))
+        }
+    }
+    $scope.EvaluarUnidad=function(unidadin)
+    {
+        $scope.unidad=unidadin;
+        
+        
+            $scope.saldounidad=0;
+            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+                if($scope.lstNewUnits[i].isChecked)
+                {
+                    $scope.saldounidad=$scope.saldounidad+$scope.lstNewUnits[i].SALDO;
+                }
+            }
+    }
 
 });

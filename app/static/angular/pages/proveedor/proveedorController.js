@@ -170,7 +170,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
                 idfinancieraD: 0,
                 idEsquemaD: 0,
                 idUsuario: $scope.idUsuario,
-                montoFinanciar: item.montoFinanciar 
+                montoFinanciar: item.montoFinanciar
             }
 
             proveedorFactory.proveedorPolizaDetalle(paraproveedorDetalle).then(function(response) {
@@ -247,6 +247,15 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
     };
+    $scope.validaPorcentaje = function(newValue, oldValue, index) {
+        if (newValue > 100) {
+            $scope.lstNewUnits[index].porcentaje = oldValue;
+            alertFactory.warning('El porcentaje no puede ser mayor a 100')
+        } else {
+            $scope.lstNewUnits[index].porcentaje = newValue;
+            $scope.lstNewUnits[index].montoFinanciar = ($scope.lstNewUnits[index].SALDO * (newValue / 100))
+        }
+    }
 
     // proveedorFactory.getLote(0, '1,3').then(function(result) {
     //     $scope.lstUnitsPending = result.data;
