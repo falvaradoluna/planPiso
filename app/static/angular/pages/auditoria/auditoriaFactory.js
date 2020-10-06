@@ -235,6 +235,13 @@ appModule.factory('auditoriaFactory', function($http) {
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },getTiposColateral: function(financieraID) {
+            return $http({
+                url: auditoriaUrl + 'TiposColateral/',
+                method: "GET",
+                params: { financieraID: financieraID },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 });

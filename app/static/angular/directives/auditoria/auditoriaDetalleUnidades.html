@@ -39,106 +39,9 @@
     <thead>
         <tr>
             <th></th>
-            <th>Documento</th>
-            <th>Número serie</th>
-            <th>Ubicación</th>
-            <th>Situación</th>
-            <th>Saldo</th>
-            <th>Saldo CXC</th>
-            <th>Unidad encontrada?</th>
-            <th width="180">Observaciones</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="(key, dato) in lstAuditoriaNormales" repeat-end="setTableStyle('#tblNormales')">
-            <td style="text-align: center;">
-                <input type="checkbox" ng-model="dato.isChecked">
-            </td>
-            <td>{{dato.documento}}</td>
-            <td>
-                <b>{{dato.vin}}</b><br>
-            </td>
-            <td>{{dato.Ubicacion}}</td>
-            <td>{{dato.Situacion}}</td>
-            <td>{{dato.saldo | currency}}</td>
-            <td>{{dato.saldoCXC | currency}}</td>
-            <td><input type="checkbox" ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
-            <td>{{dato.observaciones}}</td>
-            <td>
-                <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
-                    <span class="glyphicon glyphicon-edit"></span>
-                </button>
-            </td>
-            <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="5" style="text-align:right">Total:</th>
-            <th>{{lstAuditoriaNormalesTotal | currency}}</th>
-        </tr>
-    </tfoot>
-</table>
-<hr>
-<h2>Unidades Plan Piso DPP</h2>
-<table id="tblDPP" class="table table-hover borderless">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Documento</th>
-            <th>Número serie</th>
-            <th>Ubicación</th>
-            <th>Situación</th>
-            <th>Saldo</th>
-            <th>Saldo CXC</th>
-            <th>Fecha fin DPP</th>
-            <th>Fecha factura</th>
-            <th>Factura</th>
-            <th>Unidad encontrada?</th>
-            <th width="180">Observaciones</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="(key, dato) in lstAuditoriaDPP" repeat-end="setTableStyle('#tblDPP')">
-            <td style="text-align: center;">
-                <input type="checkbox" ng-model="dato.isChecked">
-            </td>
-            <td>{{dato.documento}}</td>
-            <td>
-                <b>{{dato.vin}}</b><br>
-            </td>
-            <td>{{dato.Ubicacion}}</td>
-            <td>{{dato.Situacion}}</td>
-            <td>{{dato.saldo | currency}}</td>
-            <td>{{dato.saldoCXC | currency}}</td>
-            <td>{{dato.fechafin}}</td>
-            <td>{{dato.ucn_fechaalta}}</td>
-            <td>{{dato.ucn_idFactura}}</td>
-            <td><input type="checkbox" ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
-            <td>{{dato.observaciones}}</td>
-            <td>
-                <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
-                    <span class="glyphicon glyphicon-edit"></span>
-                </button>
-            </td>
-            <!-- <td ng-class="dato.esMayor == 1 ? 'celdaFondoVerde' : dato.esMayor == 2 ? 'celdaFondoAmarillo' : 'celdaFondoRojo'  ">{{dato.diferencia| currency}}</td> -->
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="5" style="text-align:right">Total:</th>
-            <th>{{lstAuditoriaDPPTotal | currency}}</th>
-        </tr>
-    </tfoot>
-</table>
-<hr>
-<h2>Unidades Plan Piso Fecha de Salida con saldo</h2>
-<table id="tblFS" class="table table-hover borderless">
-    <thead>
-        <tr>
-            <th></th>
+            <th>Financiera</th>
+            <th>Tipo</th>
+            <th>Colateral</th>
             <th>Documento</th>
             <th>Número serie</th>
             <th>Ubicación</th>
@@ -146,30 +49,40 @@
             <th>Fecha factura</th>
             <th>Factura</th>
             <th>Fecha Salida</th>
+            <th>Fecha fin DPP</th>
             <th>Saldo</th>
             <th>Saldo CXC</th>
+            <th>Cliente</th>
             <th>Unidad encontrada?</th>
+            <th>Unidad por auditar?</th>
             <th width="180">Observaciones</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="(key, dato) in lstAuditoriaFS" repeat-end="setTableStyle('#tblFS')">
+        <tr ng-repeat="(key, dato) in lstAuditoria" repeat-end="setTableStyle('#tblNormales')">
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="dato.isChecked">
             </td>
+            <td>{{dato.financiera}}</td>
+            <td>{{dato.tipo}}</td>
+            <td>{{dato.tipoColateral}}</td>
             <td>{{dato.documento}}</td>
             <td>
                 <b>{{dato.vin}}</b><br>
             </td>
             <td>{{dato.Ubicacion}}</td>
             <td>{{dato.Situacion}}</td>
+           
             <td>{{dato.ucn_fechaalta}}</td>
             <td>{{dato.ucn_idFactura}}</td>
             <td>{{dato.veh_fechasalida}}</td>
+            <td>{{dato.fechafin}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
+            <td>{{dato.cliente}}</td>
             <td><input type="checkbox" ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
+            <td>{{dato.porauditar}}</td>
             <td>{{dato.observaciones}}</td>
             <td>
                 <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetail(dato)" ng-show="dato.idestatus==1">
@@ -181,11 +94,12 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="5" style="text-align:right">Total:</th>
-            <th>{{lstAuditoriaFSTotal | currency}}</th>
+            <th colspan="11" style="text-align:right">Total:</th>
+            <th>{{lstAuditoriaTotal | currency}}</th>
         </tr>
     </tfoot>
 </table>
+
 <div class="row">
     <div class="col-sm-6">
         &nbsp;

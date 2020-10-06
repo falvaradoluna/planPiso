@@ -74,16 +74,34 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     // Este es como funciona desde Branch Auditoria
     commonFactory.getFinancial($scope.session.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
+        var tem={
+            financieraID:1000,
+            nombre:'Todas'
+        };
+        $scope.lstFinancial.push(tem);
     });
     auditoriaFactory.getTiposAuditoria().then(function(result) {
         $scope.lstTipoAuditoria = result.data;
     }, function(error) {
         console.log("Error", error);
     });
+    $scope.SelFinanciera=function(sel)
+    {
+        auditoriaFactory.getTiposColateral(sel.financieraID).then(function(result) {
+            $scope.lstTipoColateral = result.data;
+        }, function(error) {
+            console.log("Error", error);
+        });
+
+    }
     $scope.nexStep = function() {
         if ($scope.frmauditoria.idFinanciera == 0) {
             swal("Auditoria", "No se ha especificado la financiera.");
-        } else {
+        } 
+        else if ($scope.frmauditoria.idtipoColateral == 0) {
+            swal("Auditoria", "No se ha especificado el Colateral.");
+        }
+        else {
             $scope.insertAuditoria();
         }
         $("#modalNuevaAuditoria").modal('hide');
@@ -94,7 +112,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             var parametros = {
                 idEmpresa: $scope.session.empresaID,
                 idFinanciera: $scope.frmauditoria.idFinanciera,
-                idtipoAuditoria: $scope.frmauditoria.idtipoauditoria
+                idtipoAuditoria: $scope.frmauditoria.idtipoauditoria,
+                idtipoColateral: $scope.frmauditoria.idtipoColateral
             }
             auditoriaFactory.insertaAuditoria(parametros).then(function(result) {
                 var id = result.data[0].id;
@@ -119,22 +138,14 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             $scope.ctrl.lblFinanciera = result.data[0][0].financiera;
             $scope.ctrl.idestatus = result.data[0][0].idestatus;
             $scope.ctrl.idtipoAuditoria = result.data[0][0].idtipoAuditoria;
-            $scope.lstAuditoriaNormales = result.data[1];
-            $scope.lstAuditoriaDPP = result.data[2];
-            $scope.lstAuditoriaFS = result.data[3];
+            $scope.lstAuditoria = result.data[1];
             $scope.currentPanel = 'pnlAuditoriaUnidades';
-            $scope.lstAuditoriaNormalesTotal = 0;
-            $scope.lstAuditoriaDPPTotal = 0;
-            $scope.lstAuditoriaFSTotal = 0;
-            for (var i = 0; i < $scope.lstAuditoriaNormales.length; i++) {
-                $scope.lstAuditoriaNormalesTotal += $scope.lstAuditoriaNormales[i].saldo;
+            $scope.lstAuditoriaTotal = 0;
+           
+            for (var i = 0; i < $scope.lstAuditoria.length; i++) {
+                $scope.lstAuditoriaTotal += $scope.lstAuditoria[i].saldo;
             }
-            for (var i = 0; i < $scope.lstAuditoriaDPP.length; i++) {
-                $scope.lstAuditoriaDPPTotal += $scope.lstAuditoriaDPP[i].saldo;
-            }
-            for (var i = 0; i < $scope.lstAuditoriaFS.length; i++) {
-                $scope.lstAuditoriaFSTotal += $scope.lstAuditoriaFS[i].saldo;
-            }
+           
         }, function(error) {
             console.log("Error", error);
         });

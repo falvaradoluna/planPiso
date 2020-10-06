@@ -35,16 +35,22 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <label>Financiera</label>
-                        <select class="form-control" ng-model="frmauditoria.idFinanciera">
-                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}">{{financial.nombre}}</option>
-                        </select>
-                        <br>
                         <label>Tipo auditoria</label>
                         <select class="form-control" ng-model="frmauditoria.idtipoauditoria" >
                             <option ng-repeat="tipo in lstTipoAuditoria" value="{{tipo.idtipoAuditoria}}" >{{tipo.tipoAuditoria}}</option>
                         </select>
                         <br>
+                        <label>Financiera</label>
+                        <select class="form-control" ng-model="frmauditoria.idFinanciera">
+                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}" ng-click="SelFinanciera(financial)">{{financial.nombre}}</option>
+                        </select>
+                        <br>
+                        <label>Colateral</label>
+                        <select class="form-control" ng-model="frmauditoria.idtipoColateral">
+                            <option ng-repeat="colateral in lstTipoColateral" value="{colateral.idtipoColateral}}">{{colateral.tipoColateral}}</option>
+                        </select>
+                        <br>
+                       
                     </div>
                 </div>
             </div>

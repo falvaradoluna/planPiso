@@ -27,7 +27,8 @@ ApiAuditoria.prototype.get_insertaAuditoria = function(req, res, next) {
     var self = this;
     var params = [ { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
     { name: 'idFinanciera', value: req.query.idFinanciera, type: self.model.types.INT },
-    { name: 'idtipoAuditoria', value: req.query.idtipoAuditoria, type: self.model.types.INT }
+    { name: 'idtipoAuditoria', value: req.query.idtipoAuditoria, type: self.model.types.INT },
+    { name: 'idtipoColateral', value: req.query.idtipoColateral, type: self.model.types.INT }
 ];
 
     self.model.query('INS_Auditoria_SP', params, function(error, result) {
@@ -291,6 +292,18 @@ ApiAuditoria.prototype.get_buscaVIN = function(req, res, next) {
           ];
 
     self.model.queryAllRecordSet('Usp_buscaVIN', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_TiposColateral = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+    params = [{ name: 'financieraID', value: req.query.financieraID, type: self.model.types.INT }];
+    self.model.query('GET_TiposColateral_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
