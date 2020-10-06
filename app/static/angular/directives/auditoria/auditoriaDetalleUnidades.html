@@ -1,19 +1,39 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-3 text-right">
-                <h2><small>Financiera:</small> <br>{{ ctrl.lblFinanciera }}</h2>
-            </div>
-            <div class="col-md-3 text-right">
+           
+            <div class="col-md-2 text-right">
                 <h2><small>Número de Unidades:</small> <br>{{ ctrl.numveh }}</h2>
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-md-2 text-right">
+                
+            </div>
+            <div class="col-md-2 text-right">
                 <h2><small>Auditoría Num:</small> <br>{{ctrl.lblNum}}</h2>
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-md-2 text-right">
+                
+            </div>
+            <div class="col-md-2 text-right">
                 <h2><small>Fecha:</small> <br>{{ctrl.lblFecha}}</h2>
             </div>
-            <div class="col-md-12">&nbsp;</div>
+            <div class="col-md-12">
+                 <div class="col-md-2 text-right">
+                <h2><small>Unidades encontradas:</small> <br>{{ ctrl.numvehenc }}</h2>
+            </div>
+            <div class="col-md-2 text-right">
+                <h2><small>Unidades no encontradas:</small> <br>{{ctrl.numvehnoenc}}</h2>
+            </div>
+            <div class="col-md-2 text-right">
+                <h2><small>Unidades por auditar:</small> <br>{{ctrl.numvehaud}}</h2>
+            </div>
+            <div class="col-md-2 text-right">
+                <h2><small>Unidades estrella:</small> <br>{{ctrl.numvehestre}}</h2>
+            </div>
+            <div class="col-md-2 text-right">
+                <h2><small>Unidades doble estrella:</small> <br>{{ctrl.numvehedoblestre}}</h2>
+            </div>
+        </div>
             <div class="col-md-6 text-right">
             </div>
             <div class="col-md-6 text-right">
@@ -53,6 +73,7 @@
             <th>Saldo</th>
             <th>Saldo CXC</th>
             <th>Cliente</th>
+            <th>Estrella</th>
             <th>Unidad encontrada?</th>
             <th>Unidad por auditar?</th>
             <th width="180">Observaciones</th>
@@ -81,6 +102,11 @@
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.cliente}}</td>
+            <td>
+               <span ng-if="dato.estrella=='*'">Estrella</span> 
+               <span ng-if="dato.dobleEstrella=='**'">Doble Estrella</span> 
+               <span ng-if="dato.estrella==''||dato.dobleEstrella==''"></span> 
+            </td>
             <td><input type="checkbox" ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
             <td>{{dato.porauditar}}</td>
             <td>{{dato.observaciones}}</td>

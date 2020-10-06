@@ -145,7 +145,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             for (var i = 0; i < $scope.lstAuditoria.length; i++) {
                 $scope.lstAuditoriaTotal += $scope.lstAuditoria[i].saldo;
             }
-           
+            $scope.Cuenta();
         }, function(error) {
             console.log("Error", error);
         });
@@ -171,8 +171,30 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         }, function(error) {
             console.log("Error", error);
         });
+        $scope.Cuenta();
     };
-
+$scope.Cuenta= function(){
+    $scope.ctrl.numvehenc=0;
+    $scope.ctrl.numvehnoenc=0;
+    $scope.ctrl.numvehaud=0;
+    $scope.ctrl.numvehestre=0;
+    $scope.ctrl.numvehedoblestre=0;
+    for (var i = 0; i < $scope.lstAuditoria.length; i++) {
+        if ($scope.lstAuditoria[i].encontrada == 1) {
+            $scope.ctrl.numvehenc++;
+        }
+        if ($scope.lstAuditoria[i].porauditar == 'SI') {
+            $scope.ctrl.numvehaud++;
+        }
+        if ($scope.lstAuditoria[i].estrella == '*') {
+            $scope.ctrl.numvehestre++;
+        }
+        if ($scope.lstAuditoria[i].dobleEstrella == '**') {
+            $scope.ctrl.numvehedoblestre++;
+        }
+    }
+    $scope.ctrl.numvehnoenc=$scope.ctrl.numveh-$scope.ctrl.numvehenc;
+}
 
 
     $scope.muestraAuditoriaPendiente = function(idauditoria) {
