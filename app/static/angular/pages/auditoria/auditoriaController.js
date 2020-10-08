@@ -441,31 +441,43 @@ $scope.Cuenta= function(){
         $("#mdlLoading").modal('show');
         // console.log($scope.lstAuditoriaNormales, $scope.lstAuditoriaDPP, $scope.lstAuditoriaFS);
         // console.log($scope.lstAuditoriaNormalesTotal, $scope.lstAuditoriaDPPTotal, $scope.lstAuditoriaFSTotal)
-        angular.forEach($scope.lstAuditoriaNormales, function(value, key) {
+        angular.forEach($scope.lstAuditoria, function(value, key) {
             value.encontrada = value.encontrada == true ? 'Si' : 'No';
-        });
-        angular.forEach($scope.lstAuditoriaDPP, function(value, key) {
-            value.encontrada = value.encontrada == true ? 'Si' : 'No';
-        });
-        angular.forEach($scope.lstAuditoriaFS, function(value, key) {
-            value.encontrada = value.encontrada == true ? 'Si' : 'No';
+            value.idCliente = value.idCliente == null ? '' : value.idCliente;
         });
         $scope.contenidoReporte = {
             "detalle": [{
-                "titulo": "Unidades Plan Piso Normales",
-                "detalle": $scope.lstAuditoriaNormales,
-                "total": $scope.lstAuditoriaNormalesTotal
-            }, {
-                "titulo": "Unidades Plan Piso DPP",
-                "detalle": $scope.lstAuditoriaDPP,
-                "total": $scope.lstAuditoriaDPPTotal
-            }, {
-                "titulo": "Unidades Plan Piso Fecha de Salida con saldo",
-                "detalle": $scope.lstAuditoriaFS,
-                "total": $scope.lstAuditoriaFSTotal
+                "titulo": "Unidades Plan Piso",
+                "detalle": $scope.lstAuditoria,
+                "total": $scope.lstAuditoriaTotal
             }]
 
         };
+        // angular.forEach($scope.lstAuditoriaNormales, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // angular.forEach($scope.lstAuditoriaDPP, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // angular.forEach($scope.lstAuditoriaFS, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // $scope.contenidoReporte = {
+        //     "detalle": [{
+        //         "titulo": "Unidades Plan Piso Normales",
+        //         "detalle": $scope.lstAuditoriaNormales,
+        //         "total": $scope.lstAuditoriaNormalesTotal
+        //     }, {
+        //         "titulo": "Unidades Plan Piso DPP",
+        //         "detalle": $scope.lstAuditoriaDPP,
+        //         "total": $scope.lstAuditoriaDPPTotal
+        //     }, {
+        //         "titulo": "Unidades Plan Piso Fecha de Salida con saldo",
+        //         "detalle": $scope.lstAuditoriaFS,
+        //         "total": $scope.lstAuditoriaFSTotal
+        //     }]
+
+        // };
         console.log('CONTEDIDO REPORTE', JSON.stringify($scope.contenidoReporte));
 
         auditoriaFactory.reporteAuditoria($scope.contenidoReporte).then(function success(res) {
