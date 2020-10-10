@@ -451,9 +451,11 @@ ApiInteres.prototype.get_compensacionDetalle = function(req, res, next) {
         { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
         { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
         { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
-        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING }
+        { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
+        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING }
     ];
-
+    console.log(params);
+    console.log('----------------------------------')
     self.model.query('Pol_Poliza13Detalle_INS', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -472,9 +474,11 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         { name: 'tipoProducto', value: req.query.tipoProducto, type: self.model.types.STRING },
         { name: 'documento', value: req.query.documento, type: self.model.types.STRING },
         { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
-        { name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.STRING }
+        { name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.STRING },
+        { name: 'idReciboAutomatico', value: req.query.idReciboAutomatico, type: self.model.types.INT }
     ];
     console.log(params);
+    console.log('====================================')
     self.model.query('Pol_Poliza13DetalleBPRO_INS', params, function(error, result) {
         self.view.expositor(res, {
             error: error,

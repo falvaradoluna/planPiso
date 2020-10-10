@@ -76,7 +76,6 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             'saldo': '',
             'tipoProducto': 'PROV',
             'montoCompensar': 0,
-            'bpro': 1
         },
         {
             'tipoFactura': 'Incentivo Penetración',
@@ -1219,10 +1218,12 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             idmovimiento: item.movimientoID,
             idUsuario: $scope.idUsuario,
             saldo: item.InteresMes,
-            tiempo: tiempo
+            tiempo: tiempo,
+            facturaUnidad: $scope.factura_unidad
         }
 
         interesFactory.compensacionDetalle(paraCompensacionDetalle).then(function(response) {
+            $scope.idReciboAutomatico = response.data[0].success
             detalleBproCompensacion(tiempo);
             // $scope.setPnlInteres();
         }, function(error) {
@@ -1318,7 +1319,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 tipoProducto: 'NCA',
                 documento: $scope.factura_unidad,
                 tiempo: tiempo,
-                consecutivo: auxConta
+                consecutivo: auxConta,
+                idReciboAutomatico: $scope.idReciboAutomatico
             }
             // $scope.facturasTotal.push({
             //     'tipoFactura': 'NCA',
@@ -1363,7 +1365,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
-                                consecutivo: auxConta
+                                consecutivo: auxConta,
+                                idReciboAutomatico: $scope.idReciboAutomatico
                             }
                             break;
                         case 'COMPRA':
@@ -1375,7 +1378,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
-                                consecutivo: auxConta
+                                consecutivo: auxConta,
+                                idReciboAutomatico: $scope.idReciboAutomatico
                             }
                             var preLoteCompensacion = [{
                                 'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
@@ -1399,7 +1403,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
-                                consecutivo: auxConta
+                                consecutivo: auxConta,
+                                idReciboAutomatico: $scope.idReciboAutomatico
                             }
                     }
                     console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
@@ -1418,6 +1423,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 console.log('Ocurrio un error al intentar insertar NCA')
             });
         } else {
+
             $scope.facturasTotal.map((value) => {
                 switch (value.tipoProducto) {
                     case 'FU':
