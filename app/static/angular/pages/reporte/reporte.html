@@ -21,7 +21,8 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div>
+                        <spin ng-show="!datosReporte"></spin>
+                        <div ng-show="datosReporte">
                             <table class="table reporteText">
                                 <thead>
                                     <tr>
@@ -130,11 +131,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div id="grid1" ui-grid="gridOptions" ui-grid-pinning ui-grid-expandable></div>
-                        </div>
-                        <div class="col-md-12 m-t-md">
-                            <button class="btn btn-primary pull-right" ng-click="descargarReporteEmpresa()">Descargar Reporte</button>
+                        <div ng-show="datosReporte">
+                            <div class="col-md-12">
+                                <div id="grid1" ui-grid="gridOptions" ui-grid-pinning ui-grid-expandable></div>
+                            </div>
+                            <div class="col-md-12 m-t-md">
+                                <button class="btn btn-primary pull-right" ng-click="descargarReporteEmpresa()">Descargar Reporte</button>
+                            </div>
                         </div>
                     </div>
                 </div>
