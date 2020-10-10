@@ -182,7 +182,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             field: 'nombre',
             width: 300,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >Total</div>',
-            pinnedLeft:true,
+            pinnedLeft: true,
             headers: [
                 { label: 'Financiera', rowSpan: 2 },
                 { label: '', rowSpan: '#rowSpan' }
@@ -503,17 +503,16 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                     };
                     // totalPropiasEstrella
                     $scope.gridOptions[key].columnDefs = [{
-                            name: 'Financiera',
                             field: 'nombre',
-                            width: 600,
+                            width: 300,
                             footerCellTemplate: '<div class="ui-grid-cell-contents" >Total</div>',
+                            pinnedLeft: true,
                             headers: [
                                 { label: 'Financiera', rowSpan: 2 },
                                 { label: '', rowSpan: '#rowSpan' }
                             ]
                         },
                         {
-                            name: 'TIIE',
                             field: 'tiie',
                             width: 80,
                             headers: [
@@ -522,7 +521,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Spread',
                             field: 'puntos',
                             width: 80,
                             headers: [
@@ -531,7 +529,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Tasa',
                             field: 'sumaTP',
                             width: 80,
                             headers: [
@@ -540,38 +537,38 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Línea Autorizada',
-                            field: 'unidades',
+                            field: 'unidadesAutorizadas',
                             width: 80,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
                                 { label: 'Línea Autorizada', colSpan: 2 },
                                 { label: 'Unidades' }
                             ]
                         },
                         {
-                            name: 'unidades',
                             field: 'lineaAutorizada',
                             width: 150,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
                             cellFilter: 'currency',
                             cellClass: 'currencyGrid',
-                            aggregationType: uiGridConstants.aggregationTypes.sum,
-                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
                                 { label: '', colSpan: '#colSpan' },
                                 { label: 'Monto' }
                             ]
                         },
                         {
-                            name: 'Línea utilizada',
                             field: 'unidades',
                             width: 80,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
                                 { label: 'Línea utilizada', colSpan: 2 },
                                 { label: 'Unidades' }
                             ]
                         },
                         {
-                            name: 'Monto',
                             field: 'saldo',
                             width: 150,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
@@ -584,18 +581,20 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Línea disponible',
-                            field: 'unidades',
+                            field: 'unidadesDisponibles',
                             width: 80,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
                                 { label: 'Línea disponible', colSpan: 2 },
                                 { label: 'Unidades' }
                             ]
                         },
                         {
-                            name: 'Monto2    ',
                             field: 'lineaResto',
                             width: 150,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
                             cellFilter: 'currency',
                             cellClass: 'currencyGrid',
                             headers: [
@@ -604,8 +603,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Unidades Inventario',
-                            field: 'unidades',
+                            field: 'unidadesInventario',
                             width: 80,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
                             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
@@ -615,7 +613,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Inventario',
                             field: 'saldo',
                             width: 150,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
@@ -628,25 +625,48 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Unidades en días de gracia',
-                            field: 'unidadesDiaGracia',
-                            width: 180,
+                            field: 'unidadesCxc',
+                            width: 80,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
-                                { label: 'Unidades en días de gracia', rowSpan: 2 },
+                                { label: 'Unidades cxc', colSpan: 2 },
+                                { label: 'Unidades' }
+                            ]
+                        },
+                        {
+                            field: 'unidadesCxcMonto',
+                            width: 150,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{col.getAggregationValue() | currency }}</div>',
+                            cellFilter: 'currency',
+                            cellClass: 'currencyGrid',
+                            headers: [
+                                { label: '', colSpan: '#colSpan' },
+                                { label: 'Monto' }
+                            ]
+                        },
+                        {
+                            field: 'conciliacion',
+                            width: 100,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
+                            headers: [
+                                { label: 'Concliacion', rowSpan: 2 },
                                 { label: '', rowSpan: '#rowSpan' }
                             ]
                         },
                         {
-                            name: 'Unidades en Estrella',
                             field: 'estrella',
                             width: 80,
+                            aggregationType: uiGridConstants.aggregationTypes.sum,
+                            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
                                 { label: 'Unidades en Estrella', colSpan: 2 },
                                 { label: 'Unidades' }
                             ]
                         },
                         {
-                            name: 'Estrella',
                             field: 'estrellaMonto',
                             width: 150,
                             cellFilter: 'currency',
@@ -658,7 +678,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Unidades doble Estrella',
                             field: 'dobleEstrella',
                             width: 80,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
@@ -669,7 +688,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Doble Estrella',
                             field: 'dobleEstrellaMonto',
                             width: 150,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
@@ -682,7 +700,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Unidades días de gracia',
                             field: 'unidadesDiaGracia',
                             width: 180,
                             aggregationType: uiGridConstants.aggregationTypes.sum,
@@ -693,7 +710,6 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             ]
                         },
                         {
-                            name: 'Unidades que genera Intereses',
                             field: 'unidadesGeneraIntereses',
                             width: 190,
                             aggregationType: uiGridConstants.aggregationTypes.sum,

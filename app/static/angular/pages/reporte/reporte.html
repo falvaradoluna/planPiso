@@ -21,7 +21,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div >
+                        <div>
                             <table class="table reporteText">
                                 <thead>
                                     <tr>
@@ -158,6 +158,113 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
+                        <div class="col-md-12">
+                            <table class="table reporteText">
+                                <thead>
+                                    <tr>
+                                        <th class="thNoneReporte"></th>
+                                        <!-- <th colspan="3" class="thReporte text-center">Tasa de Interés</th> -->
+                                        <th colspan="2" class="thReporte text-center">Línea Autorizada</th>
+                                        <th colspan="2" class="thReporte text-center">Línea Utilizada</th>
+                                        <th colspan="2" class="thReporte text-center">Línea Disponible</th>
+                                        <th colspan="2" class="thReporte text-center">Inventario</th>
+                                        <th colspan="2" class="thReporte text-center">CXC</th>
+                                        <th class="thNoneReporte"></th>
+                                        <th colspan="2" class="thReporte text-center">Estrella</th>
+                                        <th colspan="2" class="thReporte text-center">Doble Estrella</th>
+                                        <th colspan="2" class="thReporte text-center">Unidades</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="thReporte thNoneReporte">Financiera</th>
+                                        <!-- <th class="thReporte">TIIE</th>
+                                        <th class="thReporte">Spread</th>
+                                        <th class="thReporte">Tasa</th> -->
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte thNoneReporte">Conciliación</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte">Días de gracia</th>
+                                        <th class="thReporte">Que generan intereses</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="detalleReporte in empresa.reporte">
+                                        <td>{{detalleReporte.nombre}}</td>
+                                        <!-- <td>{{detalleReporte.tiie}}</td>
+                                        <td>{{detalleReporte.puntos}}</td>
+                                        <td>{{detalleReporte.puntos + detalleReporte.tiie}}</td> -->
+                                        <td class="text-right">{{detalleReporte.unidadesAutorizadas }}</td>
+                                        <td class="text-right">{{detalleReporte.lineaAutorizada | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.unidades}}</td>
+                                        <td class="text-right">{{detalleReporte.saldo | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesDisponibles}}</td>
+                                        <td class="text-right">{{detalleReporte.lineaResto | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesInventario}}</td>
+                                        <td class="text-right">{{detalleReporte.saldo | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesCxc}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesCxcMonto | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.conciliacion}}</td>
+                                        <td class="text-right">{{detalleReporte.estrella}}</td>
+                                        <td class="text-right">{{detalleReporte.estrellaMonto | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.dobleEstrella}}</td>
+                                        <td class="text-right">{{detalleReporte.dobleEstrellaMonto | currency}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesDiaGracia}}</td>
+                                        <td class="text-right">{{detalleReporte.unidadesGeneraIntereses}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="reporteTotal thReporte">TOTAL</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesAutorizadas'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'lineaAutorizada' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidades'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesDisponibles'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'lineaResto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesInventario'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'saldo' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesCxc'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'conciliacion'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'estrella'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'estrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'dobleEstrella'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'dobleEstrellaMonto' | currency}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesDiaGracia'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesGeneraIntereses'}}</td>
+                                    </tr>
+                                </tfoot>
+                                <!-- <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ totalUnidades }}</td>
+                                        <td class="text-right">{{ totalLineaUtilizada | currency}}</td>
+                                        <td></td>
+                                        <td>{{ totalUnidadesInventario }}</td>
+                                        <td class="text-right">{{totalIventario | currency}}</td>
+                                        <td>{{unidadesEstrella}}</td>
+                                        <td class="text-right">{{totalEstrella | currency}}</td>
+                                        <td>{{unidadesDobleE}}</td>
+                                        <td class="text-right">{{totalDobleE | currency}}</td>
+                                    </tr>
+                                </tfoot> -->
+                            </table>
+                        </div>
                         <div class="col-md-12">
                             <div id="grid1" ui-grid="empresa.group" ui-grid-pinning ui-grid-expandable></div>
                         </div>
