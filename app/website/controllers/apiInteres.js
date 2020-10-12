@@ -475,7 +475,8 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         { name: 'documento', value: req.query.documento, type: self.model.types.STRING },
         { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
         { name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.STRING },
-        { name: 'idReciboAutomatico', value: req.query.idReciboAutomatico, type: self.model.types.INT }
+        { name: 'idReciboAutomatico', value: req.query.idReciboAutomatico, type: self.model.types.INT },
+        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING }
     ];
     console.log(params);
     console.log('====================================')

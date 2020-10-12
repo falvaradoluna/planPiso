@@ -1320,7 +1320,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 documento: $scope.factura_unidad,
                 tiempo: tiempo,
                 consecutivo: auxConta,
-                idReciboAutomatico: $scope.idReciboAutomatico
+                idReciboAutomatico: $scope.idReciboAutomatico,
+                facturaUnidad: $scope.factura_unidad
             }
             // $scope.facturasTotal.push({
             //     'tipoFactura': 'NCA',
@@ -1366,7 +1367,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 documento: value.factura,
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
-                                idReciboAutomatico: $scope.idReciboAutomatico
+                                idReciboAutomatico: $scope.idReciboAutomatico,
+                                facturaUnidad: $scope.factura_unidad
                             }
                             break;
                         case 'COMPRA':
@@ -1379,7 +1381,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 documento: value.factura,
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
-                                idReciboAutomatico: $scope.idReciboAutomatico
+                                idReciboAutomatico: $scope.idReciboAutomatico,
+                                facturaUnidad: $scope.factura_unidad
                             }
                             var preLoteCompensacion = [{
                                 'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
@@ -1404,7 +1407,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 documento: value.factura,
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
-                                idReciboAutomatico: $scope.idReciboAutomatico
+                                idReciboAutomatico: $scope.idReciboAutomatico,
+                                facturaUnidad: $scope.factura_unidad
                             }
                     }
                     console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
