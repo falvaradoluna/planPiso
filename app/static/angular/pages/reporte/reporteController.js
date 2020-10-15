@@ -328,8 +328,19 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
             aggregationType: uiGridConstants.aggregationTypes.sum,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
             headers: [
-                { label: 'Concliacion', rowSpan: 2 },
-                { label: '', rowSpan: '#rowSpan' }
+                { label: 'Conciliacion', colSpan: 2 },
+                { label: 'Unidades' }
+            ]
+        },
+        {
+            field: 'montoConciliacion',
+            width: 150,
+            cellFilter: 'currency',
+            cellClass: 'currencyGrid',
+            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{grid.appScope.totalPropiasEstrella | currency }}</div>',
+            headers: [
+                { label: '', colSpan: '#colSpan' },
+                { label: 'Monto' }
             ]
         },
         {
@@ -652,8 +663,19 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             aggregationType: uiGridConstants.aggregationTypes.sum,
                             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}}</div>',
                             headers: [
-                                { label: 'Concliacion', rowSpan: 2 },
-                                { label: '', rowSpan: '#rowSpan' }
+                                { label: 'Conciliacion', colSpan: 2 },
+                                { label: 'Unidades' }
+                            ]
+                        },
+                        {
+                            field: 'montoConciliacion',
+                            width: 150,
+                            cellFilter: 'currency',
+                            cellClass: 'currencyGrid',
+                            footerCellTemplate: '<div class="ui-grid-cell-contents currencyGrid" >{{grid.appScope.totalPropiasEstrella | currency }}</div>',
+                            headers: [
+                                { label: '', colSpan: '#colSpan' },
+                                { label: 'Monto' }
                             ]
                         },
                         {

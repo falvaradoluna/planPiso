@@ -33,7 +33,7 @@
                                         <th colspan="2" class="thReporte text-center">Línea Disponible</th>
                                         <th colspan="2" class="thReporte text-center">Inventario</th>
                                         <th colspan="2" class="thReporte text-center">CXC</th>
-                                        <th class="thNoneReporte"></th>
+                                        <th colspan="2" class="thReporte text-center">Conciliacion</th>
                                         <th colspan="2" class="thReporte text-center">Estrella</th>
                                         <th colspan="2" class="thReporte text-center">Doble Estrella</th>
                                         <th colspan="2" class="thReporte text-center">Unidades</th>
@@ -43,20 +43,21 @@
                                         <!-- <th class="thReporte">TIIE</th>
                                         <th class="thReporte">Spread</th>
                                         <th class="thReporte">Tasa</th> -->
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte thNoneReporte">Conciliación</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
                                         <th class="thReporte">Días de gracia</th>
                                         <th class="thReporte">Que generan intereses</th>
@@ -79,6 +80,7 @@
                                         <td class="text-right">{{datoReporte.unidadesCxc}}</td>
                                         <td class="text-right">{{datoReporte.unidadesCxcMonto | currency}}</td>
                                         <td class="text-right">{{datoReporte.conciliacion}}</td>
+                                        <td class="text-right">{{datoReporte.montoConciliacion | currency}}</td>
                                         <td class="text-right">{{datoReporte.estrella}}</td>
                                         <td class="text-right">{{datoReporte.estrellaMonto | currency}}</td>
                                         <td class="text-right">{{datoReporte.dobleEstrella}}</td>
@@ -101,6 +103,7 @@
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesCxc'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'conciliacion'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'montoConciliacion'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'estrella'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'estrellaMonto' | currency}}</td>
                                         <td class="text-right reporteTotal thReporte">{{datosReporte | sumOfValue:'dobleEstrella'}}</td>
@@ -172,7 +175,7 @@
                                         <th colspan="2" class="thReporte text-center">Línea Disponible</th>
                                         <th colspan="2" class="thReporte text-center">Inventario</th>
                                         <th colspan="2" class="thReporte text-center">CXC</th>
-                                        <th class="thNoneReporte"></th>
+                                        <th colspan="2" class="thReporte text-center">Conciliacion</th>
                                         <th colspan="2" class="thReporte text-center">Estrella</th>
                                         <th colspan="2" class="thReporte text-center">Doble Estrella</th>
                                         <th colspan="2" class="thReporte text-center">Unidades</th>
@@ -182,20 +185,21 @@
                                         <!-- <th class="thReporte">TIIE</th>
                                         <th class="thReporte">Spread</th>
                                         <th class="thReporte">Tasa</th> -->
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte thNoneReporte">Conciliación</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
-                                        <th class="thReporte text-center">Unidades</th>
+                                        <th class="thReporte text-center">Unidad</th>
+                                        <th class="thReporte text-center">Monto</th>
+                                        <th class="thReporte text-center">Unidad</th>
                                         <th class="thReporte text-center">Monto</th>
                                         <th class="thReporte">Días de gracia</th>
                                         <th class="thReporte">Que generan intereses</th>
@@ -218,6 +222,7 @@
                                         <td class="text-right">{{detalleReporte.unidadesCxc}}</td>
                                         <td class="text-right">{{detalleReporte.unidadesCxcMonto | currency}}</td>
                                         <td class="text-right">{{detalleReporte.conciliacion}}</td>
+                                        <td class="text-right">{{detalleReporte.montoConciliacion | currency}}</td>
                                         <td class="text-right">{{detalleReporte.estrella}}</td>
                                         <td class="text-right">{{detalleReporte.estrellaMonto | currency}}</td>
                                         <td class="text-right">{{detalleReporte.dobleEstrella}}</td>
@@ -240,6 +245,7 @@
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesCxc'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'unidadesCxcMonto' | currency}}</td>
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'conciliacion'}}</td>
+                                        <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'montoConciliacion'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'estrella'}}</td>
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'estrellaMonto' | currency}}</td>
                                         <td class="text-right reporteTotal thReporte">{{empresa.reporte | sumOfValue:'dobleEstrella'}}</td>
