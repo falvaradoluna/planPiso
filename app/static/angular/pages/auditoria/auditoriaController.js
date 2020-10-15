@@ -85,9 +85,9 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     }, function(error) {
         console.log("Error", error);
     });
-    $scope.SelFinanciera=function(sel)
+    $scope.SelFinanciera=function(item)
     {
-        auditoriaFactory.getTiposColateral(sel.financieraID).then(function(result) {
+        auditoriaFactory.getTiposColateral($scope.frmauditoria.idFinanciera).then(function(result) {
             $scope.lstTipoColateral = result.data;
         }, function(error) {
             console.log("Error", error);

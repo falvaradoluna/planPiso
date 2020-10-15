@@ -41,8 +41,8 @@
                         </select>
                         <br>
                         <label>Financiera</label>
-                        <select class="form-control" ng-model="frmauditoria.idFinanciera">
-                            <option ng-repeat="financial in lstFinancial" value="{{financial.financieraID}}" ng-click="SelFinanciera(financial)">{{financial.nombre}}</option>
+                        <select class="form-control" ng-model="frmauditoria.idFinanciera"  ng-change="SelFinanciera(item)">
+                            <option ng-repeat="item in lstFinancial" value="{{item.financieraID}}">{{item.nombre}}</option>
                         </select>
                         <br>
                         <label>Colateral</label>

@@ -750,7 +750,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
 
                 interesFactory.ProvisionFinancieraDetalle(paraProvision).then(function(respuesta) {
                     $scope.LastId = respuesta.data[0].LastId;
-                    if (response.length != 0) {
+                    if (respuesta.data[0].success != 0) {
                         swal({
                             title: "Provisión Plan Piso",
                             text: "Se ha efectuado correctamente su Provisión.",
