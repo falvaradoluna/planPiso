@@ -54,6 +54,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
    
 
     var increment   = 0;
+    $scope.cargandoPro = 0;
     var contador    = 0;
     $scope.init=function()
     {
@@ -180,6 +181,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             }
 
             execelFields = $scope.arrayToObject(aux);
+            $scope.maxPro = execelFields.length;
             $scope.insertData();
         }, function(error) {
             console.log("Error", error);
@@ -215,6 +217,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         }
                         else{
                             increment++;
+                            $scope.cargandoPro++;
                             $scope.insertData();
                         }
                     }                    
