@@ -578,7 +578,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     // $scope.lstNewUnits.push(value.data);
                     angular.forEach(unidadesFor, function(value2, key2) {
                         $scope.contador++;
-                       
+                        $scope.$apply();
                     });
 
                 });
