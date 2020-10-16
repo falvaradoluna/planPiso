@@ -82,8 +82,8 @@
                         <img src="assets/img/loading-light.gif" width="30"> Cargando ...{{cargandoPro}}
                     </center>
                     <div class="progress">
-
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin={{cargandoPro}} aria-valuemax={{maxPro}} style="width: 75%"></div>
+<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin={{cargandoPro}} aria-valuemax={{maxPro}} style="width: {{cargandoPro * 100 / maxPro}}%"></div>
+                        <!-- <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin={{cargandoPro}} aria-valuemax={{maxPro}} style="width: 75%"></div> -->
                       </div>
                 </div>
             </div>
