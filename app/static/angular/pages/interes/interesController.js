@@ -1011,6 +1011,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.saldoCompensar = 0;
         $scope.diferenciaPP = 0;
         $scope.facturasTotal = [];
+        $scope.montoCompensarCxc = 0;
         if ($scope.haveSelection() === false) {
             swal("Aviso", "No se ha seleccionado ningun registro", "warning");
         } else {
@@ -1047,8 +1048,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         // }
 
                                         // value2.montoCompensar = value2.cargo - $scope.unidadCompensacion.importe;
-                                        if (value2.saldo > $scope.unidadCompensacion.saldo) {
-                                            value2.montoCompensar = $scope.unidadCompensacion.saldo;
+                                        if ($scope.montoTotal > $scope.unidadCompensacion.saldo) {
+                                            // value2.saldo
+                                            if(value2.saldo > $scope.unidadCompensacion.saldo){
+                                                value2.montoCompensar = $scope.unidadCompensacion.saldo;
+                                            }else{
+                                                value2.montoCompensar = 0;
+                                            }
                                         } else {
                                             value2.montoCompensar = value2.saldo;
                                         }
@@ -1059,7 +1065,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         $scope.$apply(function() {
                                             $scope.facturasTotal.push(value2);
                                         });
-
+                                        $scope.montoCompensarCxc = Number($scope.montoCompensarCxc) + Number(value2.montoCompensar);
                                         contadorFacturas++;
                                     });
                                 }
@@ -1547,8 +1553,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     });
     $scope.sumaCompensar = function(factura, index, oldValue) {
         console.log(factura, index, event)
+        $scope.montoCompensarCxc = 0;
         if (factura.montoCompensar <= factura.saldo) {
-            if (factura.montoCompensar <= $scope.unidadCompensacion.montoCompensar) {
+            if (factura.montoCompensar <= Number($scope.unidadCompensacion.montoCompensar)) {
                 $scope.facturasTotal[index].montoCompensar = factura.montoCompensar;
                 //unidadCompensacion
                 var auxSumaCxc = 0;
@@ -1562,7 +1569,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     }
                     auxSumaCxcTotal = auxSumaCxcTotal + Number(value.montoCompensar);
                 });
-                if (auxSumaCxcTotal <= $scope.unidadCompensacion.montoCompensar) {
+                $scope.montoCompensarCxc = auxSumaCxcTotal;
+                if (auxSumaCxcTotal <= Number($scope.unidadCompensacion.montoCompensar)) {
                     $scope.saldoFU = auxSumaCxc;
                     $scope.saldoCompensar = auxSumaCxcTotal;
                     $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
@@ -1579,6 +1587,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.facturasTotal[index].montoCompensar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
+
 
     };
     $scope.sumaCompensarCxP = function(newValue, oldValue) {
