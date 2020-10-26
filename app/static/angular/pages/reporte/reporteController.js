@@ -43,7 +43,12 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             { name: 'Spread', field: 'puntos' },
                             { name: 'Intereses', field: 'totalInteres', cellFilter: 'currency', cellClass: 'currencyGrid' },
                             { name: 'Estrella', field: 'estrella' },
-                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                            { name: 'Doble Estrella', field: 'dobleEstrella' },
+                            { name: 'IdCliente', field: 'ucu_idcliente' },
+                            { name: 'Nombre Cliente', field: 'nombreCliente' },
+                            { name: 'Factura', field: 'ucn_idFactura' },
+                            { name: 'Precio Unidad', field: 'ucn_preciounidad' },
+                            { name: 'Saldo', field: 'saldoCXC' }
                         ],
                         data: result[i].data
                     };
@@ -483,7 +488,12 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                                             { name: 'Spread', field: 'puntos' },
                                             { name: 'Intereses', field: 'totalInteres', cellFilter: 'currency', cellClass: 'currencyGrid' },
                                             { name: 'Estrella', field: 'estrella' },
-                                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                                            { name: 'Doble Estrella', field: 'dobleEstrella' },
+                                            { name: 'IdCliente', field: 'ucu_idcliente' },
+                                            { name: 'Nombre Cliente', field: 'nombreCliente' },
+                                            { name: 'Factura', field: 'ucn_idFactura' },
+                                            { name: 'Precio Unidad', field: 'ucn_preciounidad' },
+                                            { name: 'Saldo', field: 'saldoCXC' }
                                         ],
                                         data: result[i].data
                                     };
