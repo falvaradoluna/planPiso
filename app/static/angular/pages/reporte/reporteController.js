@@ -15,6 +15,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     // $scope.totalDobleE = 0;
     $scope.totalPropiasEstrella = 0;
     $scope.muestraxempresa = true;
+    $scope.muestraRepoGeneral = false;
     reporteFactory.getReporteEmpresa(sessionFactory.empresaID).then(function success(result) {
         $scope.datosReporte = result.data;
         var promises = [];
@@ -43,7 +44,12 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                             { name: 'Spread', field: 'puntos' },
                             { name: 'Intereses', field: 'totalInteres', cellFilter: 'currency', cellClass: 'currencyGrid' },
                             { name: 'Estrella', field: 'estrella' },
-                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                            { name: 'Doble Estrella', field: 'dobleEstrella' },
+                            { name: 'IdCliente', field: 'ucu_idcliente' },
+                            { name: 'Nombre Cliente', field: 'nombreCliente' },
+                            { name: 'Factura', field: 'ucn_idFactura' },
+                            { name: 'Precio Unidad', field: 'ucn_preciounidad' },
+                            { name: 'Saldo', field: 'saldoCXC' }
                         ],
                         data: result[i].data
                     };
@@ -73,7 +79,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     $scope.descargarReporteEmpresa = function() {
         descargarReporte($scope.datosReporte, sessionFactory.nombre)
     };
-    $scope.descargarReporteEmpresas = function() {
+    $scope.descargarReporteEmpresas = function() {        
         console.log($scope.encabezadoReporte)
         angular.forEach($scope.encabezadoReporte, function(value, key) {
             descargarReporte(value.reporte, value.emp_nombre)
@@ -434,6 +440,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
     // END UI GRID
     $scope.reporteEmpresas = function() {
         $scope.muestraxempresa = false;
+        $scope.muestraRepoGeneral = true;
         empresaFactory.getEmpresa($scope.idUsuario).then(function(result) {
             $scope.lstEmpresa = result.data;
             $scope.encabezadoReporte = [];
@@ -483,7 +490,12 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                                             { name: 'Spread', field: 'puntos' },
                                             { name: 'Intereses', field: 'totalInteres', cellFilter: 'currency', cellClass: 'currencyGrid' },
                                             { name: 'Estrella', field: 'estrella' },
-                                            { name: 'Doble Estrella', field: 'dobleEstrella' }
+                                            { name: 'Doble Estrella', field: 'dobleEstrella' },
+                                            { name: 'IdCliente', field: 'ucu_idcliente' },
+                                            { name: 'Nombre Cliente', field: 'nombreCliente' },
+                                            { name: 'Factura', field: 'ucn_idFactura' },
+                                            { name: 'Precio Unidad', field: 'ucn_preciounidad' },
+                                            { name: 'Saldo', field: 'saldoCXC' }
                                         ],
                                         data: result[i].data
                                     };
@@ -495,6 +507,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                     }
                 });
                 console.log($scope.encabezadoReporte, 'Soy las empresas que si tiene detalle')
+                $scope.muestraRepoGeneral = false;
                 angular.forEach($scope.encabezadoReporte, function(value, key) {
 
                     //BEGIN UI GRID

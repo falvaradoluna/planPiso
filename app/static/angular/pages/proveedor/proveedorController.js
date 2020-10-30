@@ -242,6 +242,7 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
     $scope.validaMonto = function(newValue, oldValue, saldo, index) {
         if (newValue <= saldo) {
             $scope.lstNewUnits[index].montoFinanciar = newValue;
+            $scope.lstNewUnits[index].porcentaje = (newValue * 100) / saldo;
         } else {
             $scope.lstNewUnits[index].montoFinanciar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');

@@ -241,7 +241,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         $scope.selectedSchema = itemSchemas;
         if ($scope.selectedSchema.tipoColateralId != undefined) {
             var data = {
-                idPersona:  $scope.FinancieraSel.financieraIDBP,
+                idPersona: $scope.FinancieraSel.financieraIDBP,
                 idEmpresa: $scope.unidad.idEmpresa,
                 idColateral: $scope.selectedSchema.tipoColateralId
             };
@@ -273,6 +273,7 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
     $scope.validaMonto = function(newValue, oldValue, saldo, index) {
         if (newValue <= saldo) {
             $scope.lstNewUnits[index].montoFinanciar = newValue;
+            $scope.lstNewUnits[index].porcentaje = (newValue * 100) / saldo;
         } else {
             $scope.lstNewUnits[index].montoFinanciar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
@@ -287,18 +288,16 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
             $scope.lstNewUnits[index].montoFinanciar = ($scope.lstNewUnits[index].IMPORTE * (newValue / 100))
         }
     }
-    $scope.EvaluarUnidad=function(unidadin)
-    {
-        $scope.unidad=unidadin;
-        
-        
-            $scope.saldounidad=0;
-            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-                if($scope.lstNewUnits[i].isChecked)
-                {
-                    $scope.saldounidad=$scope.saldounidad+$scope.lstNewUnits[i].SALDO;
-                }
+    $scope.EvaluarUnidad = function(unidadin) {
+        $scope.unidad = unidadin;
+
+
+        $scope.saldounidad = 0;
+        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            if ($scope.lstNewUnits[i].isChecked) {
+                $scope.saldounidad = $scope.saldounidad + $scope.lstNewUnits[i].SALDO;
             }
+        }
     }
 
 });
