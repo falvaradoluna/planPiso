@@ -125,7 +125,7 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
                 dia: array2[0],
                 porcentaje: array2[1]
             }
-            $scope.SumaPorcentaje += array2[1];
+            $scope.SumaPorcentaje += parseInt(array2[1]);
             tablaregreso.push(newobject);
         }
 
@@ -175,10 +175,17 @@ appModule.controller('esquemaController', function($scope, $rootScope, $filter, 
         $scope.nuevo = 0;
         $scope.ctrl.dia = item.dia;
         $scope.ctrl.porcentaje = item.porcentaje;
-
+        $scope.SumaPorcentaje=0;
+        for (var i = 0; i < $scope.esquemaHeader.lstreduccion.length; i++) {
+            $scope.SumaPorcentaje +=  parseInt($scope.esquemaHeader.lstreduccion[i].porcentaje,10);
+        }
     }
     $scope.BorrarDetail = function(item) {
         $scope.esquemaHeader.lstreduccion.splice($scope.esquemaHeader.lstreduccion.findIndex(v => v.dia === item.dia), 1);
+        $scope.SumaPorcentaje=0;
+        for (var i = 0; i < $scope.esquemaHeader.lstreduccion.length; i++) {
+            $scope.SumaPorcentaje +=  parseInt($scope.esquemaHeader.lstreduccion[i].porcentaje,10);
+        }
     }
     $scope.setCurrentFinancial = function(financialObj) {
         $scope.showAddBtn = true;

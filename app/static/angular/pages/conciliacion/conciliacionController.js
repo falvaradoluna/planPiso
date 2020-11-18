@@ -176,7 +176,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
             var aux = [];
-            for (var i = 1; i < LayoutFile.length; i++) {
+            for (var i = 0; i < LayoutFile.length; i++) {
                 aux.push(LayoutFile[i]);
             }
 
@@ -246,7 +246,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     $scope.conceal = function() {
       
-        conciliacionFactory.getConciliacion( ($scope.currentMonth + 1), contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
+        conciliacionFactory.getConciliacion( ($scope.currentMonth + 1),$scope.currentYear, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.creaConciliacion(2,contador);
             $scope.sumTotal();
@@ -564,7 +564,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                             interesAcumuladoGA:     item.InteresMesAcumulado,
                             interesGrupoAndrade:    item.InteresMesActual,
                             interesFinanciera:      item.interes,
-                            interesAjuste:          item.ajuste,
+                            interesAjuste:          item.interes,
                             situacion:              ( item.equiparante == 1 && item.esMayor == 1 ) ? 1 : ( item.equiparante == 1 && item.esMayor != 1 ) ? 2 : 3 ,// 1 => Montos iguales; 2 => Monto Ajustado; 3 => No Aplica
                             checked:                item.checked?1:0
     

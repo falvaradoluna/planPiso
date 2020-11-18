@@ -32,13 +32,14 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getConciliacion: function( periodo, consecutivo, financiera ) {
+        getConciliacion: function( periodo,anio, consecutivo, financiera ) {
             return $http({
                 url: conciliacionUrl + 'Conciliacion/',
                 method: "GET",
                 params: { 
                     periodo: periodo, 
                     consecutivo: consecutivo,
+                    anio:anio,
                     financiera: financiera
                 },
                 headers: { 'Content-Type': 'application/json' }

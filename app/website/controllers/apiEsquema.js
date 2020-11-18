@@ -48,7 +48,7 @@ ApiEsquema.prototype.get_putEsquema = function(req, res, next) {
     { name: 'porcentajePenetracion', value: req.query.porcentajePenetracion, type: self.model.types.INT },
     { name: 'tipoTiieCID', value: req.query.tipoTiieCID, type: self.model.types.INT },
     { name: 'tipoColateralId', value: req.query.tipoColateralId, type: self.model.types.INT },
-    { name: 'tiie', value: req.query.tiie, type: self.model.types.INT },
+    { name: 'tiie', value: req.query.tiie, type: self.model.types.DECIMAL },
     { name: 'recalendarizacion', value: req.query.recalendarizacion, type: self.model.types.INT },
     { name: 'tasarecalendarizacion', value: req.query.tasarecalendarizacion, type: self.model.types.DECIMAL },
     { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
@@ -95,7 +95,7 @@ ApiEsquema.prototype.get_updEsquema = function(req, res, next) {
     { name: 'porcentajePenetracion', value: req.query.porcentajePenetracion, type: self.model.types.INT },
     { name: 'tipoTiieCID', value: req.query.tipoTiieCID, type: self.model.types.INT },
     { name: 'tipoColateralId', value: req.query.tipoColateralId, type: self.model.types.INT },
-    { name: 'tiie', value: req.query.tiie, type: self.model.types.DECIMAL },
+    { name: 'tiie', value: req.query.tiie, type: self.model.types.STRING },
     { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
 
     self.model.query('uspSetEsquema', params, function(error, result) {

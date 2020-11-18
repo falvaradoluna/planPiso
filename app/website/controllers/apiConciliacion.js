@@ -130,6 +130,7 @@ ApiConciliacion.prototype.get_Conciliacion = function(req, res, next) {
     var self = this;
     var params = [{ name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.INT },
         { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT },
         { name: 'financiera', value: req.query.financiera, type: self.model.types.INT }
     ];
 
