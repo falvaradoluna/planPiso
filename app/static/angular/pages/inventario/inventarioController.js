@@ -271,22 +271,22 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
         }
     };
     $scope.validaMonto = function(newValue, oldValue, saldo, index) {
-        if (newValue <= saldo) {
+        // if (newValue <= saldo) {
             $scope.lstNewUnits[index].montoFinanciar = newValue;
             $scope.lstNewUnits[index].porcentaje = (newValue * 100) / saldo;
-        } else {
-            $scope.lstNewUnits[index].montoFinanciar = oldValue;
-            alertFactory.warning('No puede ingresar un valor mayor al saldo');
-        }
+        // } else {
+        //     $scope.lstNewUnits[index].montoFinanciar = oldValue;
+        //     alertFactory.warning('No puede ingresar un valor mayor al saldo');
+        // }
     };
     $scope.validaPorcentaje = function(newValue, oldValue, index) {
-        if (newValue > 100) {
-            $scope.lstNewUnits[index].porcentaje = oldValue;
-            alertFactory.warning('El porcentaje no puede ser mayor a 100')
-        } else {
+        // if (newValue > 100) {
+        //     $scope.lstNewUnits[index].porcentaje = oldValue;
+        //     alertFactory.warning('El porcentaje no puede ser mayor a 100')
+        // } else {
             $scope.lstNewUnits[index].porcentaje = newValue;
             $scope.lstNewUnits[index].montoFinanciar = ($scope.lstNewUnits[index].IMPORTE * (newValue / 100))
-        }
+        // }
     }
     $scope.EvaluarUnidad = function(unidadin) {
         $scope.unidad = unidadin;
