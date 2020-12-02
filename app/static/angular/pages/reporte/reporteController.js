@@ -20,7 +20,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
         $scope.datosReporte = result.data;
         var promises = [];
         $scope.datosReporte.map((value) => {
-            promises.push(reporteFactory.getReporteUnidades(sessionFactory.empresaID, value.financieraID));
+            promises.push(reporteFactory.getReporteUnidades(sessionFactory.empresaID, value.financieraID, value.esquemaID));
         })
         Promise.all(promises).then(function response(result) {
             console.log(result, 'UNIDADEEEES');
@@ -462,7 +462,7 @@ appModule.controller('reporteController', function($scope, $rootScope, $location
                         $scope.encabezadoReporte[contador].reporte = reporteEncabezado[key].data;
                         var promises2 = [];
                         $scope.encabezadoReporte[contador].reporte.map((value) => {
-                            promises2.push(reporteFactory.getReporteUnidades(idEmpresa, value.financieraID));
+                            promises2.push(reporteFactory.getReporteUnidades(idEmpresa, value.financieraID, value.esquemaID));
                         })
                         Promise.all(promises2).then(function response(result) {
                             console.log(result, 'Sacatelas')
