@@ -421,6 +421,18 @@ appModule.factory('interesFactory', function($http) {
 
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        otGarantia: function(vin, factura) {
+            return $http({
+                url: interesesUrl + 'otGarantia/',
+                method: "GET",
+                params: {
+                    vin: vin,
+                    factura: factura
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

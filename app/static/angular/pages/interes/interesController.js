@@ -1035,10 +1035,22 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         Promise.all(facturas).then(function(results) {
                             console.log(results, 'Facturaaaas')
                             var contadorFacturas = 0;
+                            $scope.ocGarantias = [];
                             angular.forEach(results, function(value, key) {
                                 console.log(value.data.length);
                                 if (value.data.length > 0) {
                                     angular.forEach(value.data, function(value2, key) {
+                                        if (value2.tipoProducto == 'FA' && value2.garantia == 1) {
+                                            interesFactory.otGarantia(value2.numeroSerie, value2.factura).then(function success(result) {
+                                                console.log(result.data, 'Soy la Ot relacionada ')
+                                                result.data[0].montoCompensar = result.data[0].montoCompensar.toFixed(2);
+                                                $scope.ocGarantias.push(result.data[0]);
+                                                // totalCompensar();
+                                                $scope.totalCompensar();
+                                            }, function error(err) {
+                                                console.log('Ocurrio un error al intentar obtener las OT relacionadas a la Garantia extendida')
+                                            });
+                                        }
                                         // if (value2.tipoProducto != 'NCR') {
                                         $scope.montoTotal = $scope.montoTotal + value2.saldo;
                                         // } else if (value2.tipoProducto == 'NCR') {
@@ -1050,9 +1062,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         // value2.montoCompensar = value2.cargo - $scope.unidadCompensacion.importe;
                                         if ($scope.montoTotal > $scope.unidadCompensacion.saldo) {
                                             // value2.saldo
-                                            if(value2.saldo > $scope.unidadCompensacion.saldo){
+                                            if (value2.saldo > $scope.unidadCompensacion.saldo) {
                                                 value2.montoCompensar = $scope.unidadCompensacion.saldo;
-                                            }else{
+                                            } else {
                                                 value2.montoCompensar = 0;
                                             }
                                         } else {
@@ -1077,7 +1089,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 $scope.factura_unidad = result.data[0].ucn_idFactura
                                 // $scope.$apply(function() {
 
-                                $scope.diferenciaPP = $scope.montoTotal - $scope.engancheCotizacion.ucu_impenganche;
+                                $scope.diferenciaPP = $scope.montoTotal;
                                 $scope.saldoCompensar = $scope.montoTotal - $scope.engancheCotizacion.ucu_impenganche;
                                 $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
                                 // $scope.unidadCompensacion.montoCompensar = $scope.unidadCompensacion.montoCompensar; 
@@ -1085,6 +1097,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 $scope.unidadCompensacion.montoCompensar = $scope.unidadCompensacion.montoCompensar.toFixed(2);
                                 $scope.saldoFU = $scope.saldoFU - $scope.engancheCotizacion.ucu_impenganche;
                                 console.log($scope.unidadCompensacion.montoCompensar, 'MMMTTAAAA')
+                                // totalCompensar();
+                                $scope.totalCompensar();
                                 // });
                             }, function err(error) {
                                 console.log(error)
@@ -1096,6 +1110,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 swal("Aviso", "No se puede compensar este documento.", "warning");
                             }
                             console.log($scope.facturasTotal, 'TOTAL FACTURAS');
+                            // totalCompensar();
+                            $scope.totalCompensar();
                         });
                         // interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
                         //     console.log(result.data);
@@ -1197,6 +1213,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 confirmButtonText: "Aplicar",
                 closeOnConfirm: true
             }, function() {
+                $scope.totalCompensar();
                 $('#mdlLoading').modal('hide');
                 var paraCompensacion = {
                     idUsuario: $scope.idUsuario,
@@ -1247,37 +1264,52 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         var saldoNcr = 0;
         var FacturaUN = 0;
         var auxConta = 1;
-        angular.forEach($scope.facturasTotal, function(value, key) {
-            if (value.tipoProducto == 'FA' && value.garantia == 1) {
-                saldoNcr = value.montoCompensar * 0.75;
-                FacturaUN = value.factura;
-                console.log(saldoNcr, 'El saldo de la nota de credito')
-                //Agrego el arreglo del PAG
-                // $scope.facturasTotal.push({
-                //     'tipoFactura': 'Compra',
-                //     'cargo': saldoNcr,
-                //     'iva': '',
-                //     'total': saldoNcr,
-                //     'fecha': '',
-                //     'factura': value.factura,
-                //     'numeroSerie': '',
-                //     'saldo': '',
-                //     'tipoProducto': 'NCR',
-                //     'montoCompensar': saldoNcr
-                // });
-                $scope.facturasTotal.push({
-                    'tipoFactura': 'PAG',
-                    'cargo': saldoNcr,
-                    'iva': '',
-                    'total': saldoNcr,
-                    'fecha': '',
-                    'factura': value.factura,
-                    'numeroSerie': '',
-                    'saldo': '',
-                    'tipoProducto': 'PAG',
-                    'montoCompensar': saldoNcr
-                });
-            }
+        // angular.forEach($scope.facturasTotal, function(value, key) {
+        //     if (value.tipoProducto == 'FA' && value.garantia == 1) {
+        //         saldoNcr = value.montoCompensar * 0.75;
+        //         FacturaUN = value.factura;
+        //         console.log(saldoNcr, 'El saldo de la nota de credito')
+        //         //Agrego el arreglo del PAG
+        //         // $scope.facturasTotal.push({
+        //         //     'tipoFactura': 'Compra',
+        //         //     'cargo': saldoNcr,
+        //         //     'iva': '',
+        //         //     'total': saldoNcr,
+        //         //     'fecha': '',
+        //         //     'factura': value.factura,
+        //         //     'numeroSerie': '',
+        //         //     'saldo': '',
+        //         //     'tipoProducto': 'NCR',
+        //         //     'montoCompensar': saldoNcr
+        //         // });
+        //         $scope.facturasTotal.push({
+        //             'tipoFactura': 'PAG',
+        //             'cargo': saldoNcr,
+        //             'iva': '',
+        //             'total': saldoNcr,
+        //             'fecha': '',
+        //             'factura': value.factura,
+        //             'numeroSerie': '',
+        //             'saldo': '',
+        //             'tipoProducto': 'PAG',
+        //             'montoCompensar': saldoNcr
+        //         });
+        //     }
+        // });
+        angular.forEach($scope.ocGarantias, function(value, key) {
+            $scope.facturasTotal.push({
+                'tipoFactura': 'PAG',
+                'cargo': value.montoCompensar,
+                'iva': '',
+                'total': value.montoCompensar,
+                'fecha': '',
+                'factura': value.oce_folioorden,
+                'numeroSerie': '',
+                'saldo': '',
+                'tipoProducto': 'PAG',
+                'montoCompensar': value.montoCompensar
+            });
+
         });
         var montoNCA = 0;
         angular.forEach($scope.facturasCompensacion, function(value, key) {
@@ -1345,9 +1377,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         console.log($scope.saldoCompensar - saldoNcr, 'COMPRA');
         $scope.facturasTotal.push({
             'tipoFactura': 'Compra',
-            'cargo': $scope.unidadCompensacion.montoCompensar,
+            'cargo': $scope.saldoCXC,
             'iva': '',
-            'total': $scope.unidadCompensacion.montoCompensar,
+            'total': $scope.saldoCXC,
             'fecha': '',
             'factura': $scope.unidadCompensacion.CCP_IDDOCTO,
             'numeroSerie': '',
@@ -1368,7 +1400,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 idpoliza: $scope.LastId,
                                 idmovimiento: item.movimientoID,
                                 idUsuario: $scope.idUsuario,
-                                saldo: $scope.saldoFU,
+                                saldo: value.montoCompensar,
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
@@ -1382,7 +1414,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 idpoliza: $scope.LastId,
                                 idmovimiento: item.movimientoID,
                                 idUsuario: $scope.idUsuario,
-                                saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
+                                saldo: $scope.saldoCXC,
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
@@ -1441,11 +1473,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             idpoliza: $scope.LastId,
                             idmovimiento: item.movimientoID,
                             idUsuario: $scope.idUsuario,
-                            saldo: $scope.saldoFU,
+                            saldo: value.montoCompensar,
                             tipoProducto: value.tipoProducto,
                             documento: value.factura,
                             tiempo: tiempo,
-                            consecutivo: auxConta
+                            consecutivo: auxConta,
+                            idReciboAutomatico: $scope.idReciboAutomatico,
+                            facturaUnidad: $scope.factura_unidad
                         }
                         break;
                     case 'COMPRA':
@@ -1453,11 +1487,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             idpoliza: $scope.LastId,
                             idmovimiento: item.movimientoID,
                             idUsuario: $scope.idUsuario,
-                            saldo: $scope.saldoCompensar - saldoNcr + montoNCA,
+                            saldo: $scope.saldoCXC,
                             tipoProducto: value.tipoProducto,
                             documento: value.factura,
                             tiempo: tiempo,
-                            consecutivo: auxConta
+                            consecutivo: auxConta,
+                            idReciboAutomatico: $scope.idReciboAutomatico,
+                            facturaUnidad: $scope.factura_unidad
                         }
                         var preLoteCompensacion = [{
                             'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
@@ -1481,7 +1517,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             tipoProducto: value.tipoProducto,
                             documento: value.factura,
                             tiempo: tiempo,
-                            consecutivo: auxConta
+                            consecutivo: auxConta,
+                            idReciboAutomatico: $scope.idReciboAutomatico,
+                            facturaUnidad: $scope.factura_unidad
                         }
                 }
                 console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
@@ -1588,7 +1626,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
 
-
+        $scope.totalCompensar();
     };
     $scope.sumaCompensarCxP = function(newValue, oldValue) {
         console.log(newValue, oldValue, 'CuentasXpagar')
@@ -1598,9 +1636,35 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.unidadCompensacion.montoCompensar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
+        $scope.totalCompensar();
     };
-    var totalCompensar = function() {
-        $scope.montoCompensar = $scope.auxSumaCxp;
+    $scope.totalCompensar = function() {
+        $scope.montoCompensar = 0;
+        $scope.saldoCXC = 0;
+        $scope.saldoGarantia = 0;
+        $scope.montoCompensar = Number($scope.unidadCompensacion.montoCompensar);
+        angular.forEach($scope.ocGarantias, function(value, key) {
+            $scope.saldoGarantia = Number($scope.saldoGarantia) + Number(value.montoCompensar);
+        });
+        $scope.montoCompensar = Number($scope.montoCompensar) + $scope.saldoGarantia
+        $scope.montoCompensar = Number($scope.montoCompensar) - Number($scope.diferenciaPP);
+        console.log($scope.montoCompensar, 'Soy el monto a compensarrrr');
+        angular.forEach($scope.facturasTotal, function(value, key) {
+            $scope.saldoCXC = $scope.saldoCXC + Number(value.montoCompensar);
+        });
+        angular.forEach($scope.facturasCompensacion, function(value, key) {
+            if (value.tipoProducto == 'PROV') {
+                $scope.saldoCXC = $scope.saldoCXC - Number(value.montoCompensar);
+                $scope.montoCompensar = Number($scope.montoCompensar) + Number(value.montoCompensar);
+            } else {
+                $scope.saldoCXC = $scope.saldoCXC + Number(value.montoCompensar);
+            }
+            if (value.tipoProducto == 'CD') {
+                $scope.montoCompensar = Number($scope.montoCompensar) - Number(value.montoCompensar);
+            }
+
+        });
+        $scope.saldoCXC = $scope.saldoCXC - $scope.saldoGarantia;
     };
     ///////////////////////////////
     /////traspaso sucursal

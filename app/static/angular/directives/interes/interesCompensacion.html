@@ -1,27 +1,32 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <h2><strong>Validar Compensacion</strong></h2>
     </div>
-    <!-- <div class="col-md-6">
+    <div class="col-md-6">
         <div class="alert alert-info" role="alert">
-            <form class="form-inline">
+            <button class="btn btn-primary" ng-click="totalCompensar();">Calcular</button>
+            <!-- <form class="form-inline">
                 <label for="exampleInputName2">Saldo a Compensar: </label>
                 {{montoCompensar | currency}}
             </form>
             <form class="form-inline">
-                <label for="exampleInputName2">Diferencia vs plan piso: </label>
-                {{diferenciaPP | currency}}
-            </form>
-            <form class="form-inline">
                 <label for="exampleInputName2">Compra: </label>
                 {{saldoCompensar | currency}}
+            </form> -->
+            <form class="form-inline">
+                <label for="exampleInputName2">Diferencia vs plan piso: </label>
+                {{diferenciaPP | currency}}
+            </form>            
+            <form class="form-inline">
+                <label for="exampleInputName2">Saldo Serie PP x Pagar: </label>
+                {{montoCompensar | currency}}
             </form>
             <form class="form-inline">
-                <label for="exampleInputName2">FU: </label>
-                {{saldoFU | currency}}
+                <label for="exampleInputName2">Saldo CXC: </label>
+                {{saldoCXC | currency}}
             </form>
         </div>
-    </div> -->
+    </div>
     <hr>
 </div>
 <div class="row">
@@ -100,6 +105,13 @@
                         <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
                         <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensarCxP(unidadCompensacion.montoCompensar, {{unidadCompensacion.montoCompensar}})"></td>
                     </tr>
+                    <tr ng-repeat="ocGarantia in ocGarantias">
+                        <td>{{ocGarantia.financiera}}</td>
+                        <td>{{ocGarantia.oce_folioorden}}</td>
+                        <td>{{ocGarantia.oce_importetotal || currency}}</td>
+                        <td class="text-right">{{ocGarantia.saldo | currency}}</td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="ocGarantia.montoCompensar" ng-change="sumaCompensarCxP(ocGarantia.montoCompensar, {{ocGarantia.montoCompensar}})"></td>
+                    </tr>
                 </tbody>
                 <!-- <tfoot>
                     <tr>
@@ -141,7 +153,7 @@
                     <tr ng-repeat="facturaCompensacion in facturasCompensacion">
                         <td></td>
                         <td colspan="6">{{facturaCompensacion.tipoFactura}}</td>
-                        <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;"></td>
+                        <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;" ng-change="totalCompensar()"></td>
                     </tr>
                     <tr>
                         <td colspan="6">Enganche</td>

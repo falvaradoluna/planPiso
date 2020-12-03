@@ -758,4 +758,21 @@ ApiInteres.prototype.get_movimientoscxc = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_otGarantia = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'vin', value: req.query.vin, type: self.model.types.STRING },
+        { name: 'factura', value: req.query.factura, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_otGarantiaExtendida', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;
