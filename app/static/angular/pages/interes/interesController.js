@@ -1414,7 +1414,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 idpoliza: $scope.LastId,
                                 idmovimiento: item.movimientoID,
                                 idUsuario: $scope.idUsuario,
-                                saldo: $scope.saldoCXC,
+                                saldo: $scope.saldoCXC + montoNCA,
                                 tipoProducto: value.tipoProducto,
                                 documento: value.factura,
                                 tiempo: tiempo,
@@ -1642,6 +1642,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         $scope.montoCompensar = 0;
         $scope.saldoCXC = 0;
         $scope.saldoGarantia = 0;
+        $scope.saldoFacturasCompensacion = 0;
         $scope.montoCompensar = Number($scope.unidadCompensacion.montoCompensar);
         angular.forEach($scope.ocGarantias, function(value, key) {
             $scope.saldoGarantia = Number($scope.saldoGarantia) + Number(value.montoCompensar);
@@ -1654,17 +1655,22 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
         angular.forEach($scope.facturasCompensacion, function(value, key) {
             if (value.tipoProducto == 'PROV') {
-                $scope.saldoCXC = $scope.saldoCXC - Number(value.montoCompensar);
+                // $scope.saldoCXC = $scope.saldoCXC - Number(value.montoCompensar);
                 $scope.montoCompensar = Number($scope.montoCompensar) + Number(value.montoCompensar);
-            } else {
-                $scope.saldoCXC = $scope.saldoCXC + Number(value.montoCompensar);
-            }
+            } 
+            // else {
+            //     $scope.saldoCXC = $scope.saldoCXC + Number(value.montoCompensar);
+            // }
             if (value.tipoProducto == 'CD') {
                 $scope.montoCompensar = Number($scope.montoCompensar) - Number(value.montoCompensar);
             }
 
         });
-        $scope.saldoCXC = $scope.saldoCXC - $scope.saldoGarantia;
+        angular.forEach($scope.facturasCompensacion, function(value, key) {
+            $scope.saldoFacturasCompensacion = Number($scope.saldoFacturasCompensacion) + Number(value.montoCompensar);
+        });
+        
+        $scope.saldoCXC = $scope.saldoCXC - $scope.saldoGarantia ;
     };
     ///////////////////////////////
     /////traspaso sucursal
