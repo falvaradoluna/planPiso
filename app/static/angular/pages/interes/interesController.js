@@ -1661,7 +1661,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             // else {
             //     $scope.saldoCXC = $scope.saldoCXC + Number(value.montoCompensar);
             // }
-            if (value.tipoProducto == 'CD') {
+            if (value.tipoProducto == 'CD' || value.tipoProducto == 'IP') {
                 $scope.montoCompensar = Number($scope.montoCompensar) - Number(value.montoCompensar);
             }
 
