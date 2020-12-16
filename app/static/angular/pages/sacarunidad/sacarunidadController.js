@@ -188,8 +188,24 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
     };
 
     $scope.gridOptions = {
-        enableSorting: true,
+        enableColumnResize: true,
+        enableRowSelection: true,
+        enableGridMenu: true,
         enableFiltering: true,
+        enableGroupHeaderSelection: true,
+        treeRowHeaderAlwaysVisible: false,
+        showColumnFooter: false,
+        showGridFooter: false,
+        height: 900,
+        cellEditableCondition: function($scope) {
+            return $scope.row.entity.seleccionable;
+        },
+        isRowSelectable: function(row) {
+            if (row.entity.seleccionable == "True") return false; //rirani is not selectable
+            return true; //everyone else is
+        },
+        enableSorting: true,
+        // enableFiltering: true,
         columnDefs: [
             // {
             //         name: 'nombreAgrupador',
@@ -750,7 +766,13 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
 
     };
     $scope.validaDocumentosSeleccionados = function() {
+        $scope.mostrarAlerta = false;
+        $scope.noMostrar = false;
+        var contador = 0;
         console.log($scope.bancoPago, 'BANCO')
+        $scope.montoIgual = 0;
+        $scope.interesesUnidades = [];
+        $scope.arrayInteresUnidad = [];
         var rows = $scope.gridApi1.selection.getSelectedRows();
         if (rows.length > 0) {
             if ($scope.bancoPago) {
@@ -762,6 +784,30 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                 var proveedorcuentaDestino = '';
                 var unaCuenta = true;
                 rows.some(function(row, i, j) {
+                    if (row.saldo == row.Pagar) {
+                        $scope.montoIgual = 1;
+                        $scope.noMostrar = true;
+                        sacarunidadFactory.getIntesesUnidad(row.documento, row.idProveedor, row.Pagar).then(function success(result) {
+                            console.log(result.data, 'soy el interes de la unidad ')
+                            if (result.data[0][0].success == 0) {
+                                $scope.mostrarAlerta = true;
+                                contador++;
+                            } else if (result.data[0][0].success == 2) {
+                                $scope.noMostrar = false;
+                            } else {
+                                $scope.interesesUnidades.push(row);
+                                if (result.data[1]) {
+                                    $scope.arrayInteresUnidad.push(result.data[1][0])
+                                    console.log($scope.arrayInteresUnidad, 'Soy los intereses')
+                                }
+
+                            }
+                            // $scope.noMostrar = contador > 0 ? true : false;
+                        }, function error(err) {
+                            console.log('Ocurrio un error al intentar obtener el interes de la unidad')
+                        });
+
+                    }
                     if ((row.convenioCIE == null) || (row.convenioCIE == undefined) || (row.convenioCIE == "")) {
                         pasaxCIE = true;
                     } else {
@@ -814,6 +860,28 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
         }
     };
     $scope.guardarLote = function() {
+        $scope.PreLote = false;
+        if ($scope.noMostrar == false) {
+            console.log('Entre donde guardara normal')
+            $scope.guardaLoteTotal();
+
+        } else {
+            swal({
+                title: "Atención",
+                text: "Al guardar el lote de pago se crearan ordenes de compra para los intereses. ¿Seguro que desea continuar?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            }, function() {
+                $scope.PreLote = true;
+                $scope.guardaLoteTotal();
+            });
+        }
+
+    };
+    $scope.guardaLoteTotal = function() {
         var rows = $scope.gridApi1.selection.getSelectedRows();
         var dataEncabezado = {
             idEmpresa: sessionFactory.empresaID,
@@ -823,12 +891,14 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
             esAplicacionDirecta: 0,
             cifraControl: ($scope.sumaDocumentos).toFixed(2)
         };
+        var idProveedor = 0;
         crealoteFactory.setEncabezadoPago(dataEncabezado)
             .then(function successCallback(response) {
                 $scope.idLotePadre = response.data[0].idLotePadre;
                 var array = [];
                 var count = 1;
                 rows.forEach(function(row, i) {
+                    idProveedor = row.idProveedor;
                     var elemento = {};
                     elemento.pal_id_lote_pago = $scope.idLotePadre; //response.data;
                     elemento.pad_polTipo = row.polTipo; //entity.polTipo;
@@ -879,9 +949,38 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                     .then(function successCallback(response) {
                         console.log(response.data[0].estatus, 'INSERTO???MMMM')
                         if (response.data[0].estatus == 1) {
-                            alertFactory.success('Se guardaron los datos.');
-                            $('#modalGridLote').modal('hide');
-                            cargaInfoGridLotes();
+                            if ($scope.PreLote) {
+                                sacarunidadFactory.encabezadoPreLote($scope.idLotePadre, idProveedor).then(function success(result) {
+                                    console.log(result.data);
+                                    var idPreLote = result.data[0].idPreLote;
+                                    if (result.data[0].idPreLote != -1) {
+                                        var promises = [];
+                                        $scope.arrayInteresUnidad.map((value) => {
+                                            var objetoPoliza = {
+                                                'idPreLote' : idPreLote,
+                                                'idEmpresa' : sessionFactory.empresaID,
+                                                'documento' : value.documento,
+                                                'idproveedor':idProveedor,
+                                                'saldoDocumento':value.saldo,
+                                                'saldoInteres':value.totalInteres,
+                                                'idUsuario':$scope.idUsuario
+                                            };
+                                            promises.push(sacarunidadFactory.polizaInteres(objetoPoliza));
+                                        })
+                                        Promise.all(promises).then(function response(result) {
+
+                                        });
+                                    } else {
+                                        console.log('Ocurrio un problema al insertar el preLote')
+                                    }
+                                }, function error(err) {
+                                    console.log('Ocurrio un error al insertar el encabezado del prelote')
+                                });
+                            } else {
+                                alertFactory.success('Se guardaron los datos.');
+                                $('#modalGridLote').modal('hide');
+                                cargaInfoGridLotes();
+                            }
                         } else {
                             alertFactory.error('Ocurrio un Problema al guardar el lote')
                         }
@@ -892,7 +991,6 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
             }, function errorCallback(response) {
                 alertFactory.error('Error al insertar en tabla padre.');
             });
-
     };
     $scope.gridOptions2 = {
         enableSorting: true,

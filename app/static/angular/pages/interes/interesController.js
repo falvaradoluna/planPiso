@@ -1206,7 +1206,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             // swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
             swal({
                 title: "¿Esta seguro?",
-                text: "Se creara la compensación de la unidad  para la unidad seleccionada.",
+                text: "Se creara la compensación para la unidad seleccionada.",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",

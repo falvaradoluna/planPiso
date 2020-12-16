@@ -34,7 +34,7 @@ appModule.factory('staticFactory', function($http) {
         polizasBar: function() {
             return [
                 { name: 'Empresas', url: 'empresa', isActive: false },
-                { name: 'polizas', url: '#', isActive: true }
+                { name: 'Aplicación Pagos', url: '#', isActive: true }
             ];
         },
         proveedorBar: function() {

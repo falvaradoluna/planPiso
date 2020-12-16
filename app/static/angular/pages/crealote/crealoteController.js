@@ -175,8 +175,24 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     };
 
     $scope.gridOptions = {
-        enableSorting: true,
+        enableColumnResize: true,
+        enableRowSelection: true,
+        enableGridMenu: true,
         enableFiltering: true,
+        enableGroupHeaderSelection: true,
+        treeRowHeaderAlwaysVisible: false,
+        showColumnFooter: false,
+        showGridFooter: false,
+        height: 900,
+        cellEditableCondition: function($scope) {
+            return $scope.row.entity.seleccionable;
+        },
+        isRowSelectable: function(row) {
+            if (row.entity.seleccionable == "True") return false; //rirani is not selectable
+            return true; //everyone else is
+        },
+        enableSorting: true,
+        // enableFiltering: true,
         columnDefs: [
             // {
             //         name: 'nombreAgrupador',

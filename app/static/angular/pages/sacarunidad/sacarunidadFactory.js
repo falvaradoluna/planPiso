@@ -19,6 +19,37 @@ appModule.factory('sacarunidadFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getIntesesUnidad: function(documento, idProveedor, monto) {
+            return $http({
+                url: apisacarunidadUrl + 'interesUnidad/',
+                method: "GET",
+                params: {
+                    documento: documento,
+                    idProveedor: idProveedor,
+                    monto: monto
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        encabezadoPreLote: function(idLote, idProveedor) {
+            return $http({
+                url: apisacarunidadUrl + 'encabezadoPreLote/',
+                method: "GET",
+                params: {
+                    idLote: idLote,
+                    idProveedor: idProveedor
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        polizaInteres: function(parametros) {
+            return $http({
+                url: apisacarunidadUrl + 'polizaInteres/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

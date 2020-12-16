@@ -437,3 +437,7 @@ tr.unSelect td {
   }
 }
 /*END Spin*/
+.botonFormulario{
+    position: absolute;
+    bottom: 12px;
+}

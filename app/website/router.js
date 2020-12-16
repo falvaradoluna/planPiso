@@ -10,7 +10,7 @@
      apiFinanciera: require('./controllers/apiFinanciera'),
      apiInteres: require('./controllers/apiInteres'),
      apiTraspaso: require('./controllers/apiTraspaso'),
-     apipolizas: require('./controllers/apipolizas'),
+     apiAplicaPagos: require('./controllers/apiAplicaPagos'),
      apiproveedor: require('./controllers/apiProveedor'),
      apiReduccion: require('./controllers/apiReduccion'),
      apiTiie: require('./controllers/apiTiie'),

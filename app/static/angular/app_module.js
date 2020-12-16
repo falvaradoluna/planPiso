@@ -31,9 +31,9 @@ appModule.config(function($routeProvider, $locationProvider) {
             templateUrl: 'angular/pages/interes/interes.html',
             controller: 'interesController'
     })
-    .when('/polizas', {
-        templateUrl: 'angular/pages/polizas/polizas.html',
-        controller: 'polizasController'
+    .when('/aplicaPagos', {
+        templateUrl: 'angular/pages/aplicaPagos/aplicaPagos.html',
+        controller: 'aplicaPagosController'
 
     })
     .when('/proveedor', {

@@ -1,10 +1,11 @@
+<link href="assets/css/aplicaPago.css" rel="stylesheet">
 <div class="modal fade" id="modalGridLote" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">                
+            <div class="modal-header">
                 <h4 class="modal-title">
                     <div class="row">
-                       <!--  <div class="col-sm-12">
+                        <!--  <div class="col-sm-12">
                             <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
                         </div> -->
                         <div class="col-sm-6">
@@ -22,14 +23,47 @@
                         <h3>Se guardara el lote con los siguientes documentos</h3>
                         <div id="grid2" ui-grid="gridOptions2" ui-grid-grouping ui-grid-cellNav class="gridStyle"></div>
                     </div>
+                    <div ng-show="noMostrar">
+                        <div class="col-sm-12" ng-hide="mostrarAlerta">
+                            <h3>Los siguientes documentos tienen el siguiente interes </h3>
+                            <table id="consultaLotes" class="table table-striped">
+                                <tr>
+                                    <th>Documento</th>
+                                    <th>Puntos</th>
+                                    <th>TIIE</th>
+                                    <th>Penetración</th>
+                                    <th>Interes</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Días</th>
+                                    <th>Intereses</th>
+                                </tr>
+                                <tr ng-repeat="interesUnidad in arrayInteresUnidad">
+                                    <td>{{interesUnidad.documento}}</td>
+                                    <th>{{interesUnidad.puntos}}</th>
+                                    <th>{{interesUnidad.tiie}}</th>
+                                    <th>{{interesUnidad.penetracion}}</th>
+                                    <th>{{interesUnidad.Interes}}</th>
+                                    <th>{{interesUnidad.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</th>
+                                    <th>{{interesUnidad.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</th>
+                                    <th>{{interesUnidad.dias}}</th>
+                                    <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-12 bg-danger" ng-show="mostrarAlerta">
+                            <h3>El saldo no corresponde, favor de actualizar su cartera </h3>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-sm-12">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="montoIgual">Intereses</button> -->
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar</button> -->
-                        <button type="button" class="btn btn-success" ng-show="BotonGuardarLote" ng-click="guardarLote()">Guardar y Enviar a Aprobación</button>
+                        <button type="button" class="btn btn-success" ng-show="BotonGuardarLote" ng-click="guardarLote()">Guardar</button>
                     </div>
                 </div>
             </div>
