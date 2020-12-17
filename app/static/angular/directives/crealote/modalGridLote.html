@@ -46,7 +46,7 @@
                                     <th>{{interesUnidad.Interes}}</th>
                                     <th>{{interesUnidad.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</th>
                                     <th>{{interesUnidad.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</th>
-                                    <th>{{interesUnidad.dias}}</th>
+                                    <th><input type="text" class="form-control" ng-model="interesUnidad.dias" style="width: 100px" ng-change="cambioDias(interesUnidad.dias,{{interesUnidad.dias}}, $index, interesUnidad.Interes)"></th>
                                     <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
                                 </tr>
                             </table>

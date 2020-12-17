@@ -957,13 +957,13 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                                         var promises = [];
                                         $scope.arrayInteresUnidad.map((value) => {
                                             var objetoPoliza = {
-                                                'idPreLote' : idPreLote,
-                                                'idEmpresa' : sessionFactory.empresaID,
-                                                'documento' : value.documento,
-                                                'idproveedor':idProveedor,
-                                                'saldoDocumento':value.saldo,
-                                                'saldoInteres':value.totalInteres,
-                                                'idUsuario':$scope.idUsuario
+                                                'idPreLote': idPreLote,
+                                                'idEmpresa': sessionFactory.empresaID,
+                                                'documento': value.documento,
+                                                'idproveedor': idProveedor,
+                                                'saldoDocumento': value.saldo,
+                                                'saldoInteres': value.totalInteres,
+                                                'idUsuario': $scope.idUsuario
                                             };
                                             promises.push(sacarunidadFactory.polizaInteres(objetoPoliza));
                                         })
@@ -1305,6 +1305,10 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
             $('#mdlLoading').modal('hide');
             console.log('Error al actualizar Cartera', err)
         });
+    };
+    $scope.cambioDias = function(newValue, oldValue, index, intereses) {
+        $scope.arrayInteresUnidad[index].totalInteres = newValue * intereses;
+        // $scope.arrayInteresUnidad[index].montoFinanciar = ($scope.arrayInteresUnidad[index].IMPORTE * (newValue / 100))
     };
     /////////-----------------------------
     //FAL crea los campos del grid y las rutinas en los eventos del grid.
