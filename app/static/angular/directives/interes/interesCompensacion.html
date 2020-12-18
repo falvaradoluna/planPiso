@@ -110,16 +110,16 @@
                         <td>{{ocGarantia.oce_folioorden}}</td>
                         <td>{{ocGarantia.oce_importetotal || currency}}</td>
                         <td class="text-right">{{ocGarantia.saldo | currency}}</td>
-                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="ocGarantia.montoCompensar"></td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="ocGarantia.montoCompensar" ng-change="sumaCompensarOc()"></td>
                     </tr>
                 </tbody>
-                <!-- <tfoot>
+                <tfoot>
                     <tr>
-                        <td colspan="3" class="text"><strong>Total</strong></td>
-                        <td class="text-right">{{montoTotal | currency}}</td>
-                        <td></td>
+                        <td colspan="4" class="text"><strong>Total</strong></td>
+                        <td class="text-right">{{totalTablaCXP | currency}}</td>
+                        <!-- <td></td> -->
                     </tr>
-                </tfoot> -->
+                </tfoot>
             </table>
             <table class="table table-striped">
                 <thead>
@@ -173,6 +173,11 @@
                         <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
                     </tr> -->
                 </tbody>
+                <tr>
+                        <td colspan="7" class="text"><strong>Total</strong></td>
+                        <td class="text-right">{{totalTablaCXC | currency}}</td>
+                        <!-- <td></td> -->
+                    </tr>
                 <!-- <tfoot>
                     <tr>
                         <td colspan="3" class="text"><strong>Total</strong></td>

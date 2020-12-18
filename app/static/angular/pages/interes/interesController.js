@@ -40,6 +40,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $rootScope.tiie = 0;
     $rootScope.puntos = 0;
     $scope.montoCompensar = 0;
+    $scope.totalTablaCXP = 0;
+    $scope.totalTablaCXC = 0;
     var CargarSpreadTiie = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "CargarSpreadTiie" })[0];
     var cambiarEsquema = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "cambiarEsquema" })[0];
     var traspasoFinanciera = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "traspasoFinanciera" })[0];
@@ -1047,6 +1049,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                                 $scope.ocGarantias.push(result.data[0]);
                                                 // totalCompensar();
                                                 $scope.totalCompensar();
+                                                $scope.sumaTotalCXP();
                                             }, function error(err) {
                                                 console.log('Ocurrio un error al intentar obtener las OT relacionadas a la Garantia extendida')
                                             });
@@ -1099,6 +1102,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 console.log($scope.unidadCompensacion.montoCompensar, 'MMMTTAAAA')
                                 // totalCompensar();
                                 $scope.totalCompensar();
+                                $scope.sumaTotalCXP()
+                                $scope.sumaTotalCXC();
                                 // });
                             }, function err(error) {
                                 console.log(error)
@@ -1112,6 +1117,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             console.log($scope.facturasTotal, 'TOTAL FACTURAS');
                             // totalCompensar();
                             $scope.totalCompensar();
+                            $scope.sumaTotalCXP();
                         });
                         // interesFactory.facturaUnidad(item.empresaID, item.sucursalID, item.CCP_IDDOCTO).then(function success(result) {
                         //     console.log(result.data);
@@ -1214,6 +1220,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 closeOnConfirm: true
             }, function() {
                 $scope.totalCompensar();
+                $scope.sumaTotalCXP();
                 $('#mdlLoading').modal('hide');
                 var paraCompensacion = {
                     idUsuario: $scope.idUsuario,
@@ -1593,7 +1600,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         console.log(factura, index, event)
         $scope.montoCompensarCxc = 0;
         if (factura.montoCompensar <= factura.saldo) {
-            if (factura.montoCompensar <= Number($scope.unidadCompensacion.montoCompensar)) {
+            // if (factura.montoCompensar <= Number($scope.unidadCompensacion.montoCompensar)) {
                 $scope.facturasTotal[index].montoCompensar = factura.montoCompensar;
                 //unidadCompensacion
                 var auxSumaCxc = 0;
@@ -1608,25 +1615,26 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     auxSumaCxcTotal = auxSumaCxcTotal + Number(value.montoCompensar);
                 });
                 $scope.montoCompensarCxc = auxSumaCxcTotal;
-                if (auxSumaCxcTotal <= Number($scope.unidadCompensacion.montoCompensar)) {
+                // if (auxSumaCxcTotal <= Number($scope.unidadCompensacion.montoCompensar)) {
                     $scope.saldoFU = auxSumaCxc;
                     $scope.saldoCompensar = auxSumaCxcTotal;
                     $scope.saldoCompensar = $scope.saldoCompensar.toFixed(2);
-                } else {
-                    $scope.facturasTotal[index].montoCompensar = oldValue;
-                    alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
-                }
+                // } else {
+                //     $scope.facturasTotal[index].montoCompensar = oldValue;
+                //     alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
+                // }
 
-            } else {
-                $scope.facturasTotal[index].montoCompensar = oldValue;
-                alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
-            }
+            // } else {
+            //     $scope.facturasTotal[index].montoCompensar = oldValue;
+            //     alertFactory.warning('No puede ingresar un valor mayor al monto a compensar');
+            // }
         } else {
             $scope.facturasTotal[index].montoCompensar = oldValue;
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
 
         $scope.totalCompensar();
+        $scope.sumaTotalCXP();
     };
     $scope.sumaCompensarCxP = function(newValue, oldValue) {
         console.log(newValue, oldValue, 'CuentasXpagar')
@@ -1637,7 +1645,12 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             alertFactory.warning('No puede ingresar un valor mayor al saldo');
         }
         $scope.totalCompensar();
+        $scope.sumaTotalCXP();
     };
+    $scope.sumaCompensarOc = function(){
+        $scope.totalCompensar();
+        $scope.sumaTotalCXP();
+    }
     $scope.totalCompensar = function() {
         $scope.montoCompensar = 0;
         $scope.saldoCXC = 0;
@@ -1671,6 +1684,24 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
         
         $scope.saldoCXC = $scope.saldoCXC - $scope.saldoGarantia ;
+        $scope.sumaTotalCXC()
+    };
+    $scope.sumaTotalCXP = function(){
+        $scope.totalTablaCXP = 0;
+            $scope.totalTablaCXP =  Number($scope.totalTablaCXP) +  Number($scope.unidadCompensacion.montoCompensar);
+       
+        angular.forEach($scope.ocGarantias, function(value, key) {
+            $scope.totalTablaCXP =  Number($scope.totalTablaCXP) +  Number(value.montoCompensar);
+        });
+    };
+    $scope.sumaTotalCXC = function(){
+        $scope.totalTablaCXC = 0;
+        angular.forEach($scope.facturasTotal, function(value, key) {
+            $scope.totalTablaCXC =  Number($scope.totalTablaCXC) +  Number(value.montoCompensar);
+        });
+        angular.forEach($scope.facturasCompensacion, function(value, key) {
+            $scope.totalTablaCXC =  Number($scope.totalTablaCXC) +  Number(value.montoCompensar);
+        });
     };
     ///////////////////////////////
     /////traspaso sucursal
