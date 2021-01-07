@@ -184,6 +184,7 @@
     <div class="col-md-12">
         <table id="tblInteres" class="table table-striped">
             <tr>
+                <th>Documento</th>
                 <th>Saldo</th>
                 <th>Puntos</th>
                 <th>Tiie</th>
@@ -198,6 +199,7 @@
                 <th>Fecha ejecución</th>
             </tr>
             <tr ng-repeat="item in lstInteresesMov">
+                <td>{{item.documento }}</td>
                 <td>{{item.saldo | number:2 }}</td>
                 <td>{{item.puntos | number:2}}</td>
                 <td>{{item.tiie | number:4}}</td>
