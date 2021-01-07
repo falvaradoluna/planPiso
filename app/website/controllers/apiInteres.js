@@ -775,4 +775,21 @@ ApiInteres.prototype.get_otGarantia = function(req, res, next) {
         });
     });
 };
+ApiInteres.prototype.get_buscaFactura = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'documento', value: req.query.factura, type: self.model.types.STRING },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_get_comisionDelear', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

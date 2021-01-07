@@ -773,6 +773,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
         $scope.montoIgual = 0;
         $scope.interesesUnidades = [];
         $scope.arrayInteresUnidad = [];
+        $scope.arrayInteresUnidadOriginal = [];
         var rows = $scope.gridApi1.selection.getSelectedRows();
         if (rows.length > 0) {
             if ($scope.bancoPago) {
@@ -797,7 +798,8 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                             } else {
                                 $scope.interesesUnidades.push(row);
                                 if (result.data[1]) {
-                                    $scope.arrayInteresUnidad.push(result.data[1][0])
+                                    $scope.arrayInteresUnidad.push(result.data[1][0]);
+                                    $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
                                     console.log($scope.arrayInteresUnidad, 'Soy los intereses')
                                 }
 
@@ -881,6 +883,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
         }
 
     };
+
     $scope.guardaLoteTotal = function() {
         var rows = $scope.gridApi1.selection.getSelectedRows();
         var dataEncabezado = {
@@ -968,7 +971,45 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                                             promises.push(sacarunidadFactory.polizaInteres(objetoPoliza));
                                         })
                                         Promise.all(promises).then(function response(result) {
+                                            var b2 = $scope.arrayInteresUnidad;
+                                            var b1 = $scope.arrayInteresUnidadOriginal;
+                                            var calculo = b1.filter(item1 => !b2.some(item2 => (item2.dias === item1.dias && item2.totalInteres === item1.totalInteres)));
+                                            var banco = b2.filter(item1 => !b1.some(item2 => (item2.dias === item1.dias && item2.totalInteres === item1.totalInteres)));
+                                            var arrayBitacora = [];
 
+                                            angular.forEach(calculo, function(value, key) {
+                                                value.tipo = 'calculo';
+                                                arrayBitacora.push(value);
+                                            });
+                                            angular.forEach(banco, function(value, key) {
+                                                value.tipo = 'banco';
+                                                arrayBitacora.push(value);
+                                            });
+                                            var promisesBitacora = [];
+                                            arrayBitacora.map((value) => {
+                                                var objetoBitacora = {
+                                                    'idmovimiento': value.idmovimiento,
+                                                    'idfinanciera': value.idfinanciera,
+                                                    'idesquema': value.idesquema,
+                                                    'saldo': value.saldo,
+                                                    'puntos': value.puntos,
+                                                    'tiie': value.tiie,
+                                                    'penetracion': value.penetracion,
+                                                    'plazo': value.plazo,
+                                                    'fechatiie': value.fechatiie,
+                                                    'fechainicio': value.fechainicio,
+                                                    'fechafin': value.fechafin,
+                                                    'Interes': value.Interes,
+                                                    'dias': value.dias,
+                                                    'totalInteres': value.totalInteres,
+                                                    'tipo': value.tipo,
+                                                    'idLote': $scope.idLotePadre
+                                                };
+                                                promisesBitacora.push(sacarunidadFactory.insBitacora(objetoBitacora));
+                                            });
+                                            Promise.all(promises).then(function response(result) {
+                                                console.log('Termino Bitacora');
+                                            });
                                         });
                                     } else {
                                         console.log('Ocurrio un problema al insertar el preLote')

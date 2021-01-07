@@ -50,6 +50,14 @@ appModule.factory('sacarunidadFactory', function($http) {
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        insBitacora: function(parametros) {
+            return $http({
+                url: apisacarunidadUrl + 'bitacorainteres/',
+                method: "POST",
+                data: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

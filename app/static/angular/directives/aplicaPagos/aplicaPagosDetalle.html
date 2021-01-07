@@ -36,6 +36,7 @@
                     <th>Total a pagar</th>
                     <th>Banco pago </th>
                     <th>Detalle</th>
+                    <th>Bitacora Interes</th>
                     <th>Aplicar</th>
                     <th>Intereses</th>
                 </tr>
@@ -49,6 +50,11 @@
                     <td>
                         <button type="button" class="btn btn-default" ng-click="detalleLote(lote)">
                             <span class="glyphicon glyphicon-edit"></span>
+                        </button>                        
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" ng-click="detalleBitacora(lote)">
+                            <span class="glyphicon glyphicon-list-alt"></span>
                         </button>                        
                     </td>
                     <td>
@@ -66,4 +72,5 @@
         </div>
 </div>
 <modal-detalle-lote></modal-detalle-lote>
+<modal-detalle-interes></modal-detalle-interes>
 <!-- <button type="button" class="btn btn-success" ng-click="prevStep()">regresar</button> -->

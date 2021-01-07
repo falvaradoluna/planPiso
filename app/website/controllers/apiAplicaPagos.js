@@ -104,4 +104,18 @@ ApiAplicaPagos.prototype.get_agregaIntesesLote = function(req, res, next) {
     });
 };
 
+ApiAplicaPagos.prototype.get_detalleBitacora = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idLote', value: req.query.idLote, type: self.model.types.INT }];
+
+    self.model.query('udp_get_detalleIntereses', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiAplicaPagos;

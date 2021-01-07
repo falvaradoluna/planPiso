@@ -50,6 +50,20 @@
                                     <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
                                 </tr>
                             </table>
+                            <div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                        Vencimiento (Agrupa interes y pago de unidad)
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                        Pago Usuario (No agrupa interes y pago de unidad)
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-12 bg-danger" ng-show="mostrarAlerta">
                             <h3>El saldo no corresponde, favor de actualizar su cartera </h3>

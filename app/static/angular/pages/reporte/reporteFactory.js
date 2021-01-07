@@ -13,7 +13,7 @@ appModule.factory('reporteFactory', function($http) {
         },
         jsReporte: function(json) {
             return $http({
-                url: 'http://192.168.20.89:5488/api/report',
+                url: global_settings.urlJsReport,
                 //  url: 'http://192.168.100.7:5488/api/report',
                 // url: 'http://localhost:5488/api/report',
                 method: "POST",

@@ -90,4 +90,16 @@ appModule.controller('aplicaPagosController', function($scope, $rootScope, $loca
             console.log('Error al actualizar Cartera', err)
         });
     };
+    $scope.detalleBitacora = function(lote){
+        // $('#mdlLoading').modal('show');
+        aplicaPagosFactory.detalleBitacora(lote.idLotePago).then(function success(result){
+            // $('#mdlLoading').modal('hide');
+            console.log(result.data);
+            $scope.interesesBitacora = result.data;
+            $('#modalDetalleInteres').modal('show');
+        }, function error(err){
+            // $('#mdlLoading').modal('hide');
+            console.log('Ocurrio un problema al intentar obtener el detalle de la bitacora de los intereses');
+        });
+    };
 });
