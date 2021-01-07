@@ -144,9 +144,10 @@ Apicrealote.prototype.post_encabezadoPagos = function(req, res, next) {
         { name: 'nombreLote', value: req.body.nombreLote, type: self.model.types.STRING },
         { name: 'estatus', value: req.body.estatus, type: self.model.types.INT },
         { name: 'esApliacionDirecta', value: req.body.esAplicacionDirecta, type: self.model.types.INT },
-        { name: 'cifraControl', value: req.body.cifraControl, type: self.model.types.INT }
+        { name: 'cifraControl', value: req.body.cifraControl, type: self.model.types.INT },
+        { name: 'interesAgrupado', value: req.body.interesAgrupado, type: self.model.types.INT }
     ];
-    // console.log(params, 'INS_PAG_PROG_PAGOS_SP')
+    console.log(params, 'INS_PAG_PROG_PAGOS_SP')
     self.model.query('INS_PAG_PROG_PAGOS_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,

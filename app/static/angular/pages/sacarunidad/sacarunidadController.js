@@ -9,6 +9,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
     $scope.BotonGuardarLote = false;
+    $scope.agrupado = 1;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
         var valor = _.where($scope.lstPermisoBoton, { idModulo: 8, Boton: "guardarLote" })[0];
@@ -892,7 +893,8 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
             nombreLote: $scope.nombreLote,
             estatus: 1,
             esAplicacionDirecta: 0,
-            cifraControl: ($scope.sumaDocumentos).toFixed(2)
+            cifraControl: ($scope.sumaDocumentos).toFixed(2),
+            interesAgrupado: $scope.agrupado
         };
         var idProveedor = 0;
         crealoteFactory.setEncabezadoPago(dataEncabezado)
@@ -910,7 +912,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                     elemento.pad_polConsecutivo = row.polConsecutivo;
                     elemento.pad_polMovimiento = row.polMovimiento;
                     elemento.pad_fechaPromesaPago = (row.fechaPromesaPago == '' ? '1900-01-01T00:00:00' : row.fechaPromesaPago);
-                    elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//
+                    elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//                    
                     //15062018
                     if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
                         row.referencia = "AUT";
@@ -1009,6 +1011,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                                             });
                                             Promise.all(promises).then(function response(result) {
                                                 console.log('Termino Bitacora');
+                                                window.location = "/sacarunidad";
                                             });
                                         });
                                     } else {
