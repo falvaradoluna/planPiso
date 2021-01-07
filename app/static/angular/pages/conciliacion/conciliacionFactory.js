@@ -239,7 +239,7 @@ appModule.factory('conciliacionFactory', function($http) {
             return $http({
                 //LQMA changed 01022018
                 //url: 'http://189.204.141.193:5488/api/report',
-                url: 'http://192.168.20.89:5488/api/report',
+                url: 'http://192.168.20.92:5488/api/report',
                 method: "POST",
                 data: {
                     template: { name: myJson.template.name },
