@@ -16,7 +16,7 @@
             <form class="form-inline">
                 <label for="exampleInputName2">Diferencia vs plan piso: </label>
                 {{diferenciaPP | currency}}
-            </form>            
+            </form>
             <form class="form-inline">
                 <label for="exampleInputName2">Saldo Serie PP x Pagar: </label>
                 {{montoCompensar | currency}}
@@ -110,16 +110,23 @@
                         <td>{{ocGarantia.oce_folioorden}}</td>
                         <td>{{ocGarantia.oce_importetotal || currency}}</td>
                         <td class="text-right">{{ocGarantia.saldo | currency}}</td>
-                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="ocGarantia.montoCompensar"></td>
+                        <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="ocGarantia.montoCompensar" ng-change="sumaCompensarOc()"></td>
+                    </tr>
+                    <tr ng-repeat="facturaCompensacion in facturasCompensacion | filter: { tipoProducto: 'PROV' }">
+                        <td></td>
+                        <td>{{facturaCompensacion.tipoFactura}}</td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;" ng-change="totalCompensar()"></td>
                     </tr>
                 </tbody>
-                <!-- <tfoot>
+                <tfoot>
                     <tr>
-                        <td colspan="3" class="text"><strong>Total</strong></td>
-                        <td class="text-right">{{montoTotal | currency}}</td>
-                        <td></td>
+                        <td colspan="4" class="text"><strong>Total</strong></td>
+                        <td class="text-right">{{totalTablaCXP | currency}}</td>
+                        <!-- <td></td> -->
                     </tr>
-                </tfoot> -->
+                </tfoot>
             </table>
             <table class="table table-striped">
                 <thead>
@@ -150,9 +157,22 @@
                             <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar(factura, $index, {{factura.montoCompensar}})">
                         </td>
                     </tr>
-                    <tr ng-repeat="facturaCompensacion in facturasCompensacion">
+                    <tr ng-repeat="facturaCompensacion in facturasCompensacion | filter: { tipoProducto: '!PROV' }">
                         <td></td>
-                        <td colspan="6">{{facturaCompensacion.tipoFactura}}</td>
+                        <td colspan="2">{{facturaCompensacion.tipoFactura}}</td>
+                        <td ng-show="facturaCompensacion.tipoProducto == 'CD'">
+                            <!-- <input type="text" class="form-control text-right" ng-model="facturaSubsidio " style="width: 100%;"> -->
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="documentoCD">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" style="font-size: 14px !important;" ng-click="buscaComision(documentoCD, $index)"><span class="glyphicon glyphicon-search"></span></button>
+                                </span>
+                            </div>
+                        </td>
+                        <td ng-show="facturaCompensacion.tipoProducto != 'CD'"></td>
+                        <td></td>
+                        <td class="text-right">{{facturaCompensacion.importe | currency}}</td>
+                        <td class="text-right">{{facturaCompensacion.saldo | currency}}</td>
                         <td><input type="text" class="form-control text-right" ng-model="facturaCompensacion.montoCompensar" style="width: 100%;" ng-change="totalCompensar()"></td>
                     </tr>
                     <tr>
@@ -173,6 +193,11 @@
                         <td><input type="text" class="form-control text-right" style="width: 100%;"></td>
                     </tr> -->
                 </tbody>
+                <tr>
+                    <td colspan="7" class="text"><strong>Total</strong></td>
+                    <td class="text-right">{{totalTablaCXC | currency}}</td>
+                    <!-- <td></td> -->
+                </tr>
                 <!-- <tfoot>
                     <tr>
                         <td colspan="3" class="text"><strong>Total</strong></td>

@@ -433,6 +433,18 @@ appModule.factory('interesFactory', function($http) {
 
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        buscaFactura: function(factura, idEmpresa) {
+            return $http({
+                url: interesesUrl + 'buscaFactura/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    factura: factura
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

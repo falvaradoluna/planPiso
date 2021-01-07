@@ -54,6 +54,16 @@ appModule.factory('aplicaPagosFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        detalleBitacora: function(idLote) {
+            return $http({
+                url: aplicaPagosUrl + 'detalleBitacora/',
+                method: "GET",
+                params: {
+                    idLote: idLote
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
     };

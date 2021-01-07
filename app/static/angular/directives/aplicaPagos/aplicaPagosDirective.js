@@ -25,4 +25,9 @@ appModule.directive('aplicaPagosAplicado', function() {
         restrict: 'E',
         templateUrl: aplicaPagosPath + 'modalDetalleLote.html'
     };
+}).directive('modalDetalleInteres', function() {
+    return {
+        restrict: 'E',
+        templateUrl: aplicaPagosPath + 'modalDetalleInteres.html'
+    };
 });
