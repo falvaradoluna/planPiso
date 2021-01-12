@@ -20,6 +20,7 @@
                                 <th>Fecha Fin</th>
                                 <th>Días</th>
                                 <th>Intereses</th>
+                                <th>Tipo</th>
                             </tr>
                             <tr ng-repeat="intereseBitacora in interesesBitacora">
                                 <td>{{intereseBitacora.documento}}</td>
@@ -31,6 +32,7 @@
                                 <th>{{intereseBitacora.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</th>
                                 <th>{{intereseBitacora.dias}}</th>
                                 <td>{{intereseBitacora.totalInteres}}</td>
+                                <td>{{intereseBitacora.tipo | uppercase}}</td>
                             </tr>
                         </table>
                     </div>

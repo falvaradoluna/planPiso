@@ -157,7 +157,7 @@
                             <input type="text" class="form-control  text-right" style="width: 100%" ng-model="factura.montoCompensar" ng-change="sumaCompensar(factura, $index, {{factura.montoCompensar}})">
                         </td>
                     </tr>
-                    <tr ng-repeat="facturaCompensacion in facturasCompensacion | filter: { tipoProducto: '!PROV' }">
+                    <tr ng-repeat="facturaCompensacion in facturasCompensacion | filter: { tipoProducto: 'CD' }">
                         <td></td>
                         <td colspan="2">{{facturaCompensacion.tipoFactura}}</td>
                         <td ng-show="facturaCompensacion.tipoProducto == 'CD'">
