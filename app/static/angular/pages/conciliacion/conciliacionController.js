@@ -996,10 +996,14 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.totalAbonoBancario = 0;
         $scope.totalCargoContable = 0;
         $scope.totalCargoBancario = 0;
+        $scope.financiera = 0;
+        $scope.GA = 0;
         conciliacionFactory.getDatosReporte($scope.idconciliacion)
         .then(function(result) {
             if (result.data.length > 0) {
-                    $scope.busqueda = result.data[0];
+                    $scope.busqueda = result.data[0][0];
+                    $scope.financiera = result.data[1][0].financiera;
+                    $scope.GA = result.data[1][0].ga;
                     $scope.getAbonoContable();
             }
            
@@ -1106,21 +1110,22 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 "titulo": "CONCILIACIÓN  PLAN PISO",
                 "titulo2": "BANCOS",
                 "titulo3": "FA04",
-                "empresa":  $scope.session.empresaID,
-                "fechaElaboracion": newDate,
+                "empresa":   $scope.busqueda.Empresa,
+                "fechaElaboracion": $scope.busqueda.fechaCreacion,
+                "fecha": $scope.busqueda.fecha,
                 "conciliacionBancaria": $scope.busqueda.Financiera,
                 "chequera": newDate,
                 "bancoCuenta": $scope.busqueda.Cuenta,
                 "clabe": $scope.busqueda.Cuenta,
                 "cuentaContable": $scope.busqueda.CuentaContable,
-                "estadoCuenta": 0,
+                "estadoCuenta": $scope.financiera,
                 "aCNB":  $scope.totalAbonoContable,
                 "aBNC": $scope.totalAbonoBancario,
-                "cCNB": $scope.totalCargoContable,
-                "cBNC": $scope.totalCargoBancario,
-                "saldoConciliacion": 0,
-                "saldoContabilidad": 0,
-                "diferencia": 0,
+                "cCNB": $scope.totalCargoContable*-1,
+                "cBNC": $scope.totalCargoBancario*-1,
+                "saldoConciliacion": ($scope.financiera+$scope.totalAbonoContable-$scope.totalAbonoBancario+($scope.totalCargoBancario*-1)-($scope.totalCargoContable*-1)),
+                "saldoContabilidad": ( $scope.GA),
+                "diferencia": ( $scope.GA)-($scope.financiera+$scope.totalAbonoContable-$scope.totalAbonoBancario+($scope.totalCargoBancario*-1)-($scope.totalCargoContable*-1)),
                 //Detalle de Diferencias
                 "DetalleAbonosContables": abonosContables,
                 "DetalleAbonosBancarios": abonosBancarios,

@@ -563,7 +563,7 @@ ApiConciliacion.prototype.get_DatosReporte = function (req, res, next) {
         { name: 'idconciliacion', value: req.query.id, type: self.model.types.INT }
     ];
     
-    this.model.query('uspGetDatosreporte', params, function (error, result) {
+    this.model.queryAllRecordSet('uspGetDatosreporte', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
