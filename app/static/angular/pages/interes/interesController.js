@@ -366,35 +366,50 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         if (result.data.length > 0) {
             if ($scope.lstSpreads == undefined) {
                 $scope.lstSpreads = result.data[0];
-                $rootScope.fechainicio = result.data[1][0].fechainicio;
-                $rootScope.fechafin = result.data[1][0].fechafin;
-                $rootScope.showwarningspread = result.data[1][0].showwarningspread;
-                $rootScope.tiie = result.data[1][0].tiie;
-                $rootScope.puntos = 0;
             }
         }
     });
     $scope.CargarNuevo = function() {
         $('#selectReporte').modal('show');
     };
-    $scope.GuardarDetail = function(puntos, tiie) {
+    $scope.editDetail = function(edit) {
+        $('#selectReporte').modal('show');
+            $scope.idfinanciera=edit.idfinanciera;
+            $scope.puntos=edit.puntos;
+            $scope.tiie=edit.tiie;
+            $scope.penetracion=edit.penetracion;
+            $scope.mes=edit.mes;
+            $scope.anio=edit.anio;
+            $scope.currentFinancial2 = _.where($scope.lstFinancial, { financieraID: edit.idfinanciera });
+            $scope.currentFinancialName2 = $scope.currentFinancial2[0].nombre;
+         
+    };
+    commonFactory.getFinancial($scope.session.empresaID).then(function(result) {
+        $scope.lstFinancial = result.data;
+       
+    });
+    $scope.setCurrentFinance2 = function(financialObj) {
+        //  $scope.currentPanel = "pnlResumen";
+        $scope.currentFinancialName2 = financialObj.nombre;
+        $scope.currentFinancial2 = financialObj;
+        // $scope.getNewUnitsBySucursal(sessionFactory.empresaID, $scope.currentSucursal.sucursalID);
+    };
+    $scope.GuardarDetail = function(puntos, tiie,penetracion,mes,anio) {
         var data = {
             idempresa: sessionFactory.empresaID,
+            idfinanciera:  $scope.currentFinancial2[0].financieraID,
             puntos: puntos,
             tiie: tiie,
-            fechainicio: $rootScope.fechainicio,
-            fechafin: $rootScope.fechafin
+            penetracion: penetracion,
+            mes: mes,
+            anio: anio
         };
         interesFactory.saveSpread(data).then(function(resultSchema) {
 
             commonFactory.getSpreads(sessionFactory.empresaID).then(function(result) {
                 if (result.data.length > 0) {
                     $scope.lstSpreads = result.data[0];
-                    $rootScope.fechainicio = result.data[1][0].fechainicio;
-                    $rootScope.fechafin = result.data[1][0].fechafin;
-                    $rootScope.showwarningspread = result.data[1][0].showwarningspread;
-                    $rootScope.tiie = result.data[1][0].tiie;
-                    $rootScope.puntos = 0;
+                  
 
                 }
                 $('#selectReporte').modal('hide');

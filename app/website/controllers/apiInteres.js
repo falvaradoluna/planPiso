@@ -401,10 +401,12 @@ ApiInteres.prototype.get_saveSpread = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'idempresa', value: req.query.idempresa, type: self.model.types.INT },
+        { name: 'idfinanciera', value: req.query.idfinanciera, type: self.model.types.INT },
         { name: 'puntos', value: req.query.puntos, type: self.model.types.DECIMAL },
         { name: 'tiie', value: req.query.tiie, type: self.model.types.DECIMAL },
-        { name: 'fechainicio', value: req.query.fechainicio, type: self.model.types.STRING },
-        { name: 'fechafin', value: req.query.fechafin, type: self.model.types.STRING }
+        { name: 'penetracion', value: req.query.penetracion, type: self.model.types.DECIMAL },
+        { name: 'mes', value: req.query.mes, type: self.model.types.INT },
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT }
     ];
 
     self.model.query('uspSaveSpreads', params, function(error, result) {
