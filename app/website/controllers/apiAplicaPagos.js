@@ -80,9 +80,10 @@ ApiAplicaPagos.prototype.get_sacarPlanPiso = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idLote', value: req.query.idLote, type: self.model.types.INT }];
+    var params = [{ name: 'idLote', value: req.query.idLote, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
 
-    self.model.query('', params, function(error, result) {
+    self.model.query('upd_sacaPlanPiso', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

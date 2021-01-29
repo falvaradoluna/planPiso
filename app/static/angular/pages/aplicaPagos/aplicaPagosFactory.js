@@ -35,12 +35,13 @@ appModule.factory('aplicaPagosFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        sacarPlanPiso: function(idLote) {
+        sacarPlanPiso: function(idLote, idUsuario) {
             return $http({
                 url: aplicaPagosUrl + 'sacarPlanPiso/',
                 method: "GET",
                 params: {
-                    idLote: idLote
+                    idLote: idLote,
+                    idUsuario:idUsuario
                 },
                 headers: { 'Content-Type': 'application/json' }
             });

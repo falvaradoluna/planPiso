@@ -30,4 +30,9 @@ appModule.directive('aplicaPagosAplicado', function() {
         restrict: 'E',
         templateUrl: aplicaPagosPath + 'modalDetalleInteres.html'
     };
+}).directive('modalDetalleAplicado', function() {
+    return {
+        restrict: 'E',
+        templateUrl: aplicaPagosPath + 'modalDetalleAplicado.html'
+    };
 });

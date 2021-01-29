@@ -65,8 +65,10 @@ appModule.controller('aplicaPagosController', function($scope, $rootScope, $loca
         });
     };
     $scope.sacarPlanPiso = function(lote){
-        aplicaPagosFactory.sacarPlanPiso(lote.idLotePago).then(function success(result){
+        aplicaPagosFactory.sacarPlanPiso(lote.idLotePago, $scope.idUsuario).then(function success(result){
             console.log(result.data, 'Soy la respuesta al sacar la unidad de plan piso')
+            $scope.documentosAplicados = result.data;
+            $('#modalDetalleAplicado').modal('show');
         }, function error(err){
             console.log('Ocurrio un error al tratar de sacar las unidades de plan piso')
         });
