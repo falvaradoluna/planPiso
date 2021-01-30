@@ -28,6 +28,18 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-md-12">
+                            <div class="alert alert-danger" role="alert" ng-show="documentosNoEncontrados.length > 0">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> No se encontraron los siguientes documentos favor de <strong>actualizar cartera</strong>
+                                </h4>
+                                <div class="row mb-0" ng-repeat="documentosNoEncontrado in documentosNoEncontrados">
+                                    <div class="col-md-4">
+                                        <b>{{documentosNoEncontrado.documento}}</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div class="alert alert-warning" role="alert" ng-show="financieraMasCuenta.length > 0">
                                 <h4 class="alert-heading">
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Tiene mas de una cuenta destino las siguientes financieras

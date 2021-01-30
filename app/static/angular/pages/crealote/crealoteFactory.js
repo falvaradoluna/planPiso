@@ -102,6 +102,17 @@ appModule.factory('crealoteFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        getDocumentosNoEncontrados: function(idEmpresa, idPoliza) {
+            return $http({
+                url: crealoteUrl + 'documentosNoEncontrados/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idPoliza: idPoliza
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
     };
 });

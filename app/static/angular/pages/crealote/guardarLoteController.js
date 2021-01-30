@@ -10,8 +10,10 @@ appModule.controller('guardarLoteController', function($scope, $rootScope, $loca
     $scope.bancoPago = undefined;
     $scope.idPoliza = $location.search().idPre;
     $scope.BotonGuardarLote = false;
+    $scope.documentosNoEncontrados = [];
     console.log($location.search().idPre, 'LO QUE VIENE DE LA URL')
     var cargaInfoGridLotes = function() {
+        // $('#mdlLoading').modal('show');
         var valor = _.where($scope.lstPermisoBoton, { idModulo: 11, Boton: "guardarLote" })[0];
         $scope.BotonGuardarLote = valor != undefined;
         $scope.sumaDocumentos = undefined;
@@ -28,17 +30,27 @@ appModule.controller('guardarLoteController', function($scope, $rootScope, $loca
                 $scope.selPagoDirecto = false;
             }
             console.log($scope.selPagoDirecto, 'PAGO DIRECTO');
+            crealoteFactory.getDocumentosNoEncontrados(sessionFactory.empresaID, $scope.idPoliza).then(function success(result){
+                $scope.documentosNoEncontrados = result.data;
+                console.log($scope.documentosNoEncontrados, 'Los que no encontre')
+            }, function error(err){
+                console.log('Ocurrio un error al intentar obtener los documentos no encontrados en pagos');
+                $('#mdlLoading').modal('hide');
+            });
             crealoteFactory.getPreDocumentos(sessionFactory.empresaID, $scope.idPoliza).then(function success(result) {
                 console.log(result.data);
                 $scope.documentos = result.data;
                 validaDocumentos($scope.documentos);
                 $scope.gridOptions.data = $scope.documentos;
+                $('#mdlLoading').modal('hide');
             }, function error(err) {
                 console.log('Ocusrrio un error al obtener los documentos')
+                $('#mdlLoading').modal('hide');
             });
 
         }, function error(err) {
             console.log('Ocurrio un erro al obtener los escenarios')
+            $('#mdlLoading').modal('hide');
         });
     };
     cargaInfoGridLotes();
@@ -889,8 +901,9 @@ appModule.controller('guardarLoteController', function($scope, $rootScope, $loca
         $('#mdlLoading').modal('show');
         crealoteFactory.actualizarCartera(sessionFactory.empresaID).then(function success(result) {
             console.log(result.data);
-            $('#mdlLoading').modal('hide');
+            // $('#mdlLoading').modal('hide');
             alertFactory.success('Se actualizo correctamente');
+            cargaInfoGridLotes();
         }, function error(err) {
             $('#mdlLoading').modal('hide');
             console.log('Error al actualizar Cartera', err)

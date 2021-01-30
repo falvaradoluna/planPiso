@@ -393,4 +393,19 @@ Apicrealote.prototype.get_actualizarCartera = function(req, res, next) {
         });
     });
 };
+Apicrealote.prototype.get_documentosNoEncontrados = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idPoliza', value: req.query.idPoliza, type: self.model.types.INT }
+    ];
+
+    self.model.query('usp_get_documentosNoEncontrados', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = Apicrealote;
