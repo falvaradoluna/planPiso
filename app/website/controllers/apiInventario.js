@@ -86,7 +86,8 @@ Apiinventario.prototype.get_inventarioPolizaDetalle = function(req, res, next) {
     { name: 'idfinancieraD', value: req.query.idfinancieraD, type: self.model.types.INT },
     { name: 'idEsquemaD', value: req.query.idEsquemaD, type: self.model.types.INT },
     { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
-    { name: 'montoFinanciar', value: req.query.montoFinanciar, type: self.model.types.INT }];
+    { name: 'montoFinanciar', value: req.query.montoFinanciar, type: self.model.types.INT },
+    { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING }];
 
     self.model.query('Pol_Poliza6Detalle_INS', params, function(error, result) {
         self.view.expositor(res, {

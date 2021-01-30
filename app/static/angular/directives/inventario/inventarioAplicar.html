@@ -10,6 +10,7 @@
             <th>Modelo</th>
             <th>Precio venta</th>
             <th>Saldo Inicial</th>
+            <th>Fecha Calculo</th>
             <th>Mensage</th>
         </tr>
     </thead>
@@ -24,7 +25,14 @@
             <td>{{unidadSeleccion.modelo}}</td>
             <td>{{unidadSeleccion.IMPORTE}}</td>
             <td>{{unidadSeleccion.SALDO}}</td>
-
+            <td>
+                <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy" ng-model="unidadSeleccion.fechaCalculo">
+                    <input type="text" class="form-control" ng-model="unidadSeleccion.fechaCalculo">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
+                </div>
+            </td>
             <td ng-style="unidadSeleccion.isValid ?  
             {'background-color':'#1A7BB9', 'color':'white'} : 
             {'background-color':'#EC4758', 'color':'white'} ">

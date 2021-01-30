@@ -170,7 +170,8 @@ appModule.controller('inventarioController', function($scope, $rootScope, $locat
                 idfinancieraD: 0,
                 idEsquemaD: 0,
                 idUsuario: $scope.idUsuario,
-                montoFinanciar: item.montoFinanciar
+                montoFinanciar: item.montoFinanciar,
+                fechaInicio: item.fechaCalculo
             }
 
             inventarioFactory.inventarioPolizaDetalle(parainventarioDetalle).then(function(response) {
