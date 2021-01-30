@@ -1,6 +1,6 @@
 var ApiTiieView = require('../views/reference'),
     ApiTiieModel = require('../models/dataAccess'),
-    NodeCron = require('node-cron'),
+    cron = require('node-cron'),
     Request = require('request')
 
 var ApiTiie = function(conf) {
@@ -111,13 +111,16 @@ ApiTiie.prototype.get_ejecutaTiie = function(req, res, next) {
 
     actualizaTiiesDesdeBanxico();
 };
-
-NodeCron.schedule('00 06 * * *', () => {
-    console.log('se ejecuto cron');
+cron.schedule('00 09 * * *', () => {
     actualizaTiiesDesdeBanxico();
     notificaciones();
-
 });
+// NodeCron.schedule('1 * * * *', () => {
+//     console.log('se ejecuto cron');
+//     // actualizaTiiesDesdeBanxico();
+//     // notificaciones();
+
+// });
 var notificaciones = function() {
     let url = 'http://localhost:4900/api/apiNotificaciones/notificaciones/';
     Request.post(url, (error, response, body) => {
