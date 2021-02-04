@@ -93,7 +93,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     $scope.setCurrentFinancial = function() {
         $scope.listUnidades = _.where($scope.lstNewUnits, { isChecked: true });
         $scope.currentFinancialName = $scope.listUnidades[0].nombreFinanciera;
-        $scope.getSchemasBP($scope.listUnidades[0].idPersona);
+        $scope.getSchemasBP($scope.listUnidades[0].idPersona, sessionFactory.empresaID);
     };
 
     $scope.getSchemas = function(financieraID) {
@@ -126,7 +126,7 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
         {
                 var data = {
                 idPersona: $scope.unidad.idPersona,
-            idEmpresa: $scope.unidad.idEmpresa,
+            idEmpresa: sessionFactory.empresaID,
             idColateral:$scope.selectedSchema.tipoColateralId
             };
            

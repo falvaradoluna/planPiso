@@ -31,7 +31,7 @@ appModule.factory('commonFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getSchemasBP: function(financieraID, esquemaID,idempresa) {
+        getSchemasBP: function(financieraID,idempresa, esquemaID) {
             return $http({
                 url: commonUrl +'SchemasBP/',
                 method: "GET",
