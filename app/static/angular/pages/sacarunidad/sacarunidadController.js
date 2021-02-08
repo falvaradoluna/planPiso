@@ -799,7 +799,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                             } else {
                                 $scope.interesesUnidades.push(row);
                                 if (result.data[1]) {
-                                    $scope.arrayInteresUnidad = result.data[1];
+                                    $scope.arrayInteresUnidad.push(result.data[1][0]);
                                     $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
                                     console.log($scope.arrayInteresUnidad, 'Soy los intereses')
                                 }
