@@ -534,7 +534,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                 console.log(filasSeleccionadas)
                 $scope.sumaDocumentos = 0;
                 angular.forEach(filasSeleccionadas, function(value, key) {
-                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.monto;
+                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.Pagar;
                 });
                 if (row.internalRow == true && row.isSelected == true) {
                     var childRows = row.treeNode.children;
@@ -680,6 +680,12 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                 //FAL trabaja con las variables dependiendo si se edita o cambia la fecha
                 var i = 0;
                 // var numcuentas = $scope.grdBancos.length;
+                var filasSeleccionadas = $scope.gridApi1.selection.getSelectedRows();
+                console.log(filasSeleccionadas)
+                $scope.sumaDocumentos = 0;
+                angular.forEach(filasSeleccionadas, function(value, key) {
+                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.Pagar;
+                });
                 if (rowEntity.estGrid == 'Pago' || rowEntity.estGrid == 'Pago Reprogramado') {
                     if (rowEntity.fechaPago == "1900-01-01T00:00:00") {
                         old_date = "";
@@ -769,6 +775,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
     $scope.validaDocumentosSeleccionados = function() {
         $scope.mostrarAlerta = false;
         $scope.noMostrar = false;
+        $scope.muestraInteresesBanamex = false;
         var contador = 0;
         console.log($scope.bancoPago, 'BANCO')
         $scope.montoIgual = 0;
@@ -797,6 +804,8 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                             } else if (result.data[0][0].success == 2) {
                                 $scope.noMostrar = false;
                             } else {
+                                var banderaIntereses = result.data[0][0].bandera;
+                                $scope.muestraInteresesBanamex = banderaIntereses == 2 ? true : false;
                                 $scope.interesesUnidades.push(row);
                                 if (result.data[1]) {
                                     $scope.arrayInteresUnidad.push(result.data[1][0]);
@@ -1353,6 +1362,11 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
     $scope.cambioDias = function(newValue, oldValue, index, intereses) {
         $scope.arrayInteresUnidad[index].totalInteres = newValue * intereses;
         // $scope.arrayInteresUnidad[index].montoFinanciar = ($scope.arrayInteresUnidad[index].IMPORTE * (newValue / 100))
+    };
+    $scope.cambioTasa = function(intereses, index) {
+        console.log(intereses, index)
+        $scope.arrayInteresUnidad[index].totalInteres = intereses.saldo * ((intereses.tasa / 100) / 360) * intereses.dias;
+        console.log($scope.arrayInteresUnidad[index].totalInteres, 'cual es el interes???')
     };
     /////////-----------------------------
     //FAL crea los campos del grid y las rutinas en los eventos del grid.

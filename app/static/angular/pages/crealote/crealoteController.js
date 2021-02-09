@@ -1,4 +1,4 @@
-appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory) {
+appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
@@ -6,7 +6,8 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.topBarNav = staticFactory.crealoteBar();
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
-     $scope.BotonGuardarLote = false;
+    $scope.BotonGuardarLote = false;
+    $scope.agrupado = 1;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
         var valor = _.where($scope.lstPermisoBoton, { idModulo: 11, Boton: "guardarLote" })[0];
@@ -510,7 +511,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 console.log(filasSeleccionadas)
                 $scope.sumaDocumentos = 0;
                 angular.forEach(filasSeleccionadas, function(value, key) {
-                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.monto;
+                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.Pagar;
                 });
                 if (row.internalRow == true && row.isSelected == true) {
                     var childRows = row.treeNode.children;
@@ -656,6 +657,12 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 //FAL trabaja con las variables dependiendo si se edita o cambia la fecha
                 var i = 0;
                 // var numcuentas = $scope.grdBancos.length;
+                var filasSeleccionadas = $scope.gridApi1.selection.getSelectedRows();
+                console.log(filasSeleccionadas)
+                $scope.sumaDocumentos = 0;
+                angular.forEach(filasSeleccionadas, function(value, key) {
+                    $scope.sumaDocumentos = $scope.sumaDocumentos + value.Pagar;
+                });
                 if (rowEntity.estGrid == 'Pago' || rowEntity.estGrid == 'Pago Reprogramado') {
                     if (rowEntity.fechaPago == "1900-01-01T00:00:00") {
                         old_date = "";
@@ -743,7 +750,15 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
 
     };
     $scope.validaDocumentosSeleccionados = function() {
+        $scope.mostrarAlerta = false;
+        $scope.noMostrar = false;
+        $scope.muestraInteresesBanamex = false;
+        var contador = 0;
         console.log($scope.bancoPago, 'BANCO')
+        $scope.montoIgual = 0;
+        $scope.interesesUnidades = [];
+        $scope.arrayInteresUnidad = [];
+        $scope.arrayInteresUnidadOriginal = [];
         var rows = $scope.gridApi1.selection.getSelectedRows();
         if (rows.length > 0) {
             if ($scope.bancoPago) {
@@ -755,6 +770,33 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 var proveedorcuentaDestino = '';
                 var unaCuenta = true;
                 rows.some(function(row, i, j) {
+                    if (row.saldo == row.Pagar) {
+                        $scope.montoIgual = 1;
+                        $scope.noMostrar = true;
+                        sacarunidadFactory.getIntesesUnidad(row.documento, row.idProveedor, row.Pagar).then(function success(result) {
+                            console.log(result.data, 'soy el interes de la unidad ')
+                            if (result.data[0][0].success == 0) {
+                                $scope.mostrarAlerta = true;
+                                contador++;
+                            } else if (result.data[0][0].success == 2) {
+                                $scope.noMostrar = false;
+                            } else {
+                                var banderaIntereses = result.data[0][0].bandera;
+                                $scope.muestraInteresesBanamex = banderaIntereses == 2 ? true : false;
+                                $scope.interesesUnidades.push(row);
+                                if (result.data[1]) {
+                                    $scope.arrayInteresUnidad.push(result.data[1][0]);
+                                    $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
+                                    console.log($scope.arrayInteresUnidad, 'Soy los intereses')
+                                }
+
+                            }
+                            // $scope.noMostrar = contador > 0 ? true : false;
+                        }, function error(err) {
+                            console.log('Ocurrio un error al intentar obtener el interes de la unidad')
+                        });
+
+                    }
                     if ((row.convenioCIE == null) || (row.convenioCIE == undefined) || (row.convenioCIE == "")) {
                         pasaxCIE = true;
                     } else {
@@ -807,6 +849,29 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         }
     };
     $scope.guardarLote = function() {
+        $scope.PreLote = false;
+        if ($scope.noMostrar == false) {
+            console.log('Entre donde guardara normal')
+            $scope.guardaLoteTotal();
+
+        } else {
+            swal({
+                title: "Atención",
+                text: "Al guardar el lote de pago se crearan ordenes de compra para los intereses. ¿Seguro que desea continuar?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+            }, function() {
+                $scope.PreLote = true;
+                $scope.guardaLoteTotal();
+            });
+        }
+
+    };
+
+    $scope.guardaLoteTotal = function() {
         var rows = $scope.gridApi1.selection.getSelectedRows();
         var dataEncabezado = {
             idEmpresa: sessionFactory.empresaID,
@@ -814,14 +879,17 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             nombreLote: $scope.nombreLote,
             estatus: 1,
             esAplicacionDirecta: 0,
-            cifraControl: ($scope.sumaDocumentos).toFixed(2)
+            cifraControl: ($scope.sumaDocumentos).toFixed(2),
+            interesAgrupado: $scope.agrupado
         };
+        var idProveedor = 0;
         crealoteFactory.setEncabezadoPago(dataEncabezado)
             .then(function successCallback(response) {
                 $scope.idLotePadre = response.data[0].idLotePadre;
                 var array = [];
                 var count = 1;
                 rows.forEach(function(row, i) {
+                    idProveedor = row.idProveedor;
                     var elemento = {};
                     elemento.pal_id_lote_pago = $scope.idLotePadre; //response.data;
                     elemento.pad_polTipo = row.polTipo; //entity.polTipo;
@@ -830,7 +898,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     elemento.pad_polConsecutivo = row.polConsecutivo;
                     elemento.pad_polMovimiento = row.polMovimiento;
                     elemento.pad_fechaPromesaPago = (row.fechaPromesaPago == '' ? '1900-01-01T00:00:00' : row.fechaPromesaPago);
-                    elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//
+                    elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//                    
                     //15062018
                     if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
                         row.referencia = "AUT";
@@ -872,9 +940,82 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     .then(function successCallback(response) {
                         console.log(response.data[0].estatus, 'INSERTO???MMMM')
                         if (response.data[0].estatus == 1) {
-                            alertFactory.success('Se guardaron los datos.');
-                            $('#modalGridLote').modal('hide');
-                            cargaInfoGridLotes();
+                            if ($scope.PreLote) {
+                                sacarunidadFactory.encabezadoPreLote($scope.idLotePadre, idProveedor).then(function success(result) {
+                                    console.log(result.data);
+                                    var idPreLote = result.data[0].idPreLote;
+                                    if (result.data[0].idPreLote != -1) {
+                                        var promises = [];
+                                        $scope.arrayInteresUnidad.map((value) => {
+                                            var objetoPoliza = {
+                                                'idPreLote': idPreLote,
+                                                'idEmpresa': sessionFactory.empresaID,
+                                                'documento': value.documento,
+                                                'idproveedor': idProveedor,
+                                                'saldoDocumento': value.saldo,
+                                                'saldoInteres': value.totalInteres,
+                                                'idUsuario': $scope.idUsuario
+                                            };
+                                            promises.push(sacarunidadFactory.polizaInteres(objetoPoliza));
+                                        })
+                                        Promise.all(promises).then(function response(result) {
+                                            var b2 = $scope.arrayInteresUnidad;
+                                            var b1 = $scope.arrayInteresUnidadOriginal;
+                                            var calculo = b1.filter(item1 => !b2.some(item2 => (item2.dias === item1.dias && item2.totalInteres === item1.totalInteres)));
+                                            var banco = b2.filter(item1 => !b1.some(item2 => (item2.dias === item1.dias && item2.totalInteres === item1.totalInteres)));
+                                            var arrayBitacora = [];
+
+                                            angular.forEach(calculo, function(value, key) {
+                                                value.tipo = 'calculo';
+                                                arrayBitacora.push(value);
+                                            });
+                                            angular.forEach(banco, function(value, key) {
+                                                value.tipo = 'banco';
+                                                arrayBitacora.push(value);
+                                            });
+                                            var promisesBitacora = [];
+                                            arrayBitacora.map((value) => {
+                                                var tasa = 0;
+                                                if(value.tasa){
+                                                    tasa =  value.tasa;
+                                                }
+                                                var objetoBitacora = {
+                                                    'idmovimiento': value.idmovimiento,
+                                                    'idfinanciera': value.idfinanciera,
+                                                    'idesquema': value.idesquema,
+                                                    'saldo': value.saldo,
+                                                    'puntos': value.puntos,
+                                                    'tiie': value.tiie,
+                                                    'penetracion': value.penetracion,
+                                                    'plazo': value.plazo,
+                                                    'fechatiie': value.fechatiie,
+                                                    'fechainicio': value.fechainicio,
+                                                    'fechafin': value.fechafin,
+                                                    'Interes': value.Interes,
+                                                    'dias': value.dias,
+                                                    'totalInteres': value.totalInteres,
+                                                    'tipo': value.tipo,
+                                                    'idLote': $scope.idLotePadre,
+                                                    'tasa': tasa
+                                                };
+                                                promisesBitacora.push(sacarunidadFactory.insBitacora(objetoBitacora));
+                                            });
+                                            Promise.all(promises).then(function response(result) {
+                                                console.log('Termino Bitacora');
+                                                window.location = "/sacarunidad";
+                                            });
+                                        });
+                                    } else {
+                                        console.log('Ocurrio un problema al insertar el preLote')
+                                    }
+                                }, function error(err) {
+                                    console.log('Ocurrio un error al insertar el encabezado del prelote')
+                                });
+                            } else {
+                                alertFactory.success('Se guardaron los datos.');
+                                $('#modalGridLote').modal('hide');
+                                cargaInfoGridLotes();
+                            }
                         } else {
                             alertFactory.error('Ocurrio un Problema al guardar el lote')
                         }
@@ -885,7 +1026,6 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             }, function errorCallback(response) {
                 alertFactory.error('Error al insertar en tabla padre.');
             });
-
     };
     $scope.gridOptions2 = {
         enableSorting: true,
@@ -1201,6 +1341,15 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             console.log('Error al actualizar Cartera', err)
         });
     };
+    $scope.cambioDias = function(newValue, oldValue, index, intereses) {
+        $scope.arrayInteresUnidad[index].totalInteres = newValue * intereses;
+        // $scope.arrayInteresUnidad[index].montoFinanciar = ($scope.arrayInteresUnidad[index].IMPORTE * (newValue / 100))
+    };
+    $scope.cambioTasa = function(intereses, index) {
+        console.log(intereses, index)
+        $scope.arrayInteresUnidad[index].totalInteres = intereses.saldo * ((intereses.tasa / 100) / 360) * intereses.dias;
+        console.log($scope.arrayInteresUnidad[index].totalInteres, 'cual es el interes???')
+    };
     /////////-----------------------------
     //FAL crea los campos del grid y las rutinas en los eventos del grid.
 
@@ -1227,5 +1376,5 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
 
     // $scope.regresar = function(){
     //     location.reload();
-    // }
+    // }    
 });

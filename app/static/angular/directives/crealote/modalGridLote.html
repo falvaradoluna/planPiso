@@ -25,44 +25,71 @@
                     </div>
                     <div ng-show="noMostrar">
                         <div class="col-sm-12" ng-hide="mostrarAlerta">
-                            <h3>Los siguientes documentos tienen el siguiente interes </h3>
-                            <table id="consultaLotes" class="table table-striped">
-                                <tr>
-                                    <th>Documento</th>
-                                    <th>Puntos</th>
-                                    <th>TIIE</th>
-                                    <th>Penetración</th>
-                                    <th>Interes</th>
-                                    <th>Fecha Inicio</th>
-                                    <th>Fecha Fin</th>
-                                    <th>Días</th>
-                                    <th>Intereses</th>
-                                </tr>
-                                <tr ng-repeat="interesUnidad in arrayInteresUnidad">
-                                    <td>{{interesUnidad.documento}}</td>
-                                    <th>{{interesUnidad.puntos}}</th>
-                                    <th>{{interesUnidad.tiie}}</th>
-                                    <th>{{interesUnidad.penetracion}}</th>
-                                    <th>{{interesUnidad.Interes}}</th>
-                                    <th>{{interesUnidad.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</th>
-                                    <th>{{interesUnidad.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</th>
-                                    <th><input type="text" class="form-control" ng-model="interesUnidad.dias" style="width: 100px" ng-change="cambioDias(interesUnidad.dias,{{interesUnidad.dias}}, $index, interesUnidad.Interes)"></th>
-                                    <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
-                                </tr>
-                            </table>
-                            <div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" ng-value="1" checked ng-model="agrupado">
-                                        Vencimiento (Agrupa interes y pago de unidad)
-                                    </label>
+                            <div ng-show="!muestraInteresesBanamex">
+                                <h3>Los siguientes documentos tienen el siguiente interes </h3>
+                                <table id="consultaLotes" class="table table-striped">
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Puntos</th>
+                                        <th>TIIE</th>
+                                        <th>Penetración</th>
+                                        <th>Interes</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
+                                        <th>Días</th>
+                                        <th>Intereses</th>
+                                    </tr>
+                                    <tr ng-repeat="interesUnidad in arrayInteresUnidad">
+                                        <td>{{interesUnidad.documento}}</td>
+                                        <td>{{interesUnidad.puntos}}</td>
+                                        <td>{{interesUnidad.tiie}}</td>
+                                        <td>{{interesUnidad.penetracion}}</td>
+                                        <td>{{interesUnidad.Interes}}</td>
+                                        <td>{{interesUnidad.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                                        <td>{{interesUnidad.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                                        <td><input type="text" class="form-control" ng-model="interesUnidad.dias" style="width: 100px" ng-change="cambioDias(interesUnidad.dias,{{interesUnidad.dias}}, $index, interesUnidad.Interes)"></td>
+                                        <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
+                                    </tr>
+                                </table>
+                                <div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="optionsRadios" id="optionsRadios1" ng-value="1" checked ng-model="agrupado">
+                                            Vencimiento (Agrupa interes y pago de unidad)
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="optionsRadios" id="optionsRadios2" ng-value="0" ng-model="agrupado">
+                                            Pago Usuario (No agrupa interes y pago de unidad)
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" ng-value="0"  ng-model="agrupado">
-                                        Pago Usuario (No agrupa interes y pago de unidad)
-                                    </label>
-                                </div>
+                            </div>
+                            <div ng-show="muestraInteresesBanamex">
+                                <h3>Los siguientes documentos tienen el siguiente interes </h3>
+                                <table id="consultaLotes" class="table table-striped">
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Tasa</th>
+                                        <th>Penetración</th>
+                                        <th>Interes</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
+                                        <th>Días</th>
+                                        <th>Intereses</th>
+                                    </tr>
+                                     <tr ng-repeat="interesUnidad in arrayInteresUnidad">
+                                        <td>{{interesUnidad.documento}}</td>
+                                        <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.tasa" style="width: 100px" ng-change="cambioTasa(interesUnidad, $index)"></td>
+                                        <td>{{interesUnidad.penetracion}}</td>
+                                        <td>{{interesUnidad.Interes}}</td>
+                                        <td>{{interesUnidad.fechainicio | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                                        <td>{{interesUnidad.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+                                        <td><input type="text" class="form-control" ng-model="interesUnidad.dias" style="width: 100px" ng-change="cambioDias(interesUnidad.dias,{{interesUnidad.dias}}, $index, interesUnidad.Interes)"></td>
+                                        <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.totalInteres" style="width: 100px"></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                         <div class="col-sm-12 bg-danger" ng-show="mostrarAlerta">
