@@ -122,7 +122,7 @@ Apisacarunidad.prototype.post_bitacorainteres = function(req, res, next) {
         { name: 'totalInteres', value: req.body.totalInteres, type: self.model.types.DECIMAL },
         { name: 'tipo', value: req.body.tipo, type: self.model.types.STRING },
         { name: 'idLote', value: req.body.idLote, type: self.model.types.INT },
-        { name: 'tasa', value: req.body.tasa, type: self.model.types.NUMERIC }
+        { name: 'tasa', value: req.body.tasa, type: self.model.types.DECIMAL }
     ];
     console.log(params)
     self.model.query('INS_logInteresOrdendecompra_SP', params, function(error, result) {

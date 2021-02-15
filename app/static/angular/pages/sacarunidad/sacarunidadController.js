@@ -894,7 +894,7 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
 
     };
 
-    $scope.guardaLoteTotal = function() {
+     $scope.guardaLoteTotal = function() {
         var rows = $scope.gridApi1.selection.getSelectedRows();
         var dataEncabezado = {
             idEmpresa: sessionFactory.empresaID,
@@ -998,6 +998,10 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                                             });
                                             var promisesBitacora = [];
                                             arrayBitacora.map((value) => {
+                                                var tasa = 0;
+                                                if(value.tasa){
+                                                    tasa =  value.tasa;
+                                                }
                                                 var objetoBitacora = {
                                                     'idmovimiento': value.idmovimiento,
                                                     'idfinanciera': value.idfinanciera,
@@ -1014,11 +1018,12 @@ appModule.controller('sacarunidadController', function($scope, $rootScope, $loca
                                                     'dias': value.dias,
                                                     'totalInteres': value.totalInteres,
                                                     'tipo': value.tipo,
-                                                    'idLote': $scope.idLotePadre
+                                                    'idLote': $scope.idLotePadre,
+                                                    'tasa': tasa
                                                 };
                                                 promisesBitacora.push(sacarunidadFactory.insBitacora(objetoBitacora));
                                             });
-                                            Promise.all(promises).then(function response(result) {
+                                            Promise.all(promisesBitacora).then(function response(result) {
                                                 console.log('Termino Bitacora');
                                                 window.location = "/sacarunidad";
                                             });

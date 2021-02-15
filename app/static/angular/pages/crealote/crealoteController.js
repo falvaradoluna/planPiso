@@ -1000,7 +1000,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                                 };
                                                 promisesBitacora.push(sacarunidadFactory.insBitacora(objetoBitacora));
                                             });
-                                            Promise.all(promises).then(function response(result) {
+                                            Promise.all(promisesBitacora).then(function response(result) {
                                                 console.log('Termino Bitacora');
                                                 window.location = "/sacarunidad";
                                             });
