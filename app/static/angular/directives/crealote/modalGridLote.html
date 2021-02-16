@@ -30,6 +30,7 @@
                                 <table id="consultaLotes" class="table table-striped">
                                     <tr>
                                         <th>Documento</th>
+                                        <th>Vin</th>
                                         <th>Puntos</th>
                                         <th>TIIE</th>
                                         <th>Penetración</th>
@@ -41,6 +42,7 @@
                                     </tr>
                                     <tr ng-repeat="interesUnidad in arrayInteresUnidad">
                                         <td>{{interesUnidad.documento}}</td>
+                                        <td>{{interesUnidad.vin}}</td>
                                         <td>{{interesUnidad.puntos}}</td>
                                         <td>{{interesUnidad.tiie}}</td>
                                         <td>{{interesUnidad.penetracion}}</td>
@@ -71,6 +73,7 @@
                                 <table id="consultaLotes" class="table table-striped">
                                     <tr>
                                         <th>Documento</th>
+                                        <th>Vin</th>
                                         <th>Tasa</th>
                                         <th>Penetración</th>
                                         <th>Interes</th>
@@ -80,6 +83,7 @@
                                         <th>Intereses</th>
                                     </tr>
                                      <tr ng-repeat="interesUnidad in arrayInteresUnidad">
+                                        <td>{{interesUnidad.documento}}</td>
                                         <td>{{interesUnidad.documento}}</td>
                                         <td class="text-right"><input type="text" class="form-control" ng-model="interesUnidad.tasa" style="width: 100px" ng-change="cambioTasa(interesUnidad, $index)"></td>
                                         <td>{{interesUnidad.penetracion}}</td>
