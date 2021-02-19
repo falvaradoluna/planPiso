@@ -60,7 +60,10 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
     { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
     { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT },
     { name: 'diasgracia', value: req.body.diasgracia, type: self.model.types.INT },
-    { name: 'tipoEntrada', value: req.body.tipoEntrada, type: self.model.types.STRING }];
+    { name: 'tipoEntrada', value: req.body.tipoEntrada, type: self.model.types.STRING },
+    { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+    { name: 'idSucursal', value: req.body.idSucursal, type: self.model.types.INT },
+    { name: 'numeroSerie', value: req.body.vin, type: self.model.types.STRING }];
 
     self.model.query('uspSetUnidadSchema', params, function(error, result) {
         self.view.expositor(res, {

@@ -371,7 +371,10 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             fechainicio: staticFactory.todayDateGiven(item.fechainicio),
             fechafin: staticFactory.todayDateGiven(item.fechafin),
             diasgracia: item.diasgracia,
-            tipoEntrada:item.tipoCompra
+            tipoEntrada:item.tipoCompra,
+            idEmpresa : item.idEmpresa,
+            idSucursal: item.idSucursal,
+            vin: item.veh_numserie
         };
 
         unuevasFactory.setUnitSchema(data).then(function(result) {
