@@ -36,14 +36,15 @@ ApiTraspaso.prototype.get_TraspasoFinancieraDetalle = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idpoliza', value: req.query.idpoliza, type: self.model.types.INT },
+    var params = [{ name: 'idtipopoliza', value: req.query.idtipopoliza, type: self.model.types.INT },
     { name: 'idmovimiento', value: req.query.idmovimiento, type: self.model.types.INT },
     { name: 'idfinancieraO', value: req.query.idfinancieraO, type: self.model.types.INT },
     { name: 'idEsquemaO', value: req.query.idEsquemaO, type: self.model.types.INT },
     { name: 'idfinancieraD', value: req.query.idfinancieraD, type: self.model.types.INT },
     { name: 'idEsquemaD', value: req.query.idEsquemaD, type: self.model.types.INT },
     { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
-    { name: 'dobleEstrella', value: req.query.dobleEstrella, type: self.model.types.INT }
+    { name: 'dobleEstrella', value: req.query.dobleEstrella, type: self.model.types.INT },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
     console.log(params)
 

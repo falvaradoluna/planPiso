@@ -119,19 +119,19 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
 
                     if ($scope.typeTraspaso == 3) {
 
-                        var paraTraspaso = {
-                            idUsuario: $scope.idUsuario,
-                            idEmpresa: sessionFactory.empresaID,
-                            idtipopoliza: 2 //cambio de financiera
-                        }
+                        // var paraTraspaso = {
+                        //     idUsuario: $scope.idUsuario,
+                        //     idEmpresa: sessionFactory.empresaID,
+                        //     idtipopoliza: 2 //cambio de financiera
+                        // }
 
-                        traspasoFactory.traspasoFinanciera(paraTraspaso).then(function(respuesta) {
-                            $scope.LastId = respuesta.data[0].LastId;
-                            $scope.lstUnitsTraspasos = filterFilter($scope.lstNewUnits, { isChecked: true });
-                            $scope.guardaDetalle();
-                        }, function(error) {
-                            $scope.error(error.data.Message);
-                        });
+                        // traspasoFactory.traspasoFinanciera(paraTraspaso).then(function(respuesta) {
+                        // $scope.LastId = respuesta.data[0].LastId;
+                        $scope.lstUnitsTraspasos = filterFilter($scope.lstNewUnits, { isChecked: true });
+                        $scope.guardaDetalle();
+                        // }, function(error) {
+                        //     $scope.error(error.data.Message);
+                        // });
                     } else {
                         var paraTraspaso = {
                             idUsuario: $scope.idUsuario,
@@ -157,11 +157,12 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
     var contTraspadoDetalle = 0;
     $scope.guardaDetalle = function() {
         console.log($scope.dobleEstrella);
-        var validacionEstrella =  $scope.dobleEstrella == true ? 1 : 0;
+        var validacionEstrella = $scope.dobleEstrella == true ? 1 : 0;
         if (contTraspadoDetalle < $scope.lstUnitsTraspasos.length) {
             var item = $scope.lstUnitsTraspasos[contTraspadoDetalle];
             var paraTraspasoDetalle = {
-                idpoliza: $scope.LastId,
+                idEmpresa: sessionFactory.empresaID,
+                idtipopoliza: 2,
                 idmovimiento: item.movimientoID,
                 idfinancieraO: $scope.lstFinancieraOrigen[0].financieraID,
                 idEsquemaO: item.esquemaID,
@@ -406,7 +407,7 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
         // });
         // $scope.lstNewUnits[ key ]["estatusPromesaPago"] = 1;
     }
-    $scope.cambioEstrella = function(){
+    $scope.cambioEstrella = function() {
         $scope.dobleEstrella = !$scope.dobleEstrella;
     };
 
