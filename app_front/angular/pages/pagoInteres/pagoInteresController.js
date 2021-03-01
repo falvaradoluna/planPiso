@@ -13,12 +13,12 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
     $scope.showDropDown = true;
 
 
-    pagoFactory.getLote(1).then(function(result) {
+    pagoFactory.getLote(0, '9').then(function(result) {
         $scope.lstUnitsPending = result.data;
     });
 
 
-    pagoFactory.getLote(2).then(function(result) {
+    pagoFactory.getLote(1, '9').then(function(result) {
         $scope.lstUnitsApply = result.data;
     });
 
@@ -31,20 +31,12 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
 
     $scope.setCurrentpay = function(payType) {
 
-        $scope.currentPayName = payType.texto;
 
-        switch (parseInt(payType.CID)) {
-            case 1:
-                $scope.currentPanel = 'pnlPendientes';
-                break;
-            case 2:
-                $scope.currentPanel = 'pnlAplicados';
-                break;
-            default:
-                break;
-        }
+        $scope.currentPanel = 'pnlPendientes';
 
-    };
+    }
+
+
 
 
 
@@ -61,14 +53,14 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
 
         $scope.showDropDown = false;
 
-        if (lote.estatusCID == 1) {
+        if (lote.estatusCID == 0) {
             $scope.objEdit.visible = true;
         } else {
             $scope.objEdit.visible = false;
         }
 
         $scope.currentPanel = 'pnlDetalle';
-        pagoFactory.getLoteDetail(lote.loteID).then(function(result) {
+        pagoFactory.getLoteDetail(lote.ple_idplanpiso).then(function(result) {
             $scope.lstUnitDeatil = result.data;
         });
     };

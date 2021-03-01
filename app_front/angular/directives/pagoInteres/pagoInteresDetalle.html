@@ -3,23 +3,25 @@
         <table id="tblDetalle" class="table table-striped">
             <thead>
                 <tr>
-                    <th>loteDetalleID</th>
-                    <th>unidadID</th>
-                    <th>interesCalculado</th>
-                    <th ng-hide="objEdit.visible">interesUsuario</th>
-                    <th ng-show="objEdit.visible">interesUsuario</th>                    
+                    <th>Documento</th>
+                    <th>Cuenta</th>
+                    <th>Concepto</th>
+                    <th>VIN</th>
+                    <th>Cargo</th>
+                    <th>Abono</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="unidad in lstUnitDeatil" repeat-end="setTableStyle('#tblDetalle')">
-                    <td>{{unidad.loteDetalleID}}</td>
-                    <td>{{unidad.unidadID}}</td>
-                    <td>{{unidad.interesCalculado}}</td>
-                    <td ng-hide="objEdit.visible">{{unidad.interesUsuario}}</td>
-                    <td ng-show="objEdit.visible">
-                        <input type="text" ng-model="unidad.interesUsuario" class="form-control">
-                    </td>
-                    
+                <tr ng-repeat="unidad in lstUnitDeatil">
+                    <td>{{unidad.pld_iddocumento}}</td>
+                    <td>{{unidad.pld_numcuenta}}</td>
+                    <td>{{unidad.pld_concepto}}</td>
+                    <td>{{unidad.pld_vin}}</td>
+                    <td>{{unidad.pld_cargo}}</td>
+                    <td>{{unidad.pld_abono}}</td>
+
+
+
                 </tr>
             </tbody>
         </table>

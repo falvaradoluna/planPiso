@@ -6,30 +6,32 @@
 
 
 .celdaFondoRojo {
-    background-color: #EC4758;
-    text-align: center;
-    color: #fff;
+    background-color: #f2dede;
+    /*text-align: center;*/
+    color: #a94442;
 }
 
 .celdaFondoVerde {
-    background-color: #18A689;
-    text-align: center;
-    color: #fff;
+    background-color: #dff0d8;
+    /*text-align: center;*/
+    color: #3c763d;
 }
 
 .celdaFondoAmarillo {
-    background-color: #F7A54A;
-    text-align: center;
-    color: #fff;
+    background-color: #fcf8e3;
+    /*text-align: center;*/
+    color: #8a6d3b;
 }
 
 .celdaFondoAzul {
-    background-color: #1a7bb9;
-    text-align: center;
-    color: #fff;
+    background-color: #d9edf7;
+    /*text-align: center;*/
+    color: #31708f;
 }
 
-
+.borderless td, .borderless th {
+    border: none;
+}
 
 
 /*loading_Modal*/
@@ -211,4 +213,17 @@
 
 .simpleStep .visited {
     background-color: #6FD1BD;
+}
+
+.alert-correct{
+    font-size: 30px !important;
+    margin-top: 15px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.fa-fechapago{
+    font-size: 20px !important;
 }
