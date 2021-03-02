@@ -34,9 +34,9 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
     commonFactory.getSucursal(sessionFactory.empresaID, $scope.idUsuario).then(function(result) {
         $scope.lstSucursal = result.data;
         var promises = [];
-        //$scope.lstSucursal.map((value) => {
-            promises.push(unuevasFactory.getNewUnitsBySucursal(sessionFactory.empresaID, null, null));
-        //})
+        $scope.lstSucursal.map((value) => {
+            promises.push(unuevasFactory.getNewUnitsBySucursal(sessionFactory.empresaID, value.sucursalID, null));
+        })
         Promise.all(promises).then(function response(result) {
             console.log(result, 'UNIDADEEEES');
             angular.forEach(result, function(value, key) {
