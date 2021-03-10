@@ -48,12 +48,14 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     var pagarReduccion = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "pagarReduccion" })[0];
     var generarPolizaInteres = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "generarPolizaInteres" })[0];
     var compensacion = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "compensacion" })[0];
+    var recalcularIntereses = _.where($scope.lstPermisoBoton, { idModulo: 4, Boton: "recalcularIntereses" })[0];
     $scope.muestraCargarSpreadTiie = CargarSpreadTiie != undefined ? false : true;
     $scope.muestracambiarEsquema = cambiarEsquema != undefined ? false : true;
     $scope.muestratraspasoFinanciera = traspasoFinanciera != undefined ? false : true;
     $scope.muestrapagarReduccion = pagarReduccion != undefined ? false : true;
     $scope.muestragenerarPolizaInteres = generarPolizaInteres != undefined ? false : true;
     $scope.muestracompensacion = compensacion != undefined ? false : true;
+    $scope.muestrarecalcularIntereses = recalcularIntereses != undefined ? false : true;
     $scope.facturasCompensacion = [{
             'tipoFactura': 'Comisión Dealer',
             'cargo': 0,
