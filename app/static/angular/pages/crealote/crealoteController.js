@@ -1,4 +1,4 @@
-appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory) {
+appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory, conciliacionFactory, $window) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
@@ -8,6 +8,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.bancoPago = undefined;
     $scope.BotonGuardarLote = false;
     $scope.agrupado = 1;
+    var myDropzone;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
         var valor = _.where($scope.lstPermisoBoton, { idModulo: 11, Boton: "guardarLote" })[0];
@@ -531,13 +532,15 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     if (ctrCuentaDestinoArr.length > 1) {
                         // proveedorcuentaDestino = row.proveedor;
                         var rowCol = $scope.gridApi1.cellNav.getFocusedCell();
-                        alertFactory.warningCenter('El proveedor tiene mas de una cuenta destino');
-                        $scope.gridApi1.core.scrollTo($scope.gridOptions.data[rowCol.row.entity.id], $scope.gridOptions.columnDefs[32]);
-                        $interval(function() {
-                            $scope.gridApi1.core.handleWindowResize();
-                        }, 100, 10);
-                        // return true;
-                        console.log('tiene mas de una cuenta destino ')
+                        if (rowCol) {
+                            alertFactory.warningCenter('El proveedor tiene mas de una cuenta destino');
+                            $scope.gridApi1.core.scrollTo($scope.gridOptions.data[rowCol.row.entity.id], $scope.gridOptions.columnDefs[32]);
+                            $interval(function() {
+                                $scope.gridApi1.core.handleWindowResize();
+                            }, 100, 10);
+                            // return true;
+                            console.log('tiene mas de una cuenta destino ')
+                        }
                     } else {
                         var childRows = row.treeNode.parentRow.treeNode.children;
                         var numchilds = row.treeNode.parentRow.treeNode.aggregations[0].value;
@@ -976,8 +979,8 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                             var promisesBitacora = [];
                                             arrayBitacora.map((value) => {
                                                 var tasa = 0;
-                                                if(value.tasa){
-                                                    tasa =  value.tasa;
+                                                if (value.tasa) {
+                                                    tasa = value.tasa;
                                                 }
                                                 var objetoBitacora = {
                                                     'idmovimiento': value.idmovimiento,
@@ -1350,6 +1353,148 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         $scope.arrayInteresUnidad[index].totalInteres = intereses.saldo * ((intereses.tasa / 100) / 360) * intereses.dias;
         console.log($scope.arrayInteresUnidad[index].totalInteres, 'cual es el interes???')
     };
+    $scope.VerArchivo = function() {
+        $('#mdlLoading').modal('show');
+        var arregloBytes = [];
+        $rootScope.pdf = undefined;
+        conciliacionFactory.getreadFile().then(function(result) {
+            arregloBytes = result.data;
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdf = 1;
+                $rootScope.pdf = [];
+            } else {
+                $rootScope.NohayPdf = undefined;
+                $rootScope.excel = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            }
+            setTimeout(function() {
+                $window.open($rootScope.excel);
+            }, 100);
+            $('#mdlLoading').modal('hide');
+            console.log($rootScope.excel, 'Soy el arreglo ')
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
+    $scope.cargarLayout = function() {
+        $('#modalCargaLayout').modal('show');
+        $scope.Dropzone();
+    };
+    $scope.Dropzone = function() {
+        $("#cargaLotout").html('')
+
+        var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" accept="text/csv, .csv" />
+                        </div>
+                    </form>`;
+
+        $("#cargaLotout").html(html);
+        myDropzone = new Dropzone("#idDropzone", {
+            url: "api/apiConciliacion/upload",
+            uploadMultiple: 0,
+            maxFiles: 1,
+            autoProcessQueue: false,
+            acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            webkitRelativePath: "/uploads"
+        });
+
+        myDropzone.on("success", function(req, xhr) {
+            var _this = this;
+
+            var filename = xhr + '.xlsx';
+            $scope.loadingPanel = true;
+            $('#mdlLoading').modal('show');
+            $scope.readLayout(filename);
+
+            $scope.limpiarDropzone = function() {
+                _this.removeAllFiles();
+                myDropzone.enable()
+                // $scope.frmConciliacion.loadLayout = true;
+            }
+        });
+
+        myDropzone.on("addedfile", function() {
+            // $scope.frmConciliacion.loadLayout = true;
+        });
+    };
+    $scope.procesaDocumentos = function() {
+        myDropzone.processQueue();
+    };
+    var execelFields = [];
+    $scope.readLayout = function(filename) {
+        conciliacionFactory.readLayout(filename).then(function(result) {
+            var LayoutFile = result.data;
+            var aux = [];
+            for (var i = 0; i < LayoutFile.length; i++) {
+                aux.push(LayoutFile[i]);
+            }
+
+            execelFields = $scope.arrayToObject(aux);
+            $scope.maxPro = execelFields.length;
+            $scope.buscaDocumentos();
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
+    $scope.arrayToObject = function(array) {
+        var lst = [];
+        for (var i = 0; i < array.length; i++) {
+            var obj = { dato1: array[i].Numeroserie, dato2: array[i].Valor, dato3: array[i].Interes };
+            lst.push(obj);
+        }
+        return lst;
+    };
+    $scope.buscaDocumentos = function() {
+        console.log(execelFields, 'Lodel excel');
+        console.log($scope.gridOptions.data, 'DATA')
+        var vinExcel = '';
+        var importeExcel = 0;
+        var interesExcel = 0;
+        var vinKey = 0;
+        var ctrCuentaDestinoArr;
+        $scope.financieraMasCuenta = [];
+        $scope.saldoMenor = [];
+        angular.forEach(execelFields, function(value, key) {
+            vinExcel = value.dato1;
+            importeExcel = value.dato2;
+            interesExcel = value.dato3;
+            vinKey = key;
+            angular.forEach($scope.gridOptions.data, function(value, key) {
+                if (value.numeroSerie == vinExcel || value.documento == vinExcel) {
+                    if (importeExcel > value.saldo || importeExcel <= 0) {
+                        $scope.saldoMenor.push(value);
+                    } else {
+                        value.Pagar = importeExcel;
+                        var ctrCuentaDestinoArr = value.cuentaDestino.split(',');
+                        if (ctrCuentaDestinoArr.length > 1) {
+                            $scope.financieraMasCuenta.push(value);
+                        }
+                        $scope.gridApi1.selection.selectRow($scope.gridOptions.data[key]);
+                    }
+                }
+            });
+        });
+        if ($scope.financieraMasCuenta.length > 0) {
+            $scope.cuentasRepetidas = Array.from(new Set($scope.financieraMasCuenta.map(s => s.proveedor))).map(proveedor => {
+                return {
+                    proveedor: proveedor,
+                    currentCuentaDestino: 'Seleccione cuenta destino',
+                    cuentaDestino: $scope.financieraMasCuenta.find(s => s.proveedor === proveedor).cuentaDestino.split(',')
+                }
+            });
+            console.log($scope.cuentasRepetidas, 'MMM SI QUEDARA???')
+        }
+        // $scope.gridApi1.selection.selectRow($scope.gridOptions.data[1]);
+    };
+    $scope.cambioCuentasGrid = function(cuenta, financiera) {
+        console.log($scope.gridOptions.data, 'POR QUE NOOO')
+        var financieraSeleccion = financiera;
+        angular.forEach($scope.gridOptions.data, function(value, key) {
+            if (financieraSeleccion == value.proveedor) {
+                value.cuentaDestino = cuenta;
+            }
+        });
+    }
     /////////-----------------------------
     //FAL crea los campos del grid y las rutinas en los eventos del grid.
 
