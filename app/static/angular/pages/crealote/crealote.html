@@ -64,7 +64,7 @@
                         <div class="col-md-12">
                             <div id="grid1" ui-grid="gridOptions" ui-grid-grouping ui-grid-edit ui-grid-selection ui-grid-cellNav class="gridStyle"></div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 m-t-sm">
                             <div class="alert alert-warning" role="alert" ng-show="saldoMenor.length > 0">
                                 <h4 class="alert-heading">
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> La cantidad que quiere pagar es mayor al saldo del documento 
@@ -73,10 +73,38 @@
                                     <tr>
                                         <th>Documento</th>
                                         <th>Vin</th>
+                                        <th>Saldo</th>
+                                        <th>Pagar</th>
                                     </tr>
                                     <tr ng-repeat="saldoM in saldoMenor">
                                         <td>{{saldoM.documento}}</td>
-                                        <td>{{saldoM.vin}}</td>
+                                        <td>{{saldoM.numeroSerie}}</td>
+                                        <td>{{saldoM.saldo}}</td>
+                                        <td>{{saldoM.PagarExcel}}</td>
+                                    </tr>
+                                </table>
+                                <!-- <div class="row mb-0" ng-repeat="saldoM in saldoMenor">
+                                    <div class="col-md-12">
+                                        <b>{{saldoM.documento}}</b>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="alert alert-warning" role="alert" ng-show="noSeleccionable.length > 0">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Los siguientes documentos no son seleccionables 
+                                </h4>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Vin</th>
+                                        <th>Saldo</th>
+                                        <th>Pagar</th>
+                                    </tr>
+                                    <tr ng-repeat="noSel in noSeleccionable">
+                                        <td>{{noSel.documento}}</td>
+                                        <td>{{noSel.numeroSerie}}</td>
+                                        <td>{{noSel.saldo}}</td>
+                                        <td>{{noSel.PagarExcel}}</td>
                                     </tr>
                                 </table>
                                 <!-- <div class="row mb-0" ng-repeat="saldoM in saldoMenor">

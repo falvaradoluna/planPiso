@@ -1,4 +1,4 @@
-appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory, conciliacionFactory, $window) {
+appModule.controller('crealoteController', function($scope, $rootScope, $location, $sce, $interval, crealoteFactory, commonFactory, staticFactory, filterFilter, uiGridConstants, uiGridGroupingConstants, utils, alertFactory, sacarunidadFactory, conciliacionFactory, $window, $timeout) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
@@ -8,6 +8,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.bancoPago = undefined;
     $scope.BotonGuardarLote = false;
     $scope.agrupado = 1;
+
     var myDropzone;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
@@ -763,6 +764,9 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         $scope.arrayInteresUnidad = [];
         $scope.arrayInteresUnidadOriginal = [];
         var rows = $scope.gridApi1.selection.getSelectedRows();
+        var idProveedorUnico = rows[0].idProveedor;
+        var proveedorDiferente = false;
+        console.log('SOY EL PROVEEDOR', idProveedorUnico)
         if (rows.length > 0) {
             if ($scope.bancoPago) {
                 //$scope.gridOptions2.data = rows;
@@ -773,6 +777,9 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 var proveedorcuentaDestino = '';
                 var unaCuenta = true;
                 rows.some(function(row, i, j) {
+                    if (idProveedorUnico != row.idProveedor) {
+                        proveedorDiferente = true;
+                    }
                     if (row.saldo == row.Pagar) {
                         $scope.montoIgual = 1;
                         $scope.noMostrar = true;
@@ -835,11 +842,15 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 });
                 if (unaCuenta) {
                     if (pasaxCIE) {
-                        $('#modalGridLote').modal('show');
-                        $scope.gridOptions2.data = rows;
-                        $interval(function() {
-                            $scope.gridApi2.core.handleWindowResize();
-                        }, 500, 10);
+                        if (proveedorDiferente == true) {
+                            alertFactory.warning('No puede seleccionar documentos de diferentes proveedores');
+                        } else {
+                            $('#modalGridLote').modal('show');
+                            $scope.gridOptions2.data = rows;
+                            $interval(function() {
+                                $scope.gridApi2.core.handleWindowResize();
+                            }, 500, 10);
+                        }
                     } else {
                         alertFactory.warning('Existe un documento del proveedor ' + proveedorCIE + ' con convenio CIE sin referencia');
                     };
@@ -1424,13 +1435,15 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.readLayout = function(filename) {
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
+
             var aux = [];
             for (var i = 0; i < LayoutFile.length; i++) {
                 aux.push(LayoutFile[i]);
+
             }
 
             execelFields = $scope.arrayToObject(aux);
-            $scope.maxPro = execelFields.length;
+
             $scope.buscaDocumentos();
         }, function(error) {
             console.log("Error", error);
@@ -1454,6 +1467,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         var ctrCuentaDestinoArr;
         $scope.financieraMasCuenta = [];
         $scope.saldoMenor = [];
+        $scope.noSeleccionable = [];
         angular.forEach(execelFields, function(value, key) {
             vinExcel = value.dato1;
             importeExcel = value.dato2;
@@ -1461,15 +1475,27 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             vinKey = key;
             angular.forEach($scope.gridOptions.data, function(value, key) {
                 if (value.numeroSerie == vinExcel || value.documento == vinExcel) {
-                    if (importeExcel > value.saldo || importeExcel <= 0) {
-                        $scope.saldoMenor.push(value);
+                    if (importeExcel > value.saldo || importeExcel <= 0 || value.seleccionable == "True") {
+                        if (value.seleccionable == "True") {
+                            value.PagarExcel = importeExcel;
+                            $scope.noSeleccionable.push(value);
+                        } else {
+                            value.PagarExcel = importeExcel;
+                            $scope.saldoMenor.push(value);
+                        }
                     } else {
                         value.Pagar = importeExcel;
                         var ctrCuentaDestinoArr = value.cuentaDestino.split(',');
                         if (ctrCuentaDestinoArr.length > 1) {
                             $scope.financieraMasCuenta.push(value);
                         }
-                        $scope.gridApi1.selection.selectRow($scope.gridOptions.data[key]);
+                        $timeout(function() {
+                            if ($scope.gridApi1.selection.selectRow) {
+                                $scope.gridApi1.selection.selectRow($scope.gridOptions.data[key]);
+
+                            }
+                        });
+
                     }
                 }
             });
@@ -1482,6 +1508,8 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     cuentaDestino: $scope.financieraMasCuenta.find(s => s.proveedor === proveedor).cuentaDestino.split(',')
                 }
             });
+            $('#mdlLoading').modal('hide');
+            $('#modalCargaLayout').modal('hide');
             console.log($scope.cuentasRepetidas, 'MMM SI QUEDARA???')
         }
         // $scope.gridApi1.selection.selectRow($scope.gridOptions.data[1]);
