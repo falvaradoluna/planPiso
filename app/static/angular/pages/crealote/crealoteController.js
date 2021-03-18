@@ -795,9 +795,27 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                 $scope.muestraInteresesBanamex = banderaIntereses == 2 ? true : false;
                                 $scope.interesesUnidades.push(row);
                                 if (result.data[1]) {
-                                    $scope.arrayInteresUnidad.push(result.data[1][0]);
-                                    $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
-                                    console.log($scope.arrayInteresUnidad, 'Soy los intereses')
+                                    if (execelFields.length > 0) {
+                                        var unidadesInteres = result.data[1];
+                                        var excelUnidad;
+                                        angular.forEach(execelFields, function(value, key) {
+                                            excelUnidad = value;
+                                            angular.forEach(unidadesInteres, function(value, key) {
+                                                if (excelUnidad.dato1 == value.vin) {
+                                                    if (excelUnidad.dato3 != value.totalInteres) {
+                                                        value.totalInteres = excelUnidad.dato3;
+                                                    }
+                                                }
+                                            });
+                                        });
+                                        $scope.arrayInteresUnidad.push(unidadesInteres[0]);
+                                        $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
+                                        console.log($scope.arrayInteresUnidad, 'Soy los intereses')
+                                    } else {
+                                        $scope.arrayInteresUnidad.push(result.data[1][0]);
+                                        $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
+                                        console.log($scope.arrayInteresUnidad, 'Soy los intereses')
+                                    }
                                 }
 
                             }
@@ -1508,10 +1526,10 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                     cuentaDestino: $scope.financieraMasCuenta.find(s => s.proveedor === proveedor).cuentaDestino.split(',')
                 }
             });
-            $('#mdlLoading').modal('hide');
-            $('#modalCargaLayout').modal('hide');
             console.log($scope.cuentasRepetidas, 'MMM SI QUEDARA???')
         }
+        $('#mdlLoading').modal('hide');
+        $('#modalCargaLayout').modal('hide');
         // $scope.gridApi1.selection.selectRow($scope.gridOptions.data[1]);
     };
     $scope.cambioCuentasGrid = function(cuenta, financiera) {
