@@ -373,10 +373,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 $scope.diferencias.diferentes = $scope.diferencias.diferentes + 1;
             }
         });
-
+        $scope.situacion.financiera=0;
         $scope.controlCheck();
         $scope.readyConciliation();
-
+        $scope.conciliacion = true;
         // Valida estatus de autorización
         // if($scope.situacion.gpoAndrade != 0 && $scope.situacion.financiera == 0){
         //     $scope.estSolAutorizacion  = 1;
@@ -506,10 +506,11 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     $scope.ajusteAutomatico = function(){
         $scope.ajusteManual = true;
         $scope.lstConceal.forEach(function(item, key) {
-            if( item.equiparante == 1 && item.esMayor != 1 ){
+            // if( item.equiparante == 1 && item.esMayor != 1 ){
                 $scope.lstConceal[ key ].ajuste  = $scope.lstConceal[ key ].interes;
                 $scope.lstConceal[ key ].esMayor = 3;
-            }
+            // }
+         
         });
         
         $scope.total.sistema = 0;
@@ -524,12 +525,12 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
 
     $scope.readyConciliation = function(){
         var modulo = parseFloat($scope.total.sistema) - parseFloat($scope.total.archivo);
-        if( modulo >= -1 && modulo <= 1 ){
+        // if( modulo >= -1 && modulo <= 1 ){
             $scope.conciliacion = true;
-        }
-        else{
-            $scope.conciliacion = false;
-        }        
+        // }
+        // else{
+        //     $scope.conciliacion = false;
+        // }        
        
     }
 
@@ -967,7 +968,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 $rootScope.NohayPdf = undefined;
                 $rootScope.excel = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
     
-                $('#polizaCancelada').modal('show');
+             
             }
     
             setTimeout(function() {

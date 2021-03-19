@@ -6,6 +6,7 @@
 
                 <div class="ibox-title">
                     <unuevas-content-header></unuevas-content-header>
+                  
                 </div>
                 <div class="ibox-content row">
                     <div class="col-md-4">
@@ -19,6 +20,8 @@
                         </div>
                     </div>
                     <div class="col-md-8">
+                        <button type="button" class="btn btn-success btn-sm pull-right"  ng-show="showStep == 1" ng-click="CargarLayout()">CargarLayout</button>
+                        <button type="button" class="btn btn-primary btn-sm pull-right" ng-click="VerArchivo()"   ng-show="showStep == 1" >Descarga Layout </button>
                         <div ng-show='saldounidad!=undefined'>
                             <h2>  Suma unidades: {{saldounidad | currency}}</h2>
                           </div>
@@ -46,6 +49,45 @@
                         </div>
                     </div>
                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalNuevaLayout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> <span class="text-navy">Carga de Archivo</span> </h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Carga Layout</label>
+                        <div id="templeteDropzone3"></div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div ng-show="!loadingPanel">
+                  
+                    
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" ng-click="nexStep3()">Continuar</button>
+                </div>
+                <div>
+                    Registros {{cargandoPro}} ---{{maxPro}}
+                </div>
+                <div ng-show="loadingPanel">
+                    <center>
+                        <img src="assets/img/loading-light.gif" width="30"> Cargando ...{{cargandoPro}}
+                    </center>
+                    <div class="progress">
+<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="25" aria-valuemin={{cargandoPro}} aria-valuemax={{maxPro}} style="width: {{cargandoPro * 100 / maxPro}}%"></div>
+                        <!-- <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin={{cargandoPro}} aria-valuemax={{maxPro}} style="width: 75%"></div> -->
+                      </div>
                 </div>
             </div>
         </div>

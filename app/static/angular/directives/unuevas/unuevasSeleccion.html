@@ -22,7 +22,7 @@
     </thead>
     <tbody>
         <!-- <tr ng-repeat="unidad in lstNewUnits" repeat-end="initTblUnidadesNuevas()"> -->
-            <tr ng-repeat="unidad in lstNewUnits">
+            <tr ng-repeat="unidad in lstNewUnits" ng-class="{'alert alert-danger': unidad.isDisabled==true}">
             <td>{{unidad.CCP_IDDOCTO}}</td>
             <!-- <td>{{unidad.DES_CARTERA}}</td>
             <td>{{unidad.DES_TIPODOCTO}}</td> -->
@@ -46,8 +46,9 @@
             </td>
             <td><input type="text" class="form-control" ng-model="unidad.SALDO" style="width: 100px"></td>
             <td style="text-align: center;">
-                <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true" ng-click="EvaluarUnidad(unidad)">
+                <input type="checkbox" ng-model="unidad.isChecked" ng-init="unidad.isValid=true" ng-disabled="unidad.isDisabled" ng-click="EvaluarUnidad(unidad)">
             </td>
         </tr>
     </tbody>
 </table>
+

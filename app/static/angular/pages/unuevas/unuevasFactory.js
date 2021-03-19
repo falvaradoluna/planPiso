@@ -9,11 +9,11 @@ appModule.factory('unuevasFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        getNewUnitsBySucursal: function(empresaID, sucursalID,financieraID) {
+        getNewUnitsBySucursal: function(empresaID, sucursalID,financieraID,tipo) {
             return $http({
                 url: apiNewUnitsUrl + 'NewUnitsBySucursal/',
                 method: "GET",
-                params: { empresaID: empresaID, sucursalID: sucursalID,financieraID:financieraID },
+                params: { empresaID: empresaID, sucursalID: sucursalID,financieraID:financieraID,tipo:tipo },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -56,6 +56,35 @@ appModule.factory('unuevasFactory', function($http) {
                 url: apiNewUnitsUrl + 'SaldoFinanciera/',
                 method: "GET",
                 params: objectData,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },readLayout: function(LayoutName) {
+            return $http({
+                url: apiNewUnitsUrl + 'readLayout/',
+                method: "GET",
+                params: { LayoutName: LayoutName },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        insExcelData: function(lstUnidades) {
+            return $http({
+                url: apiNewUnitsUrl + 'insExcelData/',
+                method: "GET",
+                params: { lstUnidades: lstUnidades },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },getreadFile: function( parametros ) {
+            return $http({
+                url: apiNewUnitsUrl + 'readFile/',
+                method: "GET",
+                params:parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },   validaExistencia: function( parametros ) {
+            return $http({
+                url: apiNewUnitsUrl + 'validaExistencia/',
+                method: "GET",
+                params: parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
         },
