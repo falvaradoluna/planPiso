@@ -2,6 +2,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.idUsuario = parseInt(localStorage.getItem("idUsuario"))
     $scope.session = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
+    $scope.currentEmpresa = $scope.session.nombre;
+    $scope.topBarNav = staticFactory.auditoriaBar();
     console.log($scope.session)
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck = "Desmarcar Unidades";
@@ -65,6 +67,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         $scope.MuestraguardarAuditoria = valor != undefined;
         valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "cancelarAuditoria" })[0];
         $scope.MuestracancelarAuditoria = valor != undefined;
+        valor = _.where($scope.lstPermisoBoton, { idModulo: 10, Boton: "unidadEstrella" })[0];
+        $scope.MuestraEstrella = valor != undefined;
     }
     $scope.init();
     $scope.openModalAuditoria = function() {

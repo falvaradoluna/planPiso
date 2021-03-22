@@ -27,10 +27,10 @@
             <div class="col-md-2 text-right">
                 <h2><small>Unidades por auditar:</small> <br>{{ctrl.numvehaud}}</h2>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-md-2 text-right" ng-hide="false">
                 <h2><small>Unidades estrella:</small> <br>{{ctrl.numvehestre}}</h2>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-md-2 text-right" ng-hide="false">
                 <h2><small>Unidades doble estrella:</small> <br>{{ctrl.numvehedoblestre}}</h2>
             </div>
         </div>
@@ -73,7 +73,7 @@
             <th>Saldo</th>
             <th>Saldo CXC</th>
             <th>Cliente</th>
-            <th>Estrella</th>
+            <th ng-hide="false">Estrella</th>
             <th>Unidad encontrada?</th>
             <th>Unidad por auditar?</th>
             <th width="180">Observaciones</th>
@@ -102,7 +102,7 @@
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.cliente}}</td>
-            <td>
+            <td ng-hide="false">
                <span ng-if="dato.estrella=='*'">Estrella</span> 
                <span ng-if="dato.dobleEstrella=='**'">Doble Estrella</span> 
                <span ng-if="dato.estrella==''||dato.dobleEstrella==''"></span> 
