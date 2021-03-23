@@ -19,11 +19,11 @@
                             <div class="dropdown setInline">
                                 <button class="btn btn-warning" type="button" ng-click="actualizarCartera()">Actualizar Cartera</button>
                             </div>
-                            <div class="dropdown setInline" ng-show="false">
-                                <button class="btn btn-warning" type="button" ng-click="VerArchivo()">Descargar Layout</button>
+                            <div class="dropdown setInline">
+                                <button class="btn btn-primary" type="button" ng-click="VerArchivo()">Descargar Layout</button>
                             </div>
-                            <div class="dropdown setInline" ng-show="false">
-                                <button class="btn btn-warning" type="button" ng-click="cargarLayout()">Cargar Layout</button>
+                            <div class="dropdown setInline">
+                                <button class="btn btn-primary" type="button" ng-click="cargarLayout()">Cargar Layout</button>
                             </div>
                         </div>
                         <div class="col-md-2 text-right">
@@ -105,6 +105,28 @@
                                         <td>{{noSel.numeroSerie}}</td>
                                         <td>{{noSel.saldo}}</td>
                                         <td>{{noSel.PagarExcel}}</td>
+                                    </tr>
+                                </table>
+                                <!-- <div class="row mb-0" ng-repeat="saldoM in saldoMenor">
+                                    <div class="col-md-12">
+                                        <b>{{saldoM.documento}}</b>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="alert alert-warning" role="alert" ng-show="documenosNoEncontrados.length > 0">
+                                <h4 class="alert-heading">
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Los siguientes documentos no fueron encontrados 
+                                </h4>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Monto</th>
+                                        <th>Importe</th>
+                                    </tr>
+                                    <tr ng-repeat="documenoNoEncontrado in documenosNoEncontrados">
+                                        <td>{{documenoNoEncontrado.dato1}}</td>
+                                        <td>{{documenoNoEncontrado.dato2}}</td>
+                                        <td>{{documenoNoEncontrado.dato3}}</td>
                                     </tr>
                                 </table>
                                 <!-- <div class="row mb-0" ng-repeat="saldoM in saldoMenor">
