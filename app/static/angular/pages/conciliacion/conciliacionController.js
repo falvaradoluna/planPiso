@@ -1288,7 +1288,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
     $scope.BorrarDetail = function(item) {
         var params = {
-            idPrevioConciliacion: item.idPrevioConciliacion
+            idprevioConciliacion: item.idprevioConciliacion
             //,usuarioID: localStorage.getItem('idUsuario')
         };
 

@@ -634,7 +634,7 @@ ApiConciliacion.prototype.get_delprevioConciliacion = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idprevioconciliacion', value: req.query.idprevioconciliacion, type: self.model.types.INT },
+    var params = [{ name: 'idprevioconciliacion', value: req.query.idprevioConciliacion, type: self.model.types.INT },
     ];
 
     self.model.query('DEL_previoConciliacion_SP', params, function(error, result) {
