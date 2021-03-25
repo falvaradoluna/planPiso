@@ -205,6 +205,20 @@ appModule.factory('auditoriaFactory', function($http) {
                 responseType: 'arraybuffer'
             });
         },
+        reporteAuditoriaPdf: function(json) {
+            return $http({
+                url: global_settings.urlJsReport,
+                method: "POST",
+                data: {
+                    template: { name: "auditoriaPPv2" },
+                    data: json
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            });
+        },
         readLayout: function(LayoutName) {
             return $http({
                 url: auditoriaUrl + 'readLayout/',

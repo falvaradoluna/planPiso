@@ -8,8 +8,8 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.currentFinancialName = "Seleccionar Financiera";
     $scope.lbl_btn_descheck = "Desmarcar Unidades";
     $scope.currentPanel = 'pnlCargaArchivo';
-    $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
- 
+    $scope.frmConciliacion = { lblMes: 0, idFinanciera: 0, loadLayout: false }
+
     $scope.titleDocumentos = '';
     $scope.titleDocumentosDetalle = '';
     $scope.tipoauditoria = 0;
@@ -78,9 +78,9 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     // Este es como funciona desde Branch Auditoria
     commonFactory.getFinancial($scope.session.empresaID).then(function(result) {
         $scope.lstFinancial = result.data;
-        var tem={
-            financieraID:1000,
-            nombre:'Todas'
+        var tem = {
+            financieraID: 1000,
+            nombre: 'Todas'
         };
         $scope.lstFinancial.push(tem);
     });
@@ -89,8 +89,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     }, function(error) {
         console.log("Error", error);
     });
-    $scope.SelFinanciera=function(item)
-    {
+    $scope.SelFinanciera = function(item) {
         auditoriaFactory.getTiposColateral($scope.frmauditoria.idFinanciera).then(function(result) {
             $scope.lstTipoColateral = result.data;
         }, function(error) {
@@ -101,11 +100,9 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.nexStep = function() {
         if ($scope.frmauditoria.idFinanciera == 0) {
             swal("Auditoria", "No se ha especificado la financiera.");
-        } 
-        else if ($scope.frmauditoria.idtipoColateral == 0) {
+        } else if ($scope.frmauditoria.idtipoColateral == 0) {
             swal("Auditoria", "No se ha especificado el Colateral.");
-        }
-        else {
+        } else {
             $scope.insertAuditoria();
         }
         $("#modalNuevaAuditoria").modal('hide');
@@ -145,7 +142,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             $scope.lstAuditoria = result.data[1];
             $scope.currentPanel = 'pnlAuditoriaUnidades';
             $scope.lstAuditoriaTotal = 0;
-           
+
             for (var i = 0; i < $scope.lstAuditoria.length; i++) {
                 $scope.lstAuditoriaTotal += $scope.lstAuditoria[i].saldo;
             }
@@ -177,28 +174,28 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         });
         $scope.Cuenta();
     };
-$scope.Cuenta= function(){
-    $scope.ctrl.numvehenc=0;
-    $scope.ctrl.numvehnoenc=0;
-    $scope.ctrl.numvehaud=0;
-    $scope.ctrl.numvehestre=0;
-    $scope.ctrl.numvehedoblestre=0;
-    for (var i = 0; i < $scope.lstAuditoria.length; i++) {
-        if ($scope.lstAuditoria[i].encontrada == 1) {
-            $scope.ctrl.numvehenc++;
+    $scope.Cuenta = function() {
+        $scope.ctrl.numvehenc = 0;
+        $scope.ctrl.numvehnoenc = 0;
+        $scope.ctrl.numvehaud = 0;
+        $scope.ctrl.numvehestre = 0;
+        $scope.ctrl.numvehedoblestre = 0;
+        for (var i = 0; i < $scope.lstAuditoria.length; i++) {
+            if ($scope.lstAuditoria[i].encontrada == 1) {
+                $scope.ctrl.numvehenc++;
+            }
+            if ($scope.lstAuditoria[i].porauditar == 'SI') {
+                $scope.ctrl.numvehaud++;
+            }
+            if ($scope.lstAuditoria[i].estrella == '*') {
+                $scope.ctrl.numvehestre++;
+            }
+            if ($scope.lstAuditoria[i].dobleEstrella == '**') {
+                $scope.ctrl.numvehedoblestre++;
+            }
         }
-        if ($scope.lstAuditoria[i].porauditar == 'SI') {
-            $scope.ctrl.numvehaud++;
-        }
-        if ($scope.lstAuditoria[i].estrella == '*') {
-            $scope.ctrl.numvehestre++;
-        }
-        if ($scope.lstAuditoria[i].dobleEstrella == '**') {
-            $scope.ctrl.numvehedoblestre++;
-        }
+        $scope.ctrl.numvehnoenc = $scope.ctrl.numveh - $scope.ctrl.numvehenc;
     }
-    $scope.ctrl.numvehnoenc=$scope.ctrl.numveh-$scope.ctrl.numvehenc;
-}
 
 
     $scope.muestraAuditoriaPendiente = function(idauditoria) {
@@ -399,7 +396,7 @@ $scope.Cuenta= function(){
             swal("Ok", "Se guardo con exito el archivo", "success");
             setTimeout(function() {
                 location.reload();
-            },3000);
+            }, 3000);
         }, function(error) {
             console.log("Error", error);
         });
@@ -445,13 +442,25 @@ $scope.Cuenta= function(){
         $("#mdlLoading").modal('show');
         // console.log($scope.lstAuditoriaNormales, $scope.lstAuditoriaDPP, $scope.lstAuditoriaFS);
         // console.log($scope.lstAuditoriaNormalesTotal, $scope.lstAuditoriaDPPTotal, $scope.lstAuditoriaFSTotal)
+        var estrellaReporte;
         angular.forEach($scope.lstAuditoria, function(value, key) {
             value.encontrada = value.encontrada == true ? 'Si' : 'No';
             value.idCliente = value.idCliente == null ? '' : value.idCliente;
+            if ($scope.MuestraEstrella) {
+                value.muestraEstrella = true;
+            } else {
+                value.muestraEstrella = false;
+            }
         });
+        if ($scope.MuestraEstrella) {
+            estrellaReporte = true;
+        } else {
+            estrellaReporte = false;
+        }
         $scope.contenidoReporte = {
             "detalle": [{
                 "titulo": "Unidades Plan Piso",
+                "muestraEstrella": estrellaReporte,
                 "detalle": $scope.lstAuditoria,
                 "total": $scope.lstAuditoriaTotal
             }]
@@ -496,13 +505,86 @@ $scope.Cuenta= function(){
         });
 
     };
+    // -----------------------------------------
+    // --Reporte Excel desde jsreport
+    // -----------------------------------------
+    $scope.generaReportePdf = function() {
+        $("#mdlLoading").modal('show');
+        // console.log($scope.lstAuditoriaNormales, $scope.lstAuditoriaDPP, $scope.lstAuditoriaFS);
+        // console.log($scope.lstAuditoriaNormalesTotal, $scope.lstAuditoriaDPPTotal, $scope.lstAuditoriaFSTotal)
+        var estrellaReporte;
+        angular.forEach($scope.lstAuditoria, function(value, key) {
+            value.encontrada = value.encontrada == true ? 'Si' : 'No';
+            value.idCliente = value.idCliente == null ? '' : value.idCliente;
+            if ($scope.MuestraEstrella) {
+                value.muestraEstrella = true;
+            } else {
+                value.muestraEstrella = false;
+            }
+        });
+        if ($scope.MuestraEstrella) {
+            estrellaReporte = true;
+        } else {
+            estrellaReporte = false;
+        }
+        $scope.contenidoReporte = {
+            "detalle": [{
+                "titulo": "Unidades Plan Piso",
+                "muestraEstrella": estrellaReporte,
+                "detalle": $scope.lstAuditoria,
+                "total": $scope.lstAuditoriaTotal
+            }]
 
+        };
+        // angular.forEach($scope.lstAuditoriaNormales, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // angular.forEach($scope.lstAuditoriaDPP, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // angular.forEach($scope.lstAuditoriaFS, function(value, key) {
+        //     value.encontrada = value.encontrada == true ? 'Si' : 'No';
+        // });
+        // $scope.contenidoReporte = {
+        //     "detalle": [{
+        //         "titulo": "Unidades Plan Piso Normales",
+        //         "detalle": $scope.lstAuditoriaNormales,
+        //         "total": $scope.lstAuditoriaNormalesTotal
+        //     }, {
+        //         "titulo": "Unidades Plan Piso DPP",
+        //         "detalle": $scope.lstAuditoriaDPP,
+        //         "total": $scope.lstAuditoriaDPPTotal
+        //     }, {
+        //         "titulo": "Unidades Plan Piso Fecha de Salida con saldo",
+        //         "detalle": $scope.lstAuditoriaFS,
+        //         "total": $scope.lstAuditoriaFSTotal
+        //     }]
+
+        // };
+        console.log('CONTEDIDO REPORTE', JSON.stringify($scope.contenidoReporte));
+
+        auditoriaFactory.reporteAuditoriaPdf($scope.contenidoReporte).then(function success(res) {
+            // var file = new Blob([result.data], { type: 'application/pdf' });
+            // var fileURL = URL.createObjectURL(file);
+            var fileName = "file_name.pdf";
+            var a = document.createElement("a");
+            var file = new Blob([res.data], { type: 'application/pdf' });
+            var fileURL = window.URL.createObjectURL(file);
+            a.href = fileURL;
+            a.download = fileName;
+            a.click();
+            $("#mdlLoading").modal('hide');
+        }, function error(err) {
+            error(err);
+        });
+
+    };
 
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     var myDropzone2;
     $scope.Dropzone2 = function() {
-        $("#templeteDropzone2").html( '' )
+        $("#templeteDropzone2").html('')
 
         var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
                         <div class="fallback">
@@ -510,14 +592,14 @@ $scope.Cuenta= function(){
                         </div>
                     </form>`;
 
-        $("#templeteDropzone2").html( html );
+        $("#templeteDropzone2").html(html);
         myDropzone2 = new Dropzone("#idDropzone", {
             url: "api/apiAuditoria/upload",
             uploadMultiple: 0,
             maxFiles: 1,
             autoProcessQueue: false,
             acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            webkitRelativePath:"/uploads"
+            webkitRelativePath: "/uploads"
         });
 
         myDropzone2.on("success", function(req, xhr) {
@@ -528,7 +610,7 @@ $scope.Cuenta= function(){
             $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
 
-            $scope.limpiarDropzone = function(){
+            $scope.limpiarDropzone = function() {
                 _this.removeAllFiles();
                 myDropzone2.enable()
                 $scope.frmConciliacion.loadLayout = true;
@@ -540,7 +622,7 @@ $scope.Cuenta= function(){
         });
     };
     var execelFields = [];
-    
+
     $scope.readLayout = function(filename) {
         auditoriaFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
@@ -557,78 +639,75 @@ $scope.Cuenta= function(){
     };
 
     $scope.insertData = function() {
-        try{
+        try {
             execelFields[increment]['consecutivo'] = contador;
             auditoriaFactory.insExcelData(execelFields[increment]).then(function(result) {
-                if( !result.data ){
-                    swal("Auditoria","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
-                    $('#mdlLoading').modal('hide');
-                    $scope.loadingPanel = false;
-                }
-                else{
-                    if( result.data[0].success == 1 ){
-                        contador    = parseInt(result.data[0].consecutivo);
+                    if (!result.data) {
+                        swal("Auditoria", "El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                        $('#mdlLoading').modal('hide');
+                        $scope.loadingPanel = false;
+                    } else {
+                        if (result.data[0].success == 1) {
+                            contador = parseInt(result.data[0].consecutivo);
 
-                        if (increment >= (execelFields.length - 1)) {
-                            // $scope.nexStep();
-                            $scope.frmConciliacion.loadLayout = true;
-                            $scope.loadingPanel = false;
-                            $('#mdlLoading').modal('hide');
+                            if (increment >= (execelFields.length - 1)) {
+                                // $scope.nexStep();
+                                $scope.frmConciliacion.loadLayout = true;
+                                $scope.loadingPanel = false;
+                                $('#mdlLoading').modal('hide');
                                 // if($scope.frmConciliacion.lbltipoconciliacion== 1)
                                 //     $scope.currentPanel = 'pnlConciliar';
                                 // else
                                 //     $scope.currentPanel = 'pnlConciliarUnidades';
-                            $scope.conceal();
-                            $("#modalNuevaConciliacion").modal('hide');
+                                $scope.conceal();
+                                $("#modalNuevaConciliacion").modal('hide');
+                            } else {
+                                increment++;
+                                $scope.insertData();
+                            }
                         }
-                        else{
-                            increment++;
-                            $scope.insertData();
-                        }
-                    }                    
-                }
-            })
-            .catch(function(e){
-               console.log("got an error in initial processing",e);
-               throw e;
-            }).then(function(res){
-            });            
-        }
-        catch( e ){
-            console.log( "Error", e );
-            swal("Auditoria","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                    }
+                })
+                .catch(function(e) {
+                    console.log("got an error in initial processing", e);
+                    throw e;
+                }).then(function(res) {});
+        } catch (e) {
+            console.log("Error", e);
+            swal("Auditoria", "El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
         }
     }
     $scope.conceal = function() {
-      
-        auditoriaFactory.getConciliacionAuditoria( $scope.idauditoria ).then(function(result) {
-            swal("Auditoria","Archivo cargado correctamente.");
+
+        auditoriaFactory.getConciliacionAuditoria($scope.idauditoria).then(function(result) {
+            swal("Auditoria", "Archivo cargado correctamente.");
             setTimeout(function() {
                 location.reload();
             }, 5000);
-            
+
         });
     };
     $scope.arrayToObject = function(array) {
         var lst = [];
         for (var i = 0; i < array.length; i++) {
-            if(array[i].__EMPTY_23 != undefined)
-            {
-            var obj = { dato1: $scope.idauditoria,
-                dato2: array[i].__EMPTY_11,
-                 dato3: array[i].__EMPTY_17,
-                 dato4: array[i].__EMPTY_23,
-                 dato5: array[i].__EMPTY_26,
-                 dato6: array[i].__EMPTY_27,
-                 dato7: array[i].__EMPTY_31,
-                 dato8: array[i].__EMPTY_34,
-                 dato9: array[i].__EMPTY_48 };
-            lst.push(obj);
+            if (array[i].__EMPTY_23 != undefined) {
+                var obj = {
+                    dato1: $scope.idauditoria,
+                    dato2: array[i].__EMPTY_11,
+                    dato3: array[i].__EMPTY_17,
+                    dato4: array[i].__EMPTY_23,
+                    dato5: array[i].__EMPTY_26,
+                    dato6: array[i].__EMPTY_27,
+                    dato7: array[i].__EMPTY_31,
+                    dato8: array[i].__EMPTY_34,
+                    dato9: array[i].__EMPTY_48
+                };
+                lst.push(obj);
             }
         }
         return lst;
     };
-    $scope.CargarAuditoria= function(){
+    $scope.CargarAuditoria = function() {
 
         $('#modalNuevaConciliacion').modal('show');
         $scope.Dropzone2();
@@ -636,7 +715,7 @@ $scope.Cuenta= function(){
     $scope.nextStep2 = function() {
         myDropzone2.processQueue();
         $scope.frmConciliacion.loadLayout = true;
-      
+
     };
 
     ////////////////////////////////////////////////////////////////////////
