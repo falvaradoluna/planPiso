@@ -381,7 +381,7 @@ var myDropzone3;
 
         $("#templeteDropzone3").html( html );
         myDropzone3 = new Dropzone("#idDropzone", {
-            url: "api/apiNewUnits/upload",
+            url: "api/apiunidadesvin/upload",
             uploadMultiple: 0,
             maxFiles: 1,
             autoProcessQueue: false,

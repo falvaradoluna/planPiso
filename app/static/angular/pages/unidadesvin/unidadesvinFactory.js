@@ -1,9 +1,9 @@
-var apiNewUnitsUrl = global_settings.urlCORS + 'api/apiunidadesvin/';
+var apiunidadesvin = global_settings.urlCORS + 'api/apiunidadesvin/';
 appModule.factory('unidadesvinFactory', function($http) {
     return {
         getNewUnits: function(empresaID) {
             return $http({
-                url: apiNewUnitsUrl + 'NewUnits/',
+                url: apiunidadesvin + 'NewUnits/',
                 method: "GET",
                 params: { empresaID: empresaID },
                 headers: { 'Content-Type': 'application/json' }
@@ -11,7 +11,7 @@ appModule.factory('unidadesvinFactory', function($http) {
         },
         getNewUnitsBySucursal: function(empresaID, sucursalID,financieraID,tipo) {
             return $http({
-                url: apiNewUnitsUrl + 'NewUnitsBySucursal/',
+                url: apiunidadesvin + 'NewUnitsBySucursal/',
                 method: "GET",
                 params: { empresaID: empresaID, sucursalID: sucursalID,financieraID:financieraID,tipo:tipo },
                 headers: { 'Content-Type': 'application/json' }
@@ -19,7 +19,7 @@ appModule.factory('unidadesvinFactory', function($http) {
         },
         setUnitSchema: function(objectData) {
             return $http({
-                url: apiNewUnitsUrl + 'setUnitSchema/',
+                url: apiunidadesvin + 'setUnitSchema/',
                 method: "POST",
                 data: objectData,
                 headers: { 'Content-Type': 'application/json' }
@@ -53,14 +53,14 @@ appModule.factory('unidadesvinFactory', function($http) {
         },
         SaldoFinanciera: function(objectData) {
             return $http({
-                url: apiNewUnitsUrl + 'SaldoFinanciera/',
+                url: apiunidadesvin + 'SaldoFinanciera/',
                 method: "GET",
                 params: objectData,
                 headers: { 'Content-Type': 'application/json' }
             });
         },readLayout: function(LayoutName) {
             return $http({
-                url: apiNewUnitsUrl + 'readLayout/',
+                url: apiunidadesvin + 'readLayout/',
                 method: "GET",
                 params: { LayoutName: LayoutName },
                 headers: { 'Content-Type': 'application/json' }
@@ -68,21 +68,21 @@ appModule.factory('unidadesvinFactory', function($http) {
         },
         insExcelData: function(lstUnidades) {
             return $http({
-                url: apiNewUnitsUrl + 'insExcelData/',
+                url: apiunidadesvin + 'insExcelData/',
                 method: "GET",
                 params: { lstUnidades: lstUnidades },
                 headers: { 'Content-Type': 'application/json' }
             });
         },getreadFile: function( parametros ) {
             return $http({
-                url: apiNewUnitsUrl + 'readFile/',
+                url: apiunidadesvin + 'readFile/',
                 method: "GET",
                 params:parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
         },   validaExistencia: function( parametros ) {
             return $http({
-                url: apiNewUnitsUrl + 'validaExistencia/',
+                url: apiunidadesvin + 'validaExistencia/',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }

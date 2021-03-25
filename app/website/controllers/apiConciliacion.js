@@ -570,4 +570,79 @@ ApiConciliacion.prototype.get_DatosReporte = function (req, res, next) {
         });
     });
 };
+ApiConciliacion.prototype.get_previoConciliacion = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT }];
+
+    self.model.query('PrevioCONCILIACION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_cuentas = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [];
+
+    self.model.query('usp_CuentasContables_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_insprevioConciliacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idConciliacion', value: req.query.idconciliacion, type: self.model.types.INT },
+    { name: 'sucursalID', value: req.query.idsucursal , type: self.model.types.INT },
+    { name: 'Interes', value: req.query.Interes, type: self.model.types.DECIMAL },
+    { name: 'CTA_NUMCTA', value: req.query.CTA_NUMCTA, type: self.model.types.STRING }];
+
+    self.model.query('INS_previoConciliacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_updprevioConciliacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idprevioconciliacion', value: req.query.idprevioconciliacion, type: self.model.types.INT },
+        { name: 'idConciliacion', value: req.query.idconciliacion, type: self.model.types.INT },
+    { name: 'sucursalID', value: req.query.idsucursal , type: self.model.types.INT },
+    { name: 'Interes', value: req.query.Interes, type: self.model.types.DECIMAL },
+    { name: 'CTA_NUMCTA', value: req.query.CTA_NUMCTA, type: self.model.types.STRING }];
+
+    self.model.query('UPD_previoConciliacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiConciliacion.prototype.get_delprevioConciliacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idprevioconciliacion', value: req.query.idprevioconciliacion, type: self.model.types.INT },
+    ];
+
+    self.model.query('DEL_previoConciliacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = ApiConciliacion;
