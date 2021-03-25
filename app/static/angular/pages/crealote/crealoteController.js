@@ -764,10 +764,10 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         $scope.arrayInteresUnidad = [];
         $scope.arrayInteresUnidadOriginal = [];
         var rows = $scope.gridApi1.selection.getSelectedRows();
-        var idProveedorUnico = rows[0].idProveedor;
-        var proveedorDiferente = false;
-        console.log('SOY EL PROVEEDOR', idProveedorUnico)
         if (rows.length > 0) {
+            var idProveedorUnico = rows[0].idProveedor;
+            var proveedorDiferente = false;
+            console.log('SOY EL PROVEEDOR', idProveedorUnico)
             if ($scope.bancoPago) {
                 //$scope.gridOptions2.data = rows;
                 console.log(rows);
@@ -1461,8 +1461,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             }
 
             execelFields = $scope.arrayToObject(aux);
-
-            $scope.buscaDocumentos();
+            guardaBitacoraExcel();            
         }, function(error) {
             console.log("Error", error);
         });
@@ -1475,6 +1474,32 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         }
         return lst;
     };
+    var guardaBitacoraExcel = function() {
+        crealoteFactory.insIdBitacora().then(function success(result) {
+            console.log(result.data[0].idBitacora, 'Id Bitacora')
+            $scope.idBitacora = result.data[0].idBitacora;
+            var promisesBitacora = [];
+            var objetoBitacora = {};
+            angular.forEach(execelFields, function(value, key) {
+                objetoBitacora = {
+                    'idBitacoraCrearLote': $scope.idBitacora,
+                    'vin': value.dato1,
+                    'montoPagar': value.dato2,
+                    'interes': value.dato3,
+                    'idUsuario': $scope.idUsuario,
+                    'idEmpresa': sessionFactory.empresaID
+                };
+                console.log($scope.idBitacora, value.dato1, value.dato2, value.dato3, sessionFactory.empresaID, $scope.idUsuario)
+                promisesBitacora.push(crealoteFactory.idBitacoraCrearLote(objetoBitacora));
+            });
+            Promise.all(promisesBitacora).then(function response(result) {
+                console.log(result, 'TERMINE');
+                $scope.buscaDocumentos();
+            });
+        }, function error(err) {
+            console.log('Ocurrio un error al intentar insertar el id de la bitacora ')
+        });
+    };
     $scope.buscaDocumentos = function() {
         console.log(execelFields, 'Lodel excel');
         console.log($scope.gridOptions.data, 'DATA')
@@ -1486,13 +1511,21 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         $scope.financieraMasCuenta = [];
         $scope.saldoMenor = [];
         $scope.noSeleccionable = [];
+        $scope.documenosNoEncontrados = [];
+        var objetoExcel;
         angular.forEach(execelFields, function(value, key) {
+            objetoExcel = value;
             vinExcel = value.dato1;
             importeExcel = value.dato2;
             interesExcel = value.dato3;
             vinKey = key;
+            var auxContador = 1;
+            var auxMax = $scope.gridOptions.data.length;
+            var unidadEncontrada = false;
             angular.forEach($scope.gridOptions.data, function(value, key) {
+                auxContador++;
                 if (value.numeroSerie == vinExcel || value.documento == vinExcel) {
+                    unidadEncontrada = true;
                     if (importeExcel > value.saldo || importeExcel <= 0 || value.seleccionable == "True") {
                         if (value.seleccionable == "True") {
                             value.PagarExcel = importeExcel;
@@ -1516,7 +1549,13 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
 
                     }
                 }
+                // if(){
+
+                // }
             });
+            if (unidadEncontrada == false) {
+                $scope.documenosNoEncontrados.push(objetoExcel);
+            }
         });
         if ($scope.financieraMasCuenta.length > 0) {
             $scope.cuentasRepetidas = Array.from(new Set($scope.financieraMasCuenta.map(s => s.proveedor))).map(proveedor => {

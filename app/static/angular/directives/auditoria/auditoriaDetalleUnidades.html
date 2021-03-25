@@ -27,10 +27,10 @@
             <div class="col-md-2 text-right">
                 <h2><small>Unidades por auditar:</small> <br>{{ctrl.numvehaud}}</h2>
             </div>
-            <div class="col-md-2 text-right" ng-hide="false">
+            <div class="col-md-2 text-right" ng-show="MuestraEstrella">
                 <h2><small>Unidades estrella:</small> <br>{{ctrl.numvehestre}}</h2>
             </div>
-            <div class="col-md-2 text-right" ng-hide="false">
+            <div class="col-md-2 text-right" ng-show="MuestraEstrella">
                 <h2><small>Unidades doble estrella:</small> <br>{{ctrl.numvehedoblestre}}</h2>
             </div>
         </div>
@@ -49,7 +49,10 @@
     Buscar unidad <span class="glyphicon glyphicon-search"></span>
 </button>
 <button type="button" class="btn btn-primary" ng-show='ctrl.idtipoAuditoria==2' ng-click="generaReporte()">
-    Generar Reporte <span class="fa fa-file-pdf-o"></span>
+    Generar Reporte <span class="fa fa-file-excel-o"></span>
+</button>
+<button type="button" class="btn btn-primary" ng-show='ctrl.idtipoAuditoria==2' ng-click="generaReportePdf()">
+    Generar Reporte Pdf<span class="fa fa-file-pdf-o"></span>
 </button>
 <button type="button" class="btn btn-default" ng-show='ctrl.idtipoAuditoria==1' ng-click="CargarAuditoria()">
     Cargar auditoria en excel <span class="glyphicon glyphicon-search"></span>
@@ -73,7 +76,7 @@
             <th>Saldo</th>
             <th>Saldo CXC</th>
             <th>Cliente</th>
-            <th ng-hide="false">Estrella</th>
+            <th ng-show="MuestraEstrella">Estrella</th>
             <th>Unidad encontrada?</th>
             <th>Unidad por auditar?</th>
             <th width="180">Observaciones</th>
@@ -102,7 +105,7 @@
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.cliente}}</td>
-            <td ng-hide="false">
+            <td ng-show="MuestraEstrella">
                <span ng-if="dato.estrella=='*'">Estrella</span> 
                <span ng-if="dato.dobleEstrella=='**'">Doble Estrella</span> 
                <span ng-if="dato.estrella==''||dato.dobleEstrella==''"></span> 
