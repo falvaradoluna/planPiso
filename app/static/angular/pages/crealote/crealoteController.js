@@ -757,6 +757,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         $scope.mostrarAlerta = false;
         $scope.noMostrar = false;
         $scope.muestraInteresesBanamex = false;
+        $scope.noMostrarInactivas = false;
         var contador = 0;
         console.log($scope.bancoPago, 'BANCO')
         $scope.montoIgual = 0;
@@ -776,6 +777,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                 var pasaxbancoDestino = true;
                 var proveedorcuentaDestino = '';
                 var unaCuenta = true;
+                $scope.unidadesInactiva = [];
                 rows.some(function(row, i, j) {
                     if (idProveedorUnico != row.idProveedor) {
                         proveedorDiferente = true;
@@ -790,6 +792,10 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                 contador++;
                             } else if (result.data[0][0].success == 2) {
                                 $scope.noMostrar = false;
+                            } else if (result.data[0][0].success == 3) {
+                                $scope.noMostrar = false;
+                                $scope.noMostrarInactivas = true;
+                                $scope.unidadesInactiva.push(result.data[0][0]);
                             } else {
                                 var banderaIntereses = result.data[0][0].bandera;
                                 $scope.muestraInteresesBanamex = banderaIntereses == 2 ? true : false;
@@ -1450,7 +1456,8 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         myDropzone.processQueue();
     };
     var execelFields = [];
-    $scope.readLayout = function(filename) {
+    $scope.readLayout = function(filename) {        
+        $scope.gridApi1.selection.clearSelectedRows();
         conciliacionFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;
 
@@ -1569,6 +1576,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         }
         $('#mdlLoading').modal('hide');
         $('#modalCargaLayout').modal('hide');
+        $scope.loadingPanel = false;
         // $scope.gridApi1.selection.selectRow($scope.gridOptions.data[1]);
     };
     $scope.cambioCuentasGrid = function(cuenta, financiera) {
