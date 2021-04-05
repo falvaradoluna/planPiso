@@ -1,4 +1,4 @@
-appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory, alertFactory,conciliacionFactory) {
+appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory, alertFactory,conciliacionFactory, traspasoFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.session = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -1013,6 +1013,35 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 if ($scope.unidadesSeleccionadas > 1) {
                     swal("Aviso", "Solo se puede seleccionar uno a la vez.", "warning");
                 } else {
+                    var valida = filterFilter($scope.lstNewUnits, { isChecked: true });
+                    $scope.unidadesEnProceso = [];
+                    var promesaUnidadEnProceso = [];
+
+                    valida.forEach(function(item, key) {
+                        promesaUnidadEnProceso.push(traspasoFactory.unidadEnProceso(item.CCP_IDDOCTO, item.empresaID));
+                    });
+                    Promise.all(promesaUnidadEnProceso).then(function(results) {
+                        console.log('REsultado unidades en proceso ', results);
+                        angular.forEach(results, function(value, key) {
+
+                            if (value.data.length > 0) {
+                                console.log(value, 'RESULTS')
+                                angular.forEach(value.data, function(value2, key) {
+                                    $scope.unidadesEnProceso.push(value2);
+                                });
+
+                            }
+                        });
+                        console.log($scope.unidadesEnProceso)
+                        if ($scope.unidadesEnProceso.length > 0) {
+                            swal({
+                                title: "Traspaso entre Financieras",
+                                text: "Algunas unidades se encuentran en otro proceso y no puede realziar el traspaso"
+                            }, function() {
+                                location.reload();
+                            });
+                        }
+                    });
                     $scope.lstNewUnits.forEach(function(item) {
                         if (item.isChecked === true) {
                             $scope.unidadCompensacion = item;
