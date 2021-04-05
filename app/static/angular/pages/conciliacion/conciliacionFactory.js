@@ -355,7 +355,17 @@ appModule.factory('conciliacionFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
+        },
+        getConciliacionGuardadaPasivos: function( idconciliacion ) {
+            return $http({
+                url: conciliacionUrl + 'ConciliacionGuardadaPasivos/',
+                method: "GET",
+                params: { 
+                    idconciliacion: idconciliacion, 
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
 
     };
 });

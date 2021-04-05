@@ -154,6 +154,7 @@ ApiConciliacion.prototype.get_ConciliacionGuardada = function(req, res, next) {
         });
     });
 };
+
 ApiConciliacion.prototype.get_AutorizacionDetalle = function(req, res, next) {
 
     var self = this;
@@ -644,5 +645,17 @@ ApiConciliacion.prototype.get_delprevioConciliacion = function(req, res, next) {
         });
     });
 };
+ApiConciliacion.prototype.get_ConciliacionGuardadaPasivos = function(req, res, next) {
 
+    var self = this;
+    var params = [{ name: 'idconciliacion', value: req.query.idconciliacion, type: self.model.types.INT }
+    ];
+
+    self.model.query('uspGetConciliacionGuardadaPasivos', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiConciliacion;

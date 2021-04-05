@@ -1,4 +1,4 @@
-appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory, alertFactory) {
+appModule.controller('interesController', function($scope, $rootScope, $location, filterFilter, $filter, commonFactory, staticFactory, interesFactory, esquemaFactory, alertFactory,conciliacionFactory) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.session = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -458,9 +458,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $('#mdlLoading').modal('show');
             $scope.deshabilitaBoton = true;
             var data = {
-                financieraId: $scope.currentFinanciale.financieraID,
-                anio: $scope.currentMes.anio,
-                mes: $scope.currentMes.nummes
+                financieraId: $scope.currentFinanciale.financieraID
             };
             interesFactory.RecalculaInteres(data).then(function(result) {
                 if (result.data.length > 0) {
@@ -718,6 +716,9 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.callPayInteres = function() {
         $scope.lstSelectPay = [];
         $scope.currentPanel = "pnlPagoInteres";
+        conciliacionFactory.getCuentas().then(function(result) {
+            $scope.lstCuentas = result.data;
+        });
         $scope.lstNewUnits.forEach(function(item) {
             if (item.isChecked === true) {
                 item.InteresMes = item.InteresMesActual;
@@ -727,7 +728,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
         interesFactory.ResumenInteresMes($scope.lstSelectPay[0].financieraID).then(function success(result) {
             $scope.lstInteresesMes = result.data;
-
+            $scope.CalculaTotal();
         }, function error(err) {
             console.log(err)
         });
@@ -750,45 +751,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         unidad.TotalMes = parseFloat(unidad.InteresMes) + unidad.saldo;
         return unidad.TotalMes;
     }
-    $scope.CrearProvision = function() {
-        swal({
-            title: "¿Esta seguro?",
-            text: "Se creara la poliza para el pago de interes para la financiera de la unidad seleccionada.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#21B9BB",
-            confirmButtonText: "Aplicar",
-            closeOnConfirm: false
-        }, function() {
-            if ($scope.haveSelection() === false) {
-                swal("Aviso", "No se ha seleccionado ningun registro", "warning");
-            } else {
-                var paraProvision = {
-                    idUsuario: $scope.idUsuario,
-                    idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza: 7,
-                    idFinanciera: $scope.lstSelectPay[0].financieraID
-                }
-
-                interesFactory.ProvisionFinancieraDetalle(paraProvision).then(function(respuesta) {
-                    $scope.LastId = respuesta.data[0].LastId;
-                    if (respuesta.data[0].success != 0) {
-                        swal({
-                            title: "Provisión Plan Piso",
-                            text: "Se ha efectuado correctamente su Provisión.",
-                            type: "warning"
-                        }, function() {
-                            location.reload();
-                        });
-                    }
-                }, function(error) {
-                    $scope.error(error.data.Message);
-                });
-
-            }
-
-        });
-    }
+   
     var contProvisionDetalle = 0;
     // $scope.guardaProvisionDetalle = function() {
     //     if (contProvisionDetalle < $scope.lstUnitsProvisions.length) {
@@ -1914,7 +1877,153 @@ appModule.controller('interesController', function($scope, $rootScope, $location
         });
         return saldoCero
     };
-    // 
+    // ////////////////////////////////////////////////////
 
+    $scope.AgregarDetail = function() {
+        $scope.agregareditar = true;
+        $scope.nuevo = 1;
+        $scope.ctrl = {};
+
+    }
+    $scope.GuardarDetail = function() {
+        if ($scope.nuevo == 1) {
+            // var newobject={
+            //     dia:$scope.ctrl.dia,
+            //     porcentaje:$scope.ctrl.porcentaje
+            // }
+            //  $scope.esquemaHeader.lstreduccion.push(newobject);
+            var params = {
+                idfinanciera: $scope.lstSelectPay[0].financieraID,
+                CTA_NUMCTA: $scope.ctrl.selectedcuenta.CTA_NUMCTA,
+                idsucursal: $scope.ctrl.selectedsucursal.sucursalID,
+                Interes: $scope.ctrl.Interes,
+                //,usuarioID: localStorage.getItem('idUsuario')
+            };
+
+            interesFactory.insprevioConciliacion(params).then(function(result) {
+                swal('Guardado', 'Registro guardado con exito', 'success');
+                $scope.regresatabla();
+
+            });
+        } else {
+            // for (var i=0; i<$scope.esquemaHeader.lstreduccion.length; i++) { 
+            //     if ($scope.esquemaHeader.lstreduccion[i].dia == $scope.ctrl.dia) {
+            //         $scope.esquemaHeader.lstreduccion[i].porcentaje = $scope.ctrl.porcentaje;
+            //        break; //Stop this loop, we found it!
+            //     }
+            //   }
+            if($scope.ctrl.selectedsucursal==undefined)
+            {
+                $scope.ctrl.selectedsucursal=[];
+                $scope.ctrl.selectedsucursal.idsucursal=$scope.ctrl.idsucursal;
+            }
+            if($scope.ctrl.selectedcuenta==undefined)
+            {
+                $scope.ctrl.selectedcuenta=[];
+                $scope.ctrl.selectedcuenta.CTA_NUMCTA=$scope.ctrl.CTA_NUMCTA;
+            }
+
+            var params = {
+                idpreCierreInteres: $scope.ctrl.idpreCierreInteres,
+                CTA_NUMCTA: $scope.ctrl.selectedcuenta.CTA_NUMCTA,
+                idsucursal: $scope.ctrl.selectedsucursal.sucursalID,
+                Interes: $scope.ctrl.Interes,
+                //,usuarioID: localStorage.getItem('idUsuario')
+            };
+
+            interesFactory.updprevioConciliacion(params).then(function(result) {
+                swal('Guardado', 'Registro guardada con exito', 'success');
+                $scope.regresatabla();
+
+            });
+
+        }
+        $scope.agregareditar = false;
+    }
+    $scope.CancelarDetail = function() {
+        $scope.agregareditar = false;
+    }
+    $scope.EditarDetail = function(item) {
+        $scope.agregareditar = true;
+        $scope.ctrl = {};
+        $scope.nuevo = 0;
+        $scope.ctrl.idpreCierreInteres = item.idpreCierreInteres;
+        $scope.ctrl.idsucursal = item.idsucursal;
+        $scope.ctrl.CTA_NUMCTA = item.CTA_NUMCTA;
+        $scope.ctrl.selectedcuenta = _.where($scope.lstCuentas, { reduc: item.CTA_NUMCTA.substr(5,2) })[0];
+        $scope.ctrl.selectedsucursal = _.where($scope.lstSucursal, { sucursalID: item.idsucursal })[0];
+        $scope.ctrl.Interes = item.Interes;
+
+    }
+    $scope.BorrarDetail = function(item) {
+        var params = {
+            idpreCierreInteres: item.idpreCierreInteres
+            //,usuarioID: localStorage.getItem('idUsuario')
+        };
+
+        interesFactory.delprevioConciliacion(params).then(function(result) {
+            swal('Guardado', 'registro borrado con exito', 'success');
+            $scope.regresatabla();
+
+        });
+    }
+    $scope.regresatabla = function() {
+    
+        interesFactory.ResumenInteresMes($scope.lstSelectPay[0].financieraID).then(function success(result) {
+            $scope.lstInteresesMes = result.data;
+            $scope.CalculaTotal();
+        }, function error(err) {
+            console.log(err)
+        });
+
+
+    }
+    $scope.CalculaTotal = function(){
+        $scope.TotalInteres=0;
+        $scope.lstInteresesMes.forEach(function(item) {
+            $scope.TotalInteres+= item.Interes;
+             
+        });
+       
+    }
+    $scope.showMsgpreCierre = function() 
+    {
+        swal({
+            title: "¿Esta seguro?",
+            text: "Se creara la poliza del Precierre.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aplicar",
+            closeOnConfirm: false
+        }, function() {
+            if ($scope.haveSelection() === false) {
+                swal("Aviso", "No se ha seleccionado ningun registro", "warning");
+            } else {
+                var paraProvision = {
+                    idUsuario: $scope.idUsuario,
+                    idCierre:  $scope.lstInteresesMes[0].idCierre,
+                    totalInteres: $scope.TotalInteres
+                }
+
+                interesFactory.ProvisionFinancieraDetalle(paraProvision).then(function(respuesta) {
+                    $scope.LastId = respuesta.data[0].LastId;
+                    if (respuesta.data[0].success != 0) {
+                        swal({
+                            title: "Provisión Plan Piso",
+                            text: "Se ha efectuado correctamente su Provisión.",
+                            type: "warning"
+                        }, function() {
+                            location.reload();
+                        });
+                    }
+                }, function(error) {
+                    $scope.error(error.data.Message);
+                });
+
+            }
+
+        });
+    };
 
 });

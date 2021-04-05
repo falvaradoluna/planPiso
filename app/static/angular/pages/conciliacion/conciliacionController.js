@@ -260,35 +260,60 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.estatusConciliacion=idconciliacion.estatus;
         $scope.frmConciliacion.lbltipoconciliacion=idconciliacion.idTipo;
                                     
-
-        conciliacionFactory.getConciliacionGuardada($scope.idconciliacion).then(function(result) {
-            $scope.lstConceal = result.data;
-            $scope.sumTotal();
-
-             if($scope.frmConciliacion.lbltipoconciliacion== 1)
-                                    $scope.currentPanel = 'pnlConciliar';
-                                else
-                                    $scope.currentPanel = 'pnlConciliarUnidades';
-
-            conciliacionFactory.autorizacionDetalle( $scope.idconciliacion  ).then(function(detalle) {
-                if( detalle.data.length != 0 ){
-                   
-
-                    $scope.autDetalle = detalle.data[0];
-
-                    $scope.frmConciliacion.lblMes       = $scope.lstMonth[ ($scope.autDetalle.periodoContable - 1) ];
-                    $scope.frmConciliacion.idFinanciera = $scope.autDetalle.idFinanciera;
-                    $scope.lblFinanciera                = $scope.autDetalle.nombre;
-                    switch( $scope.autDetalle.estatus ){
-                        case 0: $scope.estSolAutorizacion = 4; break;
-                        case 1: $scope.estSolAutorizacion = 2; break;
-                        case 2: $scope.estSolAutorizacion = 3; break;
-                    }                    
-                    console.log( "estSolAutorizacion", $scope.estSolAutorizacion );
-
-                }
-            })
-        });
+        if($scope.frmConciliacion.lbltipoconciliacion== 1){
+            conciliacionFactory.getConciliacionGuardada($scope.idconciliacion).then(function(result) {
+                $scope.lstConceal = result.data;
+                $scope.sumTotal();
+                $scope.currentPanel = 'pnlConciliar';
+                              
+                conciliacionFactory.autorizacionDetalle( $scope.idconciliacion  ).then(function(detalle) {
+                    if( detalle.data.length != 0 ){
+                       
+    
+                        $scope.autDetalle = detalle.data[0];
+    
+                        $scope.frmConciliacion.lblMes       = $scope.lstMonth[ ($scope.autDetalle.periodoContable - 1) ];
+                        $scope.frmConciliacion.idFinanciera = $scope.autDetalle.idFinanciera;
+                        $scope.lblFinanciera                = $scope.autDetalle.nombre;
+                        switch( $scope.autDetalle.estatus ){
+                            case 0: $scope.estSolAutorizacion = 4; break;
+                            case 1: $scope.estSolAutorizacion = 2; break;
+                            case 2: $scope.estSolAutorizacion = 3; break;
+                        }                    
+                        console.log( "estSolAutorizacion", $scope.estSolAutorizacion );
+    
+                    }
+                })
+            });
+        }
+        else
+        {
+            conciliacionFactory.getConciliacionGuardadaPasivos($scope.idconciliacion).then(function(result) {
+                $scope.lstConceal = result.data;
+                $scope.sumTotal();
+                $scope.currentPanel = 'pnlConciliarUnidades';
+    
+                conciliacionFactory.autorizacionDetalle( $scope.idconciliacion  ).then(function(detalle) {
+                    if( detalle.data.length != 0 ){
+                       
+    
+                        $scope.autDetalle = detalle.data[0];
+    
+                        $scope.frmConciliacion.lblMes       = $scope.lstMonth[ ($scope.autDetalle.periodoContable - 1) ];
+                        $scope.frmConciliacion.idFinanciera = $scope.autDetalle.idFinanciera;
+                        $scope.lblFinanciera                = $scope.autDetalle.nombre;
+                        switch( $scope.autDetalle.estatus ){
+                            case 0: $scope.estSolAutorizacion = 4; break;
+                            case 1: $scope.estSolAutorizacion = 2; break;
+                            case 2: $scope.estSolAutorizacion = 3; break;
+                        }                    
+                        console.log( "estSolAutorizacion", $scope.estSolAutorizacion );
+    
+                    }
+                })
+            });
+        }
+        
     }
 
     $scope.muestraDetalleDocumentos = function( item ){
@@ -524,13 +549,13 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     }
 
     $scope.readyConciliation = function(){
-        var modulo = parseFloat($scope.total.sistema) - parseFloat($scope.total.archivo);
-         if( modulo >= -1 && modulo <= 1 ){
+        // var modulo = parseFloat($scope.total.sistema) - parseFloat($scope.total.archivo);
+        //  if( modulo >= -1 && modulo <= 1 ){
             $scope.conciliacion = true;
-        }
-        else{
-            $scope.conciliacion = false;
-        }        
+        // }
+        // else{
+        //     $scope.conciliacion = false;
+        // }        
        
     }
 
