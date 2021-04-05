@@ -207,7 +207,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
                 NumUnidades: $scope.ctrl.NumUnidades,
                 fechainicio: $scope.ctrl.fechainicio,
                 fechafin: $scope.ctrl.fechafin
-                //,usuarioID: localStorage.getItem('idUsuario')
+                ,usuarioID: localStorage.getItem('idUsuario')
             };
 
             financieraFactory.insColateralLineaCredito(params).then(function(result) {
@@ -228,7 +228,7 @@ appModule.controller('financieraController', function($scope, $rootScope, $filte
                 NumUnidades: $scope.ctrl.NumUnidades,
                 fechainicio: $scope.ctrl.fechainicio,
                 fechafin: $scope.ctrl.fechafin
-                //,usuarioID: localStorage.getItem('idUsuario')
+                ,usuarioID: localStorage.getItem('idUsuario')
             };
 
             financieraFactory.updColateralLineaCredito(params).then(function(result) {

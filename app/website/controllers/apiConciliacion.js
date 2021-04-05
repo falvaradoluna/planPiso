@@ -604,7 +604,8 @@ ApiConciliacion.prototype.get_insprevioConciliacion = function(req, res, next) {
     var params = [{ name: 'idConciliacion', value: req.query.idconciliacion, type: self.model.types.INT },
     { name: 'sucursalID', value: req.query.idsucursal , type: self.model.types.INT },
     { name: 'Interes', value: req.query.Interes, type: self.model.types.DECIMAL },
-    { name: 'CTA_NUMCTA', value: req.query.CTA_NUMCTA, type: self.model.types.STRING }];
+    { name: 'CTA_NUMCTA', value: req.query.CTA_NUMCTA, type: self.model.types.STRING },
+    { name: 'usuarioID', value: req.query.usuarioID, type: self.model.types.INT }];
 
     self.model.query('INS_previoConciliacion_SP', params, function(error, result) {
         self.view.expositor(res, {

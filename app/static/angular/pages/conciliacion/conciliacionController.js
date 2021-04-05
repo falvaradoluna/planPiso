@@ -1229,8 +1229,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         });
         conciliacionFactory.PrevioConciliacion($scope.idconciliacion).then(function(result) {
             $scope.lstDetalle = result.data;
+            $scope.CalculaTotal();
             $('#mdlLoading').modal('hide');
             $scope.initTblProviders();
+           
           
         });
     }
@@ -1252,7 +1254,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 CTA_NUMCTA: $scope.ctrl.selectedcuenta.CTA_NUMCTA,
                 idsucursal: $scope.ctrl.selectedsucursal.sucursalID,
                 Interes: $scope.ctrl.Interes,
-                //,usuarioID: localStorage.getItem('idUsuario')
+                usuarioID: localStorage.getItem('idUsuario')
             };
 
             conciliacionFactory.insprevioConciliacion(params).then(function(result) {
@@ -1327,10 +1329,18 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     
         conciliacionFactory.PrevioConciliacion($scope.idconciliacion).then(function(result) {
             $scope.lstDetalle = result.data;
-        //    $scope.initTblProviders();
+            $scope.CalculaTotal();
         });
 
 
+    }
+    $scope.CalculaTotal = function(){
+        $scope.TotalInteres=0;
+        $scope.lstDetalle.forEach(function(item) {
+            $scope.TotalInteres+= item.Interes;
+             
+        });
+       
     }
     $scope.showMsgConciliacion = function() 
     {
