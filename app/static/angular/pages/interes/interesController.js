@@ -491,6 +491,11 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 $scope.unitDetail = resultSchema.data[1][0];
                 $scope.unitDetailEsquema = resultSchema.data[2][0];
                 $scope.lstInteresesMov = resultSchema.data[3];
+                $scope.TotalInteresMov=0;
+                $scope.lstInteresesMov.forEach(function(item) {
+                    $scope.TotalInteresMov+= item.totalInteres;
+                     
+                });
             });
         });
 
