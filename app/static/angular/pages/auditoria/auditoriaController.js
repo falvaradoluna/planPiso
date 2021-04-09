@@ -133,6 +133,7 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
     $scope.getauditoria = function(id) {
 
         auditoriaFactory.getAuditoria(id).then(function(result) {
+            $scope.setResetTable('tblNormales', 'Auditoria', 20);
             $scope.ctrl.lblNum = result.data[0][0].idAuditoria;
             $scope.ctrl.lblFecha = result.data[0][0].fecha;
             $scope.ctrl.numveh = result.data[0][0].numveh;
@@ -222,9 +223,10 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
 
     $scope.setTableStyle = function(tblID) {
         staticFactory.setTableStyleFooter(tblID, 5);
-
     };
-
+    $scope.setResetTable = function(tblID, display, length) {
+        staticFactory.setTableStyleClass('.' + tblID, display, length)
+    };
     $scope.editDetail = function(valor) {
         var item = valor;
         $rootScope.documento = valor.documento;
@@ -731,4 +733,138 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
             console.log("Error", error);
         });
     };
+    var myDropzone3;
+    $scope.Dropzone3 = function() {
+        $("#templeteDropzone3").html( '' )
+
+        var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" accept="text/csv, .csv" />
+                        </div>
+                    </form>`;
+
+        $("#templeteDropzone3").html( html );
+        myDropzone3 = new Dropzone("#idDropzone", {
+            url: "api/apiAuditoria/upload",
+            uploadMultiple: 0,
+            maxFiles: 1,
+            autoProcessQueue: false,
+            acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            webkitRelativePath:"/uploads"
+        });
+
+        myDropzone3.on("success", function(req, xhr) {
+            var _this = this;
+
+            var filename = xhr + '.xlsx';
+            $scope.loadingPanel = true;
+            $('#mdlLoading').modal('show');
+            $scope.readLayout2(filename);
+            $scope.cargandoPro=0;
+            increment=0;
+            $scope.limpiarDropzone2 = function(){
+                _this.removeAllFiles();
+                myDropzone3.enable()
+                $scope.frmConciliacion.loadLayout = true;
+            }
+        });
+
+        myDropzone3.on("addedfile", function() {
+            $scope.frmConciliacion.loadLayout = true;
+        });
+    };
+    var execelFields2 = [];
+    $scope.cargandoPro=0;
+    $scope.readLayout2 = function(filename) {
+        auditoriaFactory.readLayout(filename).then(function(result) {
+            var LayoutFile = result.data;
+            var aux = [];
+            for (var i = 0; i < LayoutFile.length; i++) {
+                aux.push(LayoutFile[i]);
+            }
+
+            execelFields2 = $scope.arrayToObject2(aux);
+            $scope.maxPro = execelFields2.length;
+            $scope.insertData2();
+        }, function(error) {
+            console.log("Error", error);
+        });
+    };
+
+    $scope.insertData2 = function() {
+        try{
+            execelFields2[increment]['consecutivo'] = contador;
+            auditoriaFactory.insExcelData2(execelFields2[increment]).then(function(result) {
+                if( !result.data ){
+                    swal("Pendiente de esquema","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                    $('#mdlLoading').modal('hide');
+                    $scope.loadingPanel = false;
+                }
+                else{
+                    if( result.data[0].success == 1 ){
+                        contador    = parseInt(result.data[0].consecutivo);
+
+                        if (increment >= (execelFields2.length - 1)) {
+                            // $scope.nexStep();
+                           
+                            $scope.loadingPanel = false;
+                            $('#mdlLoading').modal('hide');
+                            $scope.conceal2();
+                            $("#modalNuevaLayoutExcel").modal('hide');
+                           
+                        }
+                        else{
+                            increment++;
+                            $scope.cargandoPro++;
+                            $scope.insertData2();
+                        }
+                    }                    
+                }
+            })
+            .catch(function(e){
+               console.log("got an error in initial processing",e);
+               throw e;
+            }).then(function(res){
+            });            
+        }
+        catch( e ){
+            console.log( "Error", e );
+            swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+        }
+    }
+$scope.CargarAuditoriaExcel= function(){
+
+    $('#modalNuevaLayoutExcel').modal('show');
+    $scope.Dropzone3();
+}
+
+ $scope.nexStep3 = function() {
+    if( !$scope.frmConciliacion.loadLayout ){
+        swal("Unidades","No se ha cargado el Layout.");
+    }
+    else{
+       
+        myDropzone3.processQueue();
+      
+    }
+};
+$scope.arrayToObject2 = function(array) {
+    var lst = [];
+    for (var i = 0; i < array.length; i++) {
+        var obj = { dato1:$scope.idauditoria,dato2: array[i].__EMPTY_3, dato3: array[i].__EMPTY_18, dato4: array[i].__EMPTY_19 };
+        lst.push(obj);
+    }
+    return lst;
+};
+
+$scope.conceal2 = function() {
+      
+    auditoriaFactory.getConciliacionAuditoria($scope.idauditoria).then(function(result) {
+        swal("Auditoria", "Archivo cargado correctamente.");
+        setTimeout(function() {
+            location.reload();
+        }, 5000);
+
+    });
+};
 });

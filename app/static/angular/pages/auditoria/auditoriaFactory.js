@@ -256,6 +256,13 @@ appModule.factory('auditoriaFactory', function($http) {
                 params: { financieraID: financieraID },
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
+        },insExcelData2: function(lstUnidades) {
+            return $http({
+                url: auditoriaUrl + 'insExcelData2/',
+                method: "GET",
+                params: { lstUnidades: lstUnidades },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
     };
 });
