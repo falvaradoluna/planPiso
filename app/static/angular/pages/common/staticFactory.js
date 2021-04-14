@@ -85,6 +85,12 @@ appModule.factory('staticFactory', function($http) {
                 { name: 'Auditoria', url: '#', isActive: true }
             ];
         },
+        pagoInteresBar: function() {
+            return [
+                { name: 'Empresas', url: 'empresa', isActive: false },
+                { name: 'Pago Interes', url: '#', isActive: true }
+            ];
+        },
         message: function() {
             alert("Hello");
         },

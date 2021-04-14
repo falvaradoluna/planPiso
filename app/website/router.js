@@ -19,5 +19,6 @@
      apiFechaPromesa: require('./controllers/apiFechaPromesa'),
      apiReporte: require('./controllers/apiReporte'),
      apiSacarUnidad: require('./controllers/apiSacarUnidad'),
-     apiNotificaciones: require('./controllers/apiNotificaciones')
+     apiNotificaciones: require('./controllers/apiNotificaciones'),
+     apiPagoInteres: require('./controllers/apiPagoInteres')
  }
