@@ -560,7 +560,7 @@ $scope.VerArchivo=function(){
 $scope.arrayToObject = function(array) {
     var lst = [];
     for (var i = 0; i < array.length; i++) {
-        var obj = { dato1: array[i].Numeroserie, dato2: array[i].Valor, dato3: array[i].Fecha.substring(0,10) };
+        var obj = { dato1: array[i].Numeroserie, dato2: array[i].Valor, dato3: array[i].Fecha.substring(0,10), dato4: array[i].Gracia };
         lst.push(obj);
     }
     return lst;

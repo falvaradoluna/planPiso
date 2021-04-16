@@ -101,10 +101,13 @@ if(itemObject.dato2==undefined)
 itemObject.dato2=0;
 if(itemObject.dato3==undefined)
 itemObject.dato3=0;
+if(itemObject.dato4==undefined)
+itemObject.dato4=0;
 if(itemObject.consecutivo==undefined)
 itemObject.consecutivo=0;
     var params = [{ name: 'numeroSerie', value: itemObject.dato1, type: self.model.types.STRING },
         { name: 'valor', value: itemObject.dato2, type: self.model.types.DECIMAL },
+        { name: 'gracia', value: itemObject.dato4, type: self.model.types.INT },
         { name: 'fecha', value: itemObject.dato3, type: self.model.types.STRING },
         { name: 'consecutivo', value: itemObject.consecutivo, type: self.model.types.INT }
     ];

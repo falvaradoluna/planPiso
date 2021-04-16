@@ -774,7 +774,6 @@ appModule.controller('auditoriaController', function($scope, $rootScope, $locati
         });
     };
     var execelFields2 = [];
-    $scope.cargandoPro=0;
     $scope.readLayout2 = function(filename) {
         auditoriaFactory.readLayout(filename).then(function(result) {
             var LayoutFile = result.data;

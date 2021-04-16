@@ -1086,7 +1086,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                 "chequera": newDate,
                 "bancoCuenta": $scope.busqueda.Cuenta,
                 "clabe": $scope.busqueda.Cuenta,
-                "cuentaContable": $scope.busqueda.CuentaContable,
+                "cuentaContable": '2100-0010-000X-000X',
                 "estadoCuenta": $scope.financiera,
                 "aCNB":  $scope.totalAbonoContable,
                 "aBNC": $scope.totalAbonoBancario,
@@ -1106,7 +1106,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         {
                             "titulo": "ELABORÓ",
 
-                            "nombre": "JOSUÉ ELÍAS PÉREZ RODRÍGUEZ",
+                            "nombre": $scope.busqueda.nombre,
 
                             "fecha": ""
                         },
