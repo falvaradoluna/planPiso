@@ -7,7 +7,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
     $scope.BotonGuardarLote = false;
-    $scope.agrupado = 1;
+    $scope.agrupado = 0;
 
     var myDropzone;
     var cargaInfoGridLotes = function() {

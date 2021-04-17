@@ -11,6 +11,14 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
     }, function error(err) {
         console.log('Ocurrio un error al tratar de obtener los documentos de pagos');
     });
+    crealoteFactory.getLotes(sessionFactory.empresaID).then(function success(result) {
+        console.log('SOY LOS LOTES', result.data)
+        $scope.lotes = result.data;
+        var date = new Date();
+        $scope.nombreLote = ("0" + (date.getMonth() + 1)).slice(-2) + ("0" + date.getDate()).slice(-2) + date.getFullYear() + '-' + sessionFactory.empresaRfc + '-' + ('0' + ($scope.lotes.length + 1)).slice(-2);
+    }, function error(err) {
+        console.log('Ocurrio un error al tratar de obtener el nombre del lote')
+    });
     var myDropzone;
     var cargaInfoGridLotes = function() {
         $scope.sumaDocumentos = undefined;
@@ -1037,5 +1045,155 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
         } else {
             alertFactory.warning('Debe seleccionar por lo menos un documento');
         }
+    };
+    $scope.verificaIntereses = function() {
+        swal({
+            title: "Atención",
+            text: "Se crearan ordenes de compra para los intereses. ¿Seguro que desea continuar?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "OK",
+            closeOnConfirm: true
+        }, function() {
+            $scope.guardaIntereses();
+        });
+    };
+    $scope.guardaIntereses = function() {
+        console.log($scope.arrayInteresUnidad);
+        pagoInteresFactory.guardaIdIntereses().then(function success(result) {
+            console.log(result.data[0].idBitacora);
+            var idBitacora = result.data[0].idBitacora;
+            var promisesIntereses = [];
+            $scope.arrayInteresUnidad.map((value) => {
+                var tasa = 0;
+                if (value.tasa) {
+                    tasa = value.tasa;
+                }
+                var objetoInteres = {
+                    'idmovimiento': value.idmovimiento,
+                    'idfinanciera': value.idfinanciera,
+                    'idesquema': value.idesquema,
+                    'saldo': value.saldo,
+                    'puntos': value.puntos,
+                    'tiie': value.tiie,
+                    'penetracion': value.penetracion,
+                    'plazo': value.plazo,
+                    'fechatiie': value.fechatiie,
+                    'fechainicio': value.fechainicio,
+                    'fechafin': value.fechafin,
+                    'Interes': value.Interes,
+                    'dias': value.dias,
+                    'totalInteres': value.totalInteres,
+                    'tipo': 'calculo',
+                    'idpagoInteres': idBitacora,
+                    'tasa': tasa
+                };
+                promisesIntereses.push(pagoInteresFactory.insInteres(objetoInteres));
+            });
+            Promise.all(promisesIntereses).then(function response(result) {
+                console.log('Termino Bitacora');
+                var rows = $scope.gridApi1.selection.getSelectedRows();
+                var idProveedorGeneral = rows[0].idProveedor;
+                var dataEncabezado = {
+                    idEmpresa: sessionFactory.empresaID,
+                    idUsuario: $scope.idUsuario,
+                    nombreLote: $scope.nombreLote,
+                    estatus: -1,
+                    esAplicacionDirecta: 0,
+                    cifraControl: ($scope.sumaDocumentos).toFixed(2),
+                    interesAgrupado: 0
+                };
+                var idProveedor = 0;
+                crealoteFactory.setEncabezadoPago(dataEncabezado)
+                    .then(function successCallback(response) {
+                        $scope.idLotePadre = response.data[0].idLotePadre;
+                        var array = [];
+                        var count = 1;
+                        rows.forEach(function(row, i) {
+                            idProveedor = row.idProveedor;
+                            var elemento = {};
+                            elemento.pal_id_lote_pago = $scope.idLotePadre; //response.data;
+                            elemento.pad_polTipo = row.polTipo; //entity.polTipo;
+                            elemento.pad_polAnnio = row.annio;
+                            elemento.pad_polMes = row.polMes;
+                            elemento.pad_polConsecutivo = row.polConsecutivo;
+                            elemento.pad_polMovimiento = row.polMovimiento;
+                            elemento.pad_fechaPromesaPago = (row.fechaPromesaPago == '' ? '1900-01-01T00:00:00' : row.fechaPromesaPago);
+                            elemento.pad_saldo = parseFloat(row.Pagar) + .00000001; //row.saldo;//                    
+                            //15062018
+                            if ((row.referencia == null) || (row.referencia == undefined) || (row.referencia == "")) {
+                                row.referencia = "AUT";
+                            } else {
+                                if (row.convenioCIE == "") {
+                                    //row.referencia = $scope.idLotePadre + '-' + row.idProveedor + '-' + row.referencia.replace(" ", "");
+                                }
+                            }
+                            //fin 15062018
+                            elemento.pad_documento = row.documento;
+                            elemento.pad_polReferencia = row.referencia; //FAL 09052015 mandar referencia
+                            elemento.tab_revision = '1';
+                            if (row.agrupar == 1) {
+                                elemento.pad_agrupamiento = count;
+                            } else {
+                                elemento.pad_agrupamiento = row.agrupar;
+                            }
+
+                            elemento.pad_bancoPagador = $scope.bancoPago.cuenta;
+                            var lonbancodestino = row.cuentaDestino.length;
+                            var primerparentesis = row.cuentaDestino.indexOf("(", 0)
+                            var numcuentaDestino = row.cuentaDestino.substring(primerparentesis + 1, lonbancodestino)
+                            var res = numcuentaDestino.replace("(", "");
+                            res = res.replace(")", "");
+                            res = res.replace(",", "");
+                            res = res.replace(",", "");
+                            res = res.replace(",", "");
+                            res = res.replace(" ", "");
+                            elemento.pad_bancoDestino = res;
+                            array.push(elemento);
+                            count = count + 1;
+                        });
+
+                        var jsIngresos = angular.toJson([{}]); //delete $scope.ingresos['$$hashKey'];
+                        var jsTransf = angular.toJson([{}]);
+                        var jsEgresos = angular.toJson([{}]);
+                        // array, $rootScope.currentEmployee, $scope.idLotePadre, jsIngresos, jsTransf, $scope.caja, $scope.cobrar, jsEgresos, ($scope.estatusLote == 0) ? 1 : 2
+                        crealoteFactory.setDatos(array, $scope.idUsuario, $scope.idLotePadre, jsIngresos, jsTransf, 0, 0, jsEgresos, 1)
+                            .then(function successCallback(response) {
+                                console.log(response.data[0].estatus, 'INSERTO???MMMM')
+                                if (response.data[0].estatus == 1) {
+                                    pagoInteresFactory.updInteresLote($scope.idLotePadre, idBitacora).then(function success(result) {
+                                        console.log(result.data, 'Relacion Lote Interes');
+                                        pagoInteresFactory.polizaInteres(idBitacora, $scope.idUsuario, idProveedorGeneral).then(function success(result) {
+                                            console.log(result.data);
+
+                                        }, function error(err) {
+                                            console.log('Ocurrio un error al intentar crear las polizas')
+                                        });
+                                    }, function error(err) {
+                                        console.log('Ocurrio un error al relacionar el interes con el pago');
+                                    });
+
+                                } else {
+                                    alertFactory.error('Ocurrio un Problema al guardar el lote')
+                                }
+
+                            }, function errorCallback(response) {
+                                alertFactory.error('Error al guardar Datos');
+                            });
+                    }, function errorCallback(response) {
+                        alertFactory.error('Error al insertar en tabla padre.');
+                    });
+            });
+
+            // pagoInteresFactory.guardaInteres().then(function success(result) {
+            //     console.log(result.data);
+            // }, function error(err) {
+            //     console.log(err, 'Ocurrio un error al intentar guardar los Intereses')
+            // });
+        }, function error(err) {
+            console.log(err, 'Ocurrio un error al intentar guardar los Intereses')
+        });
+
     };
 });
