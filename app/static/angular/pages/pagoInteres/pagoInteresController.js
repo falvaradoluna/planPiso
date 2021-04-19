@@ -1166,7 +1166,7 @@ appModule.controller('pagoInteresController', function($scope, $rootScope, $loca
                                         console.log(result.data, 'Relacion Lote Interes');
                                         pagoInteresFactory.polizaInteres(idBitacora, $scope.idUsuario, idProveedorGeneral).then(function success(result) {
                                             console.log(result.data);
-
+                                            window.location = "/pagoInteres";
                                         }, function error(err) {
                                             console.log('Ocurrio un error al intentar crear las polizas')
                                         });
