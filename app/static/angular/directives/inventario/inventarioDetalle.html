@@ -8,6 +8,7 @@
             <th>Proveedor</th>
             <th>Descripción Modelo</th>
             <th>Modelo</th>
+            <th>Fecha</th>
             <th>Precio venta</th>
             <th>Porcentaje</th>
             <th>Monto a financiar</th>
@@ -25,6 +26,7 @@
             <td>{{unidad.nombreFinanciera}}</td>
             <td>{{unidad.descModelo}}</td>
             <td>{{unidad.modelo}}</td>
+            <td>{{unidad.fecha}}</td>
             <td>{{unidad.IMPORTE | currency}}</td>   
             <td>
                 <input type="text" ng-init="unidad.porcentaje = 100" ng-model="unidad.porcentaje" ng-change="validaPorcentaje(unidad.porcentaje,{{unidad.porcentaje}}, $index)" style="width: 30px">
