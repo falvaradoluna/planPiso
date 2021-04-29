@@ -1117,7 +1117,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         },
                         {
                             "titulo": "CONTADOR",
-                            "nombre": "GUADALUPE HERNANDEZ",
+                            "nombre": "BLANCA RAMIREZ ARMAS",
                             "fecha": ""
                         }
                     ]
