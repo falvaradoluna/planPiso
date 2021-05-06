@@ -7,9 +7,18 @@
                     <unidades-header></unidades-header>
                 </div>
                 <div class="ibox-content">
-                    <step-unidades></step-unidades>
+                    <div class="col-md-8">
+                        <step-unidades></step-unidades>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="bg-success pull-right"> 
+                            <b>
+                                <h5 class="m-l-xs m-r-xs">Número de unidades propias: {{lstNewUnits[0].cantidadPropias}}</h5>
+                            </b>
+                        </a>
+                    </div>
                     <div style="padding:10px; background-color: #fff; margin:8px;">
-                        <div  ng-show="showStep == 1" class="animated fadeInRight">
+                        <div ng-show="showStep == 1" class="animated fadeInRight">
                             <inventario-detalle></inventario-detalle>
                             <button type="button" class="btn btn-success btn-sm pull-right" ng-click="nextStep()">Siguiente</button>
                         </div>
