@@ -260,9 +260,10 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
         $scope.idconciliacion=idconciliacion.idConciliacion;
         $scope.estatusConciliacion=idconciliacion.estatus;
         $scope.frmConciliacion.lbltipoconciliacion=idconciliacion.idTipo;
-          if($scope.lstPermisoBoton[0].seg_idAccion !=24)
-          {
+          
             if($scope.frmConciliacion.lbltipoconciliacion== 1){
+                if($scope.lstPermisoBoton[0].seg_idAccion !=24)
+          {
                 conciliacionFactory.getConciliacionGuardada($scope.idconciliacion).then(function(result) {
                     $scope.lstConceal = result.data;
                     $scope.sumTotal();
@@ -287,6 +288,11 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                         }
                     })
                 });
+            }
+            else
+            {
+                $scope.PrevioConciliacion();
+            } 
             }
             else
             {
@@ -315,11 +321,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
                     })
                 });
             }
-          }
-          else
-          {
-              $scope.PrevioConciliacion();
-          }                          
+                                  
        
         
     }
