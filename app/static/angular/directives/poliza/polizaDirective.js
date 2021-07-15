@@ -1,8 +1,8 @@
-var autorizaPath = 'angular/directives/poliza/';
+var autorizaPathPoliza = 'angular/directives/poliza/';
 
 appModule.directive('polizaUploader', function() {
     return {
         restrict: 'E',
-        templateUrl: autorizaPath + 'polizaUploader.html'
+        templateUrl: autorizaPathPoliza + 'polizaUploader.html'
     };
 });

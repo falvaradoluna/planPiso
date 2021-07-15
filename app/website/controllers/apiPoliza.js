@@ -39,11 +39,7 @@ ApiPoliza.prototype.get_obtienePeriodosActivos = function(req, res, next) {
         });
     });
 };    
-ApiPoliza.prototype.get_CancelaCompensacion= function(req, res, next) {
-
-    
-    if(req.query.periodo==undefined)
-    req.query.periodo=null;
+ApiPoliza.prototype.get_CancelaPoliza= function(req, res, next) {
     var self = this;
     var params = [  { name: 'agencia', value: req.query.agencia, type: self.model.types.STRING },
     { name: 'documento', value: req.query.documento, type: self.model.types.STRING },

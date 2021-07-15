@@ -78,7 +78,7 @@ appModule.config(function($routeProvider, $locationProvider) {
     })
     .when('/poliza', {
         templateUrl: 'angular/pages/poliza/poliza.html',
-        controller: 'polizaCompController'
+        controller: 'polizaController'
     })
 
     .when('/autoriza', {
