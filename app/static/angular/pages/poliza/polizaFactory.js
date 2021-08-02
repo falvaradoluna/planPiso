@@ -1,5 +1,5 @@
 
-var auditoriaUrl = global_settings.urlCORS + 'api/apiPoliza/';
+var polUrl = global_settings.urlCORS + 'api/apiPoliza/';
 appModule.factory('polizaFactory', function($http) {
     return {
         
@@ -13,7 +13,7 @@ appModule.factory('polizaFactory', function($http) {
 
         obtienePeriodosActivos: function(parametros) {
             return $http({
-                url: auditoriaUrl + 'obtienePeriodosActivos/',
+                url: polUrl + 'obtienePeriodosActivos/',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
@@ -21,7 +21,7 @@ appModule.factory('polizaFactory', function($http) {
         },
         CancelaPoliza: function(parametros) {
             return $http({
-                url: auditoriaUrl + 'CancelaPoliza/',
+                url: polUrl + 'CancelaPoliza/',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }

@@ -32,7 +32,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
     var finalizar = _.where($scope.lstPermisoBoton, { idModulo: 1, Boton: "finalizar" })[0];
     $scope.muestrafinalizar = finalizar != undefined ? false : true;
 
-   
+    $scope.apretarboton=0;
     
     $scope.getNewUnitsBySucursal = function(empresaID) {
         $('#tblUnidadesNuevasVin').DataTable().destroy();
@@ -312,7 +312,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
         $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
         $scope.incremental = 0;
         $scope.guardandoPoliza();
-
+        $scope.apretarboton=1;
 
     };
     $scope.guardandoPoliza = function() {
@@ -351,6 +351,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                     $scope.consecNum = 0;
                     swal("Unidades asignadas", "Guardado correctamente");
                     setTimeout(function() {
+                        $scope.apretarboton=0;
                         console.log('Termino');
                         window.location = "/interes";
                     }, 1000);
