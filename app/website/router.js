@@ -6,6 +6,7 @@
      apiinventario: require('./controllers/apiInventario'),
      apiConciliacion: require('./controllers/apiConciliacion'),
      apiAuditoria: require('./controllers/apiAuditoria'),
+     apiPoliza: require('./controllers/apiPoliza'),
      apiDashboard: require('./controllers/apiDashboard'),
      apiEsquema: require('./controllers/apiEsquema'),
      apiFinanciera: require('./controllers/apiFinanciera'),

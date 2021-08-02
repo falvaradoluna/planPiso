@@ -4,8 +4,7 @@ var ApiAuditoriaView = require('../views/reference'),
     multer = require('multer'),
     fs=require('fs'),
     PDFParser=require('pdf2json');
-
-
+   
 
 
 var ApiAuditoria = function(conf) {
@@ -89,7 +88,7 @@ ApiAuditoria.prototype.post_uploadpdf = function(req, res, next) {
         },
         filename: function(req, file, callback) {
 
-            callback(null, filename + '.pdf');
+            callback(null, filename + '.zip');
         }
     });
 
@@ -118,14 +117,13 @@ ApiAuditoria.prototype.get_savePdf = function(req, res, next) {
 };
 ApiAuditoria.prototype.get_readPdf = function(req, res, next) {
     var self = this;
-  var binaryData = fs.readFileSync(req.query.ruta);
-  var base64String = new Buffer(binaryData).toString("base64");
-  var error=undefined;
-        self.view.expositor(res, {
-            error: error,
-            result: base64String
-        });
-};
+  var bitmap = fs.readFileSync(req.query.ruta);
+  res.type("zip")
+  res.send(new Buffer(bitmap).toString('base64')); 
+  
+  
+
+}
 ApiAuditoria.prototype.get_cambiarEncontrada = function(req, res, next) {
 
     var self = this;
@@ -320,20 +318,79 @@ ApiAuditoria.prototype.get_insExcelData2 = function(req, res, next) {
         itemObject.dato1=0;
         if(itemObject.dato2==undefined)
          itemObject.dato2=0;
+         if(itemObject.dato2=='Consecutivo')
+         itemObject.dato2=0;
         if(itemObject.dato3==undefined)
         itemObject.dato3='';
         if(itemObject.dato4==undefined)
         itemObject.dato4='';
+        if(itemObject.dato5==undefined)
+        itemObject.dato4='';
         if(itemObject.consecutivo==undefined)
         itemObject.consecutivo=0;
     var params = [{ name: 'idAuditoria', value: itemObject.dato1, type: self.model.types.INT },
-        { name: 'CCP_Iddocto', value: itemObject.dato2, type: self.model.types.STRING},
+        { name: 'consec', value: itemObject.dato2, type: self.model.types.STRING},
         { name: 'encontrado', value: itemObject.dato3, type: self.model.types.STRING },
-        { name: 'observaciones', value: itemObject.dato4, type: self.model.types.STRING },
+        { name: 'porauditar', value: itemObject.dato4, type: self.model.types.STRING },
+        { name: 'observaciones', value: itemObject.dato5, type: self.model.types.STRING },
         { name: 'consecutivo', value: itemObject.consecutivo, type: self.model.types.INT }      
     ];
 
     self.model.query('TEMPORALLAYOUTAuditoriaInterna_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_TipoUbicacion = function(req, res, next) {
+
+    var self = this;
+    var params = [];
+    params = [{ name: 'idempresa', value: req.query.idempresa, type: self.model.types.INT }];
+    self.model.query('usp_tipoubicaciones', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_cambiarUbicacion = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idAuditoriaDetalle', value: req.query.idAuditoriaDetalle, type: self.model.types.INT },
+    { name: 'idtipoubicacionreal', value: req.query.idtipoubicacionreal, type: self.model.types.INT }
+          ];
+
+    self.model.queryAllRecordSet('usp_tipoubicaciones_upd', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_cambiarOtraUbicacion = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idAuditoriaDetalle', value: req.query.idAuditoriaDetalle, type: self.model.types.INT },
+    { name: 'observaciones', value: req.query.observaciones, type: self.model.types.STRING }
+          ];
+
+    self.model.queryAllRecordSet('UPD_OtraUbicacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiAuditoria.prototype.get_cambiarOtraUbicacionGenerales = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idAuditoriadetalle', value: req.query.idAuditoriadetalle, type: self.model.types.STRING },
+    { name: 'observaciones', value: req.query.observaciones, type: self.model.types.STRING }
+          ];
+
+    self.model.queryAllRecordSet('UPD_OtraUbicacionGenerales_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

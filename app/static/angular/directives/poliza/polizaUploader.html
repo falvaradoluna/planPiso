@@ -1,0 +1,63 @@
+
+<!-- <div class="row row_dropzone onlyPrint" ng-init="porAutorizar();">
+    <div class="col-sm-12">
+        <h1>Hola</h1>
+    </div>
+</div>-->
+<div class="row">
+    <div class="dropdown setInline">
+       
+        <label>Periodo:  </label>
+        <button class="btn btn-warning" type="button" data-toggle="dropdown">{{currentNombrePeriodo}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="item in lstPeriodos">
+                <a ng-click="setPeriodo(item)">{{item.periodo}}</a>
+            </li>
+        </ul>
+    
+    </div>
+</div>
+
+<hr> 
+<div ng-init="obtienePeriodosActivos();">
+    <div class="col-sm-12">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Agencia</th>
+                    <th>Vin</th>
+                    <th>Factura</th>
+                    <th>Importe</th>
+                    <th>Fecha</th>
+                    <th>-</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, item) in lstPendiente">
+                    <td> <b>{{item.agencia}}</b> </td>
+                    <td> {{ item.vin }} </td>
+                    <td> {{ item.documento }} </td>
+                    <td> {{ item.importe | currency}}</td>
+                    <td> {{ item.fecha }}</td>
+                   
+                    <td>
+                        <!-- <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item.periodoContable, item.consecutivo );">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> Aplicar
+                        </button> -->
+
+                        <button class="btn btn-danger btn-sm" ng-disabled="item.yacancelado==1" ng-click="CancelaPoliza(item);">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> Cancelar
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-show="lstPendiente.length == 0">
+                    <td colspan="7">
+                        <i class="fa fa-tag" aria-hidden="true"></i> No hay cociliaciones realizadas o pendientes
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
