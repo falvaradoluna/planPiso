@@ -972,4 +972,20 @@ $scope.mostrarcatalgoUbicaciones = function() {
     $('#mostrarcatalgoUbicaciones').modal('show');
     $scope.Dropzone2();
 }
+$scope.BorrarAuditoria= function(item)
+{
+
+    var parametros = {
+        idAuditoria: item.idAuditoria
+        
+    }
+    auditoriaFactory.BorrarAuditoria(parametros).then(function(result) {
+        var solo = result;
+        swal("Ok", "Se borro con exito", "success");
+        $scope.getauditorias();
+    }, function(error) {
+        console.log("Error", error);
+    });
+
+}
 });

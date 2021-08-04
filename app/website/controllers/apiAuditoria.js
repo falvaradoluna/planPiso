@@ -397,4 +397,17 @@ ApiAuditoria.prototype.get_cambiarOtraUbicacionGenerales = function(req, res, ne
         });
     });
 };
+ApiAuditoria.prototype.get_BorrarAuditoria = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idAuditoria', value: req.query.idAuditoria, type: self.model.types.STRING }
+          ];
+
+    self.model.queryAllRecordSet('DEL_Auditoria_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiAuditoria;

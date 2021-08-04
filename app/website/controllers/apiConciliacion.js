@@ -659,4 +659,17 @@ ApiConciliacion.prototype.get_ConciliacionGuardadaPasivos = function(req, res, n
         });
     });
 };
+ApiConciliacion.prototype.get_BorrarConciliacion = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idconciliacion', value: req.query.idConciliacion, type: self.model.types.INT }
+          ];
+
+    self.model.queryAllRecordSet('DEL_Conciliacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiConciliacion;

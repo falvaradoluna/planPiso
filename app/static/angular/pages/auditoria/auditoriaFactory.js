@@ -291,6 +291,13 @@ appModule.factory('auditoriaFactory', function($http) {
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }
             });
+        },BorrarAuditoria: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'BorrarAuditoria/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
         },
     };
 });

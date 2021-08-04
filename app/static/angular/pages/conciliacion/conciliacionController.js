@@ -1390,5 +1390,22 @@ $scope.insertDetallesGuardar= function(){
             
         });
     };
+    $scope.BorrarConciliacion= function(item)
+    {
+    
+        var parametros = {
+            idConciliacion: item.idConciliacion
+            
+        }
+        conciliacionFactory.BorrarConciliacion(parametros).then(function(result) {
+            var solo = result;
+            swal("Ok", "Se borro con exito", "success");
+            $scope.obtieneCociliacion();
+        }, function(error) {
+            console.log("Error", error);
+        });
+    
+    }
+    
   
 });
