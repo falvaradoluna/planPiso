@@ -34,7 +34,7 @@ appModule.controller('polizaController', function($scope, polizaFactory,staticFa
         polizaFactory.obtienePeriodosActivos(parametros).then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstPendiente = result.data[0];
-                $scope.setResetTable('tblNormalesCancel', 'Cancelacion', 10);
+                $scope.setResetTable('tblNormalesCancel', 'Cancelacion', 6);
                
             }
         });
@@ -76,6 +76,6 @@ appModule.controller('polizaController', function($scope, polizaFactory,staticFa
       
     };
     $scope.setResetTable = function(tblID, display, length) {
-        staticFactory.filtrosTabla(tblID, display, length)
+        staticFactory.setTableStyleClass('.' + tblID, display, length)
     };
 });
