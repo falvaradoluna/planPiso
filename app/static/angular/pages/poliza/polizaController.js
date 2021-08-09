@@ -1,4 +1,4 @@
-appModule.controller('polizaController', function($scope, polizaFactory) {
+appModule.controller('polizaController', function($scope, polizaFactory,staticFactory) {
 
     $scope.idUsuario = parseInt(localStorage.getItem("idUsuario"))
     $scope.session = JSON.parse(sessionStorage.getItem("sessionFactory"));
@@ -34,6 +34,8 @@ appModule.controller('polizaController', function($scope, polizaFactory) {
         polizaFactory.obtienePeriodosActivos(parametros).then(function(result) {
             if( result.data.length != 0 ){
                 $scope.lstPendiente = result.data[0];
+                $scope.setResetTable('tblNormalesCancel', 'Cancelacion', 10);
+               
             }
         });
       
@@ -43,7 +45,7 @@ appModule.controller('polizaController', function($scope, polizaFactory) {
             title: "Compensación Plan Piso",
             text: "¿Desea cancelar la compensación?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true
         }, function () {
             
@@ -73,5 +75,7 @@ appModule.controller('polizaController', function($scope, polizaFactory) {
     
       
     };
-   
+    $scope.setResetTable = function(tblID, display, length) {
+        staticFactory.filtrosTabla(tblID, display, length)
+    };
 });
