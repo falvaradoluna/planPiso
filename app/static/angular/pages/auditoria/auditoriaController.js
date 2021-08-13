@@ -885,9 +885,16 @@ $scope.CargarAuditoriaExcel= function(){
 };
 $scope.arrayToObject2 = function(array) {
     var lst = [];
-    for (var i = 0; i < array.length; i++) {
-        var obj = { dato1:$scope.idauditoria,dato2: array[i].__EMPTY, dato3: array[i].__EMPTY_21, dato4: array[i].__EMPTY_22 , dato5: array[i].__EMPTY_23};
+    for (var i = 1; i < array.length; i++) {
+
+        if( array[i].__EMPTY_21.length>=0)
+        {
+        if(array[i].__EMPTY_8!= undefined && array[i].__EMPTY_8.length==0)
+        {array[i].__EMPTY_8=undefined;}
+
+        var obj = { dato1:$scope.idauditoria,dato2: array[i].__EMPTY, dato3: array[i].__EMPTY_21, dato4: array[i].__EMPTY_22 , dato5: array[i].__EMPTY_23, dato6: array[i].__EMPTY_8};
         lst.push(obj);
+        }
     }
     return lst;
 };
@@ -974,18 +981,28 @@ $scope.mostrarcatalgoUbicaciones = function() {
 }
 $scope.BorrarAuditoria= function(item)
 {
-
-    var parametros = {
-        idAuditoria: item.idAuditoria
+    swal({
+        title: "Borrar auditoría",
+        text: "¿Desea borrar la auditoría?",
+        showCancelButton: true,
+        closeOnConfirm: true,
+        showLoaderOnConfirm: true
+    }, function () {
         
-    }
-    auditoriaFactory.BorrarAuditoria(parametros).then(function(result) {
-        var solo = result;
-        swal("Ok", "Se borro con exito", "success");
-        $scope.getauditorias();
-    }, function(error) {
-        console.log("Error", error);
+        var parametros = {
+            idAuditoria: item.idAuditoria
+            
+        }
+        auditoriaFactory.BorrarAuditoria(parametros).then(function(result) {
+            var solo = result;
+            swal("Ok", "Se borro con exito", "success");
+            $scope.getauditorias();
+        }, function(error) {
+            console.log("Error", error);
+        });
     });
+
+  
 
 }
 });

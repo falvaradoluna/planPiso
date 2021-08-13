@@ -1392,18 +1392,28 @@ $scope.insertDetallesGuardar= function(){
     };
     $scope.BorrarConciliacion= function(item)
     {
-    
-        var parametros = {
-            idConciliacion: item.idConciliacion
+        swal({
+            title: "Borrar conciliación",
+            text: "¿Desea borrar la conciliación?",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true
+        }, function () {
             
-        }
-        conciliacionFactory.BorrarConciliacion(parametros).then(function(result) {
-            var solo = result;
-            swal("Ok", "Se borro con exito", "success");
-            $scope.obtieneCociliacion();
-        }, function(error) {
-            console.log("Error", error);
+            var parametros = {
+                idConciliacion: item.idConciliacion
+                
+            }
+            conciliacionFactory.BorrarConciliacion(parametros).then(function(result) {
+                var solo = result;
+                swal("Ok", "Se borro con exito", "success");
+                $scope.obtieneCociliacion();
+            }, function(error) {
+                console.log("Error", error);
+            });
         });
+    
+     
     
     }
     

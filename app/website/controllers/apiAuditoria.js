@@ -325,7 +325,9 @@ ApiAuditoria.prototype.get_insExcelData2 = function(req, res, next) {
         if(itemObject.dato4==undefined)
         itemObject.dato4='';
         if(itemObject.dato5==undefined)
-        itemObject.dato4='';
+        itemObject.dato5='';
+        if(itemObject.dato6==undefined)
+        itemObject.dato6=0;
         if(itemObject.consecutivo==undefined)
         itemObject.consecutivo=0;
     var params = [{ name: 'idAuditoria', value: itemObject.dato1, type: self.model.types.INT },
@@ -333,6 +335,7 @@ ApiAuditoria.prototype.get_insExcelData2 = function(req, res, next) {
         { name: 'encontrado', value: itemObject.dato3, type: self.model.types.STRING },
         { name: 'porauditar', value: itemObject.dato4, type: self.model.types.STRING },
         { name: 'observaciones', value: itemObject.dato5, type: self.model.types.STRING },
+        { name: 'idubicacionreal', value: itemObject.dato6, type: self.model.types.INT },
         { name: 'consecutivo', value: itemObject.consecutivo, type: self.model.types.INT }      
     ];
 
