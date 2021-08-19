@@ -372,7 +372,8 @@ appModule.controller('unuevasController', function($scope, $rootScope, $location
             tipoEntrada:item.tipoCompra,
             idEmpresa : item.idEmpresa,
             idSucursal: item.idSucursal,
-            vin: item.veh_numserie
+            vin: item.veh_numserie,
+            modena: item.tipoMoneda
         };
 
         unuevasFactory.setUnitSchema(data).then(function(result) {
