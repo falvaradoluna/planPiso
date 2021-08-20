@@ -93,6 +93,7 @@
                         <th>Financiera</th>
                         <th class="left" style="width:200px">Documento</th>
                         <th>Importe</th>
+                        <th>Moneda</th>
                         <th class="text-right">Saldo</th>
                         <th class="text-right">Monto a Compensar</th>
                     </tr>
@@ -102,6 +103,7 @@
                         <td>{{unidadCompensacion.financiera}}</td>
                         <td>{{unidadCompensacion.vehNumserie}}</td>
                         <td>{{unidadCompensacion.importe || currency}}</td>
+                        <td>{{unidadCompensacion.moneda}}</td>
                         <td class="text-right">{{unidadCompensacion.saldo | currency}}</td>
                         <td><input type="text" class="form-control text-right" style="width: 100%" ng-model="unidadCompensacion.montoCompensar" ng-change="sumaCompensarCxP(unidadCompensacion.montoCompensar, {{unidadCompensacion.montoCompensar}})"></td>
                     </tr>

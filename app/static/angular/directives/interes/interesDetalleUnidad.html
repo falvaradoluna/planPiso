@@ -186,6 +186,7 @@
             <tr>
                 <th>Documento</th>
                 <th>Saldo</th>
+                <th>Moneda</th>
                 <th>Puntos</th>
                 <th>Tiie</th>
                 <th>Fecha tiie</th>
@@ -201,6 +202,7 @@
             <tr ng-repeat="item in lstInteresesMov">
                 <td>{{item.documento }}</td>
                 <td>{{item.saldo | number:2 }}</td>
+                <td>{{item.moneda}}</td>
                 <td>{{item.puntos | number:2}}</td>
                 <td>{{item.tiie | number:4}}</td>
                 <td>{{item.fechatiie | date:'dd/MM/yyyy' : 'UTC'}}</td>
