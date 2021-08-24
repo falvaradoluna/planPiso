@@ -61,7 +61,7 @@ ApiNewUnits.prototype.post_setUnitSchema = function(req, res, next) {
     { name: 'fecha_Calculo', value: fecha, type: self.model.types.STRING },
     { name: 'fechainicio', value: fechaini, type: self.model.types.STRING },
     { name: 'fechafin', value: fechafn, type: self.model.types.STRING },
-    { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.INT },
+    { name: 'saldoInicial', value: req.body.saldoInicial, type: self.model.types.DECIMAL },
     { name: 'InteresInicial', value: req.body.interes, type: self.model.types.INT },
     { name: 'diasgracia', value: req.body.diasgracia, type: self.model.types.INT },
     { name: 'tipoEntrada', value: req.body.tipoEntrada, type: self.model.types.STRING },
