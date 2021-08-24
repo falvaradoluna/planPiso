@@ -84,6 +84,7 @@
             <th>Factura</th>
             <th>Fecha Salida</th>
             <th>Fecha fin DPP</th>
+            <th>Moneda</th>
             <th>Saldo Plan Piso</th>
             <th>Saldo CXC</th>
             <th>Cliente</th>
@@ -121,6 +122,7 @@
             <td>{{dato.ucn_idFactura}}</td>
             <td>{{dato.veh_fechasalida | date:'dd/MM/yyyy' : 'UTC'}}</td>
             <td>{{dato.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+            <td>{{dato.moneda}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.cliente}}</td>

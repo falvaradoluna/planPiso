@@ -42,8 +42,9 @@
         <tr>
             <th width="30"></th>
             <th>Numero Serie</th>
+            <th>Moneda</th>
             <th>Saldo G.A.</th>
-            <th>Sando Financiera</th>
+            <th>Saldo Financiera</th>
             <th>Diferencia</th>
             <th width="180">Situación</th>
         </tr>
@@ -60,6 +61,7 @@
                 <b>{{dato.numeroSerie}}</b><br>
                 <small class="text-warning">{{dato.CCP_IDDOCTO}}</small>
             </td>
+            <td>{{dato.moneda}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.valor | currency}}</td>
             <td>
