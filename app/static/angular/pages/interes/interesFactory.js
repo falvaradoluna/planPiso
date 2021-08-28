@@ -224,11 +224,14 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-        enganche: function(vin) {
+        enganche: function(vin, documento) {
             return $http({
                 url: interesesUrl + 'enganche/',
                 method: "GET",
-                params: { vin: vin },
+                params: {
+                    vin: vin,
+                    documento: documento
+                },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -307,11 +310,12 @@ appModule.factory('interesFactory', function($http) {
                 params: params,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }, ResumenInteresMes: function(idfinanciera) {
+        },
+        ResumenInteresMes: function(idfinanciera) {
             return $http({
                 url: interesesUrl + 'ResumenInteresMes/',
                 method: "GET",
-                params: {idfinanciera:idfinanciera},
+                params: { idfinanciera: idfinanciera },
                 headers: { 'Content-Type': 'application/json' }
             });
         },
@@ -445,7 +449,8 @@ appModule.factory('interesFactory', function($http) {
 
                 headers: { 'Content-Type': 'application/json' }
             });
-        },getCuentas: function(params) {
+        },
+        getCuentas: function(params) {
             return $http({
                 url: interesesUrl + 'cuentas/',
                 method: "GET",
@@ -477,7 +482,7 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
-     
+
 
     };
 });

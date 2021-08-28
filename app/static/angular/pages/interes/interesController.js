@@ -1111,7 +1111,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                         });
                                     }
                                 });
-                                interesFactory.enganche(item.vehNumserie).then(function success(result) {
+                                interesFactory.enganche(item.vehNumserie, item.CCP_IDDOCTO).then(function success(result) {
                                     console.log(result.data[0], 'COTIZACION')
                                     $scope.engancheCotizacion = result.data[0];
                                     $scope.financieraCotizacion = result.data[0].nombre;
