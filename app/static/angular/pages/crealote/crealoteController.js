@@ -1532,7 +1532,17 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             var unidadEncontrada = false;
             angular.forEach($scope.gridOptions.data, function(value, key) {
                 auxContador++;
-                if (value.numeroSerie == vinExcel || value.documento == vinExcel) {
+                var numSerieGrid = value.numeroSerie;
+                var numSerieExcel = vinExcel;
+                var documentoGrid = value.documento;
+                var re = /[^ -~]+/g;
+                numSerieGrid = numSerieGrid.replace(re, '');
+                // console.log(numSerieGrid, 'QUEEEEEE');
+                numSerieExcel = numSerieExcel.replace(re, '');
+                // console.log(numSerieExcel, 'QUEEEEEE');
+                documentoGrid = documentoGrid.replace(re, '');
+                // console.log(documentoGrid, 'QUEEEEEE');
+                if (numSerieGrid == numSerieExcel || documentoGrid == numSerieExcel) {
                     unidadEncontrada = true;
                     if (importeExcel > value.saldo || importeExcel <= 0 || value.seleccionable == "True") {
                         if (value.seleccionable == "True") {
