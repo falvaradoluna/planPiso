@@ -26,7 +26,14 @@
                     <div ng-show="noMostrar">
                         <div class="col-sm-12" ng-hide="mostrarAlerta">
                             <div ng-show="!muestraInteresesBanamex">
-                                <h3>Los siguientes documentos tienen el siguiente interes </h3>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h3>Los siguientes documentos tienen el siguiente interes </h3>                                        
+                                    </div>                                    
+                                    <div class="col-sm-6 text-right">
+                                        <h3>Total Interes: {{TotalInteresLote | currency}}</h3>
+                                    </div>                                    
+                                </div>
                                 <table id="consultaLotes" class="table table-striped">
                                     <tr>
                                         <th>Documento</th>
@@ -69,7 +76,14 @@
                                 </div>
                             </div>
                             <div ng-show="muestraInteresesBanamex">
-                                <h3>Los siguientes documentos tienen el siguiente interes </h3>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h3>Los siguientes documentos tienen el siguiente interes </h3>                                        
+                                    </div>                                    
+                                    <div class="col-sm-6">
+                                        <h3>Total Interes: {{TotalInteresLote | currency}}</h3>
+                                    </div>                                    
+                                </div>
                                 <table id="consultaLotes" class="table table-striped">
                                     <tr>
                                         <th>Documento</th>
