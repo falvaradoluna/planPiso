@@ -44,6 +44,18 @@ appModule.factory('conciliacionFactory', function($http) {
                 },
                 headers: { 'Content-Type': 'application/json' }
             });
+        }, getConciliacionPasivos: function( periodo,anio, consecutivo, financiera ) {
+            return $http({
+                url: conciliacionUrl + 'ConciliacionPasivos/',
+                method: "GET",
+                params: { 
+                    periodo: periodo, 
+                    consecutivo: consecutivo,
+                    anio:anio,
+                    financiera: financiera
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
         },
         getConciliacionGuardada: function( idconciliacion ) {
             return $http({
@@ -98,6 +110,14 @@ appModule.factory('conciliacionFactory', function($http) {
         guardaConciliacionDetalle: function( parametros ) {
             return $http({
                 url: conciliacionUrl + 'creaConciliacionDetalle/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        guardaConciliacionDetallePasivos: function( parametros ) {
+            return $http({
+                url: conciliacionUrl + 'guardaConciliacionDetallePasivos/',
                 method: "GET",
                 params: parametros,
                 headers: { 'Content-Type': 'application/json' }

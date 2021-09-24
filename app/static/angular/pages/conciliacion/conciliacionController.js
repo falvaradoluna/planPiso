@@ -245,12 +245,21 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
     };
 
     $scope.conceal = function() {
-      
+        if($scope.frmConciliacion.lbltipoconciliacion== 1){
         conciliacionFactory.getConciliacion( ($scope.currentMonth + 1),$scope.currentYear, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
             $scope.lstConceal = result.data;
             $scope.creaConciliacion(2,contador);
             $scope.sumTotal();
         });
+    }
+    else
+    {
+        conciliacionFactory.getConciliacionPasivos( ($scope.currentMonth + 1),$scope.currentYear, contador, $scope.frmConciliacion.idFinanciera ).then(function(result) {
+            $scope.lstConceal = result.data;
+            $scope.creaConciliacion(2,contador);
+            $scope.sumTotal();
+        });
+    }
 
         $scope.getCierreMes();
     };
@@ -1417,5 +1426,59 @@ $scope.insertDetallesGuardar= function(){
     
     }
     
-  
+    $scope.GuardaConciliacionPasivos  = function() {
+        swal({
+            title: "Guardar conciliación",
+            text: "¿Desea guardar la conciliación?",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true
+        }, function () {
+        if($scope.estatusConciliacion != 1)
+        {
+                $('#mdlLoading').modal('show');
+                $scope.contadorguardarpasivos=0;
+                $scope.maxcontadorguardarpasivos=$scope.lstConceal.length;
+                $scope.insertDetallesGuardarPasivos();
+        }
+    });
+           
+        
+    }
+        $scope.insertDetallesGuardarPasivos= function(){
+            var parametrosDetalle = {}
+            if($scope.contadorguardarpasivos==$scope.maxcontadorguardarpasivos)
+            {
+                $('#mdlLoading').modal('hide');
+                swal("Ok", "Se guardo con exito", "success");
+                location.reload();
+            }else
+            {
+                var item= $scope.lstConceal[$scope.contadorguardarpasivos]
+                parametrosDetalle = {
+                    idConciliacion:         $scope.idconciliacion,
+                 
+                    VIN:                    item.numeroSerie,
+                    saldo:    item.saldo,
+                    contador:$scope.contadorguardarpasivos,
+                    maxcontador:$scope.maxcontadorguardarpasivos
+        
+                }
+        
+                conciliacionFactory.guardaConciliacionDetallePasivos( parametrosDetalle ).then(function(result) {
+                    if( result.data[0].success == 1 ){
+                        
+                    
+                            $scope.contadorguardarpasivos++;
+                            $scope.insertDetallesGuardarPasivos();
+                    
+        
+                    }
+                });
+        
+            }
+          
+        
+        }            
+            
 });

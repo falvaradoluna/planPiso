@@ -141,6 +141,22 @@ ApiConciliacion.prototype.get_Conciliacion = function(req, res, next) {
         });
     });
 };
+ApiConciliacion.prototype.get_ConciliacionPasivos = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.INT },
+        { name: 'periodo', value: req.query.periodo, type: self.model.types.INT },
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT },
+        { name: 'financiera', value: req.query.financiera, type: self.model.types.INT }
+    ];
+
+    self.model.query('uspGetConciliacionPasivos', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 ApiConciliacion.prototype.get_ConciliacionGuardada = function(req, res, next) {
 
     var self = this;
@@ -666,6 +682,25 @@ ApiConciliacion.prototype.get_BorrarConciliacion = function(req, res, next) {
           ];
 
     self.model.queryAllRecordSet('DEL_Conciliacion_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiConciliacion.prototype.get_guardaConciliacionDetallePasivos = function(req, res, next) {
+
+    var self = this;
+   
+    var params = [{ name: 'idConciliacion', value: req.query.idConciliacion, type: self.model.types.INT },
+    { name: 'VIN', value: req.query.VIN, type: self.model.types.STRING },
+    { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
+    { name: 'contador', value: req.query.contador, type: self.model.types.INT },
+    { name: 'maxcontador', value: req.query.maxcontador, type: self.model.types.INT }
+
+];
+
+    self.model.query('guardaConciliacionDetallePasivos_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

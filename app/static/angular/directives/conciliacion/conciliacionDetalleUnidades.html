@@ -99,9 +99,13 @@
     </div>
     <div class="col-sm-6">
       
-        
+        <div style="overflow: hidden;" ng-show="estatusConciliacion == 2">
+            <button type="button" class="btn btn-primary pull-right" ng-click="GuardaConciliacionPasivos()">Guardar</button>
+            <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
+        </div>
+        <div style="overflow: hidden;" ng-show="estatusConciliacion != 2">
              <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
-        
+            </div>
     </div>
 </div>
 <!--INICIA modal que muestra el reporte en pdf -->
