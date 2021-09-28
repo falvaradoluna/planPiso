@@ -707,4 +707,16 @@ ApiConciliacion.prototype.get_guardaConciliacionDetallePasivos = function(req, r
         });
     });
 };
+ApiConciliacion.prototype.get_ActualizaSaldos = function(req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'empresaID', value: req.query.idEmpresa, type: self.model.types.INT },];
+
+    self.model.query('Usp_ActualizaSaldos', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiConciliacion;

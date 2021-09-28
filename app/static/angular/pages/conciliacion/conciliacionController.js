@@ -1479,6 +1479,20 @@ $scope.insertDetallesGuardar= function(){
             }
           
         
+        }        
+        $scope.ActualizaSaldos= function(item){
+            var parametros = {
+                idEmpresa:      $scope.session.empresaID
+            }
+            $('#mdlLoading').modal('show');
+            conciliacionFactory.ActualizaSaldos(parametros).then(function(result) {
+                $scope.lstMonths = result.data;
+                $('#mdlLoading').modal('hide');
+                swal("Ok", "Se actualizo con exito", "success");
+            }, function(error) {
+                console.log("Error", error);
+            });
+            
         }            
             
 });

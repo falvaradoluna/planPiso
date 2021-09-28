@@ -394,6 +394,15 @@ appModule.factory('conciliacionFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        ActualizaSaldos: function( params ) {
+            return $http({
+                url: conciliacionUrl + 'ActualizaSaldos/',
+                method: "GET",
+                params: params,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+
 
     };
 });
