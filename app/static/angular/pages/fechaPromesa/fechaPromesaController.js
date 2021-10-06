@@ -92,7 +92,7 @@ appModule.controller('fechaPromesaController', function($scope, $rootScope, $loc
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Aplicar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             }, function() {
                 var selectedRows = $filter("filter")($scope.carteras, {
                     seleccionada: true

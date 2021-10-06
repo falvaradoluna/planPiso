@@ -451,7 +451,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             text: "¿Esta seguro de recalcular intereses?",
             type: "warning",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             confirmButtonText: "Recalcula",
             cancelButtonText: "Cerrar"
         }, function() {
@@ -620,7 +620,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Pagar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
 
@@ -803,7 +803,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Aplicar",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function() {
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");
@@ -1618,7 +1618,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Aplicar",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function() {
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");
@@ -2029,7 +2029,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Aplicar",
-            closeOnConfirm: false
+            closeOnConfirm: true
         }, function() {
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");

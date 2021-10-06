@@ -271,7 +271,7 @@ appModule.controller('autorizaController', function($scope, $rootScope, $locatio
             title: "Conciliación Plan Piso",
             text: "¿Desea cancelar la conciliación?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true
         }, function () {
             autorizaFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
@@ -523,7 +523,7 @@ appModule.controller('autorizaController', function($scope, $rootScope, $locatio
             text: "¿Esta seguro de completar esta acción?",
             type: "warning",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             confirmButtonText: "Solicitar Autorización",
             confirmButtonColor: "#ec6c62",
             cancelButtonText: "Cerrar"

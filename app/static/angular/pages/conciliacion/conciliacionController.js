@@ -367,7 +367,7 @@ appModule.controller('conciliacionController', function($scope, $rootScope, $loc
             title: "Conciliación Plan Piso",
             text: "¿Desea cancelar la conciliación?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true
         }, function () {
             conciliacionFactory.CancelaConciliacion($scope.idConciliacion).then(function(resultValida) {
@@ -663,7 +663,7 @@ $scope.insertDetalles= function(){
             text: "¿Esta seguro de completar esta acción?",
             type: "warning",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             confirmButtonText: "Solicitar Autorización",
             confirmButtonColor: "#ec6c62",
             cancelButtonText: "Cerrar"
@@ -868,7 +868,7 @@ $scope.insertDetalles= function(){
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Continuar",
-            closeOnConfirm: false
+            closeOnConfirm: true
         },
         function() 
         {
@@ -1377,7 +1377,7 @@ $scope.insertDetallesGuardar= function(){
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Continuar",
-            closeOnConfirm: false
+            closeOnConfirm: true
         },
         function() 
         {
