@@ -1020,10 +1020,13 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 } else {
                     var valida = filterFilter($scope.lstNewUnits, { isChecked: true });
                     $scope.unidadesEnProceso = [];
+                    $scope.unidadesSinSaldo = [];
                     var promesaUnidadEnProceso = [];
+                    var promesaSaldoTPP = [];
 
                     valida.forEach(function(item, key) {
                         promesaUnidadEnProceso.push(traspasoFactory.unidadEnProceso(item.CCP_IDDOCTO, item.empresaID));
+                        promesaSaldoTPP.push(traspasoFactory.unidadSinSaldo(item.CCP_IDDOCTO, item.empresaID));
                     });
                     Promise.all(promesaUnidadEnProceso).then(function(results) {
                         console.log('REsultado unidades en proceso ', results);
@@ -1042,6 +1045,27 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                             swal({
                                 title: "Traspaso entre Financieras",
                                 text: "Algunas unidades se encuentran en otro proceso y no puede realziar el traspaso"
+                            }, function() {
+                                location.reload();
+                            });
+                        }
+                    });
+                    Promise.all(promesaSaldoTPP).then(function(results) {
+                        console.log('REsultado comprueba saldos TPP ', results);
+                        angular.forEach(results, function(value, key) {
+
+                            if (value.data.length > 0) {
+                                angular.forEach(value.data, function(value2, key) {
+                                    $scope.unidadesSinSaldo.push(value2);
+                                });
+
+                            }
+                        });
+                        console.log($scope.unidadesSinSaldo)
+                        if ($scope.unidadesSinSaldo.length > 0) {
+                            swal({
+                                title: "Compensación",
+                                text: "La unidad ya no tiene saldo, favor de validar con sistemas"
                             }, function() {
                                 location.reload();
                             });

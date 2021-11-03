@@ -73,5 +73,17 @@ appModule.factory('traspasoFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
+        ,
+        unidadSinSaldo: function( documento, idEmpresa ) {
+            return $http({
+                url: traspasoUrl + 'unidadSinSaldo/',
+                method: "GET",
+                params: {
+                    documento: documento,
+                    idEmpresa: idEmpresa
+                },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
     };
 });
