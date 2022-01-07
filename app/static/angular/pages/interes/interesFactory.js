@@ -482,6 +482,43 @@ appModule.factory('interesFactory', function($http) {
                 headers: { 'Content-Type': 'application/json' }
             });
         },
+        obtenerCompensacion: function(documento, factura, tiempo) {
+            return $http({
+                url: interesesUrl + 'obtenerCompensacion/',
+                method: "GET",
+                params: {
+                    documento: documento,
+                    factura: factura,
+                    tiempo: tiempo
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        eliminaCompensacion: function(documento, factura, tiempo) {
+            return $http({
+                url: interesesUrl + 'eliminaCompensacion/',
+                method: "GET",
+                params: {
+                    documento: documento,
+                    factura: factura,
+                    tiempo: tiempo
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },
+        obtieneDetalleCompensacion: function(documento) {
+            return $http({
+                url: interesesUrl + 'obtieneDetalleCompensacion/',
+                method: "GET",
+                params: {
+                    documento: documento
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
 
     };

@@ -854,4 +854,55 @@ ApiInteres.prototype.get_delprevioConciliacion = function(req, res, next) {
         });
     });
 };
+
+ApiInteres.prototype.get_obtenerCompensacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'folio', value: req.query.documento, type: self.model.types.STRING },
+        { name: 'factura', value: req.query.factura, type: self.model.types.STRING },
+        { name: 'hora', value: req.query.tiempo, type: self.model.types.STRING }
+    ];
+
+    self.model.queryAllRecordSet('usp_get_compensacion', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+ApiInteres.prototype.get_eliminaCompensacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'folio', value: req.query.documento, type: self.model.types.STRING },
+        { name: 'factura', value: req.query.factura, type: self.model.types.STRING },
+        { name: 'hora', value: req.query.tiempo, type: self.model.types.STRING }
+    ];
+
+    self.model.query('usp_del_compensacion', params, function(error, result) {
+       
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_obtieneDetalleCompensacion = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'folio', value: req.query.documento, type: self.model.types.STRING }];
+    
+
+    self.model.queryAllRecordSet('usp_get_detalleCompensacion', params, function(error, result) {
+        console.log(result)
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 module.exports = ApiInteres;

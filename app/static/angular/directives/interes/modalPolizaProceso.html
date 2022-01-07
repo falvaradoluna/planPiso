@@ -1,0 +1,33 @@
+<div class="modal fade" id="modalPolizaProceso" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">Documentos en proceso</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table id="consultaLotes" class="table table-striped">
+                        <tr>
+                            <th>Documento</th>
+                            <th>Estatus</th>
+                            <th>TipoPoliza</th>
+                        </tr>
+                        <tr ng-repeat="unidadEnProceso in unidadesEnProceso">
+                            <td>{{unidadCompensacion.CCP_IDDOCTO}}</td>
+                            <td>{{unidadEnProceso.estatusDescripcion}}</td>
+                            <td>{{unidadEnProceso.descripcion}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="recargar()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
