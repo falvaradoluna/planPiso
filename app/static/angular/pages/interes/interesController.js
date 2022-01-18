@@ -1607,7 +1607,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                     compensacionSubsidioDealer = Number(compensacionSubsidioDealer) - Number(valueDetalleCompensacion.VentaUnitario);
                                 }
                             });
-                            if (compensacionFacturas == compensacionCompra) {
+                            if (compensacionFacturas.toFixed(2) == compensacionCompra.toFixed(2)) {
                                 exitoCompensacion = true;
                             }
                             if (compensacionSubsidioDealer) {
@@ -1749,7 +1749,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 compensacionSubsidioDealer = Number(compensacionSubsidioDealer) - Number(valueDetalleCompensacion.VentaUnitario);
                             }
                         });
-                        if (compensacionFacturas == compensacionCompra) {
+                        if (compensacionFacturas.toFixed(2) == compensacionCompra.toFixed(2)) {
                             exitoCompensacion = true;
                         }
                         if (compensacionSubsidioDealer) {
@@ -1771,7 +1771,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                         interesFactory.eliminaCompensacion($scope.unidadCompensacion.CCP_IDDOCTO, $scope.factura_unidad, tiempo).then(function success(result) {
                             console.log(result.data, 'Respuesta Compensacion')
                             if (result.data[0].respuesta == 1) {
-                                swal("Atención", "Ocurrió un error", "warning");
+                                swal("Atención", "Ocurrió un error, intentelo nuevamente, si persiste el problema favor de comunicarse con sistemas.", "warning");
                                 setTimeout(function() {
                                     window.location = "/interes";
                                 }, 1000);
