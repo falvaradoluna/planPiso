@@ -455,7 +455,8 @@ ApiInteres.prototype.get_compensacionDetalle = function(req, res, next) {
         { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
         { name: 'saldo', value: req.query.saldo, type: self.model.types.DECIMAL },
         { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
-        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING }
+        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING },
+        { name: 'fechaSeleccionada', value: req.query.fecha, type: self.model.types.STRING }
     ];
     console.log(params);
     console.log('----------------------------------')
@@ -479,7 +480,8 @@ ApiInteres.prototype.get_detalleBproCompensacion = function(req, res, next) {
         { name: 'tiempo', value: req.query.tiempo, type: self.model.types.STRING },
         { name: 'consecutivo', value: req.query.consecutivo, type: self.model.types.STRING },
         { name: 'idReciboAutomatico', value: req.query.idReciboAutomatico, type: self.model.types.INT },
-        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING }
+        { name: 'facturaUnidad', value: req.query.facturaUnidad, type: self.model.types.STRING },
+        { name: 'fechaSeleccionada', value: req.query.fecha, type: self.model.types.STRING }
     ];
     console.log(params);
     console.log('====================================')
@@ -898,6 +900,22 @@ ApiInteres.prototype.get_obtieneDetalleCompensacion = function(req, res, next) {
     
 
     self.model.queryAllRecordSet('usp_get_detalleCompensacion', params, function(error, result) {
+        console.log(result)
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiInteres.prototype.get_fechaCierreMes = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'folio', value: req.query.documento, type: self.model.types.STRING },
+    { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
+    
+
+    self.model.queryAllRecordSet('usp_get_fechaCierreMes', params, function(error, result) {
         console.log(result)
         self.view.expositor(res, {
             error: error,

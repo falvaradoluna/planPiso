@@ -518,6 +518,18 @@ appModule.factory('interesFactory', function($http) {
 
                 headers: { 'Content-Type': 'application/json' }
             });
+        },
+        fechaCierreMes: function(documento, idEmpresa) {
+            return $http({
+                url: interesesUrl + 'fechaCierreMes/',
+                method: "GET",
+                params: {
+                    documento: documento,
+                    idEmpresa: idEmpresa
+                },
+
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
 

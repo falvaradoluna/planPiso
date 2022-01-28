@@ -1010,6 +1010,7 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             $scope.diferenciaPP = 0;
             $scope.facturasTotal = [];
             $scope.montoCompensarCxc = 0;
+            $scope.siguienteMostrar = true;
             if ($scope.haveSelection() === false) {
                 swal("Aviso", "No se ha seleccionado ningun registro", "warning");
             } else {
@@ -1023,10 +1024,20 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                     $scope.unidadesSinSaldo = [];
                     var promesaUnidadEnProceso = [];
                     var promesaSaldoTPP = [];
-
+                    $scope.mostrarFechasElegir = false;
                     valida.forEach(function(item, key) {
                         promesaUnidadEnProceso.push(traspasoFactory.unidadEnProceso(item.CCP_IDDOCTO, item.empresaID));
                         promesaSaldoTPP.push(traspasoFactory.unidadSinSaldo(item.CCP_IDDOCTO, item.empresaID));
+                        interesFactory.fechaCierreMes(item.CCP_IDDOCTO, item.empresaID).then(function success(result) {
+                            console.log(result.data[0][0].FechaHoy, result.data[0][0].fecha, 'Soy la fecha de cierre de mes y la de hoy')
+                            $scope.fechaCierreMes = result.data[0][0].fecha;
+                            $scope.fechaDiaHoy = result.data[0][0].FechaHoy;
+                            if($scope.fechaCierreMes != $scope.fechaDiaHoy){
+                                $scope.mostrarFechasElegir = true;
+                            }
+                        }, function error(err) {
+                            console.log('Ocurrió un error al obtener las fechas de cierre de mes')
+                        });
                     });
                     Promise.all(promesaUnidadEnProceso).then(function(results) {
                         console.log('REsultado unidades en proceso ', results);
@@ -1280,43 +1291,54 @@ appModule.controller('interesController', function($scope, $rootScope, $location
     $scope.setPnlCompensacion = function() {
         $scope.currentPanel = "pnlCompensacion";
     };
-    $scope.setPnlCompensacionResumen = function(saldoCompensar) {
-        var isok = 0;
-        if (saldoCompensar - $scope.saldoFinanciera <= 0) {
-            $scope.currentPanel = "pnlCompensacionResumen";
-            $scope.saldoCompensar = saldoCompensar;
+    $scope.setPnlCompensacionResumen = function(saldoCompensar, fecha) {
+        $scope.fechaCompensacion = fecha;
+        console.log(fecha, 'Soy la fecha que el usuario selecciono')
+        $scope.mostrarMensajeFecha = '';
+        if ($scope.fechaCierreMes != $scope.fechaDiaHoy && !fecha) {
+            swal("Aviso", "Debe seleccionar una fecha", "warning");
         } else {
-            // swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
-            swal({
-                title: "¿Esta seguro?",
-                text: "Se creara la compensación para la unidad seleccionada.",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#21B9BB",
-                confirmButtonText: "Aplicar",
-                closeOnConfirm: true
-            }, function() {
-                $scope.totalCompensar();
-                $scope.sumaTotalCXP();
-                $scope.sumaTotalCXC();
-                $('#mdlLoading').modal('hide');
-                var paraCompensacion = {
-                    idUsuario: $scope.idUsuario,
-                    idEmpresa: sessionFactory.empresaID,
-                    idtipopoliza: 8 //cambio de financiera
+            var isok = 0;
+            if (saldoCompensar - $scope.saldoFinanciera <= 0) {
+                $scope.currentPanel = "pnlCompensacionResumen";
+                $scope.saldoCompensar = saldoCompensar;
+            } else {
+                // swal("Aviso", "No puede ser mayor el saldo a compensar que el saldo e la financiera", "warning");
+                if (fecha) {
+                    $scope.mostrarMensajeFecha = 'con la fecha: ' + fecha;
                 }
+                swal({
+                    title: "¿Esta seguro?",
+                    text: "Se creara la compensación para la unidad seleccionada " + $scope.mostrarMensajeFecha + ".",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#21B9BB",
+                    confirmButtonText: "Aplicar",
+                    closeOnConfirm: true
+                }, function() {
+                    $scope.totalCompensar();
+                    $scope.sumaTotalCXP();
+                    $scope.sumaTotalCXC();
+                    $('#mdlLoading').modal('hide');
+                    var paraCompensacion = {
+                        idUsuario: $scope.idUsuario,
+                        idEmpresa: sessionFactory.empresaID,
+                        idtipopoliza: 8 //cambio de financiera
+                    }
 
-                interesFactory.cabeceraPoliza(paraCompensacion).then(function(respuesta) {
-                    $scope.LastId = respuesta.data[0].LastId;
-                    $scope.lstUnitsCompensacion = filterFilter($scope.lstNewUnits, { isChecked: true });
-                    $scope.guardaCompensacionDetalle();
-                }, function(error) {
-                    $scope.error(error.data.Message);
+                    interesFactory.cabeceraPoliza(paraCompensacion).then(function(respuesta) {
+                        $scope.LastId = respuesta.data[0].LastId;
+                        $scope.lstUnitsCompensacion = filterFilter($scope.lstNewUnits, { isChecked: true });
+                        $scope.guardaCompensacionDetalle();
+                    }, function(error) {
+                        $scope.error(error.data.Message);
+                    });
+                    // $scope.setPnlInteres();
                 });
-                // $scope.setPnlInteres();
-            });
 
+            }
         }
+
     };
     $scope.guardaCompensacionDetalle = function() {
         var tiempo = new Date().toLocaleTimeString();
@@ -1327,7 +1349,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
             idUsuario: $scope.idUsuario,
             saldo: item.InteresMes,
             tiempo: tiempo,
-            facturaUnidad: $scope.factura_unidad
+            facturaUnidad: $scope.factura_unidad,
+            fecha: $scope.fechaCompensacion
         }
 
         interesFactory.compensacionDetalle(paraCompensacionDetalle).then(function(response) {
@@ -1473,7 +1496,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                 tiempo: tiempo,
                 consecutivo: auxConta,
                 idReciboAutomatico: $scope.idReciboAutomatico,
-                facturaUnidad: $scope.factura_unidad
+                facturaUnidad: $scope.factura_unidad,
+                fecha: $scope.fechaCompensacion
             }
             // $scope.facturasTotal.push({
             //     'tipoFactura': 'NCA',
@@ -1522,7 +1546,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                     tiempo: tiempo,
                                     consecutivo: auxConta,
                                     idReciboAutomatico: $scope.idReciboAutomatico,
-                                    facturaUnidad: $scope.factura_unidad
+                                    facturaUnidad: $scope.factura_unidad,
+                                    fecha: $scope.fechaCompensacion
                                 }
                                 break;
                             case 'COMPRA':
@@ -1536,7 +1561,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                     tiempo: tiempo,
                                     consecutivo: auxConta,
                                     idReciboAutomatico: $scope.idReciboAutomatico,
-                                    facturaUnidad: $scope.factura_unidad
+                                    facturaUnidad: $scope.factura_unidad,
+                                    fecha: $scope.fechaCompensacion
                                 }
                                 var preLoteCompensacion = [{
                                     'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
@@ -1562,7 +1588,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                     tiempo: tiempo,
                                     consecutivo: auxConta,
                                     idReciboAutomatico: $scope.idReciboAutomatico,
-                                    facturaUnidad: $scope.factura_unidad
+                                    facturaUnidad: $scope.factura_unidad,
+                                    fecha: $scope.fechaCompensacion
                                 }
                         }
                         console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
@@ -1664,7 +1691,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
                                 idReciboAutomatico: $scope.idReciboAutomatico,
-                                facturaUnidad: $scope.factura_unidad
+                                facturaUnidad: $scope.factura_unidad,
+                                fecha: $scope.fechaCompensacion
                             }
                             break;
                         case 'COMPRA':
@@ -1678,7 +1706,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
                                 idReciboAutomatico: $scope.idReciboAutomatico,
-                                facturaUnidad: $scope.factura_unidad
+                                facturaUnidad: $scope.factura_unidad,
+                                fecha: $scope.fechaCompensacion
                             }
                             var preLoteCompensacion = [{
                                 'CCP_IDDOCTO': $scope.unidadCompensacion.CCP_IDDOCTO,
@@ -1704,7 +1733,8 @@ appModule.controller('interesController', function($scope, $rootScope, $location
                                 tiempo: tiempo,
                                 consecutivo: auxConta,
                                 idReciboAutomatico: $scope.idReciboAutomatico,
-                                facturaUnidad: $scope.factura_unidad
+                                facturaUnidad: $scope.factura_unidad,
+                                fecha: $scope.fechaCompensacion
                             }
                     }
                     console.log(paraCompensacionDetalle, 'Lo que insertare de facturas')
