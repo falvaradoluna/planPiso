@@ -9,7 +9,7 @@
   "author": "hhm",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^5.4.0",
+    "ajv": "^6.12.3",
     "body-parser": "^1.17.2",
     "ejs": "^2.5.7",
     "eslint": "^4.11.0",
