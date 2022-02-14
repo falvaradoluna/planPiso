@@ -1,4 +1,4 @@
-appModule.controller('unidadesvinController', function($scope, $rootScope, $location, unidadesvinFactory, commonFactory, staticFactory,utils,$window) {
+appModule.controller('unidadesvinController', function($scope, $rootScope, $location, unidadesvinFactory, commonFactory, staticFactory, utils, $window) {
     var sessionFactory = JSON.parse(sessionStorage.getItem("sessionFactory"));
     $scope.idUsuario = localStorage.getItem("idUsuario");
     $scope.lstPermisoBoton = JSON.parse(sessionStorage.getItem("PermisoUsuario"));
@@ -8,7 +8,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
     $scope.steps = unidadesvinFactory.stepsBar();
     $scope.totalUnidades = 0;
     $scope.currentStep = 0;
-    $scope.userID =  $scope.idUsuario;
+    $scope.userID = $scope.idUsuario;
     $scope.currentPanel = $scope.steps[0].panelName;
     $scope.lstSucursal = [];
     $scope.lstNewUnits = [];
@@ -19,21 +19,21 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
     $scope.incremental = 0;
     $scope.currentSucursalName = "Sucursal Todas";
     $scope.currentFinancialName = "Seleccionar Financiera";
-    $scope.frmConciliacion      = { lblMes: 0, idFinanciera: 0, loadLayout:false}
- 
+    $scope.frmConciliacion = { lblMes: 0, idFinanciera: 0, loadLayout: false }
+
     $scope.allUnits = { isChecked: false };
     $scope.ddlFinancialShow = false;
     $scope.showStep = 1;
     $scope.SucursalSel = [];
     $scope.FinancieraSel = [];
-    var increment   = 0;
+    var increment = 0;
     $scope.cargandoPro = 0;
-    var contador    = 0;
+    var contador = 0;
     var finalizar = _.where($scope.lstPermisoBoton, { idModulo: 1, Boton: "finalizar" })[0];
     $scope.muestrafinalizar = finalizar != undefined ? false : true;
 
-    $scope.apretarboton=0;
-    $scope.conceal();
+    $scope.apretarboton = 0;
+
     $scope.getNewUnitsBySucursal = function(empresaID) {
         $('#tblUnidadesNuevasVin').DataTable().destroy();
         unidadesvinFactory.getNewUnitsBySucursal(empresaID).then(function(result) {
@@ -85,20 +85,18 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
         }
         itemSchemas.isChecked = true;
         $scope.selectedSchema = itemSchemas;
-        if($scope.selectedSchema.tipoColateralId !=undefined)
-        {
-                var data = {
+        if ($scope.selectedSchema.tipoColateralId != undefined) {
+            var data = {
                 idPersona: $scope.unidad.idPersona,
-            idEmpresa: sessionFactory.empresaID,
-            idColateral:$scope.selectedSchema.tipoColateralId
+                idEmpresa: sessionFactory.empresaID,
+                idColateral: $scope.selectedSchema.tipoColateralId
             };
-           
+
             unidadesvinFactory.SaldoFinanciera(data).then(function(result) {
-                if(result.data.length>0)
-                {
-                    $scope.nombreFinanciera=result.data[0].nombrefinanciera;
-                    $scope.saldofinanciera=result.data[0].monto-result.data[0].saldofinanciera;
-                    $scope.idfinancierabp=result.data[0].idfinancierabp;
+                if (result.data.length > 0) {
+                    $scope.nombreFinanciera = result.data[0].nombrefinanciera;
+                    $scope.saldofinanciera = result.data[0].monto - result.data[0].saldofinanciera;
+                    $scope.idfinancierabp = result.data[0].idfinancierabp;
                     // if($scope.saldofinanciera-$scope.saldounidad<=0)
                     // {
                     //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
@@ -109,49 +107,47 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                     //     }
                     //     $scope.saldounidad=0;
                     //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
-                        
+
                     // }
                 }
-                
+
             }, function(error) {
                 console.log("Error", error);
             });
         }
-    
+
     };
 
-    $scope.EvaluarUnidad=function(unidadin)
-    {
-        $scope.unidad=unidadin;
-        
-        
-            $scope.saldounidad=0;
-            for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-                if($scope.lstNewUnits[i].isChecked)
-                {
-                    $scope.saldounidad=$scope.saldounidad+$scope.lstNewUnits[i].SALDO;
-                }
+    $scope.EvaluarUnidad = function(unidadin) {
+        $scope.unidad = unidadin;
+
+
+        $scope.saldounidad = 0;
+        for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+            if ($scope.lstNewUnits[i].isChecked) {
+                $scope.saldounidad = $scope.saldounidad + $scope.lstNewUnits[i].SALDO;
             }
-            // if($scope.saldofinanciera!=undefined)
-            // {
-            //     if($scope.saldofinanciera-$scope.saldounidad<=0)
-            // {
-            //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-            //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
-            //         {
-            //             $scope.lstNewUnits[i].isChecked=false;
-            //         }
-            //     }
-            //     $scope.saldounidad=0;
-            //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
-            //     return;
-            // }
-            // }
-            
-           
-   
+        }
+        // if($scope.saldofinanciera!=undefined)
+        // {
+        //     if($scope.saldofinanciera-$scope.saldounidad<=0)
+        // {
+        //     for (var i = 0; i < $scope.lstNewUnits.length; i++) {
+        //         if($scope.lstNewUnits[i].CCP_IDDOCTO==$scope.unidad.CCP_IDDOCTO)
+        //         {
+        //             $scope.lstNewUnits[i].isChecked=false;
+        //         }
+        //     }
+        //     $scope.saldounidad=0;
+        //         swal("Aviso", "No puede seleccionar otra unidad ya que no tiene linea de crédito", "warning");
+        //     return;
+        // }
+        // }
+
+
+
     }
-    
+
 
     $scope.nextStep = function() {
         if ($scope.currentStep == 0) {
@@ -159,21 +155,19 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
             angular.forEach($scope.lstNewUnits, function(value, key) {
                 if (value.isChecked === true) {
                     contador++;
-                    $scope.idfinancierabp=value.idPersona;
+                    $scope.idfinancierabp = value.idPersona;
                 }
             });
-          
+
             for (var i = 0; i < $scope.lstNewUnits.length; i++) {
-                if($scope.lstNewUnits[i].isChecked==true)
-                {
-                    if($scope.idfinancierabp != $scope.lstNewUnits[i].idPersona)
-                    {
+                if ($scope.lstNewUnits[i].isChecked == true) {
+                    if ($scope.idfinancierabp != $scope.lstNewUnits[i].idPersona) {
                         swal("Aviso", "La unidad debe de ser de la misma financiera que las otras seleccionadas", "warning");
-                    
+
                         return;
                     }
                 }
-                
+
             }
             if (contador === 0) {
                 swal("Aviso", "No ha seleccionado ningun documento", "warning");
@@ -196,7 +190,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                 angular.forEach($scope.lstNewUnits, function(value, key) {
                     if (value.isChecked === true) {
                         value.plazo = $scope.selectedSchema.plazo;
-                        value.diasgracia = value.dias!=undefined?value.dias:$scope.selectedSchema.diasGracia;
+                        value.diasgracia = value.dias != undefined ? value.dias : $scope.selectedSchema.diasGracia;
                         value.fechaRecibo = staticFactory.DateFormat(regresafechareal(value.fechaCalculoString));
                         value.fechainicio = regresafechareal(value.fechaCalculoString);
                         value.fechafin = sumarDias(regresafechareal(value.fechaCalculoString), value.plazo);
@@ -211,23 +205,21 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
 
 
 
-        if(isDate(fecha))
-        {
-        var dateObject=new Date(fecha);
-        }
-        else
-        {
-        var dateParts = fecha.split("/");
+        if (isDate(fecha)) {
+            var dateObject = new Date(fecha);
+        } else {
+            var dateParts = fecha.split("/");
 
 
-        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+            var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
         }
 
-       
+
 
         fecha = dateObject.setSeconds(dias * 86400);
         return fecha;
     }
+
     function isDate(value) {
         switch (typeof value) {
             case 'number':
@@ -242,6 +234,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                 return false;
         }
     }
+
     function regresafechareal(fecha) {
         var dateParts = fecha.split("/");
 
@@ -312,7 +305,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
         $scope.listPoliza = _.where($scope.lstNewUnits, { isChecked: true });
         $scope.incremental = 0;
         $scope.guardandoPoliza();
-        $scope.apretarboton=1;
+        $scope.apretarboton = 1;
 
     };
     $scope.guardandoPoliza = function() {
@@ -329,8 +322,8 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
             fechainicio: staticFactory.todayDateGiven(item.fechainicio),
             fechafin: staticFactory.todayDateGiven(item.fechafin),
             diasgracia: item.diasgracia,
-            tipoEntrada:item.tipoCompra,
-            idEmpresa : item.idEmpresa,
+            tipoEntrada: item.tipoCompra,
+            idEmpresa: item.idEmpresa,
             idSucursal: item.idSucursal,
             vin: item.veh_numserie
         };
@@ -351,7 +344,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                     $scope.consecNum = 0;
                     swal("Unidades asignadas", "Guardado correctamente");
                     setTimeout(function() {
-                        $scope.apretarboton=0;
+                        $scope.apretarboton = 0;
                         console.log('Termino');
                         window.location = "/interes";
                     }, 1000);
@@ -369,10 +362,10 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
             window.location = "/unidadesvin";
         }, 5000);
     };
-////////////////////////////////////////Layout
-var myDropzone3;
+    ////////////////////////////////////////Layout
+    var myDropzone3;
     $scope.Dropzone3 = function() {
-        $("#templeteDropzone3").html( '' )
+        $("#templeteDropzone3").html('')
 
         var html = `<form action="/file-upload" class="dropzone" id="idDropzone">
                         <div class="fallback">
@@ -380,14 +373,14 @@ var myDropzone3;
                         </div>
                     </form>`;
 
-        $("#templeteDropzone3").html( html );
+        $("#templeteDropzone3").html(html);
         myDropzone3 = new Dropzone("#idDropzone", {
             url: "api/apiunidadesvin/upload",
             uploadMultiple: 0,
             maxFiles: 1,
             autoProcessQueue: false,
             acceptedFiles: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            webkitRelativePath:"/uploads"
+            webkitRelativePath: "/uploads"
         });
 
         myDropzone3.on("success", function(req, xhr) {
@@ -398,7 +391,7 @@ var myDropzone3;
             $('#mdlLoading').modal('show');
             $scope.readLayout(filename);
 
-            $scope.limpiarDropzone = function(){
+            $scope.limpiarDropzone = function() {
                 _this.removeAllFiles();
                 myDropzone3.enable()
                 $scope.frmConciliacion.loadLayout = true;
@@ -427,108 +420,104 @@ var myDropzone3;
     };
 
     $scope.insertData = function() {
-        try{
+        try {
             execelFields[increment]['consecutivo'] = contador;
             unidadesvinFactory.insExcelData(execelFields[increment]).then(function(result) {
-                if( !result.data ){
-                    swal("Pendiente de esquema","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
-                    $('#mdlLoading').modal('hide');
-                    $scope.loadingPanel = false;
-                }
-                else{
-                    if( result.data[0].success == 1 ){
-                        contador    = parseInt(result.data[0].consecutivo);
+                    if (!result.data) {
+                        swal("Pendiente de esquema", "El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                        $('#mdlLoading').modal('hide');
+                        $scope.loadingPanel = false;
+                    } else {
+                        if (result.data[0].success == 1) {
+                            contador = parseInt(result.data[0].consecutivo);
 
-                        if (increment >= (execelFields.length - 1)) {
-                            // $scope.nexStep();
-                            $scope.frmConciliacion.loadLayout = true;
-                            $scope.loadingPanel = false;
-                            $('#mdlLoading').modal('hide');
+                            if (increment >= (execelFields.length - 1)) {
+                                // $scope.nexStep();
+                                $scope.frmConciliacion.loadLayout = true;
+                                $scope.loadingPanel = false;
+                                $('#mdlLoading').modal('hide');
                                 // if($scope.frmConciliacion.lbltipoconciliacion== 1)
                                 //     $scope.currentPanel = 'pnlConciliar';
                                 // else
                                 //     $scope.currentPanel = 'pnlConciliarUnidades';
-                            $scope.conceal();
-                            $("#modalNuevaLayout").modal('hide');
-                            var aux = $scope.lstFinancial[0];
-                            $scope.lblFinanciera = aux[0].nombre;
+                                $scope.conceal();
+                                $("#modalNuevaLayout").modal('hide');
+                                var aux = $scope.lstFinancial[0];
+                                $scope.lblFinanciera = aux[0].nombre;
+                            } else {
+                                increment++;
+                                $scope.cargandoPro++;
+                                $scope.insertData();
+                            }
                         }
-                        else{
-                            increment++;
-                            $scope.cargandoPro++;
-                            $scope.insertData();
-                        }
-                    }                    
-                }
-            })
-            .catch(function(e){
-               console.log("got an error in initial processing",e);
-               throw e;
-            }).then(function(res){
-            });            
-        }
-        catch( e ){
-            console.log( "Error", e );
-            swal("Conciliación","El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
+                    }
+                })
+                .catch(function(e) {
+                    console.log("got an error in initial processing", e);
+                    throw e;
+                }).then(function(res) {});
+        } catch (e) {
+            console.log("Error", e);
+            swal("Conciliación", "El archivo que porporciona no contiene el formato que se espera, asegurese de cargar el layout esperado.");
         }
     }
-$scope.CargarLayout= function(){
+    $scope.CargarLayout = function() {
 
-    $('#modalNuevaLayout').modal('show');
-    $scope.Dropzone3();
-}
-$scope.VerArchivo=function(){
+        $('#modalNuevaLayout').modal('show');
+        $scope.Dropzone3();
+    }
+    $scope.VerArchivo = function() {
 
-    var arregloBytes = [];
-     $rootScope.pdfUnidades = undefined;
-     unidadesvinFactory.getreadFile().then(function(result) {
-         arregloBytes = result.data;
- 
-         if (arregloBytes.length == 0) {
-             $rootScope.NohayPdfUnidades = 1;
-             $rootScope.pdfUnidades = [];
-         } else {
- 
-             $rootScope.NohayPdfUnidades = undefined;
-             $rootScope.excelUnidades = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
- 
-         }
- 
-         setTimeout(function() {
-             $window.open($rootScope.excelUnidades);
-         }, 100);
-         $('#mdlLoading').modal('hide');
-         console.log( $rootScope.excelUnidades , 'Soy el arreglo ')
-     }, function(error) {
-         console.log("Error", error);
-     });
-         
- 
-    
- }
- $scope.nexStep3 = function() {
-    if( !$scope.frmConciliacion.loadLayout ){
-        swal("Unidades","No se ha cargado el Layout.");
-    }
-    else{
-       
-        myDropzone3.processQueue();
-        $scope.frmConciliacion.loadLayout = true;
-         
-       
-    }
-};
-$scope.arrayToObject = function(array) {
-    var lst = [];
-    for (var i = 0; i < array.length; i++) {
-        var obj = { dato1: array[i].Numeroserie, dato2: array[i].Valor, dato3: array[i].Fecha.substring(0,10) };
-        lst.push(obj);
-    }
-    return lst;
-};
+        var arregloBytes = [];
+        $rootScope.pdfUnidades = undefined;
+        unidadesvinFactory.getreadFile().then(function(result) {
+            arregloBytes = result.data;
 
-$scope.conceal = function() {
-      
-    $scope.getNewUnitsBySucursal(sessionFactory.empresaID);
-};
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdfUnidades = 1;
+                $rootScope.pdfUnidades = [];
+            } else {
+
+                $rootScope.NohayPdfUnidades = undefined;
+                $rootScope.excelUnidades = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+
+            }
+
+            setTimeout(function() {
+                $window.open($rootScope.excelUnidades);
+            }, 100);
+            $('#mdlLoading').modal('hide');
+            console.log($rootScope.excelUnidades, 'Soy el arreglo ')
+        }, function(error) {
+            console.log("Error", error);
+        });
+
+
+
+    }
+    $scope.nexStep3 = function() {
+        if (!$scope.frmConciliacion.loadLayout) {
+            swal("Unidades", "No se ha cargado el Layout.");
+        } else {
+
+            myDropzone3.processQueue();
+            $scope.frmConciliacion.loadLayout = true;
+
+
+        }
+    };
+    $scope.arrayToObject = function(array) {
+        var lst = [];
+        for (var i = 0; i < array.length; i++) {
+            var obj = { dato1: array[i].Numeroserie, dato2: array[i].Valor, dato3: array[i].Fecha.substring(0, 10) };
+            lst.push(obj);
+        }
+        return lst;
+    };
+
+    $scope.conceal = function() {
+
+        $scope.getNewUnitsBySucursal(sessionFactory.empresaID);
+    };
+    $scope.conceal();
 });
