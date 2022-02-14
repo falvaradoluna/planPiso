@@ -141,7 +141,7 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
                     showCancelButton: true,
                     confirmButtonColor: "#21B9BB",
                     confirmButtonText: "Aplicar",
-                    closeOnConfirm: false
+                    closeOnConfirm: true
                 },
                 function() {
 
@@ -309,7 +309,7 @@ appModule.controller('traspasoController', function($scope, $rootScope, $locatio
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Aceptar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
                 var paraTraspaso = {

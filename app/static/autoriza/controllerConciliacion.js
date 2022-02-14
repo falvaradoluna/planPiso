@@ -29,7 +29,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
             title: "Conciliación Plan Piso",
             text: "¿Esta seguro de declinar la solicitud?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true,
             cancelButtonText: "Cerrar",
             confirmButtonText: "Si, estoy seguro!"
@@ -59,7 +59,7 @@ appModule.controller('conciliacionController', function($scope, $http, filterFil
             title: "Conciliación Plan Piso",
             text: "¿Estas seguro de omitir las unidades?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true,
             cancelButtonText: "Cerrar",
             confirmButtonText: "Si, estoy seguro!"

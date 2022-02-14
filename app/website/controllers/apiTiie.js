@@ -114,6 +114,8 @@ ApiTiie.prototype.get_ejecutaTiie = function(req, res, next) {
 cron.schedule('00 09 * * *', () => {
     actualizaTiiesDesdeBanxico();
     notificaciones();
+    actualizaSaldo();
+    actualizaDatosPP();
 });
 // NodeCron.schedule('1 * * * *', () => {
 //     console.log('se ejecuto cron');
@@ -121,6 +123,22 @@ cron.schedule('00 09 * * *', () => {
 //     // notificaciones();
 
 // });
+var actualizaSaldo = function() {
+    let url = 'http://localhost:4900/api/apiTiie/actualizaCarteraPP/';
+    Request.post(url, (error, response, body) => {
+        if (error) {
+            console.log('error', error);
+        };
+    });
+};
+var actualizaDatosPP = function() {
+    let url = 'http://localhost:4900/api/apiTiie/actualizaDatosPP/';
+    Request.post(url, (error, response, body) => {
+        if (error) {
+            console.log('error', error);
+        };
+    });
+};
 var notificaciones = function() {
     let url = 'http://localhost:4900/api/apiNotificaciones/notificaciones/';
     Request.post(url, (error, response, body) => {
@@ -188,6 +206,33 @@ ApiTiie.get_notificaciones = function(req, res, next) {
 
     var self = this;
 
+};
+
+ApiTiie.prototype.get_actualizaCarteraPP = function(req, res, next) {
+
+    var self = this;
+
+    var params = [];
+
+    self.model.query('upd_actualizaCarteraPP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+ApiTiie.prototype.get_actualizaDatosPP = function(req, res, next) {
+
+    var self = this;
+
+    var params = [];
+
+    self.model.query('Usp_MainExec', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
 };
 
 module.exports = ApiTiie;

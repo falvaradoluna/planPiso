@@ -96,6 +96,9 @@
                         <button class="btn btn-default btn-sm" ng-click="VerArchivoPdf( item );">
                             <i class="fa fa-eye" aria-hidden="true"></i> Ver archivo
                         </button>
+                        <button class="btn btn-default btn-sm" ng-disabled="item.idestatus != 1" ng-click="BorrarAuditoria(item);">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Borrar
+                        </button>
                     </td>
                 </tr>
                 <tr ng-show="lstAuditoria.length == 0">

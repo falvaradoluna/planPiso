@@ -43,16 +43,19 @@
 </div>
 <hr>
 <button type="button" class="btn btn-default" ng-show="Muestraeditar" ng-click="editDetailGeneral()">
-    Cambiar observaciones en general <span class="glyphicon glyphicon-edit"></span>
+    Cambiar ubicación y observaciones en general <span class="glyphicon glyphicon-edit"></span>
 </button>
 <button type="button" class="btn btn-default" ng-click="Buscarunidad()">
     Buscar unidad <span class="glyphicon glyphicon-search"></span>
 </button>
 <button type="button" class="btn btn-primary" ng-show='ctrl.idtipoAuditoria==2' ng-click="generaReporte()">
-    Generar Reporte <span class="fa fa-file-excel-o"></span>
+    Generar Reporte de Excel completo<span class="fa fa-file-excel-o"></span>
 </button>
 <button type="button" class="btn btn-primary" ng-show='ctrl.idtipoAuditoria==2' ng-click="generaReportePdf()">
     Generar Reporte Pdf<span class="fa fa-file-pdf-o"></span>
+</button>
+<button type="button" class="btn btn-primary" ng-show='ctrl.idtipoAuditoria==2' ng-click="mostrarcatalgoUbicaciones()">
+    Catalogo de Ubicaciones<span class="fa fa-file-pdf-o"></span>
 </button>
 <button type="button" class="btn btn-default" ng-show='ctrl.idtipoAuditoria==1' ng-click="CargarAuditoria()">
     Cargar auditoria en excel <span class="glyphicon glyphicon-search"></span>
@@ -65,24 +68,29 @@
     <thead>
         <tr>
             <th></th>
+            <th>Consecutivo</th>
             <th>Financiera</th>
             <th>Tipo</th>
             <th>Colateral</th>
             <th>Documento</th>
             <th>Número serie</th>
-            <th>Cuenta Inventario</th>
+            <th>Cuenta Activo</th>
             <th>Cuenta Contable</th>
-            <th>Ubicación</th>
+            <th>Ubicación Sistema</th>
+            <th ng-show="ctrl.idtipoAuditoria==2">Ubicación auditoría</th>
+            <th ng-show="ctrl.idtipoAuditoria==2">Otra ubicación </th>
             <th>Situación</th>
             <th>Fecha factura</th>
             <th>Factura</th>
             <th>Fecha Salida</th>
             <th>Fecha fin DPP</th>
-            <th>Saldo</th>
+            <th>Moneda</th>
+            <th>Saldo Plan Piso</th>
             <th>Saldo CXC</th>
             <th>Cliente</th>
             <th ng-show="MuestraEstrella">Estrella</th>
-            <th>Unidad encontrada?</th>
+            <th>Ubicación física</th>
+            <th>Ubicacion física ord</th>
             <th>Unidad por auditar?</th>
             <th width="180">Observaciones</th>
             <th></th>
@@ -93,6 +101,7 @@
             <td style="text-align: center;">
                 <input type="checkbox" ng-model="dato.isChecked">
             </td>
+            <td>{{dato.consec}}</td>
             <td>{{dato.financiera}}</td>
             <td>{{dato.tipo}}</td>
             <td>{{dato.tipoColateral}}</td>
@@ -103,12 +112,17 @@
             <td>{{dato.CTAINVENT}}</td>
             <td>{{dato.CuentaContable}}</td>
             <td>{{dato.Ubicacion}}</td>
+            <td ng-show="ctrl.idtipoAuditoria==2">
+                <select id="tipoubicacion" ng-options="lst.ubicacionreal for lst in lsttipoUbicacion" ng-model="dato.seltipoubicacionreal" ng-change="SelUbicacion(dato)" class="form-control" style="min-width:100px"></select>
+            </td>
+            <td ng-show="ctrl.idtipoAuditoria==2">{{dato.otraUbicacion}}</td>
             <td>{{dato.Situacion}}</td>
            
-            <td>{{dato.ucn_fechaalta}}</td>
+            <td>{{dato.ucn_fechaalta | date:'dd/MM/yyyy' : 'UTC'}}</td>
             <td>{{dato.ucn_idFactura}}</td>
-            <td>{{dato.veh_fechasalida}}</td>
-            <td>{{dato.fechafin}}</td>
+            <td>{{dato.veh_fechasalida | date:'dd/MM/yyyy' : 'UTC'}}</td>
+            <td>{{dato.fechafin | date:'dd/MM/yyyy' : 'UTC'}}</td>
+            <td>{{dato.moneda}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.saldoCXC | currency}}</td>
             <td>{{dato.cliente}}</td>
@@ -118,6 +132,7 @@
                <span ng-if="dato.estrella==''||dato.dobleEstrella==''"></span> 
             </td>
             <td><input type="checkbox" ng-checked="dato.encontrada" ng-model="dato.encontrada" ng-change="Encontrada(dato)"></td>
+            <td>{{dato.unidadencontrada}}</td>
             <td>{{dato.porauditar}}</td>
             <td>{{dato.observaciones}}</td>
             <td>
@@ -178,6 +193,23 @@
                             </div>
                             <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="fpuntos1">Otra Ubicación:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fpuntos2" ng-model="otraUbicacion" style="width: 500px;">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-default" ng-click="CancelarDetail()">
+                                        <span class="glyphicon glyphicon-floppy-remove"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="GuardarOtraUbicacion(otraUbicacion,idAuditoriaDetalle)">
+                                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -208,6 +240,23 @@
                                         <span class="glyphicon glyphicon-floppy-remove"></span>
                                     </button>
                                     <button type="button" class="btn btn-default" ng-click="GuardarDetailGeneral(observaciones)">
+                                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="fpuntos2">Otras Ubicaciónes:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fpuntos2" ng-model="otraUbicacion" style="width: 500px;">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-default" ng-click="CancelarDetail()">
+                                        <span class="glyphicon glyphicon-floppy-remove"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="GuardarcambiarOtraUbicacionGenerales(otraUbicacion)">
                                         <span class="glyphicon glyphicon-floppy-disk"></span>
                                     </button>
                                 </div>
@@ -371,3 +420,47 @@
         </div>
     </div>
 </div>
+<!--===================================================-->
+<!--Modal mostrarcatalgoUbicaciones-->
+<!--===================================================-->
+<div class="modal fade" id="mostrarcatalgoUbicaciones" role="dialog" tabindex="-1" data-focus-on="input:first" data-backdrop="static" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="row jumbotron">
+            <div class="modal-content">
+                <div class="media-body pad-lft">
+                    <div class="modal-body">
+                        <h3 class="text-title">Catalogo de Ubicaciones </h3>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <table id="tblUbicacion" class="table tblUbicacion">
+                                    <thead>
+                                        <tr>
+                                          
+                                            <th>Id</th>
+                                            <th>Ubicacion</th>
+                                          
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, dato) in lsttipoUbicacion" >
+                                          
+                                            <td>{{dato.idubicacionreal}}</td>
+                                            <td>{{dato.ubicacionreal}}</td>
+                                        </tr>
+                                    </tbody>
+                              
+                                </table>
+                                
+                            </div>
+                            <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                        </div>
+                   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Modal selectReporte-->
+<!--===================================================-->

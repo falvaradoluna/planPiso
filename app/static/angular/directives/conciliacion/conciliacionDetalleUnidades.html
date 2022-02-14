@@ -42,8 +42,9 @@
         <tr>
             <th width="30"></th>
             <th>Numero Serie</th>
+            <th>Moneda</th>
             <th>Saldo G.A.</th>
-            <th>Sando Financiera</th>
+            <th>Saldo Financiera</th>
             <th>Diferencia</th>
             <th width="180">Situación</th>
         </tr>
@@ -60,6 +61,7 @@
                 <b>{{dato.numeroSerie}}</b><br>
                 <small class="text-warning">{{dato.CCP_IDDOCTO}}</small>
             </td>
+            <td>{{dato.moneda}}</td>
             <td>{{dato.saldo | currency}}</td>
             <td>{{dato.valor | currency}}</td>
             <td>
@@ -97,9 +99,13 @@
     </div>
     <div class="col-sm-6">
       
-        
+        <div style="overflow: hidden;" ng-show="estatusConciliacion == 2">
+            <button type="button" class="btn btn-primary pull-right" ng-click="GuardaConciliacionPasivos()">Guardar</button>
+            <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
+        </div>
+        <div style="overflow: hidden;" ng-show="estatusConciliacion != 2">
              <button type="button" class="btn btn-default pull-right" ng-click="prevStep()">Regresar</button>
-        
+            </div>
     </div>
 </div>
 <!--INICIA modal que muestra el reporte en pdf -->

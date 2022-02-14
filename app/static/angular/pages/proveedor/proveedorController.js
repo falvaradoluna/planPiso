@@ -171,7 +171,8 @@ appModule.controller('proveedorController', function($scope, $rootScope, $locati
                 idEsquemaD: 0,
                 idUsuario: $scope.idUsuario,
                 montoFinanciar: item.montoFinanciar,
-                fechaInicio: item.fechaCalculo
+                fechaInicio: item.fechaCalculo,
+                tipoMoneda: item.tipoMoneda
             }
 
             proveedorFactory.proveedorPolizaDetalle(paraproveedorDetalle).then(function(response) {

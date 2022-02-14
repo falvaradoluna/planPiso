@@ -169,7 +169,7 @@ Apiunidadesvin.prototype.get_readFile = function(req, res, next) {
     //         console.log(e);
     //     }
     // });
-  var binaryData = fs.readFileSync('./files/LayoutUnidades.xlsx');
+  var binaryData = fs.readFileSync('./files/LayoutUnidadesVin.xlsx');
   var base64String = new Buffer(binaryData).toString("base64");
   var error=undefined;
         self.view.expositor(res, {

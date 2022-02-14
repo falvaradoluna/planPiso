@@ -46,7 +46,7 @@ appModule.factory('unuevasFactory', function($http) {
                     showCancelButton: true,
                     confirmButtonColor: "#21B9BB",
                     confirmButtonText: "Continuar",
-                    closeOnConfirm: false
+                    closeOnConfirm: true
                 },
                 callback
             );

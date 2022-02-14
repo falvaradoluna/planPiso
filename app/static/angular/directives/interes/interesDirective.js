@@ -85,4 +85,14 @@ appModule.directive('interesCambioAgencia', function() {
         restrict: 'E',
         templateUrl: interesPath + 'interesRecalcular.html'
     };
+}).directive('modalPolizaProceso', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'modalPolizaProceso.html'
+    };
+}).directive('modalDetalleCompensacion', function() {
+    return {
+        restrict: 'E',
+        templateUrl: interesPath + 'modalDetalleCompensacion.html'
+    };
 });

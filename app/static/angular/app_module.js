@@ -76,6 +76,10 @@ appModule.config(function($routeProvider, $locationProvider) {
         templateUrl: 'angular/pages/auditoria/auditoria.html',
         controller: 'auditoriaController'
     })
+    .when('/poliza', {
+        templateUrl: 'angular/pages/poliza/poliza.html',
+        controller: 'polizaController'
+    })
 
     .when('/autoriza', {
         templateUrl: 'angular/pages/autoriza/autoriza.html',
@@ -99,6 +103,10 @@ appModule.config(function($routeProvider, $locationProvider) {
     .when('/reporte', {
         templateUrl: 'angular/pages/reporte/reporte.html',
         controller: 'reporteController'
+    })
+    .when('/pagoInteres', {
+        templateUrl: 'angular/pages/pagoInteres/pagoInteres.html',
+        controller: 'pagoInteresController'
     });
 
 

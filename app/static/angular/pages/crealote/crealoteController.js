@@ -7,7 +7,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
     $scope.currentCuentaName = "Seleccione cuenta";
     $scope.bancoPago = undefined;
     $scope.BotonGuardarLote = false;
-    $scope.agrupado = 1;
+    $scope.agrupado = 0;
 
     var myDropzone;
     var cargaInfoGridLotes = function() {
@@ -808,6 +808,9 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                         angular.forEach(execelFields, function(value, key) {
                                             excelUnidad = value;
                                             angular.forEach(unidadesInteres, function(value, key) {
+                                                var re = /[^ -~]+/g;
+                                                excelUnidad.dato1 = excelUnidad.dato1.replace(re, '')
+                                                value.vin = value.vin.replace(re, '')
                                                 if (excelUnidad.dato1 == value.vin) {
                                                     if (excelUnidad.dato3 != value.totalInteres) {
                                                         value.totalInteres = excelUnidad.dato3;
@@ -823,6 +826,12 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                                         $scope.arrayInteresUnidadOriginal = angular.copy($scope.arrayInteresUnidad);
                                         console.log($scope.arrayInteresUnidad, 'Soy los intereses')
                                     }
+                                    $scope.TotalInteresLote = 0;
+                                    angular.forEach($scope.arrayInteresUnidad, function(value, key) {
+                                        $scope.TotalInteresLote = $scope.TotalInteresLote + value.totalInteres;
+                                    });
+                                    $scope.TotalInteresLote = $scope.TotalInteresLote.toFixed(2);
+                                    //console.log($scope.TotalInteresLote.toFixed(2), 'SOY EL TOTAL DE LOS INTERESES')
                                 }
 
                             }
@@ -831,6 +840,8 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
                             console.log('Ocurrio un error al intentar obtener el interes de la unidad')
                         });
 
+                    }else{
+                        console.log(row.documento,' ', row.numeroSerie, 'ESTE ES EL PROBLEMAAAAAAAA', row.saldo, ' ' , row.Pagar)
                     }
                     if ((row.convenioCIE == null) || (row.convenioCIE == undefined) || (row.convenioCIE == "")) {
                         pasaxCIE = true;
@@ -886,6 +897,7 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
         } else {
             alertFactory.warning('Debe seleccionar por lo menos un documento');
         }
+
     };
     $scope.guardarLote = function() {
         $scope.PreLote = false;
@@ -1532,7 +1544,17 @@ appModule.controller('crealoteController', function($scope, $rootScope, $locatio
             var unidadEncontrada = false;
             angular.forEach($scope.gridOptions.data, function(value, key) {
                 auxContador++;
-                if (value.numeroSerie == vinExcel || value.documento == vinExcel) {
+                var numSerieGrid = value.numeroSerie;
+                var numSerieExcel = vinExcel;
+                var documentoGrid = value.documento;
+                var re = /[^ -~]+/g;
+                numSerieGrid = numSerieGrid.replace(re, '');
+                // console.log(numSerieGrid, 'QUEEEEEE');
+                numSerieExcel = numSerieExcel.replace(re, '');
+                // console.log(numSerieExcel, 'QUEEEEEE');
+                documentoGrid = documentoGrid.replace(re, '');
+                // console.log(documentoGrid, 'QUEEEEEE');
+                if (numSerieGrid == numSerieExcel || documentoGrid == numSerieExcel) {
                     unidadEncontrada = true;
                     if (importeExcel > value.saldo || importeExcel <= 0 || value.seleccionable == "True") {
                         if (value.seleccionable == "True") {

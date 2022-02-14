@@ -263,6 +263,41 @@ appModule.factory('auditoriaFactory', function($http) {
                 params: { lstUnidades: lstUnidades },
                 headers: { 'Content-Type': 'application/json' }
             });
+        }, getTipoUbicacion: function( idempresa ) {
+            return $http({
+                url: auditoriaUrl + 'TipoUbicacion/',
+                method: "GET",
+                params:{ idempresa: idempresa },
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }, cambiarUbicacion: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'cambiarUbicacion/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },cambiarOtraUbicacion: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'cambiarOtraUbicacion/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },cambiarOtraUbicacionGenerales: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'cambiarOtraUbicacionGenerales/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        },BorrarAuditoria: function( parametros ) {
+            return $http({
+                url: auditoriaUrl + 'BorrarAuditoria/',
+                method: "GET",
+                params: parametros,
+                headers: { 'Content-Type': 'application/json' }
+            });
         },
     };
 });

@@ -42,7 +42,7 @@ appModule.controller('traspasoController', function($scope, $http, filterFilter 
             title: "Traspasos Plan Piso",
             text: "¿Esta seguro de declinar la solicitud?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true,
             cancelButtonText: "Cerrar",
             confirmButtonText: "Si, estoy seguro!"
@@ -70,7 +70,7 @@ appModule.controller('traspasoController', function($scope, $http, filterFilter 
             title: "Traspasos Plan Piso",
             text: "¿Estas seguro de confirmar el cambio de fecha promesa de pago?",
             showCancelButton: true,
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             showLoaderOnConfirm: true,
             cancelButtonText: "Cerrar",
             confirmButtonText: "Si, estoy seguro!"

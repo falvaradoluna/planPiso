@@ -2,6 +2,7 @@
     <span class="text-navy">Conciliación</span>
     <button class="btn btn-warning pull-right" ng-show="MuestranuevaConciliacion" ng-click="openModalConciliacion()"><i class="fa fa-copy"></i> Nueva Conciliación </button>
     <button class="btn btn-primary pull-right" ng-click="VerArchivo()"  >Descarga Layout </button>
+    <button class="btn btn-primary pull-right" ng-click="ActualizaSaldos()"  >Actualiza Saldos</button>
 </h2>
 <hr>
 <div class="row" ng-init="obtienePeriodosActivos();">
@@ -106,7 +107,9 @@
                         <button class="btn btn-default btn-sm" ng-click="muestraConciliacionPendiente( item );">
                             <i class="fa fa-eye" aria-hidden="true"></i> Ver
                         </button>
-
+                        <button class="btn btn-default btn-sm" ng-disabled="item.estatus == 1" ng-click="BorrarConciliacion(item);">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Borrar
+                        </button>
                         <!-- <button class="btn btn-default btn-sm" ng-click="muestraDetalleDocumentos(item);">
                             <i class="fa fa-file-text" aria-hidden="true"></i> Detalle
                         </button> -->
