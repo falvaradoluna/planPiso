@@ -519,5 +519,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
 
         $scope.getNewUnitsBySucursal(sessionFactory.empresaID);
     };
-    $scope.conceal();
+    commonFactory.getFinancial(sessionFactory.empresaID).then(function(result) {
+            $scope.lstFinancial = result.data;
+        });
 });
