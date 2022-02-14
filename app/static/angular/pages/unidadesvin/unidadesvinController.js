@@ -443,7 +443,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
                                 $scope.conceal();
                                 $("#modalNuevaLayout").modal('hide');
                                 var aux = $scope.lstFinancial[0];
-                                $scope.lblFinanciera = aux[0].nombre;
+                                $scope.lblFinanciera = aux.nombre;
                             } else {
                                 increment++;
                                 $scope.cargandoPro++;
