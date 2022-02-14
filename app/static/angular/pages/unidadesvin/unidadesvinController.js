@@ -33,7 +33,7 @@ appModule.controller('unidadesvinController', function($scope, $rootScope, $loca
     $scope.muestrafinalizar = finalizar != undefined ? false : true;
 
     $scope.apretarboton=0;
-    
+    $scope.conceal();
     $scope.getNewUnitsBySucursal = function(empresaID) {
         $('#tblUnidadesNuevasVin').DataTable().destroy();
         unidadesvinFactory.getNewUnitsBySucursal(empresaID).then(function(result) {
